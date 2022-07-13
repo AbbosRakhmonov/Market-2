@@ -1,5 +1,5 @@
 import React from 'react';
 
 export const Market = () => {
-  return <div>Market</div>;
+  return <div>Salom Navruz</div>;
 };
