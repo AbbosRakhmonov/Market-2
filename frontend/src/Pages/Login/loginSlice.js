@@ -5,7 +5,8 @@ const login = createAsyncThunk(
     'login/login',
     async (data, {rejectWithValue}) => {
         try {
-            const {data} = await Api.post('/user/login', data);
+            const response = await Api.post('/user/login', data);
+            const {data} = response;
             return {
                 userId: data.id,
                 token: data.token,
