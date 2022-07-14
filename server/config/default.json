@@ -1,6 +1,6 @@
 {
-  "PORT": 8800,
+  "PORT": 8801,
   "mongoUri": "mongodb://localhost/market-2",
   "jwtSecret": "market",
-  "baseUrl": "http://localhost:8800"
+  "baseUrl": "http://localhost:8801"
 }
