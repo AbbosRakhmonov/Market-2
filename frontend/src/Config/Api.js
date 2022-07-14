@@ -1,5 +1,5 @@
 import axios from "axios";
-const token = JSON.parse(localStorage.getItem("useData")).token;
+const userData = JSON.parse(localStorage.getItem("useData"));
 
 const instance = axios.create({
     baseURL: "http://localhost:8080",
@@ -10,6 +10,7 @@ const instance = axios.create({
 
 axios.interceptors.request.use(
     config => {
+        const token = userData.token;
         config.headers['Authorization'] = `Bearer ${token}`;
         return config;
     },
