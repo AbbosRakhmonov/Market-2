@@ -1,16 +1,16 @@
-import {lazy, Suspense} from "react";
-import {Routes, Route} from "react-router-dom";
+import { lazy, Suspense } from 'react';
+import PageRoutes from './Pages/PageRoutes';
 
-const Login = lazy(() => import("./Pages/Login/Login"));
+// const Login = lazy(() => import('./Pages/Login/Login'));
 
 function App() {
-    return <div className='App'>
-        <Suspense fallback={"Loading"}>
-            <Routes>
-                <Route path="/login" element={<Login/>}/>
-            </Routes>
-        </Suspense>
-    </div>;
+  return (
+    <div className='App'>
+      <Suspense fallback={'Loading'}>
+        <PageRoutes />
+      </Suspense>
+    </div>
+  );
 }
 
 export default App;
