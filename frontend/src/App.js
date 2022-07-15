@@ -1,7 +1,5 @@
-import { lazy, Suspense } from 'react';
+import { Suspense } from 'react';
 import PageRoutes from './Pages/PageRoutes';
-
-// const Login = lazy(() => import('./Pages/Login/Login'));
 
 function App() {
   return (

@@ -1,7 +1,5 @@
-function Login(props) {
-    return (
-        <div>Login</div>
-    );
-}
+import React from 'react';
 
-export default Login;
+export const Login = () => {
+  return <div>Login</div>;
+};

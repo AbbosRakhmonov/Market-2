@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import MainPage from './MainPage/MainPage';
+import { Login } from './Login/Login';
+import { MainPage } from './MainPage/MainPage';
 
 const PageRoutes = () => {
   const localdata = JSON.parse(localStorage.getItem('userData'));
@@ -15,8 +16,8 @@ const PageRoutes = () => {
   }
   return (
     <Routes>
-      <Route path='/' index element={<h1>Login page</h1>} />
-      <Route path='/administration' />
+      <Route path='/' index element={<Login />} />
+      <Route path='/administration' element={<h1>Admin panel</h1>} />
     </Routes>
   );
 };
