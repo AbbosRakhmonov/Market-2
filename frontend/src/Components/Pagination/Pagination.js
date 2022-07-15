@@ -2,7 +2,6 @@ import React from 'react';
 import { IoChevronBack } from 'react-icons/io5';
 import { IoChevronForward } from 'react-icons/io5';
 import ReactPaginate from 'react-paginate';
-import './index.css';
 
 export const Pagination = ({
   countPage,
@@ -32,17 +31,29 @@ export const Pagination = ({
         pageRangeDisplayed={3}
         onPageChange={pageHandle}
         containerClassName={'flex justify-between items-center'}
-        pageClassName={'page-item'}
-        pageLinkClassName={'page-link anim'}
-        previousClassName={'page-item'}
-        previousLinkClassName={'page-link anim'}
-        nextClassName={'page-item'}
-        nextLinkClassName={'page-link anim'}
-        breakClassName={'page-item'}
-        breakLinkClassName={'page-link anim'}
+        pageClassName={'mr-[15px]'}
+        pageLinkClassName={
+          'w-[35px] h-[35px] border border-primary-800 rounded-lg text-sm text-primary-800 flex justify-center items-center hover:bg-primary-700 hover:border-primary-700 hover:text-white-900 transition ease-in-out duration-100'
+        }
+        previousClassName={'mr-[15px]'}
+        previousLinkClassName={
+          'w-[35px] h-[35px] border border-primary-800 rounded-lg text-sm text-primary-800 flex justify-center items-center hover:bg-primary-700 hover:border-primary-700 hover:text-white-900 transition ease-in-out duration-100'
+        }
+        nextClassName={'mr-[15px]'}
+        nextLinkClassName={
+          'w-[35px] h-[35px] border border-primary-800 rounded-lg text-sm text-primary-800 flex justify-center items-center hover:bg-primary-700 hover:border-primary-700 hover:text-white-900 transition ease-in-out duration-100'
+        }
+        breakClassName={'mr-[15px]'}
+        breakLinkClassName={
+          'w-[35px] h-[35px] border border-primary-800 rounded-lg text-sm text-primary-800 flex justify-center items-center hover:bg-primary-700 hover:border-primary-700 hover:text-white-900 transition ease-in-out duration-100'
+        }
         activeClassName={'mr-[15px]'}
-        activeLinkClassName={'active__page-link'}
-        disabledLinkClassName={'active__btn-link'}
+        activeLinkClassName={
+          'border border-primary-800 bg-primary-800 text-white-900'
+        }
+        disabledLinkClassName={
+          'bg-transparent border-black-100 text-black-100 hover:bg-transparent hover:border-black-100 hover:text-black-100'
+        }
       />
     </nav>
   );
