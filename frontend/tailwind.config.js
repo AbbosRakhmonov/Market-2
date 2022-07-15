@@ -27,6 +27,7 @@ module.exports = withAnimations({
                 'black': 900,
             }
         },
+       
         screens: {
             xsm: '320px',
 
@@ -45,6 +46,7 @@ module.exports = withAnimations({
             '2xl': '1536px',
             // => @media (min-width: 1536px) { ... }
         },
+     
         colors: {
             transparent: 'transparent',
             primary: {

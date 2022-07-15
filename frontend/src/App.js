@@ -9,7 +9,7 @@ function App() {
   return (
     <div className='App'>
       <Suspense fallback={'Loading'}>
-        {isAuthenticated ? <PageRoutes /> : <Login />}
+        {isAuthenticated ? <PageRoutes /> : <Login />
       </Suspense>
     </div>
   );
