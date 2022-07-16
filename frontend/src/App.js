@@ -1,4 +1,7 @@
 import { Suspense } from 'react';
+import Input from './Components/Inputs/Input';
+import SearchInput from './Components/Inputs/SearchInput';
+import TableInput from './Components/Inputs/TableInput';
 import { Login } from './Pages/Login/Login';
 import PageRoutes from './Pages/PageRoutes';
 
@@ -9,8 +12,9 @@ function App() {
   return (
     <div className='App'>
       <Suspense fallback={'Loading'}>
-        {isAuthenticated ? <PageRoutes /> : <Login />
+        {isAuthenticated ? <PageRoutes /> : <Login />}
       </Suspense>
+      <SearchInput />
     </div>
   );
 }
