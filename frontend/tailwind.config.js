@@ -27,7 +27,7 @@ module.exports = withAnimations({
                 'black': 900,
             }
         },
-       
+
         screens: {
             xsm: '320px',
 
@@ -46,7 +46,7 @@ module.exports = withAnimations({
             '2xl': '1536px',
             // => @media (min-width: 1536px) { ... }
         },
-     
+
         colors: {
             transparent: 'transparent',
             primary: {
@@ -105,21 +105,22 @@ module.exports = withAnimations({
                 900: '#054F31',
             },
             black: {
-                100: '#D1FADF',
-                200: '#A6F4C5',
-                300: '#6CE9A6',
-                400: '#32D583',
-                500: '#12B76A',
-                600: '#039855',
-                700: '#027A48',
-                800: '#05603A',
+                100: 'rgba(28, 28, 28, 0.1)',
+                200: 'rgba(28, 28, 28, 0.2)',
+                300: 'rgba(28, 28, 28, 0.3)',
+                400: 'rgba(28, 28, 28, 0.4)',
+                500: 'rgba(28, 28, 28, 0.5)',
+                600: 'rgba(28, 28, 28, 0.6)',
+                700: 'rgba(28, 28, 28, 0.7)',
+                800: 'rgba(28, 28, 28, 0.8)',
                 900: '#1c1c1c',
             },
             white: {
-                100: "#EAEAEA",
-                200: "#F1F1F1",
-                300: "#F8F8F8",
-                400: "#FDFDFD",
+                100: "rgba(255, 255, 255, 0.1)",
+                200: "rgba(255, 255, 255, 0.2)",
+                300: "rgba(255, 255, 255, 0.3)",
+                400: "rgba(255, 255, 255, 0.4)",
+                700: "rgba(255, 255, 255, 0.7)",
                 900: '#ffffff',
             },
             background: "#EFF4F2",

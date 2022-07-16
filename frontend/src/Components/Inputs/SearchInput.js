@@ -1,4 +1,4 @@
-import { IoSearchOutline } from 'react-icons/io5';
+import {IoSearchOutline} from 'react-icons/io5';
 
 function SearchInput({ placeholder, type, value, onChange, label }) {
   return (
