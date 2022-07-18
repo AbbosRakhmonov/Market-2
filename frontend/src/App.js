@@ -8,8 +8,15 @@ function App() {
 
   return (
     <div className='App'>
+<<<<<<< HEAD
       <Suspense fallback={'Loading'}>
         {isAuthenticated ? <PageRoutes /> : <Login />}
+=======
+      <Suspense fallback={'Loading'}>  
+        <Routes>
+          <Route path='/login' element={<Login />} />
+        </Routes>
+>>>>>>> 61dca23 (dddd)
       </Suspense>
     </div>
   );
