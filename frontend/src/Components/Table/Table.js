@@ -17,8 +17,8 @@ function Table({ page, data, headers, currentPage, countPage }) {
     }
   };
   return (
-    <table className='w-full rounded-t-lg' style={{ borderRadius: '10px' }}>
-      <thead className=''>{<Thead headers={headers} />}</thead>
+    <table className=' w-full' style={{ borderRadius: '10px' }}>
+      <thead className='rounded-t-lg'>{<Thead headers={headers} />}</thead>
       <tbody>{checkRows()}</tbody>
     </table>
   );

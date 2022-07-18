@@ -5,41 +5,52 @@
 @tailwind utilities;
 
 @layer base {
-    .inputClass {
-        @apply w-full p-[0.625rem] rounded-[0.25rem] border-2 border-blue-100 outline-0 font-roboto text-sm
-    }
-    .tableInput {
-        @apply w-full pt-[0.3125rem] pb-[0.3125rem] pr-[0.3125rem] pl-[0.3125rem] rounded-[0.25rem] border-2 border-blue-200 outline-0 font-roboto text-sm
-    }
-    .iconClass {
-        @apply absolute top-[0.875rem] right-[0.625rem] w-[1.125rem] h-[1.125rem] text-blue-700
-    }
-    .searchInput {
-        @apply w-full pt-[0.625rem] pb-[0.625rem] pl-[2rem] rounded-[0.25rem] border-2 border-blue-200 outline-0 font-roboto text-sm 
-    }
-    .searchIcon {
-        @apply absolute top-[0.875rem] left-[0.625rem] w-[1.125rem] h-[1.125rem] text-blue-200
-    }
-    .createElement {
-        @apply p-[0.625rem] bg-success-500 text-white-900 text-[0.875rem] rounded-[0.3125rem]  flex items-center gap-[0.3125rem] leading-[1.125rem]
-    }
-    .plusIcon {
-        @apply text-white-900 text-[1.125rem] shadow-[0_rem_0.3125rem_0.9375rem_rgba(0,0,0,0.15)]
-    }
-    .clearElement {
-        @apply p-[0.625rem] bg-error-500 text-white-900 text-[0.875rem] rounded-[0.5rem]  flex items-center gap-[0.3125rem] leading-[1.125rem]
-    }
+  .inputClass {
+    @apply w-full p-[0.625rem] rounded-[0.25rem] border-2 border-blue-100 outline-0 font-roboto text-sm;
+  }
+  .tableInput {
+    @apply w-full pt-[0.3125rem] pb-[0.3125rem] pr-[0.3125rem] pl-[0.3125rem] rounded-[0.25rem] border-2 border-blue-200 outline-0 font-roboto text-sm;
+  }
+  .iconClass {
+    @apply absolute top-[0.875rem] right-[0.625rem] w-[1.125rem] h-[1.125rem] text-blue-700;
+  }
+  .searchInput {
+    @apply w-full pt-[0.625rem] pb-[0.625rem] pl-[2rem] rounded-[0.25rem] border-2 border-blue-200 outline-0 font-roboto text-sm;
+  }
+  .searchIcon {
+    @apply absolute top-[0.875rem] left-[0.625rem] w-[1.125rem] h-[1.125rem] text-blue-200;
+  }
+  .createElement {
+    @apply p-[0.625rem] bg-success-500 text-white-900 text-[0.875rem] rounded-[0.3125rem]  flex items-center gap-[0.3125rem] leading-[1.125rem];
+  }
+  .plusIcon {
+    @apply text-white-900 text-[1.125rem] shadow-[0_rem_0.3125rem_0.9375rem_rgba(0,0,0,0.15)];
+  }
+  .clearElement {
+    @apply p-[0.625rem] bg-error-500 text-white-900 text-[0.875rem] rounded-[0.5rem]  flex items-center gap-[0.3125rem] leading-[1.125rem];
+  }
+
+  .td {
+    @apply px-2 py-2.5 border-r-2 border-b-2 border-primary-700;
+  }
+  .th {
+    @apply font-bold text-sm text-white-900 py-4 px-2;
+  }
+  .tr {
+    @apply border-transparent border-l-8 hover:bg-black-300 hover:border-primary-700;
+  }
 }
 
-html, body {
-    font-family: 'Roboto', sans-serif;
-    line-height: 16px;
+html,
+body {
+  font-family: 'Roboto', sans-serif;
+  line-height: 16px;
 }
-::-webkit-scrollbar{
-    width: 2px;
-    @apply bg-black-100;
+::-webkit-scrollbar {
+  width: 2px;
+  @apply bg-black-100;
 }
-::-webkit-scrollbar-thumb{
-    border-radius: 50px;
-    @apply bg-black-200;
+::-webkit-scrollbar-thumb {
+  border-radius: 50px;
+  @apply bg-black-200;
 }

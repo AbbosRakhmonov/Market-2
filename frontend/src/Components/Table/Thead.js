@@ -2,17 +2,22 @@ import { TiArrowUnsorted } from 'react-icons/ti';
 
 function Thead({ headers, onClick }) {
   return (
-    <tr className='grid grid-cols-12 bg-primary-900 rounded-t-lg'>
+    <tr className='bg-primary-900 rounded-t-lg'>
       {headers.map((header, index) => (
         <th
           key={index}
-          className={`col-span-${
-            header.colSpan
-          } font-bold text-sm text-white-900 py-4 flex items-center justify-center ${
-            index === headers.length - 1 ? '' : 'border-r-2 border-primary-700'
-          }`}
+          scope='col'
+          className={`th 
+        ${
+          index === headers.length - 1
+            ? 'rounded-tr-lg'
+            : 'border-r-2 border-primary-700'
+        }
+        ${index === 0 && 'rounded-tl-lg'}
+        ${header.styles}
+        `}
         >
-          {header.title}{' '}
+          <span>{header.title}</span>{' '}
           {header.filter ? (
             <button name={header.filter} onClick={onClick}>
               <TiArrowUnsorted />
