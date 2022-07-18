@@ -4,39 +4,38 @@ import Table from '../../Components/Table/Table';
 export const MainPage = () => {
   const headers = [
     {
-      colSpan: 1,
       title: '№',
       filter: false,
     },
     {
-      colSpan: 1,
       title: 'Mahsulot kodi',
       filter: 'code',
+      styles: '',
     },
     {
-      colSpan: 4,
       title: 'Mahsulot nomi',
-      filter: false,
+      filter: 'name',
+      styles: 'text-left',
     },
     {
-      colSpan: 1,
       title: 'Soni (dona)',
       filter: 'total',
+      styles: '',
     },
     {
-      colSpan: 2,
       title: 'Kelgan narx',
       filter: 'incomingprice',
+      styles: '',
     },
     {
-      colSpan: 2,
       title: 'Sotish narx',
       filter: 'sellingprice',
+      styles: '',
     },
     {
-      colSpan: 1,
       title: '',
       filter: false,
+      styles: '',
     },
   ];
 
