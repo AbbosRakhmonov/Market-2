@@ -15,7 +15,7 @@ function Input({ placeholder, type, value, onChange, password, label }) {
           <input
             className='inputClass shadow-[ 0px 10px 10px rgba(0, 0, 0, 0.05)]'
             placeholder={placeholder}
-            type={currentShow ? (type = 'text') : (type = { type })}
+            type={currentShow ? 'text' : type}
             value={value}
             onChange={onChange}
           />
