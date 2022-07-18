@@ -18,10 +18,11 @@ function AccordionLink(
     }) {
     const globalPath = useLocation().pathname.split("/").filter(item => item !== "");
     useEffect(() => {
-        if (path.includes(globalPath[0])) {
-            handleClickFirstMenu(id);
-        }
-    }, [path]);
+      if (path.includes(globalPath[0])) {
+        handleClickFirstMenu(id);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [path, id]);
     return (<>
         <button
             className={`navbar__link w-full flex items-center ${expanded ? "justify-center" : "justify-between"} px-[0.9375rem] py-[0.625rem] rounded-[1.875rem] transition ease-in-out duration-200 ${path.includes(globalPath[0]) ? "text-white-900 bg-primary-800" : "text-black-700 hover:bg-black-100"}`}

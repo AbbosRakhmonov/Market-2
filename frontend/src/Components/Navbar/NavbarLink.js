@@ -18,10 +18,12 @@ function NavbarLink(
     const navLinkClasses = ({isActive}) => {
         return `navbar__link flex items-center ${expanded ? "justify-center" : ""} px-[0.9375rem] py-[0.625rem] gap-[0.9375rem] rounded-[1.875rem] transition ease-in-out duration-200 ${isActive ? "text-white-900 bg-primary-800" : "text-black-700 hover:bg-black-100"}`;
     }
+
     const handleClickNavLink = () => {
         handleClickSecondMenu(null);
         handleClickFirstMenu(null)
     }
+    
     return (
         <div className={'mb-[0.9375rem]'}>
             {
