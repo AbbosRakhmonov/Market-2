@@ -20,6 +20,15 @@
     .searchIcon {
         @apply absolute top-[0.875rem] left-[0.625rem] w-[1.125rem] h-[1.125rem] text-blue-200
     }
+    .createElement {
+        @apply p-[10px] bg-success-500 text-white-900 text-[0.875rem] rounded-[8px]  flex items-center gap-[5px]
+    }
+    .plusIcon {
+        @apply text-white-900 text-[18px] shadow-[0_px_5px_15px_rgba(0,0,0,0.15)]
+    }
+    .clearElement {
+        @apply p-[10px] bg-error-500 text-white-900 text-[0.875rem] rounded-[8px]  flex items-center gap-[5px]
+    }
 }
 
 html, body {
