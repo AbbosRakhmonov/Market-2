@@ -1,6 +1,5 @@
 import React from 'react';
-import { IoChevronBack } from 'react-icons/io5';
-import { IoChevronForward } from 'react-icons/io5';
+import {IoChevronBack, IoChevronForward} from 'react-icons/io5';
 import ReactPaginate from 'react-paginate';
 
 export const Pagination = ({

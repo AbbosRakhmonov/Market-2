@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { IoEye, IoEyeOff } from 'react-icons/io5';
+import {useState} from 'react';
+import {IoEye, IoEyeOff} from 'react-icons/io5';
 
 function Input({ placeholder, type, value, onChange, password, label }) {
   const [currentShow, setCurrentShow] = useState(false);

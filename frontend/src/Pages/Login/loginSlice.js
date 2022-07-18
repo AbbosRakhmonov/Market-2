@@ -5,13 +5,12 @@ const login = createAsyncThunk(
     'login/login',
     async (data, {rejectWithValue}) => {
         try {
-            const response = await Api.post('/user/login', data);
-            const {data} = response;
+            const {id, token, user, market} = await Api.post('/user/login', data);
             return {
-                userId: data.id,
-                token: data.token,
-                user: data.user,
-                market: data.market,
+                userId: id,
+                token: token,
+                user: user,
+                market: market,
             };
         } catch (error) {
             return rejectWithValue(error);
@@ -26,7 +25,7 @@ const slice = createSlice({
         userId: null,
         user: null,
         market: null,
-        logged: false,
+        logged: true,
         loading: false,
         error: null
     },

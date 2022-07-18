@@ -24,4 +24,13 @@
 
 html, body {
     font-family: 'Roboto', sans-serif;
+    line-height: 16px;
+}
+::-webkit-scrollbar{
+    width: 2px;
+    @apply bg-black-100;
+}
+::-webkit-scrollbar-thumb{
+    border-radius: 50px;
+    @apply bg-black-200;
 }

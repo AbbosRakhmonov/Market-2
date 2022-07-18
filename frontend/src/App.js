@@ -1,25 +1,19 @@
-import { Suspense } from 'react';
-import Input from './Components/Inputs/Input';
-import SearchInput from './Components/Inputs/SearchInput';
-import TableInput from './Components/Inputs/TableInput';
-import { Login } from './Pages/Login/Login';
-import PageRoutes from './Pages/PageRoutes';
+import {lazy, Suspense} from 'react';
+import {useSelector} from "react-redux";
+
+const Login = lazy(() => import('./Pages/Login/Login'));
+const PageRoutes = lazy(() => import('./Pages/PageRoutes'));
 
 function App() {
-  const localdata = JSON.parse(localStorage.getItem('userData'));
-  const isAuthenticated = localdata ? !!localdata.token : null;
-
-  return (
-    <div className='App'>
-      <Suspense fallback={'Loading'}>
-        {isAuthenticated ? <PageRoutes /> : <Login />}
-      </Suspense>
-      <Input label='Password' password={true} type='password' />
-      <Input label='Login' type='text' placeholder='Loginni kiriting' />
-      <SearchInput />
-      <TableInput />
-    </div>
-  );
+    const {logged} = useSelector(state => state.login);
+    // useEffect bilan useDispatch ishlatiladi
+    return (
+        <div className='App'>
+            <Suspense fallback={'Loading'}>
+                {logged ? <PageRoutes/> : <Login/>}
+            </Suspense>
+        </div>
+    );
 }
 
 export default App;
