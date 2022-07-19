@@ -21,13 +21,13 @@
         @apply absolute top-[0.875rem] left-[0.625rem] w-[1.125rem] h-[1.125rem] text-blue-200
     }
     .createElement {
-        @apply p-[0.625rem] bg-success-500 text-white-900 text-[0.875rem] rounded-[0.3125rem]  flex items-center gap-[0.3125rem]
+        @apply p-[0.625rem] bg-success-500 text-white-900 text-[0.875rem] rounded-[0.3125rem]  flex items-center gap-[0.3125rem] leading-[1.125rem]
     }
     .plusIcon {
         @apply text-white-900 text-[1.125rem] shadow-[0_rem_0.3125rem_0.9375rem_rgba(0,0,0,0.15)]
     }
     .clearElement {
-        @apply p-[0.625rem] bg-error-500 text-white-900 text-[0.875rem] rounded-[0.5rem]  flex items-center gap-[0.3125rem]
+        @apply p-[0.625rem] bg-error-500 text-white-900 text-[0.875rem] rounded-[0.5rem]  flex items-center gap-[0.3125rem] leading-[1.125rem]
     }
 }
 
