@@ -11,7 +11,7 @@ export const CategoryTableRow = ({
   return (
     <>
       {data.map((category, index) => (
-        <tr key={index} className='tr'>
+        <tr key={category._id} className='tr'>
           <td className='td'>{currentPage * countPage + 1 + index}</td>
           <td className='td'>{category.code}</td>
           <td className='td'>{category.name}</td>
