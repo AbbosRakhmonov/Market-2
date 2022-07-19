@@ -1,5 +1,6 @@
 import { CategoryTableRow } from './TableRows/CategoryTableRow';
 import { ProductTableRow } from './TableRows/ProductTableRow';
+import { UnitTableRow } from './TableRows/UnitTableRow';
 import Thead from './Thead';
 
 function Table({
@@ -27,6 +28,16 @@ function Table({
       case 'category':
         return (
           <CategoryTableRow
+            data={data}
+            currentPage={currentPage}
+            countPage={countPage}
+            Edit={Edit}
+            Delete={Delete}
+          />
+        );
+      case 'unit':
+        return (
+          <UnitTableRow
             data={data}
             currentPage={currentPage}
             countPage={countPage}
