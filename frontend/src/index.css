@@ -5,21 +5,13 @@
 @tailwind utilities;
 
 @layer base {
-  .inputClass {
-    @apply w-full p-[0.625rem] rounded-[0.25rem] border-2 border-blue-100 outline-0 font-roboto text-sm;
-  }
   .tableInput {
     @apply w-full pt-[0.3125rem] pb-[0.3125rem] pr-[0.3125rem] pl-[0.3125rem] rounded-[0.25rem] border-2 border-blue-200 outline-0 font-roboto text-sm;
   }
   .iconClass {
-    @apply absolute top-[0.875rem] right-[0.625rem] w-[1.125rem] h-[1.125rem] text-blue-700;
+    @apply w-[1.125rem] h-[1.125rem];
   }
-  .searchInput {
-    @apply w-full pt-[0.625rem] pb-[0.625rem] pl-[2rem] rounded-[0.25rem] border-2 border-blue-200 outline-0 font-roboto text-sm;
-  }
-  .searchIcon {
-    @apply absolute top-[0.875rem] left-[0.625rem] w-[1.125rem] h-[1.125rem] text-blue-200;
-  }
+
   .createElement {
     @apply p-[0.625rem] bg-success-500 text-white-900 text-[0.875rem] rounded-[0.3125rem]  flex items-center gap-[0.3125rem] leading-[1.125rem];
   }
@@ -39,6 +31,34 @@
   .tr {
     @apply border-transparent border-l-8 hover:bg-black-300 hover:border-primary-700;
   }
+  .inputClass {
+    @apply w-full p-[0.625rem] rounded-[0.25rem] border-[1px] border-blue-200 font-roboto text-sm placeholder-blue-200 outline-transparent outline outline-0 focus:outline-blue-100 bg-white-900 hover:bg-inputHover focus:outline-4 focus:bg-white-900 transition-all ease-in-out duration-100;
+  }
+
+  .labelClass {
+    @apply block mb-[10px] text-blue-700;
+  }
+  .iconButton {
+    @apply absolute right-[10px] top-1/2 -translate-y-1/2 text-blue-700 hover:text-black-700 transition ease-in duration-100;
+  }
+
+  .searchInput {
+    @apply w-full pt-[0.625rem] pb-[0.625rem] pl-[2rem] rounded-[0.25rem] border-2 border-blue-200 outline-0 font-roboto text-sm;
+  }
+
+  .searchIcon {
+    @apply absolute top-[0.875rem] left-[0.625rem] w-[1.125rem] h-[1.125rem] text-blue-200;
+  }
+
+  ::-webkit-scrollbar {
+    width: 2px;
+    @apply bg-black-100;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 50px;
+    @apply bg-black-200;
+  }
 }
 
 html,
@@ -46,11 +66,61 @@ body {
   font-family: 'Roboto', sans-serif;
   line-height: 16px;
 }
-::-webkit-scrollbar {
-  width: 2px;
-  @apply bg-black-100;
+
+.loginPage {
+  height: 100vh;
+  background: radial-gradient(
+    100% 316.36% at 0% 50%,
+    #0090a3 0%,
+    rgba(36, 86, 50, 0.9) 100%
+  );
 }
-::-webkit-scrollbar-thumb {
-  border-radius: 50px;
-  @apply bg-black-200;
+
+.loginCircle {
+  width: calc(100vw / 2.430604982206406);
+  height: calc(100vw / 2.430604982206406);
+}
+
+.bg-circle-2 {
+  width: calc(100vw / 2.732);
+  height: calc(100vw / 2.732);
+}
+
+.spinner {
+  border: 3px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  border-top-color: white;
+  width: 16px;
+  height: 16px;
+  animation: rotate-spinner 1s linear infinite;
+}
+
+.time-line {
+  width: 100%;
+  position: relative;
+}
+
+.time-line::before,
+.time-line::after {
+  content: '';
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: white;
+  top: -5.5px;
+}
+
+.time-line::before {
+  left: -11px;
+}
+
+.time-line::after {
+  right: -11px;
+}
+
+@keyframes rotate-spinner {
+  100% {
+    transform: rotate(360deg);
+  }
 }
