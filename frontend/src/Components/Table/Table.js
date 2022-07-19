@@ -1,7 +1,17 @@
+import { CategoryTableRow } from './TableRows/CategoryTableRow';
 import { ProductTableRow } from './TableRows/ProductTableRow';
 import Thead from './Thead';
 
-function Table({ page, data, headers, currentPage, countPage, Sort }) {
+function Table({
+  page,
+  data,
+  headers,
+  currentPage,
+  countPage,
+  Sort,
+  Edit,
+  Delete,
+}) {
   const checkRows = () => {
     switch (page) {
       case 'product':
@@ -10,6 +20,18 @@ function Table({ page, data, headers, currentPage, countPage, Sort }) {
             data={data}
             currentPage={currentPage}
             countPage={countPage}
+            Edit={Edit}
+            Delete={Delete}
+          />
+        );
+      case 'category':
+        return (
+          <CategoryTableRow
+            data={data}
+            currentPage={currentPage}
+            countPage={countPage}
+            Edit={Edit}
+            Delete={Delete}
           />
         );
       default:
