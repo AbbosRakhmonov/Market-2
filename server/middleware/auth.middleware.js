@@ -14,7 +14,6 @@ module.exports = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (e) {
-    console.log(e)
     return res.status(401).json({ message: "Avtorizatsiyadan o'tilmagan" });
   }
 };

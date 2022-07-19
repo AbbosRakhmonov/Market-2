@@ -1,5 +1,7 @@
 import React from 'react';
 
-export const MainPage = () => {
-  return <div className='p-4'>MainPage</div>;
-};
+function MainPage(props) {
+  return <div>Bosh sahifa</div>;
+}
+
+export default MainPage;

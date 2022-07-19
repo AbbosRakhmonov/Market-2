@@ -1,13 +1,12 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import Api from "../../Config/Api";
 
-const login = createAsyncThunk(
-    'login/login',
+export const signIn = createAsyncThunk(
+    'login/signIn',
     async (data, {rejectWithValue}) => {
         try {
-            const {id, token, user, market} = await Api.post('/user/login', data);
+            const {data: {token, user, market}} = await Api.post('/user/login', JSON.stringify(data));
             return {
-                userId: id,
                 token: token,
                 user: user,
                 market: market,
@@ -21,38 +20,45 @@ const login = createAsyncThunk(
 const slice = createSlice({
     name: "login",
     initialState: {
-        token: null,
-        userId: null,
         user: null,
         market: null,
-        logged: true,
+        logged: false,
         loading: false,
         error: null
     },
     reducers: {
+        logIn: (state, {user, market}) => {
+            state.logged = true;
+            state.user = user;
+            state.market = market;
+        },
         logOut: (state) => {
             localStorage.removeItem("userData");
             state.logged = false;
+            state.user = null;
+            state.market = null;
         },
         clearError: (state) => {
             state.error = null;
         }
     },
     extraReducers: {
-        [login.pending]: (state,) => {
+        [signIn.pending]: (state,) => {
             state.loading = true;
         },
-        [login.fulfilled]: (state, {payload}) => {
+        [signIn.fulfilled]: (state, {payload}) => {
             state.loading = false;
             state.logged = true;
+            state.user = payload.user;
+            state.market = payload.market;
             localStorage.setItem("userData", JSON.stringify(payload));
         },
-        [login.rejected]: (state, action) => {
+        [signIn.rejected]: (state, {payload}) => {
             state.loading = false;
-            state.error = action.error;
-        }
+            state.error = payload;
+        },
     },
 })
 
-export const {logOut, clearError} = slice.actions;
+export const {logOut, logIn, clearError} = slice.actions;
 export default slice.reducer;

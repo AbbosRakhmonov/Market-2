@@ -29,6 +29,8 @@ function Navbar() {
         } else {
             setActiveFirstSubMenuId(id);
         }
+        setNavbarExpended(false)
+        sessionStorage.setItem('navbarExpended', false);
     }
     const handleClickSecondMenu = (id) => {
         if (id === activeSecondSubMenuId) {
