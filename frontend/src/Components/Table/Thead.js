@@ -17,7 +17,7 @@ function Thead({ headers, onClick }) {
         ${header.styles}
         `}
         >
-          <div className='flex items-center justify-center'>
+          <div className='inline-flex items-center'>
             <span>{header.title}</span>{' '}
             {header.filter ? (
               <button name={header.filter} onClick={onClick}>
