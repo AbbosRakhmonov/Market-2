@@ -10,7 +10,7 @@ function App() {
   return (
     <div className='App'>
       <Suspense fallback={'Loading'}>
-        {true ? <PageRoutes /> : <Login />}
+        {logged ? <PageRoutes /> : <Login />}
       </Suspense>
     </div>
   );
