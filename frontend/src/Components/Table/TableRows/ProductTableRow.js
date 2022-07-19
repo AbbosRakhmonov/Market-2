@@ -1,6 +1,13 @@
 import React from 'react';
+import TableBtn from '../../Buttons/TableBtn';
 
-export const ProductTableRow = ({ currentPage, countPage, data }) => {
+export const ProductTableRow = ({
+  currentPage,
+  countPage,
+  data,
+  Edit,
+  Delete,
+}) => {
   return (
     <>
       {data.map((product, index) => {
@@ -24,9 +31,19 @@ export const ProductTableRow = ({ currentPage, countPage, data }) => {
                 product.price.sellingprice.toLocaleString('ru-RU')}{' '}
               USD
             </td>
-            <td className='td border-r-0 text-center'>
-              <button className=''>Edit</button>
-              <button className=''>Delete</button>
+            <td className='td border-r-0 text-center max-w-[50px]'>
+              <div className='flex items-center justify-center'>
+                <TableBtn
+                  type={'edit'}
+                  bgcolor='bg-warning-500'
+                  onClick={Edit}
+                />
+                <TableBtn
+                  type={'delete'}
+                  bgcolor='bg-error-500 ml-2.5'
+                  onClick={Delete}
+                />
+              </div>
             </td>
           </tr>
         );
