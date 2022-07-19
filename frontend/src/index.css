@@ -31,7 +31,7 @@
   }
 
   .td {
-    @apply px-2 py-2.5 border-r-2 border-b-2 border-primary-700;
+    @apply px-2 py-2.5 border-r-2 border-b-2 border-primary-700 text-sm font-normal text-[#000];
   }
   .th {
     @apply font-bold text-sm text-white-900 py-4 px-2;

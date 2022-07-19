@@ -17,14 +17,16 @@ function Thead({ headers, onClick }) {
         ${header.styles}
         `}
         >
-          <span>{header.title}</span>{' '}
-          {header.filter ? (
-            <button name={header.filter} onClick={onClick}>
-              <TiArrowUnsorted />
-            </button>
-          ) : (
-            ''
-          )}
+          <div className='flex items-center justify-center'>
+            <span>{header.title}</span>{' '}
+            {header.filter ? (
+              <button name={header.filter} onClick={onClick}>
+                <TiArrowUnsorted />
+              </button>
+            ) : (
+              ''
+            )}
+          </div>
         </th>
       ))}
     </tr>

@@ -36,12 +36,12 @@ export const ProductTableRow = ({
                 <TableBtn
                   type={'edit'}
                   bgcolor='bg-warning-500'
-                  onClick={Edit}
+                  onClick={() => Edit(product)}
                 />
                 <TableBtn
                   type={'delete'}
                   bgcolor='bg-error-500 ml-2.5'
-                  onClick={Delete}
+                  onClick={() => Delete(product)}
                 />
               </div>
             </td>
