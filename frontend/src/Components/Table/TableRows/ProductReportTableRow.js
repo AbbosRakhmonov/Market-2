@@ -1,0 +1,102 @@
+import React from 'react';
+import TableBtn from '../../Buttons/TableBtn';
+import TableInput from '../../Inputs/TableInput';
+
+export const ProductReportTableRow = ({
+  data,
+  Print,
+  currentPage,
+  countPage,
+  currency,
+  changeHandler,
+  addProductCheque,
+  productCheque,
+}) => {
+  const activeProduct =
+    'bg-primary-500 text-white-900 group-hover:bg-black-300';
+  return (
+    <>
+      {data.map((product, index) => (
+        <tr className='tr group hover:bg-black-300' key={product._id}>
+          <td className='td'>{currentPage * countPage + 1 + index}</td>
+          <td
+            className={`td ${productCheque.code ? `${activeProduct}` : ''}`}
+            data-property='code'
+            onClick={(e) =>
+              addProductCheque(e, product._id, product.productdata.code)
+            }
+          >
+            {product.productdata.code}
+          </td>
+          <td
+            className={`${productCheque.name ? `${activeProduct}` : ''} td`}
+            data-property='name'
+            onClick={(e) =>
+              addProductCheque(e, product._id, product.productdata.name)
+            }
+          >
+            {product.productdata.name}
+          </td>
+          <td
+            className={`td text-right ${
+              productCheque.total ? `${activeProduct}` : ''
+            } `}
+            data-property='total'
+            onClick={(e) =>
+              addProductCheque(
+                e,
+                product._id,
+                `${product.total} ${product.unit.name}`
+              )
+            }
+          >
+            <span className='pointer-events-none'>
+              {product.total} {product.unit.name}
+            </span>
+          </td>
+          <td className='td text-right'>
+            {product.price.incomingprice.toLocaleString('ru-RU')} {currency}
+          </td>
+          <td className='td text-right'>
+            {(product.price.incomingprice * product.total).toLocaleString(
+              'ru-RU'
+            )}{' '}
+            {currency}
+          </td>
+          <td
+            className={`${
+              productCheque.price ? `${activeProduct}` : ''
+            } td text-right`}
+            data-property='price'
+            onClick={(e) =>
+              addProductCheque(e, product._id, product.price.sellingprice)
+            }
+          >
+            {product.price.sellingprice.toLocaleString('ru-RU')} {currency}
+          </td>
+          <td className='td text-right'>
+            {(product.price.sellingprice * product.total).toLocaleString(
+              'ru-RU'
+            )}{' '}
+            {currency}
+          </td>
+          <td className='td'>
+            <TableInput
+              onChange={() => changeHandler(product)}
+              type={'number'}
+            />
+          </td>
+          <td className='td text-center'>
+            <div className='flex items-center justify-center'>
+              <TableBtn
+                type={'print'}
+                bgcolor={'bg-primary-800'}
+                onClick={() => Print(product)}
+              />
+            </div>
+          </td>
+        </tr>
+      ))}
+    </>
+  );
+};
