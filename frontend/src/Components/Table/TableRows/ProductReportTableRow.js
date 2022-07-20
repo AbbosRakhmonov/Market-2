@@ -11,6 +11,7 @@ export const ProductReportTableRow = ({
   changeHandler,
   addProductCheque,
   productCheque,
+  inputValue,
 }) => {
   const activeProduct =
     'bg-primary-500 text-white-900 group-hover:bg-black-300';
@@ -84,6 +85,7 @@ export const ProductReportTableRow = ({
             <TableInput
               onChange={() => changeHandler(product)}
               type={'number'}
+              value={inputValue}
             />
           </td>
           <td className='td text-center'>

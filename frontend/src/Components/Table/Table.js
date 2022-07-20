@@ -19,6 +19,7 @@ function Table({
   addProductCheque,
   productCheque,
   Print,
+  inputValue,
 }) {
   const checkRows = () => {
     switch (page) {
@@ -75,6 +76,7 @@ function Table({
             addProductCheque={addProductCheque}
             productCheque={productCheque}
             Print={Print}
+            inputValue={inputValue}
           />
         );
       default:
