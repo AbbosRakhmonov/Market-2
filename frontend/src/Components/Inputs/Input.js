@@ -9,10 +9,10 @@ function Input({placeholder, type, value, onChange, password, label}) {
 
     return (
         <div className={'input-container'}>
-            <label className={'labelClass leading-[1.125rem]'}>{label}</label>
+            {label && <label className={'labelClass leading-[1.125rem]'}>{label}</label>}
             <div className='relative'>
                 <input
-                    className='inputClass shadow-[0px 10px 10px rgba(0, 0, 0, 0.05)] leading-[1.125rem]'
+                    className='inputClass shadow-[0_10px_10px_rgba(0,0,0,0.05)] leading-[1.125rem]'
                     placeholder={placeholder}
                     type={currentShow ? 'text' : type}
                     value={value}

@@ -1,12 +1,12 @@
-import { useEffect, useLayoutEffect, useState } from 'react';
-import Paths, { profileList } from './Path';
+import {useEffect, useLayoutEffect, useState} from 'react';
+import Paths, {profileList} from './Path';
 import NavbarFooterLogo from '../../Images/logo-sm.svg';
 import Avatar from '../Avatar/Avatar';
-import { IoChevronBack, IoEllipsisVertical } from 'react-icons/io5';
+import {IoChevronBack, IoEllipsisVertical} from 'react-icons/io5';
 import ProfileMenuLink from './ProfileMenuLink';
 import NavbarLink from './NavbarLink';
-import { logOut } from '../../Pages/Login/loginSlice';
-import { useDispatch } from 'react-redux';
+import {logOut} from '../../Pages/Login/loginSlice';
+import {useDispatch} from 'react-redux';
 
 function Navbar() {
   const dispatch = useDispatch();

@@ -1,4 +1,4 @@
-import { TiArrowUnsorted } from 'react-icons/ti';
+import {TiArrowUnsorted} from 'react-icons/ti';
 
 function Thead({ headers, Sort }) {
   return (

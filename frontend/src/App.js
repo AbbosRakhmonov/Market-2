@@ -1,8 +1,7 @@
-import { useEffect } from 'react';
-import { lazy, Suspense } from 'react';
-import { ToastContainer } from 'react-toastify';
-import { useSelector, useDispatch } from 'react-redux';
-import { logIn } from './Pages/Login/loginSlice';
+import {lazy, Suspense, useEffect} from 'react';
+import {ToastContainer} from 'react-toastify';
+import {useDispatch, useSelector} from 'react-redux';
+import {logIn} from './Pages/Login/loginSlice';
 
 // pages
 const Login = lazy(() => import('./Pages/Login/Login'));
