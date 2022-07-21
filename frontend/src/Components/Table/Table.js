@@ -1,4 +1,5 @@
 import { CategoryTableRow } from './TableRows/CategoryTableRow';
+import { IncomingTableRow } from './TableRows/IncomingTableRow';
 import { ProductReportTableRow } from './TableRows/ProductReportTableRow';
 import { ProductTableRow } from './TableRows/ProductTableRow';
 import { SupplierTableRow } from './TableRows/SupplierTableRow';
@@ -77,6 +78,17 @@ function Table({
             productCheque={productCheque}
             Print={Print}
             inputValue={inputValue}
+          />
+        );
+      case 'incoming':
+        return (
+          <IncomingTableRow
+            data={data}
+            currentPage={currentPage}
+            countPage={countPage}
+            changeHandler={changeHandler}
+            Delete={Delete}
+            currency={currency}
           />
         );
       default:
