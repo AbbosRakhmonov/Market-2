@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
 function Avatar({ border = false, navbarExpended }) {
   const user = useSelector((state) => state.login.user);

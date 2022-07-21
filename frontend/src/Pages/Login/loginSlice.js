@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import Api from '../../Config/Api';
-import { toast } from 'react-toastify';
+import {toast} from 'react-toastify';
 
 export const signIn = createAsyncThunk(
   'login/signIn',
