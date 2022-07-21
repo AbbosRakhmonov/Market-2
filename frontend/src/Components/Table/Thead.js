@@ -19,12 +19,10 @@ function Thead({ headers, Sort }) {
         >
           <div className='inline-flex items-center'>
             <span>{header.title}</span>{' '}
-            {header.filter ? (
+            {header.filter && (
               <button onClick={() => Sort(header.filter)}>
                 <TiArrowUnsorted />
               </button>
-            ) : (
-              ''
             )}
           </div>
         </th>
