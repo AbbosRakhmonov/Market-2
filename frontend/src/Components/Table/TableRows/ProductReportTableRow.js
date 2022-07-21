@@ -22,18 +22,16 @@ export const ProductReportTableRow = ({
           <td className='td'>{currentPage * countPage + 1 + index}</td>
           <td
             className={`td ${productCheque.code ? `${activeProduct}` : ''}`}
-            data-property='code'
-            onClick={(e) =>
-              addProductCheque(e, product._id, product.productdata.code)
+            onClick={() =>
+              addProductCheque('code', product._id, product.productdata.code)
             }
           >
             {product.productdata.code}
           </td>
           <td
             className={`${productCheque.name ? `${activeProduct}` : ''} td`}
-            data-property='name'
-            onClick={(e) =>
-              addProductCheque(e, product._id, product.productdata.name)
+            onClick={() =>
+              addProductCheque('name', product._id, product.productdata.name)
             }
           >
             {product.productdata.name}
@@ -42,10 +40,9 @@ export const ProductReportTableRow = ({
             className={`td text-right ${
               productCheque.total ? `${activeProduct}` : ''
             } `}
-            data-property='total'
-            onClick={(e) =>
+            onClick={() =>
               addProductCheque(
-                e,
+                'total',
                 product._id,
                 `${product.total} ${product.unit.name}`
               )
@@ -68,9 +65,8 @@ export const ProductReportTableRow = ({
             className={`${
               productCheque.price ? `${activeProduct}` : ''
             } td text-right`}
-            data-property='price'
-            onClick={(e) =>
-              addProductCheque(e, product._id, product.price.sellingprice)
+            onClick={() =>
+              addProductCheque('price', product._id, product.price.sellingprice)
             }
           >
             {product.price.sellingprice.toLocaleString('ru-RU')} {currency}

@@ -5,13 +5,21 @@
 @tailwind utilities;
 
 @layer base {
+  .inputClass {
+    @apply w-full p-[0.625rem] rounded-[0.25rem] border-2 border-blue-100 outline-0 font-roboto text-sm;
+  }
   .tableInput {
-    @apply w-full pt-[0.3125rem] pb-[0.3125rem] pr-[0.3125rem] pl-[0.3125rem] rounded-[0.25rem] border-2 border-blue-200 outline-0 font-roboto text-sm;
+    @apply w-full pt-[0.3125rem] pb-[0.3125rem] pr-[0.3125rem] pl-[0.3125rem] rounded-[0.25rem] border-2 border-blue-200 outline-0 font-roboto text-sm text-right;
   }
   .iconClass {
     @apply w-[1.125rem] h-[1.125rem];
   }
-
+  .searchInput {
+    @apply w-full pt-[0.625rem] pb-[0.625rem] pl-[2rem] rounded-[0.25rem] border-2 border-blue-200 outline-0 font-roboto text-sm;
+  }
+  .searchIcon {
+    @apply absolute top-[0.875rem] left-[0.625rem] w-[1.125rem] h-[1.125rem] text-blue-200;
+  }
   .createElement {
     @apply p-[0.625rem] bg-success-500 text-white-900 text-[0.875rem] rounded-[0.3125rem]  flex items-center gap-[0.3125rem] leading-[1.125rem];
   }
@@ -50,30 +58,6 @@
     @apply absolute top-[0.875rem] left-[0.625rem] w-[1.125rem] h-[1.125rem] text-blue-200;
   }
 
-  .paragraf {
-      @apply text-[0.875rem] flex items-center text-blue-700 leading-[1rem]
-  }
-  .cardStyle {
-    @apply p-[1.15rem] bg-primary-800 text-white-900 inline-block rounded-[.5rem] transition ease-in-out hover:bg-black-700
-  }
-  .headerStyle {
-    @apply flex items-center justify-center text-[1.5rem] font-bold p-[.625rem]
-  }
-  .numberCard {
-    @apply flex justify-between font-normal mt-[.3125rem]
-  }
-  .paragrafCard {
-    @apply text-white-700 mr-[1.25rem]
-  }
-  .paragrafCardBtn {
-    @apply text-white-700 mr-[3.1rem]
-  }
-  .cardSpan {
-    @apply text-[1.25rem] ml-[.625rem]
-  }
-
-
-
   ::-webkit-scrollbar {
     width: 2px;
     @apply bg-black-100;
@@ -82,6 +66,9 @@
   ::-webkit-scrollbar-thumb {
     border-radius: 50px;
     @apply bg-black-200;
+  }
+  .paragraf {
+    @apply text-[0.875rem] flex items-center text-blue-700 leading-[1rem];
   }
 }
 
@@ -141,6 +128,16 @@ body {
 
 .time-line::after {
   right: -11px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
 }
 
 @keyframes rotate-spinner {
