@@ -14,30 +14,30 @@ export const IncomingTableRow = ({
     <>
       {data.map((incoming, index) => (
         <tr key={incoming.product._id} className='tr'>
-          <th className='td text-left'>
+          <th className='py-0 td text-left'>
             {currentPage * countPage + 1 + index}
           </th>
-          <th className='td'>{incoming.product.code}</th>
-          <th className='td text-left'>{incoming.product.name}</th>
-          <th className='td'>
+          <th className='py-0 td text-left'>{incoming.product.code}</th>
+          <th className='py-0 td text-left'>{incoming.product.name}</th>
+          <th className='py-1 td'>
             <TableInput
               onChange={(e) => changeHandler(e, 'count', incoming.product._id)}
               type={'number'}
             />
           </th>
-          <th className='td'>
+          <th className='py-1 td'>
             <TableInput
               onChange={(e) => changeHandler(e, 'price', incoming.product._id)}
               type={'number'}
             />
           </th>
-          <th className='td text-error-500'>
+          <th className='py-0 td text-error-500 text-right'>
             {incoming.previousprice} {currency}
           </th>
-          <th className='td'>
+          <th className='py-0 td text-right'>
             {incoming.total} {currency}
           </th>
-          <th className='td'>
+          <th className='py-0 td'>
             <div className='flex justify-center items-center'>
               <TableBtn
                 type={'delete'}
