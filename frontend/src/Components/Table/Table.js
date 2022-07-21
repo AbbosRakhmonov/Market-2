@@ -86,7 +86,7 @@ function Table({
   return (
     <table className='overflow-x-auto w-full'>
       <thead className='rounded-t-lg'>
-        {<Thead headers={headers} onClick={Sort} />}
+        {<Thead headers={headers} Sort={Sort} />}
       </thead>
       <tbody>{checkRows()}</tbody>
     </table>

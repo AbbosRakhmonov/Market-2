@@ -1,6 +1,6 @@
 import { TiArrowUnsorted } from 'react-icons/ti';
 
-function Thead({ headers, onClick }) {
+function Thead({ headers, Sort }) {
   return (
     <tr className='bg-primary-900 rounded-t-lg'>
       {headers.map((header, index) => (
@@ -20,7 +20,7 @@ function Thead({ headers, onClick }) {
           <div className='inline-flex items-center'>
             <span>{header.title}</span>{' '}
             {header.filter ? (
-              <button onClick={() => onClick(header.filter)}>
+              <button onClick={() => Sort(header.filter)}>
                 <TiArrowUnsorted />
               </button>
             ) : (
