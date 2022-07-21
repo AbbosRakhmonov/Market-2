@@ -1,5 +1,5 @@
 import React from 'react';
-import {IoChevronBack, IoChevronForward} from 'react-icons/io5';
+import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 import ReactPaginate from 'react-paginate';
 
 export const Pagination = ({
@@ -30,9 +30,9 @@ export const Pagination = ({
         pageRangeDisplayed={3}
         onPageChange={pageHandle}
         containerClassName={'flex justify-between items-center'}
-        pageClassName={'mr-[15px]'}
+        pageClassName={'mr-[15px] text-primary-800'}
         pageLinkClassName={
-          'w-[35px] h-[35px] border border-primary-800 rounded-lg text-sm text-primary-800 flex justify-center items-center hover:bg-primary-700 hover:border-primary-700 hover:text-white-900 transition ease-in-out duration-100'
+          'w-[35px] h-[35px] border border-primary-800 rounded-lg text-sm flex justify-center items-center hover:bg-primary-700 hover:border-primary-700 hover:text-white-900 transition ease-in-out duration-100'
         }
         previousClassName={'mr-[15px]'}
         previousLinkClassName={
@@ -46,9 +46,9 @@ export const Pagination = ({
         breakLinkClassName={
           'w-[35px] h-[35px] border border-primary-800 rounded-lg text-sm text-primary-800 flex justify-center items-center hover:bg-primary-700 hover:border-primary-700 hover:text-white-900 transition ease-in-out duration-100'
         }
-        activeClassName={'mr-[15px]'}
+        activeClassName={'mr-[15px] text-white-900'}
         activeLinkClassName={
-          'border border-primary-800 bg-primary-800 text-white-900'
+          'text-white-900 border border-primary-800 bg-primary-800'
         }
         disabledLinkClassName={
           'bg-transparent border-black-100 text-black-100 hover:bg-transparent hover:border-black-100 hover:text-black-100'
