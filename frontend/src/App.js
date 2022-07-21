@@ -20,7 +20,7 @@ function App() {
   return (
     <div className='App'>
       <Suspense fallback={'loading'}>
-        {logged ? <PageRoutes /> : <Login />}
+        { logged ? <PageRoutes /> : <Login />}
       </Suspense>
       <ToastContainer
         position='top-right'
