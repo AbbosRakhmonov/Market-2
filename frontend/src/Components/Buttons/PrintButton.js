@@ -2,11 +2,7 @@ import React, { useRef } from "react";
 import ReactToPrint from "react-to-print";
 import { IoPrint } from "react-icons/io5";
 
-export const ComponentToPrint = React.forwardRef((props, ref) => {
-  return <div ref={ref}>My cool content here!</div>;
-});
-
-export const PrintButton = () => {
+export const PrintButton = (component) => {
   const componentRef = useRef();
   return (
     <div>
@@ -23,7 +19,7 @@ export const PrintButton = () => {
         )}
         content={() => componentRef.current}
       />
-      <ComponentToPrint ref={componentRef} />
+      <component.component ref={componentRef} />
     </div>
   );
 };
