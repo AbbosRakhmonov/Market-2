@@ -1,4 +1,5 @@
 import { CategoryTableRow } from './TableRows/CategoryTableRow';
+import { ProductReportTableRow } from './TableRows/ProductReportTableRow';
 import { ProductTableRow } from './TableRows/ProductTableRow';
 import { SupplierTableRow } from './TableRows/SupplierTableRow';
 import { UnitTableRow } from './TableRows/UnitTableRow';
@@ -13,6 +14,12 @@ function Table({
   Sort,
   Edit,
   Delete,
+  currency,
+  changeHandler,
+  addProductCheque,
+  productCheque,
+  Print,
+  inputValue,
 }) {
   const checkRows = () => {
     switch (page) {
@@ -54,6 +61,22 @@ function Table({
             countPage={countPage}
             Edit={Edit}
             Delete={Delete}
+          />
+        );
+      case 'productreport':
+        return (
+          <ProductReportTableRow
+            data={data}
+            currentPage={currentPage}
+            countPage={countPage}
+            Edit={Edit}
+            Delete={Delete}
+            currency={currency}
+            changeHandler={changeHandler}
+            addProductCheque={addProductCheque}
+            productCheque={productCheque}
+            Print={Print}
+            inputValue={inputValue}
           />
         );
       default:
