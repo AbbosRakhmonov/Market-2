@@ -20,7 +20,7 @@ function Thead({ headers, onClick }) {
           <div className='inline-flex items-center'>
             <span>{header.title}</span>{' '}
             {header.filter ? (
-              <button name={header.filter} onClick={onClick}>
+              <button onClick={() => onClick(header.filter)}>
                 <TiArrowUnsorted />
               </button>
             ) : (

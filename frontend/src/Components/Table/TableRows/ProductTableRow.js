@@ -11,7 +11,7 @@ export const ProductTableRow = ({
   return (
     <>
       {data.map((product, index) => (
-        <tr key={product._id} className='tr '>
+        <tr key={product._id} className='tr'>
           <td className='td text-center '>
             {currentPage * countPage + 1 + index}
           </td>
@@ -32,11 +32,15 @@ export const ProductTableRow = ({
           </td>
           <td className='td border-r-0 text-center max-w-[50px]'>
             <div className='flex items-center justify-center'>
-              <TableBtn type={'edit'} bgcolor='bg-warning-500' onClick={Edit} />
+              <TableBtn
+                type={'edit'}
+                bgcolor='bg-warning-500'
+                onClick={() => Edit(product)}
+              />
               <TableBtn
                 type={'delete'}
                 bgcolor='bg-error-500 ml-2.5'
-                onClick={Delete}
+                onClick={() => Delete(product)}
               />
             </div>
           </td>
