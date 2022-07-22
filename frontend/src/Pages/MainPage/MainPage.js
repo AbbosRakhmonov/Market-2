@@ -1,7 +1,7 @@
 import React from 'react';
 
-function MainPage(props) {
-  return <div>MainPage</div>;
+function MainPage() {
+  return <div>Bosh Sahifa</div>;
 }
 
 export default MainPage;
