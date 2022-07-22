@@ -11,7 +11,7 @@ const SelectForm = ({onSelect}) => {
         {value: 100, label: 100},
     ];
     return (
-        <div className='flex items-center'>
+        <div className=''>
             <label
                 htmlFor='select'
                 className={'text-[0.875rem] font-light text-blue-700 leading-[1rem]'}

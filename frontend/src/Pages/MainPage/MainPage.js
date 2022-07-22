@@ -1,8 +1,7 @@
 import React from 'react';
+
 function MainPage() {
-  return <div>
-      MainPage
-  </div>;
+  return <div>Bosh sahifa</div>;
 }
 
 export default MainPage;
