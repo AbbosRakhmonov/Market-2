@@ -55,7 +55,7 @@
   }
 
   .td {
-    @apply px-2 py-2.5 border-r-2 border-b-2 border-primary-700 text-sm font-normal text-[#000];
+    @apply px-2.5 border-r-2 border-b-2 border-primary-700 text-sm font-normal text-[#000];
   }
 
   .th {
@@ -63,7 +63,7 @@
   }
 
   .tr {
-    @apply border-transparent border-l-8 hover:bg-black-300 hover:border-primary-700;
+    @apply border-transparent bg-white-900 hover:bg-black-300 hover:shadow-[-8px_0_0] hover:shadow-primary-700 transition-shadow duration-200;
   }
 
   .inputClass {

@@ -77,7 +77,7 @@ export const ProductReportTableRow = ({
             )}{' '}
             {currency}
           </td>
-          <td className='td'>
+          <td className='py-[0.25rem] td'>
             <TableInput
               onChange={() => changeHandler(product)}
               type={'number'}

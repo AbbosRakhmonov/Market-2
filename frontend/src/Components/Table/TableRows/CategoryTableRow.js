@@ -15,7 +15,7 @@ export const CategoryTableRow = ({
           <td className='td'>{currentPage * countPage + 1 + index}</td>
           <td className='td'>{category.code}</td>
           <td className='td'>{category.name}</td>
-          <td className='td border-r-0 text-center max-w-[50px]'>
+          <td className='td py-[0.375rem] border-r-0 text-center max-w-[50px]'>
             <div className='flex items-center justify-center'>
               <TableBtn
                 type={'edit'}
