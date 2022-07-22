@@ -1,29 +1,18 @@
 import React from 'react';
 
-const CheckoutCards = ({
-  trade,
-  profit,
-  expenses,
-  cash,
-  plastic,
-  transfers,
-  returned,
-  discount,
-  debts,
-  onClick,
-  percentage,
-  name,
-  cost,
-  active,
-}) => {
+const CheckoutCards = ({ type, onClick, percentage, name, cost, active }) => {
   const chooseCardName = `cardContainer ${
-    trade || profit || cash || plastic || transfers
+    type === 'trade' ||
+    type === 'profit' ||
+    type === 'cash' ||
+    type === 'plastic' ||
+    type === 'transfers'
       ? 'tradeCard'
-      : expenses || debts
+      : type === 'expenses' || type == 'debts'
       ? 'debts'
-      : returned
+      : type === 'returned'
       ? 'returnedCard'
-      : discount
+      : type === 'discount'
       ? 'discountCard'
       : ''
   } ${active ? 'activeCard' : ''}`;
@@ -32,11 +21,11 @@ const CheckoutCards = ({
     <button onClick={onClick}>
       <div className={chooseCardName}>
         <div className='tradeIn'>
-          <div className={profit ? 'hidden' : 'percentageCircle'}>
+          <div className={(type === 'profit' ? 'hidden' : 'percentageCircle')}>
             <p> {percentage} </p>
           </div>
           <div>
-            <div className={profit ? 'checkName' : 'checkoutName'}>
+            <div className={(type === 'profit' ? 'checkName' : 'checkoutName')}>
               <p className='text-[1.5rem]'>{name}</p>
               <p className='text-[1.25rem] '>$</p>
             </div>
