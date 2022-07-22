@@ -1,5 +1,6 @@
 import { CategoryTableRow } from './TableRows/CategoryTableRow';
 import { IncomingTableRow } from './TableRows/IncomingTableRow';
+import { InventoryTableRow } from './TableRows/InventoryTableRow';
 import { ProductReportTableRow } from './TableRows/ProductReportTableRow';
 import { ProductTableRow } from './TableRows/ProductTableRow';
 import { SupplierTableRow } from './TableRows/SupplierTableRow';
@@ -21,6 +22,7 @@ function Table({
   productCheque,
   Print,
   inputValue,
+  inputDisabled,
 }) {
   const checkRows = () => {
     switch (page) {
@@ -89,6 +91,17 @@ function Table({
             changeHandler={changeHandler}
             Delete={Delete}
             currency={currency}
+          />
+        );
+      case 'inventory':
+        return (
+          <InventoryTableRow
+            data={data}
+            currentPage={currentPage}
+            countPage={countPage}
+            changeHandler={changeHandler}
+            inputDisabled={inputDisabled}
+            Delete={Delete}
           />
         );
       default:

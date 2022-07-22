@@ -30,7 +30,7 @@ export const ProductTableRow = ({
               product.price.sellingprice.toLocaleString('ru-RU')}{' '}
             USD
           </td>
-          <td className='td border-r-0 text-center max-w-[50px]'>
+          <td className='td py-[0.375rem] border-r-0 text-center max-w-[50px]'>
             <div className='flex items-center justify-center'>
               <TableBtn
                 type={'edit'}

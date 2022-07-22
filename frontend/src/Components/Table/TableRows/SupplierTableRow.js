@@ -14,7 +14,7 @@ export const SupplierTableRow = ({
         <tr key={supplier._id} className='tr'>
           <td className='td'>{currentPage * countPage + 1 + index}</td>
           <td className='td text-left'>{supplier.name}</td>
-          <td className='td border-r-0 text-center max-w-[50px]'>
+          <td className='py-[0.375rem] td border-r-0 text-center max-w-[50px]'>
             <div className='flex items-center justify-center'>
               <TableBtn
                 type={'edit'}
