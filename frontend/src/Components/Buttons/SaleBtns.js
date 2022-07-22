@@ -12,14 +12,14 @@ import { IoWalletOutline } from 'react-icons/io5';
 
 export const SaleBtn = ({ onClick, text, type }) => {
   const icons = {
-    cash: <BsCashStack className='style' />,
-    card: <BsFillCreditCardFill className='style' />,
-    transfer: <BsArrowLeftRight className='style' />,
-    mixed: <BiGitCompare className='style' />,
+    cash: <BsCashStack className='paymentsstyle' />,
+    card: <BsFillCreditCardFill className='paymentsstyle' />,
+    transfer: <BsArrowLeftRight className='paymentsstyle' />,
+    mixed: <BiGitCompare className='paymentsstyle' />,
   };
   return (
     <>
-      <button onClick={onClick} className='SaleStyle'>
+      <button onClick={onClick} className='salestyle'>
         {icons[type]}
         {text}
       </button>
@@ -29,8 +29,8 @@ export const SaleBtn = ({ onClick, text, type }) => {
 
 export const DiscountBtn = ({ onClick, text }) => {
   return (
-    <button onClick={onClick} className='DiscountStyle'>
-      <AiOutlineTag className='DiscStyle' />
+    <button onClick={onClick} className='discountstyle'>
+      <AiOutlineTag className='discstyle' />
       {text}
     </button>
   );
@@ -38,8 +38,8 @@ export const DiscountBtn = ({ onClick, text }) => {
 
 export const Payment = ({ onClick, text }) => {
   return (
-    <button onClick={onClick} className='paymentStyle'>
-      <IoWalletOutline className='payStyle' />
+    <button onClick={onClick} className='paymentstyle'>
+      <IoWalletOutline className='paystyle' />
       {text}
     </button>
   );
@@ -47,7 +47,7 @@ export const Payment = ({ onClick, text }) => {
 
 export const PaymentClip = ({ onClick, text }) => {
   return (
-    <button onClick={onClick} className='PayStyle'>
+    <button onClick={onClick} className='payclipstyle'>
       <BsPaperclip className='w-[2rem] h-[18px]' />
     </button>
   );
