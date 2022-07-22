@@ -16,21 +16,21 @@ const CheckoutCards = ({
   cost,
   active,
 }) => {
+  const chooseCardName = `cardContainer ${
+    trade || profit || cash || plastic || transfers
+      ? 'tradeCard'
+      : expenses || debts
+      ? 'debts'
+      : returned
+      ? 'returnedCard'
+      : discount
+      ? 'discountCard'
+      : ''
+  } ${active ? 'activeCard' : ''}`;
+
   return (
     <button onClick={onClick}>
-      <div
-        className={`cardContainer ${
-          trade || profit || cash || plastic || transfers
-            ? 'tradeCard'
-            : expenses || debts
-            ? 'debts'
-            : returned
-            ? 'returnedCard'
-            : discount
-            ? 'discountCard'
-            : ''
-        } ${active ? 'activeCard' : ''}`}
-      >
+      <div className={chooseCardName}>
         <div className='tradeIn'>
           <div className={profit ? 'hidden' : 'percentageCircle'}>
             <p> {percentage} </p>
