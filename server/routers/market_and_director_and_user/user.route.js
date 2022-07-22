@@ -171,65 +171,6 @@ module.exports.registerDirector = async (req, res) => {
   }
 };
 
-// User Director
-
-module.exports.updateDirector = async (req, res) => {
-  try {
-    const {
-      _id,
-      firstname,
-      lastname,
-      fathername,
-      image,
-      phone,
-      password,
-      market,
-      login,
-    } = req.body;
-
-    const marke = await Market.findById(market);
-
-    if (!marke) {
-      return res.status(401).json({
-        message:
-          "Diqqat! Foydalanuvchi ro'yxatga olinayotgan do'kon dasturda ro'yxatga olinmagan.",
-      });
-    }
-
-    const oldDirector = await User.findById(_id);
-
-    let newDirector = {
-      firstname: firstname,
-      lastname: lastname,
-      fathername: fathername,
-      image: image,
-      phone: phone,
-      password: password,
-      login: login,
-    };
-
-    const isPasswordChanged = await bcrypt.compare(
-      newDirector.password,
-      oldDirector.password
-    );
-
-    if (!isPasswordChanged) {
-      let newPassword = await bcrypt.hash(newDirector.password, 8);
-      newDirector.password = newPassword;
-    } else {
-      newDirector.password = oldDirector.password;
-    }
-
-    await User.findByIdAndUpdate(oldDirector._id, {
-      ...newDirector,
-    });
-
-    res.status(201).json(oldDirector);
-  } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
-  }
-};
-
 // User LOGIN
 module.exports.login = async (req, res) => {
   try {

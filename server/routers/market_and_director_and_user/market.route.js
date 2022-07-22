@@ -1,7 +1,7 @@
 const {
   Market,
   validateMarket,
-} = require('../../models/MarketAndBranch/Market');
+} = require("../../models/MarketAndBranch/Market");
 
 module.exports.register = async (req, res) => {
   try {
@@ -65,9 +65,8 @@ module.exports.edit = async (req, res) => {
   try {
     const { market } = req.body;
 
-    await Market.findByIdAndUpdate(market._id, { ...market });
-    const updatedMarket = await Market.findById(market._id);
-    res.status(201).send(updatedMarket);
+    const update = await Market.findByIdAndUpdate(market._id, { ...market });
+    res.status(201).send(update);
   } catch (error) {
     res.status(501).json({ message: error });
   }
@@ -82,10 +81,10 @@ module.exports.getMarket = async (req, res) => {
       });
     }
 
-    const markets = await Market.find().select('name');
+    const markets = await Market.find().select("name");
 
     res.status(200).send(markets);
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };

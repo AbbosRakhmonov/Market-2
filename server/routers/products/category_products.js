@@ -46,6 +46,10 @@ router.delete('/product/delete', auth, (req, res) => {
   require('./product').delete(req, res);
 });
 
+router.post('/product/getallcategory', auth, (req, res) => {
+  require('./product').getAllCategory(req, res);
+});
+
 router.post('/product/getproductsale', auth, (req, res) => {
   require('./product').getproductsale(req, res);
 });
@@ -62,12 +66,62 @@ router.post('/product/getexceldata', auth, (req, res) => {
   require('./product').getProductExcel(req, res);
 });
 
+router.post('/product/getproducttypes', auth, (req, res) => {
+  require('./product').getAllProducttypes(req, res);
+});
+
 router.delete('/product/deleteall', auth, (req, res) => {
   require('./product').deleteAll(req, res);
 });
 
+router.delete('/product/deleteallcategory', auth, (req, res) => {
+  require('./product').deleteAllcategory(req, res);
+});
+
 router.post('/product/getallincoming', auth, (req, res) => {
   require('./product').getAllIncoming(req, res);
+});
+
+//========================================================
+// PRODUCTTYPE
+router.post('/producttype/register', auth, (req, res) => {
+  require('./producttype').register(req, res);
+});
+
+router.put('/producttype/update', auth, (req, res) => {
+  require('./producttype').update(req, res);
+});
+
+router.delete('/producttype/delete', auth, (req, res) => {
+  require('./producttype').delete(req, res);
+});
+
+router.post('/producttype/getall', auth, (req, res) => {
+  require('./producttype').getAll(req, res);
+});
+
+router.post('/producttype/getproducttypes', auth, (req, res) => {
+  require('./producttype').getProductType(req, res);
+});
+
+router.post('/producttype/getincoming', auth, (req, res) => {
+  require('./producttype').getProductTypeIncoming(req, res);
+});
+
+router.post('/producttype/getproducttypesexcel', auth, (req, res) => {
+  require('./producttype').getProductTypeExcel(req, res);
+});
+
+router.post('/producttype/getallcategory', auth, (req, res) => {
+  require('./producttype').getAllcategory(req, res);
+});
+
+router.delete('/producttype/deleteall', auth, (req, res) => {
+  require('./producttype').deleteAll(req, res);
+});
+
+router.delete('/producttype/deleteallcategory', auth, (req, res) => {
+  require('./producttype').deleteAllcategory(req, res);
 });
 
 //========================================================
@@ -122,6 +176,38 @@ router.post('/incoming/getconnectors', auth, (req, res) => {
 
 router.post('/incoming/getcount', auth, (req, res) => {
   require('./incoming').getCount(req, res);
+});
+
+//========================================================
+// BRAND
+// CRUD
+router.post('/brand/register', auth, (req, res) => {
+  require('./brand').register(req, res);
+});
+
+router.post('/brand/getall', auth, (req, res) => {
+  require('./brand').getAll(req, res);
+});
+
+router.put('/brand/update', auth, (req, res) => {
+  require('./brand').update(req, res);
+});
+
+router.delete('/brand/delete', auth, (req, res) => {
+  require('./brand').delete(req, res);
+});
+
+router.post('/brand/getbrands', auth, (req, res) => {
+  require('./brand').getBrands(req, res);
+});
+
+router.post('/brand/getbrandsexcel', auth, (req, res) => {
+  require('./brand').getBrandsExcel(req, res);
+});
+
+//
+router.post('/product/updateallproducts', (req, res) => {
+  require('./product').updateAllProducts(req, res);
 });
 
 // TEMPORARY
