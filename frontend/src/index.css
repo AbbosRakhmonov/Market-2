@@ -161,6 +161,36 @@
   .paragraf {
     @apply text-[0.875rem] flex items-center text-blue-700 leading-[1rem];
   }
+
+  /* SaleBtns Style */
+
+  .style {
+    @apply inline-block mx-2 w-[22px] h-[18-px]
+  }
+
+  .SaleStyle {
+    @apply bg-[#E9ECEB] px-[10px] py-[10px] text-[#5A5B5B] active:bg-[#00B4CC] active:text-white-900 rounded-lg font-roboto outline-none
+  }
+
+  .DiscountStyle {
+    @apply bg-[#F79009] px-[15px] py-[10px] text-white-900 rounded-lg outline-none
+  }
+
+  .DiscStyle {
+    @apply inline-block mx-1 w-[21px] h-[21px]
+  }
+
+  .paymentStyle {
+    @apply bg-[#12B76A] px-[4rem] py-[1.3rem] text-white-900 rounded-lg outline-none
+  }
+
+  .payStyle {
+    @apply inline-block mr-1 w-[21px] h-[21px]
+  }
+
+  .PayStyle{
+    @apply bg-[#9E9E9E] px-[22px] py-[15px] text-white-900 rounded-lg mx-1 outline-none
+  }
 }
 
 html,
@@ -247,3 +277,4 @@ input::-webkit-inner-spin-button {
 input[type='number'] {
   -moz-appearance: textfield;
 }
+
