@@ -1,5 +1,6 @@
 import { CategoryTableRow } from './TableRows/CategoryTableRow';
 import { IncomingTableRow } from './TableRows/IncomingTableRow';
+import { InventoriesTableRow } from './TableRows/InventoriesTableRow';
 import { InventoryTableRow } from './TableRows/InventoryTableRow';
 import { ProductReportTableRow } from './TableRows/ProductReportTableRow';
 import { ProductTableRow } from './TableRows/ProductTableRow';
@@ -23,6 +24,7 @@ function Table({
   Print,
   inputValue,
   inputDisabled,
+  Excel,
 }) {
   const checkRows = () => {
     switch (page) {
@@ -102,6 +104,16 @@ function Table({
             changeHandler={changeHandler}
             inputDisabled={inputDisabled}
             Delete={Delete}
+          />
+        );
+      case 'inventories':
+        return (
+          <InventoriesTableRow
+            data={data}
+            currentPage={currentPage}
+            countPage={countPage}
+            Excel={Excel}
+            Print={Print}
           />
         );
       default:
