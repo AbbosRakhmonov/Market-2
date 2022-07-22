@@ -15,6 +15,10 @@ const {
 } = require('../../models/FilialProducts/FilialProduct');
 const { ProductData } = require('../../models/Products/Productdata');
 const ObjectId = require('mongodb').ObjectId;
+const {
+  Exchangerate,
+  validateExchangerate,
+} = require('../../models/Exchangerate/Exchangerate');
 
 //Product registerall
 module.exports.registerAll = async (req, res) => {
@@ -54,8 +58,16 @@ module.exports.registerAll = async (req, res) => {
           error: error.message,
         });
       }
-      const { name, code, unit, incomingprice, sellingprice, total } = product;
-
+      const {
+        name,
+        code,
+        unit,
+        incomingprice,
+        sellingprice,
+        incomingpriceuzs,
+        sellingpriceuzs,
+        total,
+      } = product;
       let categor = await Category.findOne({
         code: code.slice(0, 3),
         market,
@@ -87,7 +99,6 @@ module.exports.registerAll = async (req, res) => {
       });
 
       // Create Price
-
       const newPrice = new ProductPrice({
         incomingprice: incomingprice
           ? Math.round(incomingprice * 10000) / 10000
@@ -95,9 +106,14 @@ module.exports.registerAll = async (req, res) => {
         sellingprice: sellingprice
           ? Math.round(sellingprice * 10000) / 10000
           : 0,
+        incomingpriceuzs: incomingpriceuzs
+          ? Math.round(incomingpriceuzs * 1) / 1
+          : 0,
+        sellingpriceuzs: sellingpriceuzs
+          ? Math.round(sellingpriceuzs * 1) / 1
+          : 0,
         market,
       });
-
       await newPrice.save();
       newProduct.price = newPrice._id;
 
@@ -156,7 +172,10 @@ module.exports.registerAll = async (req, res) => {
     })
       .sort({ code: 1 })
       .select('total market category')
-      .populate('price', 'incomingprice sellingprice')
+      .populate(
+        'price',
+        'incomingprice sellingprice incomingpriceuzs sellingpriceuzs'
+      )
       .populate({
         path: 'productdata',
         select: 'name code',
@@ -190,9 +209,17 @@ module.exports.register = async (req, res) => {
       });
     }
 
-    const { name, code, market, unit, total, incomingprice, sellingprice } =
-      req.body.product;
-
+    const {
+      name,
+      code,
+      market,
+      unit,
+      total,
+      incomingprice,
+      sellingprice,
+      incomingpriceuzs,
+      sellingpriceuzs,
+    } = req.body.product;
     const marke = await Market.findById(market);
 
     if (!marke) {
@@ -253,6 +280,12 @@ module.exports.register = async (req, res) => {
         ? Math.round(incomingprice * 10000) / 10000
         : 0,
       sellingprice: sellingprice ? Math.round(sellingprice * 10000) / 10000 : 0,
+      incomingpriceuzs: incomingpriceuzs
+        ? Math.round(incomingpriceuzs * 1) / 1
+        : 0,
+      sellingpriceuzs: sellingpriceuzs
+        ? Math.round(sellingpriceuzs * 1) / 1
+        : 0,
       market,
     });
 
@@ -289,7 +322,10 @@ module.exports.register = async (req, res) => {
     })
       .sort({ code: 1 })
       .select('total market category')
-      .populate('price', 'incomingprice sellingprice')
+      .populate(
+        'price',
+        'incomingprice sellingprice incomingpriceuzs sellingpriceuzs'
+      )
       .populate({
         path: 'productdata',
         select: 'name code',
@@ -308,6 +344,7 @@ module.exports.register = async (req, res) => {
       count,
     });
   } catch (error) {
+    console.log(error);
     res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
@@ -325,6 +362,8 @@ module.exports.update = async (req, res) => {
       priceid,
       incomingprice,
       sellingprice,
+      incomingpriceuzs,
+      sellingpriceuzs,
       total,
       productdata,
     } = req.body.product;
@@ -348,9 +387,25 @@ module.exports.update = async (req, res) => {
       });
     }
 
+    const exchangerate = await Exchangerate.findOne({ market })
+      .select('exchangerate')
+      .sort({ _id: -1 });
+
     await ProductPrice.findByIdAndUpdate(priceid, {
       incomingprice: Math.round(incomingprice * 10000) / 10000,
       sellingprice: Math.round(sellingprice * 10000) / 10000,
+      incomingpriceuzs:
+        Math.round(
+          (incomingpriceuzs
+            ? incomingpriceuzs
+            : exchangerate.exchangerate * incomingprice) * 1
+        ) / 1,
+      sellingpriceuzs:
+        Math.round(
+          (sellingpriceuzs
+            ? sellingpriceuzs
+            : exchangerate.exchangerate * sellingprice) * 1
+        ) / 1,
     });
     product.unit = unit;
     product.total = total;
@@ -407,7 +462,10 @@ module.exports.update = async (req, res) => {
     })
       .sort({ code: 1 })
       .select('total market category')
-      .populate('price', 'incomingprice sellingprice')
+      .populate(
+        'price',
+        'incomingprice sellingprice incomingpriceuzs sellingpriceuzs'
+      )
       .populate({
         path: 'productdata',
         select: 'name code',
@@ -555,7 +613,10 @@ module.exports.getAll = async (req, res) => {
       .populate('producttype', 'name')
       .populate('unit', 'name')
       .populate('brand', 'name')
-      .populate('price', 'incomingprice sellingprice');
+      .populate(
+        'price',
+        'incomingprice sellingprice incomingpriceuzs sellingpriceuzs'
+      );
 
     res.send(products);
   } catch (error) {
@@ -580,7 +641,10 @@ module.exports.getProducts = async (req, res) => {
     })
       .sort({ code: 1 })
       .select('total market category')
-      .populate('price', 'incomingprice sellingprice')
+      .populate(
+        'price',
+        'incomingprice sellingprice incomingpriceuzs sellingpriceuzs'
+      )
       .populate({
         path: 'productdata',
         select: 'name code',
@@ -594,12 +658,63 @@ module.exports.getProducts = async (req, res) => {
 
     const count = filter.length;
     filter = filter.splice(currentPage * countPage, countPage);
+
     res.status(201).json({
       products: filter,
       count,
     });
   } catch (error) {
     res.status(401).send(error);
+  }
+};
+
+//Product getallCategory
+module.exports.getCategory = async (req, res) => {
+  try {
+    const { market, category } = req.body;
+
+    const marke = await Market.findById(market);
+
+    if (!marke) {
+      return res.status(400).json({
+        message: "Diqqat! Do'kon ma'lumotlari topilmadi.",
+      });
+    }
+
+    const products = await Product.find({
+      market,
+      category,
+    })
+      .sort({ _id: -1 })
+      .select('name code unit category price total')
+      .populate('category', 'name code')
+      .populate('unit', 'name')
+      .populate('price', 'sellingprice');
+
+    res.send(products);
+  } catch (error) {
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+  }
+};
+
+module.exports.getAllProducttypes = async (req, res) => {
+  try {
+    const { market } = req.body;
+    const marke = await Market.findById(market);
+
+    if (!marke) {
+      return res
+        .status(401)
+        .json({ message: "Diqqat! Do'kon malumotlari topilmadi." });
+    }
+
+    const producttypes = await ProductType.find({ market }).select(
+      'name category market'
+    );
+
+    res.status(201).json(producttypes);
+  } catch (error) {
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -653,7 +768,10 @@ module.exports.getAllIncoming = async (req, res) => {
     })
       .sort({ code: 1 })
       .select('total market category')
-      .populate('price', 'incomingprice sellingprice')
+      .populate(
+        'price',
+        'incomingprice sellingprice incomingpriceuzs sellingpriceuzs'
+      )
       .populate({
         path: 'productdata',
         select: 'name code',
@@ -664,6 +782,93 @@ module.exports.getAllIncoming = async (req, res) => {
       return product.productdata !== null;
     });
 
+    res.send(products);
+  } catch (error) {
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+  }
+};
+
+//Product getall by type
+module.exports.getAllType = async (req, res) => {
+  try {
+    const { market, typeid } = req.body;
+    const marke = await Market.findById(market);
+    const type = await ProductType.findById(typeid);
+
+    if (!type || !marke) {
+      return res.status(400).json({
+        message: "Diqqat! Ma'lumotlar topilmadi.",
+      });
+    }
+
+    const products = await Product.find({
+      market,
+
+      producttype: typeid,
+    })
+      .sort({ _id: -1 })
+      .select('name code unit category price total')
+      .populate('category', 'name code')
+      .populate('unit', 'name')
+      .populate('price', 'sellingprice');
+    res.send(products);
+  } catch (error) {
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+  }
+};
+
+//Product getall by brand
+module.exports.getAllBrand = async (req, res) => {
+  try {
+    const { market, typeid } = req.body;
+
+    const marke = await Market.findById(market);
+    const bran = await Brand.findById(typeid);
+
+    if (!bran || !marke) {
+      return res.status(400).json({
+        message: "Diqqat! Ma'lumotlar topilmadi.",
+      });
+    }
+
+    const products = await Product.find({
+      market,
+
+      brand: typeid,
+    })
+      .select('name code category producttype price unit total')
+      .populate('category', 'code')
+      .populate('producttype', 'name')
+      .populate('price', 'sellingprice')
+      .populate('unit', 'name');
+    res.send(products);
+  } catch (error) {
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+  }
+};
+
+//Product getall by category
+module.exports.getAllCategory = async (req, res) => {
+  try {
+    const { market, typeid } = req.body;
+    const marke = await Market.findById(market);
+    const categor = await Category.findById(typeid);
+
+    if (!categor || !marke) {
+      return res.status(400).json({
+        message: "Diqqat! Bo'lim ma'lumotlari topilmadi.",
+      });
+    }
+
+    const products = await Product.find({
+      market,
+      category: typeid,
+    })
+      .sort({ _id: -1 })
+      .select('name code unit category price total')
+      .populate('category', 'name code')
+      .populate('unit', 'name')
+      .populate('price', 'sellingprice');
     res.send(products);
   } catch (error) {
     res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
@@ -801,7 +1006,7 @@ module.exports.getproductsale = async (req, res) => {
           localField: 'price', // qo'shilgan schemaga qanday nom bilan yozulgani
           foreignField: '_id', // qaysi propertysi qo'shilgani
           as: 'price', // qanday nom bilan chiqishi
-          pipeline: [{ $project: { sellingprice: 1 } }],
+          pipeline: [{ $project: { sellingprice: 1, incomingprice: 1 } }],
         },
       },
       {

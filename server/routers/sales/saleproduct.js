@@ -57,8 +57,8 @@ module.exports.register = async (req, res) => {
       Math.round(
         saleproducts.reduce((summ, saleproduct) => {
           return summ + saleproduct.totalpriceuzs;
-        }, 0) * 10000
-      ) / 10000;
+        }, 0) * 1
+      ) / 1;
 
     if (checkPayments(totalprice, payment, discount, debt)) {
       return res.status(400).json({
@@ -232,7 +232,7 @@ module.exports.register = async (req, res) => {
       }
     }
 
-    const id = await SaleConnector.find().count();
+    const id = await SaleConnector.find({ market }).count();
     saleconnector.id = 1000000 + id;
     saleconnector.products = [...products];
     await saleconnector.save();
@@ -309,8 +309,8 @@ module.exports.addproducts = async (req, res) => {
       Math.round(
         saleproducts.reduce((summ, saleproduct) => {
           return summ + saleproduct.totalpriceuzs;
-        }, 0) * 10000
-      ) / 10000;
+        }, 0) * 1
+      ) / 1;
 
     if (checkPayments(totalprice, payment, discount, debt)) {
       return res.status(400).json({
@@ -352,6 +352,7 @@ module.exports.addproducts = async (req, res) => {
       }
 
       const newSaleProduct = new SaleProduct({
+        price: produc.price,
         totalprice,
         totalpriceuzs,
         unitprice,
@@ -595,7 +596,6 @@ module.exports.getsaleconnectors = async (req, res) => {
       );
     });
     const count = filter.length;
-    console.log(filter);
     res.status(200).json({
       saleconnectors: filter.splice(countPage * currentPage, countPage),
       count,
@@ -701,8 +701,8 @@ module.exports.registeredit = async (req, res) => {
       Math.round(
         saleproducts.reduce((summ, saleproduct) => {
           return summ + saleproduct.totalpriceuzs;
-        }, 0) * 10000
-      ) / 10000;
+        }, 0) * 1
+      ) / 1;
 
     let all = [];
 
@@ -729,6 +729,7 @@ module.exports.registeredit = async (req, res) => {
         const produc = await Product.findById(product._id);
 
         const newSaleProduct = new SaleProduct({
+          price: produc.price,
           totalprice: -totalprice,
           totalpriceuzs: -totalpriceuzs,
           unitprice,

@@ -17,6 +17,49 @@ router.post('/market', (req, res) => {
 });
 
 //========================================================
+// Branch
+router.post('/branch/register', auth, (req, res) => {
+  require('./branch.route').register(req, res);
+});
+
+router.put('/branch/update', auth, (req, res) => {
+  require('./branch.route').update(req, res);
+});
+
+router.delete('/branch/delete', auth, (req, res) => {
+  require('./branch.route').delete(req, res);
+});
+
+router.post('/branch/getall', auth, (req, res) => {
+  require('./branch.route').getBranch(req, res);
+});
+
+router.post('/branch/registerdirector', auth, (req, res) => {
+  require('./branch.route').registerBranchDirector(req, res);
+});
+
+//========================================================
+//Director
+// router.post('/director/register', (req, res) => {
+//   require('./director.route').register(req, res)
+// })
+
+router.post('/director/login', (req, res) => {
+  require('./director.route').login(req, res);
+});
+
+router.post('/director', (req, res) => {
+  require('./director.route').getDirector(req, res);
+});
+
+router.put('/director/update', (req, res) => {
+  require('./director.route').update(req, res);
+});
+
+router.put('/director/updatepassword', (req, res) => {
+  require('./director.route').updatePassword(req, res);
+});
+
 //========================================================
 //User
 router.post('/user/register', auth, (req, res) => {
@@ -25,10 +68,6 @@ router.post('/user/register', auth, (req, res) => {
 
 router.post('/director/register', (req, res) => {
   require('./user.route').registerDirector(req, res);
-});
-
-router.put('/director/update', (req, res) => {
-  require('./user.route').updateDirector(req, res);
 });
 
 router.post('/user/login', (req, res) => {
