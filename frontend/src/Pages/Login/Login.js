@@ -30,7 +30,9 @@ function Login() {
     useEffect(() => {
         if (error) {
             toast.error(error);
-            dispatch(clearError())
+            setTimeout(() => {
+                dispatch(clearError())
+            }, 1000);
         }
     }, [error, dispatch])
     return (
