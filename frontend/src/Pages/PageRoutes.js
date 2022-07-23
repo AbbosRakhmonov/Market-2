@@ -15,11 +15,7 @@ const PageRoutes = () => {
   return (
     <section className={'flex bg-background'}>
       <Navbar />
-      <div
-        className={
-          'flex-grow pl-[2.5rem] pr-[1.25rem] py-[1.25rem] h-screen overflow-y-auto'
-        }
-      >
+      <div className={'flex-grow p-0 h-screen overflow-y-auto'}>
         <Suspense fallback={'loading'}>
           <Routes>
             <Route path='/' element={<MainPage />} />

@@ -169,6 +169,9 @@
   .activelink {
     @apply bg-white-900 shadow-[0px_10px_10px] shadow-black-100;
   }
+  .section {
+    @apply pl-[2.5rem] pr-[1.25rem] py-[1.25rem];
+  }
 }
 
 html,

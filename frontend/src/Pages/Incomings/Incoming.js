@@ -27,7 +27,7 @@ const Incoming = () => {
           title={'Ro`yxat'}
         />
       </div>
-      <div>
+      <div className='section'>
         <Outlet />
       </div>
     </section>
