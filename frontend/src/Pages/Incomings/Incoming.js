@@ -1,5 +1,5 @@
 import React from 'react';
-import { RouteLink } from './Components/RouteLink';
+import { RouteLink } from '../../Components/RouteLinks/RouteLink';
 import { Outlet } from 'react-router-dom';
 
 const Incoming = () => {
@@ -7,17 +7,25 @@ const Incoming = () => {
     <section>
       <div className='h-[80px] w-full border-b-2 border-black-100 flex justify-around items-center'>
         <RouteLink
-          path={'qabulqilish'}
+          path={'/maxsulotlar/qabul/qabulqilish'}
           iconType={'bag'}
           title={'Qabul qilish'}
         />
-        <RouteLink path={'qabullar'} iconType={'cloud'} title={'Qabullar'} />
         <RouteLink
-          path={'saqlanganlar'}
+          path={'/maxsulotlar/qabul/qabullar'}
+          iconType={'cloud'}
+          title={'Qabullar'}
+        />
+        <RouteLink
+          path={'/maxsulotlar/qabul/saqlanganlar'}
           iconType={'clip'}
           title={'Saqlanganlar'}
         />
-        <RouteLink path={'ruyxat'} iconType={'text'} title={'Ro`yxat'} />
+        <RouteLink
+          path={'/maxsulotlar/qabul/ruyxat'}
+          iconType={'text'}
+          title={'Ro`yxat'}
+        />
       </div>
       <div>
         <Outlet />
