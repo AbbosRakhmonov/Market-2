@@ -82,32 +82,10 @@
     @apply absolute right-[10px] top-1/2 -translate-y-1/2 text-blue-700 hover:text-black-700 transition ease-in duration-100;
   }
 
-  .searchInput {
-    @apply w-full pt-[0.625rem] pb-[0.625rem] pl-[2rem] rounded-[0.25rem] border-2 border-blue-200 outline-0 font-roboto text-sm;
-  }
-
   .paragraf {
     @apply text-[0.875rem] flex items-center text-blue-700 leading-[1rem];
   }
-  .cardStyle {
-    @apply p-[1.15rem] bg-primary-800 text-white-900 inline-block rounded-[.5rem] transition ease-in-out hover:bg-black-700;
-  }
-  .headerStyle {
-    @apply flex items-center justify-center text-[1.5rem] font-bold p-[.625rem];
-  }
-  .numberCard {
-    @apply flex justify-between font-normal mt-[.3125rem];
-  }
-  .paragrafCard {
-    @apply text-white-700 mr-[1.25rem];
-  }
-  .paragrafCardBtn {
-    @apply text-white-700 mr-[3.1rem];
-  }
-  .cardSpan {
-    @apply text-[1.25rem] ml-[.625rem];
-  }
-
+ 
   /* this is checkout style */
   .cardContainer {
     @apply pl-[1.875rem] pr-[1.875rem] pt-[2.3rem] pb-[2.3rem] w-[20.5rem] inline-block rounded-[.5rem] shadow-[0px_15px_15px_rgba(0,0,0,0.05)] transition ease-in-out;
@@ -151,9 +129,6 @@
   ::-webkit-scrollbar-thumb {
     border-radius: 50px;
     @apply bg-black-200;
-  }
-  .paragraf {
-    @apply text-[0.875rem] flex items-center text-blue-700 leading-[1rem];
   }
 
   /* SaleBtns Style start */
