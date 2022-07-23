@@ -86,68 +86,62 @@
     @apply w-full pt-[0.625rem] pb-[0.625rem] pl-[2rem] rounded-[0.25rem] border-2 border-blue-200 outline-0 font-roboto text-sm;
   }
 
-  .searchIcon {
-    @apply absolute top-[0.875rem] left-[0.625rem] w-[1.125rem] h-[1.125rem] text-blue-200;
-  }
-
   .paragraf {
-      @apply text-[0.875rem] flex items-center text-blue-700 leading-[1rem]
+    @apply text-[0.875rem] flex items-center text-blue-700 leading-[1rem];
   }
   .cardStyle {
-    @apply p-[1.15rem] bg-primary-800 text-white-900 inline-block rounded-[.5rem] transition ease-in-out hover:bg-black-700
+    @apply p-[1.15rem] bg-primary-800 text-white-900 inline-block rounded-[.5rem] transition ease-in-out hover:bg-black-700;
   }
   .headerStyle {
-    @apply flex items-center justify-center text-[1.5rem] font-bold p-[.625rem]
+    @apply flex items-center justify-center text-[1.5rem] font-bold p-[.625rem];
   }
   .numberCard {
-    @apply flex justify-between font-normal mt-[.3125rem]
+    @apply flex justify-between font-normal mt-[.3125rem];
   }
   .paragrafCard {
-    @apply text-white-700 mr-[1.25rem]
+    @apply text-white-700 mr-[1.25rem];
   }
   .paragrafCardBtn {
-    @apply text-white-700 mr-[3.1rem]
+    @apply text-white-700 mr-[3.1rem];
   }
   .cardSpan {
-    @apply text-[1.25rem] ml-[.625rem]
+    @apply text-[1.25rem] ml-[.625rem];
   }
 
   /* this is checkout style */
-.cardContainer {
-  @apply pl-[1.875rem] pr-[1.875rem] pt-[2.3rem] pb-[2.3rem] w-[20.5rem] inline-block rounded-[.5rem] shadow-[0px_15px_15px_rgba(0,0,0,0.05)] transition ease-in-out
-}
+  .cardContainer {
+    @apply pl-[1.875rem] pr-[1.875rem] pt-[2.3rem] pb-[2.3rem] w-[20.5rem] inline-block rounded-[.5rem] shadow-[0px_15px_15px_rgba(0,0,0,0.05)] transition ease-in-out;
+  }
   .tradeCard {
-    @apply bg-success-500 hover:bg-success-600 
+    @apply bg-success-500 hover:bg-success-600;
   }
   .debts {
-    @apply bg-error-500 hover:bg-error-600 
+    @apply bg-error-500 hover:bg-error-600;
   }
   .returnedCard {
-    @apply bg-primary-800 hover:bg-primary-900 
+    @apply bg-primary-800 hover:bg-primary-900;
   }
   .discountCard {
-    @apply bg-warning-500 hover:bg-warning-600
+    @apply bg-warning-500 hover:bg-warning-600;
   }
   .tradeIn {
-    @apply flex items-center
+    @apply flex items-center;
   }
   .percentageCircle {
-    @apply w-[3.75rem] h-[3.75rem] bg-white-900 rounded-full flex justify-center items-center text-[1.25rem] leading-[1.875rem] text-black-700 mr-[1.875rem] border-[.125rem] border-black-200
+    @apply w-[3.75rem] h-[3.75rem] bg-white-900 rounded-full flex justify-center items-center text-[1.25rem] leading-[1.875rem] text-black-700 mr-[1.875rem] border-[.125rem] border-black-200;
   }
   .checkoutName {
-    @apply w-[11rem] text-white-800 flex justify-between pb-[1.25rem] border-b border-solid border-white-200 font-normal
+    @apply w-[11rem] text-white-800 flex justify-between pb-[1.25rem] border-b border-solid border-white-200 font-normal;
   }
   .checkName {
-    @apply w-[16rem] text-white-800 flex justify-between pb-[1.25rem] border-b border-solid border-white-200 font-normal
+    @apply w-[16rem] text-white-800 flex justify-between pb-[1.25rem] border-b border-solid border-white-200 font-normal;
   }
   .costCard {
-    @apply text-[2rem] leading-[1.875rem] mt-[1.25rem] text-white-900 
+    @apply text-[2rem] leading-[1.875rem] mt-[1.25rem] text-white-900;
   }
   .activeCard {
-    @apply bg-black-700 hover:bg-black-700 shadow-[0px_25px_25px_rgba(0,0,0,0.25)]
+    @apply bg-black-700 hover:bg-black-700 shadow-[0px_25px_25px_rgba(0,0,0,0.25)];
   }
-
-
 
   ::-webkit-scrollbar {
     width: 2px;
@@ -165,31 +159,31 @@
   /* SaleBtns Style start */
 
   .paymentsstyle {
-    @apply inline-block mx-2 w-[22px] h-[18-px]
+    @apply inline-block mx-2 w-[22px] h-[18-px];
   }
 
   .salestyle {
-    @apply bg-[#E9ECEB] px-[10px] py-[10px] text-[#5A5B5B] active:bg-[#00B4CC] active:text-white-900 rounded-lg font-roboto outline-none
+    @apply bg-[#E9ECEB] px-[10px] py-[10px] text-[#5A5B5B] active:bg-[#00B4CC] active:text-white-900 rounded-lg font-roboto outline-none;
   }
 
   .discountstyle {
-    @apply bg-[#F79009] px-[15px] py-[10px] text-white-900 rounded-lg outline-none
+    @apply bg-[#F79009] px-[15px] py-[10px] text-white-900 rounded-lg outline-none;
   }
 
   .discstyle {
-    @apply inline-block mx-1 w-[21px] h-[21px]
+    @apply inline-block mx-1 w-[21px] h-[21px];
   }
 
   .paymentstyle {
-    @apply bg-[#12B76A] px-[4rem] py-[1.3rem] text-white-900 rounded-lg outline-none
+    @apply bg-[#12B76A] px-[4rem] py-[1.3rem] text-white-900 rounded-lg outline-none;
   }
 
   .paystyle {
-    @apply inline-block mr-1 w-[21px] h-[21px]
+    @apply inline-block mr-1 w-[21px] h-[21px];
   }
 
-  .payclipstyle{
-    @apply bg-[#9E9E9E] px-[22px] py-[15px] text-white-900 rounded-lg mx-1 outline-none
+  .payclipstyle {
+    @apply bg-[#9E9E9E] px-[22px] py-[15px] text-white-900 rounded-lg mx-1 outline-none;
   }
 
   /* SaleBtns Style end */
