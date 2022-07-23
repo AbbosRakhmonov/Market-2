@@ -5,7 +5,7 @@ function TableInput({ placeholder, type, value, onChange, label, disabled }) {
         {label}
         <input
           disabled={disabled}
-          className='tableInput'
+          className="tableInput"
           placeholder={placeholder}
           type={type}
           value={value}

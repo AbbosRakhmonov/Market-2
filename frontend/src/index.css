@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -14,7 +14,7 @@
   }
 
   .tableInput {
-    @apply w-full pt-[0.3125rem] pb-[0.3125rem] pr-[0.3125rem] pl-[0.3125rem] rounded-[0.25rem] border-2 border-blue-200 outline-0 font-roboto text-sm text-right;
+    @apply w-full placeholder-blue-200 pt-[0.625rem] pb-[0.625rem] pr-[0.45rem] pl-[0.3125rem] rounded-[0.25rem] border-2 border-blue-200 outline-0 font-roboto text-sm text-right;
   }
 
   .iconClass {
@@ -24,7 +24,7 @@
     @apply w-full pt-[0.625rem] pb-[0.625rem] pl-[2rem] rounded-[0.25rem] border-2 border-blue-200 outline-0 font-roboto text-sm;
   }
   .createElement {
-    @apply p-[0.625rem] bg-success-500 text-white-900 text-[0.875rem] rounded-[0.3125rem]  flex items-center gap-[0.3125rem] leading-[1.125rem] justify-center items-center w-full hover:bg-success-600 shadow-[0_5px_15px_rgba(0,0,0,0.15)] active:bg-success-700 active:shadow-none transition-all ease-in-out duration-200;
+    @apply p-[0.625rem] bg-success-500 text-white-900 text-[0.875rem] rounded-[0.5rem]  flex items-center gap-[0.3125rem] leading-[1.125rem] justify-center items-center w-full hover:bg-success-600 shadow-[0_5px_15px_rgba(0,0,0,0.15)] active:bg-success-700 active:shadow-none transition-all ease-in-out duration-200;
   }
 
   .plusIcon {
@@ -32,7 +32,7 @@
   }
 
   .clearElement {
-    @apply p-[0.625rem] bg-error-500 text-white-900 text-[0.875rem] rounded-[0.5rem]  flex items-center gap-[0.3125rem] leading-[1.125rem] justify-center items-center w-1/2 hover:bg-error-600 shadow-[0_5px_15px_rgba(0,0,0,0.15)] active:bg-error-700 active:shadow-none transition-all ease-in-out duration-200;
+    @apply w-full p-[0.625rem] bg-error-500 text-white-900 text-[0.875rem] rounded-[0.5rem]  flex items-center gap-[0.3125rem] leading-[1.125rem] justify-center items-center hover:bg-error-600 shadow-[0_5px_15px_rgba(0,0,0,0.15)] active:bg-error-700 active:shadow-none transition-all ease-in-out duration-200;
   }
 
   .cardStyle {
@@ -55,7 +55,7 @@
   }
 
   .td {
-    @apply px-2.5 border-r-2 border-b-2 border-primary-700 text-sm font-normal text-[#000];
+    @apply px-2 py-2.5 border-r-2 border-b-2 border-primary-700 text-sm font-normal text-[#000];
   }
 
   .th {
@@ -63,15 +63,15 @@
   }
 
   .tr {
-    @apply border-transparent bg-white-900 hover:bg-black-300 hover:shadow-[-8px_0_0] hover:shadow-primary-700 transition-shadow duration-200;
+    @apply border-transparent border-l-8 hover:bg-black-300 hover:border-primary-700;
   }
 
   .inputClass {
-    @apply w-full p-[0.625rem] rounded-[0.25rem] border-[1px] border-blue-200 text-sm placeholder-blue-200 outline-transparent outline outline-0 focus:outline-blue-100 bg-white-900 hover:bg-inputHover focus:outline-4 focus:bg-white-900 transition-all ease-in-out duration-100;
+    @apply w-full py-[0.625rem] px-[0.58rem]  rounded-[0.25rem] border-[1px] border-blue-200 text-sm placeholder-blue-200 outline-transparent outline outline-0 focus:outline-blue-100 bg-white-900 hover:bg-inputHover focus:outline-4 focus:bg-white-900 transition-all ease-in-out duration-100;
   }
 
   .searchInput-container {
-    @apply px-[0.625rem] rounded-[0.25rem] border-[1px] border-blue-200 text-sm placeholder-blue-200 outline-transparent outline outline-0 focus-within:outline-blue-100 bg-white-900 hover:bg-inputHover focus-within:outline-4 focus-within:bg-white-900 focus-within:hover:bg-white-900 transition-all ease-in-out duration-100;
+    @apply relative px-[0.625rem] rounded-[0.25rem] border-[1px] border-blue-200 text-sm placeholder-blue-200 outline-transparent outline outline-0 focus-within:outline-blue-100 bg-white-900 hover:bg-inputHover focus-within:outline-4 focus-within:bg-white-900 focus-within:hover:bg-white-900 transition-all ease-in-out duration-100;
   }
 
   .labelClass {
@@ -85,7 +85,7 @@
   .paragraf {
     @apply text-[0.875rem] flex items-center text-blue-700 leading-[1rem];
   }
- 
+
   /* this is checkout style */
   .cardContainer {
     @apply pl-[1.875rem] pr-[1.875rem] pt-[2.3rem] pb-[2.3rem] w-[20.5rem] inline-block rounded-[.5rem] shadow-[0px_15px_15px_rgba(0,0,0,0.05)] transition ease-in-out;
@@ -119,132 +119,160 @@
   }
   .activeCard {
     @apply bg-black-700 hover:bg-black-700 shadow-[0px_25px_25px_rgba(0,0,0,0.25)];
+    .searchInput {
+      @apply w-full pt-[0.625rem] pb-[0.625rem] pl-[2rem] rounded-[0.25rem] border-2 border-blue-200 outline-0 font-roboto text-sm;
+    }
+
+    .searchIcon {
+      @apply bottom-[0.6rem] w-[1.125rem] h-[1.125rem] text-blue-200;
+    }
+
+    .paragraf {
+      @apply text-[0.875rem] flex items-center text-blue-700 leading-[1rem];
+    }
+    .cardStyle {
+      @apply p-[1.15rem] bg-primary-800 text-white-900 inline-block rounded-[.5rem] transition ease-in-out hover:bg-black-700;
+    }
+    .headerStyle {
+      @apply flex items-center justify-center text-[1.5rem] font-bold p-[.625rem];
+    }
+    .numberCard {
+      @apply flex justify-between font-normal mt-[.3125rem];
+    }
+    .paragrafCard {
+      @apply text-white-700 mr-[1.25rem];
+    }
+    .paragrafCardBtn {
+      @apply text-white-700 mr-[3.1rem];
+    }
+    .cardSpan {
+      @apply text-[1.25rem] ml-[.625rem];
+    }
+
+    ::-webkit-scrollbar {
+      width: 2px;
+      @apply bg-black-100;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      border-radius: 50px;
+      @apply bg-black-200;
+    }
+
+    /* SaleBtns Style start */
+
+    .paymentsstyle {
+      @apply inline-block mx-2 w-[22px] h-[18-px];
+    }
+
+    .salestyle {
+      @apply bg-[#E9ECEB] px-[10px] py-[10px] text-[#5A5B5B] active:bg-[#00B4CC] active:text-white-900 rounded-lg font-roboto outline-none;
+    }
+
+    .discountstyle {
+      @apply bg-[#F79009] px-[15px] py-[10px] text-white-900 rounded-lg outline-none;
+    }
+
+    .discstyle {
+      @apply inline-block mx-1 w-[21px] h-[21px];
+    }
+
+    .paymentstyle {
+      @apply bg-[#12B76A] px-[4rem] py-[1.3rem] text-white-900 rounded-lg outline-none;
+    }
+
+    .paystyle {
+      @apply inline-block mr-1 w-[21px] h-[21px];
+    }
+
+    .payclipstyle {
+      @apply bg-[#9E9E9E] px-[22px] py-[15px] text-white-900 rounded-lg mx-1 outline-none;
+    }
+
+    /* SaleBtns Style end */
+  }
+  html,
+  body {
+    font-family: "Roboto", sans-serif;
+    line-height: 16px;
   }
 
-  ::-webkit-scrollbar {
-    width: 2px;
-    @apply bg-black-100;
+  .loginPage {
+    height: 100vh;
+    background: radial-gradient(
+      100% 316.36% at 0% 50%,
+      #0090a3 0%,
+      rgba(36, 86, 50, 0.9) 100%
+    );
   }
 
-  ::-webkit-scrollbar-thumb {
-    border-radius: 50px;
-    @apply bg-black-200;
+  .loginCircle {
+    width: calc(100vw / 2.430604982206406);
+    height: calc(100vw / 2.430604982206406);
   }
 
-  /* SaleBtns Style start */
-
-  .paymentsstyle {
-    @apply inline-block mx-2 w-[22px] h-[18-px];
+  .bg-circle-2 {
+    width: calc(100vw / 2.732);
+    height: calc(100vw / 2.732);
   }
 
-  .salestyle {
-    @apply bg-[#E9ECEB] px-[10px] py-[10px] text-[#5A5B5B] active:bg-[#00B4CC] active:text-white-900 rounded-lg font-roboto outline-none;
+  .spinner {
+    border: 3px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    border-top-color: white;
+    width: 16px;
+    height: 16px;
+    animation: rotate-spinner 1s linear infinite;
   }
 
-  .discountstyle {
-    @apply bg-[#F79009] px-[15px] py-[10px] text-white-900 rounded-lg outline-none;
+  .time-line {
+    width: 100%;
+    position: relative;
   }
 
-  .discstyle {
-    @apply inline-block mx-1 w-[21px] h-[21px];
+  .time-line::before,
+  .time-line::after {
+    content: "";
+    position: absolute;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: white;
+    top: -5.5px;
   }
 
-  .paymentstyle {
-    @apply bg-[#12B76A] px-[4rem] py-[1.3rem] text-white-900 rounded-lg outline-none;
+  .time-line::before {
+    left: -11px;
   }
 
-  .paystyle {
-    @apply inline-block mr-1 w-[21px] h-[21px];
+  .time-line::after {
+    right: -11px;
   }
 
-  .payclipstyle {
-    @apply bg-[#9E9E9E] px-[22px] py-[15px] text-white-900 rounded-lg mx-1 outline-none;
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 
-  /* SaleBtns Style end */
-}
-
-html,
-body {
-  font-family: 'Roboto', sans-serif;
-  line-height: 16px;
-}
-
-.loginPage {
-  height: 100vh;
-  background: radial-gradient(
-    100% 316.36% at 0% 50%,
-    #0090a3 0%,
-    rgba(36, 86, 50, 0.9) 100%
-  );
-}
-
-.loginCircle {
-  width: calc(100vw / 2.430604982206406);
-  height: calc(100vw / 2.430604982206406);
-}
-
-.bg-circle-2 {
-  width: calc(100vw / 2.732);
-  height: calc(100vw / 2.732);
-}
-
-.spinner {
-  border: 3px solid rgba(255, 255, 255, 0.5);
-  border-radius: 50%;
-  border-top-color: white;
-  width: 16px;
-  height: 16px;
-  animation: rotate-spinner 1s linear infinite;
-}
-
-.time-line {
-  width: 100%;
-  position: relative;
-}
-
-.time-line::before,
-.time-line::after {
-  content: '';
-  position: absolute;
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  background: white;
-  top: -5.5px;
-}
-
-.time-line::before {
-  left: -11px;
-}
-
-.time-line::after {
-  right: -11px;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type='number'] {
-  -moz-appearance: textfield;
-}
-
-@keyframes rotate-spinner {
-  100% {
-    transform: rotate(360deg);
+  input[type="number"] {
+    -moz-appearance: textfield;
   }
-}
 
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+  @keyframes rotate-spinner {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 
-/* Firefox */
-input[type='number'] {
-  -moz-appearance: textfield;
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
 }

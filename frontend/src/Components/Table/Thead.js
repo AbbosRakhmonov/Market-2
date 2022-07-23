@@ -1,24 +1,24 @@
-import {TiArrowUnsorted} from 'react-icons/ti';
+import { TiArrowUnsorted } from "react-icons/ti";
 
 function Thead({ headers, Sort }) {
   return (
-    <tr className='bg-primary-900 rounded-t-lg'>
+    <tr className="bg-primary-900 rounded-t-lg">
       {headers.map((header, index) => (
         <th
           key={index}
-          scope='col'
+          scope="col"
           className={`th 
         ${
           index === headers.length - 1
-            ? 'rounded-tr-lg'
-            : 'border-r-2 border-primary-700'
+            ? "rounded-tr-lg"
+            : "border-r-2 border-primary-700"
         }
-        ${index === 0 && 'rounded-tl-lg'}
+        ${index === 0 && "rounded-tl-lg"}
         ${header.styles}
         `}
         >
-          <div className='inline-flex items-center'>
-            <span>{header.title}</span>{' '}
+          <div className="flex items-center ml-1">
+            <span>{header.title}</span>{" "}
             {header.filter && (
               <button onClick={() => Sort(header.filter)}>
                 <TiArrowUnsorted />
