@@ -79,7 +79,7 @@
   }
 
   .tr {
-    @apply border-transparent bg-white-900 hover:bg-black-300 hover:shadow-[-8px_0_0] hover:shadow-primary-700 transition-shadow duration-200;
+    @apply border-transparent bg-white-900 hover:bg-trHover hover:shadow-[-8px_0_0] hover:shadow-primary-700 transition-shadow duration-200;
   }
 
   .inputClass {

@@ -27,7 +27,7 @@ const Incoming = () => {
           title={'Ro`yxat'}
         />
       </div>
-      <div className='section'>
+      <div className='mainPadding'>
         <Outlet />
       </div>
     </section>
