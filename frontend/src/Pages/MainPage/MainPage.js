@@ -1,8 +1,8 @@
 import React from 'react';
-import { DiscountInput } from '../../Components/Inputs/DiscountInputs';
-
 function MainPage() {
-  return <div>Main Page</div>;
+  return <div>
+      MainPage
+  </div>;
 }
 
 export default MainPage;
