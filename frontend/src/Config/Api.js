@@ -12,10 +12,17 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
     config => {
+        const {market} = Store.getState().login;
         const userData = JSON.parse(localStorage.getItem("userData"));
         if (userData) {
             const {token} = userData;
             config.headers['Authorization'] = `Bearer ${token}`;
+        }
+        if (market) {
+            config.data = {
+                ...config.data,
+                market: market._id,
+            }
         }
         return config;
     },

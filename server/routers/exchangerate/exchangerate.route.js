@@ -25,11 +25,11 @@ router.post('/get', auth, (req, res) => {
   require('./exchangerate').get(req, res);
 });
 //CURRENCY
-router.put('/currencyupdate', auth, (req, res) => {
+router.post('/currencyupdate', auth, (req, res) => {
   require('./currency').currencyupdate(req, res);
 });
 
-router.put('/currencyget', auth, (req, res) => {
+router.post('/currencyget', auth, (req, res) => {
   require('./currency').currencyget(req, res);
 });
 
