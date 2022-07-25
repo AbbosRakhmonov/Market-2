@@ -152,42 +152,35 @@
   .activeCard {
     @apply bg-black-700 hover:bg-black-700 shadow-[0px_25px_25px_rgba(0,0,0,0.25)];
   }
-
-  .searchInput {
-    @apply w-full pt-[0.625rem] pb-[0.625rem] pl-[2rem] rounded-[0.25rem] border-2 border-blue-200 outline-0 font-roboto text-sm;
+  .filial-btn {
+    @apply flex gap-[.625rem] justify-end pl-[1.25rem] pr-[1.25rem] items-center h-[50%]
   }
 
-  .searchIcon {
-    @apply bottom-[0.6rem] w-[1.125rem] h-[1.125rem] text-blue-200;
+  /* Shops Card styled start */
+
+  .shops_card {
+    @apply flex w-[100%] shadow-[0px_10px_10px_rgba(0,0,0,0.05)] rounded-[.25rem] bg-white-300 justify-between hover:bg-white-900 transition ease-in duration-100 hover:cursor-pointer
+  }
+  .product-cost {
+    @apply flex w-[80%] justify-between p-[1.25rem]
+  }
+  .product {
+    @apply text-[1rem] font-normal leading-[1.175rem] text-black-700 mb-[.625rem] flex justify-center items-center
+  }
+  .product-number {
+    @apply text-[1.25rem] font-normal leading-[1.465rem] flex justify-center items-center
+  }
+  .product-total {
+    @apply font-normal text-[1.25rem] leading-[1.465rem] text-success-500 flex justify-center items-center
+  }
+  .shop-title {
+    @apply text-[1rem] h-[50%] font-medium leading-[1.17rem] text-white-900 w-[13.4375rem] flex justify-center items-center shops-bg-color rounded-bl-[3.125rem]
+  }
+  .active_shop {
+    @apply bg-white-900
   }
 
-  .paragraf {
-    @apply text-[0.875rem] flex items-center text-blue-700 leading-[1rem];
-  }
-
-  .cardStyle {
-    @apply p-[1.15rem] bg-primary-800 text-white-900 inline-block rounded-[.5rem] transition ease-in-out hover:bg-black-700;
-  }
-
-  .headerStyle {
-    @apply flex items-center justify-center text-[1.5rem] font-bold p-[.625rem];
-  }
-
-  .numberCard {
-    @apply flex justify-between font-normal mt-[.3125rem];
-  }
-
-  .paragrafCard {
-    @apply text-white-700 mr-[1.25rem];
-  }
-
-  .paragrafCardBtn {
-    @apply text-white-700 mr-[3.1rem];
-  }
-
-  .cardSpan {
-    @apply text-[1.25rem] ml-[.625rem];
-  }
+  /* Shops Card styled end */
 
   ::-webkit-scrollbar {
     width: 2px;
@@ -370,42 +363,6 @@ input[type='number'] {
   -moz-appearance: textfield;
 }
 
-.clock-loader {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: var(--clock-width);
-  height: var(--clock-width);
-  border: 2px solid var(--clock-color);
-  border-radius: 50%;
-}
-
-.clock-loader::before,
-.clock-loader::after {
-  position: absolute;
-  content: '';
-  top: calc(var(--clock-radius) * 0.25);
-  width: var(--clock-thickness);
-  background: var(--clock-color);
-  border-radius: 10px;
-  transform-origin: center calc(100% - calc(var(--clock-thickness) / 2));
-  animation: spin infinite linear;
-}
-
-.clock-loader::before {
-  height: var(--clock-minute-length);
-  animation-duration: 2s;
-}
-
-.clock-loader::after {
-  top: calc(var(--clock-radius) * 0.25 + var(--clock-hour-length));
-  height: var(--clock-hour-length);
-  animation-duration: 15s;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(1turn);
-  }
+.shops-bg-color {
+ background:  linear-gradient(234.85deg, #00B4CC 0%, #0090A3 100%);
 }
