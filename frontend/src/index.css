@@ -200,6 +200,16 @@
   }
 
   /* SaleBtns Style end */
+
+  .linkstyles {
+    @apply bg-inputHover w-[180px] py-[0.3rem] rounded-full flex items-center justify-center gap-[0.625rem];
+  }
+  .activelink {
+    @apply bg-white-900 shadow-[0px_10px_10px] shadow-black-100;
+  }
+  .section {
+    @apply pl-[2.5rem] pr-[1.25rem] py-[1.25rem];
+  }
 }
 
 html,
