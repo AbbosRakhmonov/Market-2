@@ -29,12 +29,15 @@
   .iconClass {
     @apply w-[1.125rem] h-[1.125rem];
   }
+
   .searchInput {
     @apply w-full pt-[0.625rem] pb-[0.625rem] pl-[2rem] rounded-[0.25rem] border-2 border-blue-200 outline-0 font-roboto text-sm;
   }
+
   .createElement {
     @apply p-[0.625rem] bg-success-500 text-white-900 text-[0.875rem] rounded-[0.3125rem]  flex items-center gap-[0.3125rem] leading-[1.125rem] justify-center items-center w-full hover:bg-success-600 shadow-[0_5px_15px_rgba(0,0,0,0.15)] active:bg-success-700 active:shadow-none transition-all ease-in-out duration-200;
   }
+
   .plusIcon {
     @apply text-white-900 text-[1.125rem] shadow-[0_rem_0.3125rem_0.9375rem_rgba(0,0,0,0.15)];
   }
@@ -46,18 +49,23 @@
   .cardStyle {
     @apply p-[1.15rem] bg-primary-800 text-white-900 inline-block rounded-[.5rem] transition ease-in-out hover:bg-black-700;
   }
+
   .headerStyle {
     @apply flex items-center justify-center text-[1.5rem] font-bold p-[.625rem];
   }
+
   .numberCard {
     @apply flex justify-between font-normal mt-[.3125rem];
   }
+
   .paragrafCard {
     @apply text-white-700 mr-[1.25rem];
   }
+
   .paragrafCardBtn {
     @apply text-white-700 mr-[3.1rem];
   }
+
   .cardSpan {
     @apply text-[1.25rem] ml-[.625rem];
   }
@@ -71,7 +79,7 @@
   }
 
   .tr {
-     @apply border-transparent bg-white-900 hover:bg-black-300 hover:shadow-[-8px_0_0] hover:shadow-primary-700 transition-shadow duration-200;
+    @apply border-transparent bg-white-900 hover:bg-black-300 hover:shadow-[-8px_0_0] hover:shadow-primary-700 transition-shadow duration-200;
   }
 
   .inputClass {
@@ -98,33 +106,43 @@
   .cardContainer {
     @apply pl-[1.875rem] pr-[1.875rem] pt-[2.3rem] pb-[2.3rem] w-[20.5rem] inline-block rounded-[.5rem] shadow-[0px_15px_15px_rgba(0,0,0,0.05)] transition ease-in-out;
   }
+
   .tradeCard {
     @apply bg-success-500 hover:bg-success-600;
   }
+
   .debts {
     @apply bg-error-500 hover:bg-error-600;
   }
+
   .returnedCard {
     @apply bg-primary-800 hover:bg-primary-900;
   }
+
   .discountCard {
     @apply bg-warning-500 hover:bg-warning-600;
   }
+
   .tradeIn {
     @apply flex items-center;
   }
+
   .percentageCircle {
     @apply w-[3.75rem] h-[3.75rem] bg-white-900 rounded-full flex justify-center items-center text-[1.25rem] leading-[1.875rem] text-black-700 mr-[1.875rem] border-[.125rem] border-black-200;
   }
+
   .checkoutName {
     @apply w-[11rem] text-white-800 flex justify-between pb-[1.25rem] border-b border-solid border-white-200 font-normal;
   }
+
   .checkName {
     @apply w-[16rem] text-white-800 flex justify-between pb-[1.25rem] border-b border-solid border-white-200 font-normal;
   }
+
   .costCard {
     @apply text-[2rem] leading-[1.875rem] mt-[1.25rem] text-white-900;
   }
+
   .activeCard {
     @apply bg-black-700 hover:bg-black-700 shadow-[0px_25px_25px_rgba(0,0,0,0.25)];
   }
@@ -140,21 +158,27 @@
   .paragraf {
     @apply text-[0.875rem] flex items-center text-blue-700 leading-[1rem];
   }
+
   .cardStyle {
     @apply p-[1.15rem] bg-primary-800 text-white-900 inline-block rounded-[.5rem] transition ease-in-out hover:bg-black-700;
   }
+
   .headerStyle {
     @apply flex items-center justify-center text-[1.5rem] font-bold p-[.625rem];
   }
+
   .numberCard {
     @apply flex justify-between font-normal mt-[.3125rem];
   }
+
   .paragrafCard {
     @apply text-white-700 mr-[1.25rem];
   }
+
   .paragrafCardBtn {
     @apply text-white-700 mr-[3.1rem];
   }
+
   .cardSpan {
     @apply text-[1.25rem] ml-[.625rem];
   }
@@ -170,7 +194,6 @@
   }
 
   /* SaleBtns Style start */
-
   .paymentsstyle {
     @apply inline-block mx-2 w-[22px] h-[18-px];
   }
@@ -200,15 +223,23 @@
   }
 
   /* SaleBtns Style end */
+  .mainPadding {
+    @apply pl-[2.5rem] pr-[1.25rem] py-[1.25rem];
+  }
+
+  .tableContainerPadding {
+    @apply pl-[2.5rem] pr-[1.25rem] pb-[1.25rem];
+  }
+
+  .stickyForm {
+    @apply sticky z-10 top-0 bg-background shadow-[0_5px_25px_rgba(0,0,0,0.5)] rounded-l-[8px];
+  }
 
   .linkstyles {
     @apply bg-inputHover w-[180px] py-[0.3rem] rounded-full flex items-center justify-center gap-[0.625rem];
   }
   .activelink {
     @apply bg-white-900 shadow-[0px_10px_10px] shadow-black-100;
-  }
-  .section {
-    @apply pl-[2.5rem] pr-[1.25rem] py-[1.25rem];
   }
 }
 

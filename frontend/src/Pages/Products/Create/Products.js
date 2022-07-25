@@ -10,14 +10,28 @@ import SelectForm from '../../../Components/Select/SelectForm';
 import FilterButtons from '../../../Components/FilterButtons/FilterButtons';
 import Input from '../../../Components/Inputs/Input';
 import SearchInput from '../../../Components/Inputs/SearchInput';
-import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
 import { UzsToUsd, UsdToUzs } from '../../Currency/Currency';
-import { clearErrorProducts } from './productSlice';
 import Spinner from '../../../Components/Spinner/SmallLoader';
 import NotFind from '../../../Components/NotFind/NotFind';
-import { getProducts, addProduct } from './productSlice';
+import {
+  getProducts,
+  addProduct,
+  clearErrorProducts,
+  clearSuccessProducts,
+} from './productSlice';
 import { clearErrorUnits, getUnits } from '../../Units/unitsSlice';
+import {
+  universalToast,
+  successAddProduct,
+  successUpdateProduct,
+  warningEmptyInput,
+  warningCurrencyRate,
+} from '../../../Components/ToastMessages/ToastMessages';
+import {
+  regexForEmptyString,
+  regexForTypeNumber,
+} from '../../../Components/RegularExpressions/RegularExpressions';
 
 function Products() {
   const dispatch = useDispatch();
@@ -26,9 +40,8 @@ function Products() {
   } = useSelector((state) => state.login);
   const { errorUnits, units } = useSelector((state) => state.units);
   const { currency, currencyType } = useSelector((state) => state.currency);
-  const { products, total, errorProducts, loading } = useSelector(
-    (state) => state.products
-  );
+  const { products, total, errorProducts, loading, successProducts } =
+    useSelector((state) => state.products);
   const [data, setData] = useState(products);
   const [codeOfProduct, setCodeOfProduct] = useState('');
   const [nameOfProduct, setNameOfProduct] = useState('');
@@ -40,6 +53,9 @@ function Products() {
   const [searchByName, setSearchByName] = useState('');
   const [showByTotal, setShowByTotal] = useState('10');
   const [currentPage, setCurrentPage] = useState(0);
+  const [filteredDataTotal, setFilteredDataTotal] = useState(total);
+  const [stickyForm, setStickyForm] = useState(false);
+  const [currentProduct, setCurrentProduct] = useState(null);
   // table headers
   const headers = [
     { title: '№' },
@@ -64,10 +80,6 @@ function Products() {
     },
     { title: '' },
   ];
-
-  // regex for check type number and non empty string
-  const regexForTypeNumber = /^[0-9]*\.?[0-9]*$/;
-  const regexForEmptyString = /^\s*$/;
 
   // handle change of inputs
   const handleChangeCodeOfProduct = (e) => {
@@ -99,15 +111,17 @@ function Products() {
   };
   const filterByCode = (e) => {
     let val = e.target.value;
-    let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim();
+    let valForSearch = val.replace(/\s+/g, ' ').trim();
     setSearchByCode(val);
     if (valForSearch === '') {
-      setData(data);
+      setData(products);
+      setFilteredDataTotal(total);
     } else {
       const filteredProducts = products.filter((product) => {
-        return product.code.toLowerCase().includes(valForSearch);
+        return product.productdata.code.includes(valForSearch);
       });
       setData(filteredProducts);
+      setFilteredDataTotal(filteredProducts.length);
     }
   };
   const filterByName = (e) => {
@@ -115,12 +129,14 @@ function Products() {
     let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim();
     setSearchByName(val);
     if (valForSearch === '') {
-      setData(data);
+      setData(products);
+      setFilteredDataTotal(total);
     } else {
       const filteredProducts = products.filter((product) => {
-        return product.name.toLowerCase().includes(valForSearch);
+        return product.productdata.name.toLowerCase().includes(valForSearch);
       });
       setData(filteredProducts);
+      setFilteredDataTotal(filteredProducts.length);
     }
   };
   const filterByNameWhenEnter = (e) => {
@@ -175,7 +191,7 @@ function Products() {
         regexForEmptyString.test(priceOfProduct) ||
         regexForEmptyString.test(sellingPriceOfProduct)
       ) {
-        toast.error('Ma`lumotlar to`liq kiritilmagan!');
+        warningEmptyInput();
       } else {
         const body = {
           currentPage,
@@ -209,25 +225,31 @@ function Products() {
           },
         };
         dispatch(addProduct(body));
-        setTimeout(() => {
-          clearForm(e);
-        }, 500);
       }
     } else {
-      toast.error('Valyuta kursi kiritilmagan!');
+      warningCurrencyRate();
     }
   };
   const clearForm = (e) => {
-    e.preventDefault();
+    e && e.preventDefault();
     setCodeOfProduct('');
     setNameOfProduct('');
     setNumberOfProduct('');
     setUnitOfProduct('');
     setPriceOfProduct('');
     setSellingPriceOfProduct('');
+    setCurrentProduct(null);
+    setStickyForm(false);
   };
-  const handleEdit = () => {
-    console.log('edited');
+  const handleEdit = (e) => {
+    e.preventDefault();
+    const body = {
+      product: {
+        ...currentProduct,
+      },
+      currentPage,
+      countPage: showByTotal,
+    };
   };
 
   // excel
@@ -262,7 +284,8 @@ function Products() {
 
   // table edit and delete
   const editProduct = (product) => {
-    console.log(product);
+    setCurrentProduct(product);
+    setStickyForm(true);
   };
   const deleteProduct = (product) => {
     console.log(product);
@@ -273,7 +296,7 @@ function Products() {
 
   useEffect(() => {
     if (!currency) {
-      toast.error('Valyuta kursi kiritilmagan!');
+      warningCurrencyRate();
     } else if (currencyType === 'UZS') {
       priceOfProduct && setPriceOfProduct(UsdToUzs(priceOfProduct, currency));
       sellingPriceOfProduct &&
@@ -286,11 +309,17 @@ function Products() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currency, currencyType]);
   useEffect(() => {
-    errorUnits && toast.error(errorUnits) && dispatch(clearErrorUnits());
+    errorUnits &&
+      universalToast(errorUnits, 'error') &&
+      dispatch(clearErrorUnits());
     errorProducts &&
-      toast.error(errorProducts) &&
+      universalToast(errorProducts, 'error') &&
       dispatch(clearErrorProducts());
-  }, [errorUnits, errorProducts, dispatch]);
+    successProducts &&
+      successAddProduct() &&
+      dispatch(clearSuccessProducts()) &&
+      clearForm();
+  }, [errorUnits, errorProducts, dispatch, successProducts]);
   useEffect(() => {
     const body = {
       currentPage,
@@ -308,9 +337,42 @@ function Products() {
   useEffect(() => {
     setData(products);
   }, [products]);
+  useEffect(() => {
+    setFilteredDataTotal(total);
+  }, [total]);
+  useEffect(() => {
+    if (currentProduct) {
+      const {
+        productdata: { name, code },
+        price: {
+          sellingprice,
+          incomingprice,
+          sellingpriceuzs,
+          incomingpriceuzs,
+        },
+        unit,
+        total,
+      } = currentProduct;
+      setCodeOfProduct(code);
+      setNameOfProduct(name);
+      setNumberOfProduct(total);
+      setUnitOfProduct(unit._id);
+      setPriceOfProduct(
+        currencyType === 'UZS' ? incomingpriceuzs : incomingprice
+      );
+      setSellingPriceOfProduct(
+        currencyType === 'UZS' ? sellingpriceuzs : sellingprice
+      );
+    }
+  }, [currentProduct]);
+
   return (
     <section>
-      <form className={'flex gap-[1.25rem] flex-col'}>
+      <form
+        className={`flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200 ${
+          stickyForm ? 'stickyForm' : ''
+        }`}
+      >
         <div className={'flex gap-[1.25rem]'}>
           {/* -- maxulot kodi -- */}
           <FieldContainer
@@ -371,15 +433,15 @@ function Products() {
           />
           <div className={'flex gap-[1.25rem] grow'}>
             <Button
-              onClick={addNewProduct}
+              onClick={stickyForm ? handleEdit : addNewProduct}
               add={true}
-              text={"Yangi maxsulot qo'shish"}
+              text={stickyForm ? 'Saqlash' : "Yangi maxsulot qo'shish"}
             />
             <Button onClick={clearForm} text={'Tozalash'} />
           </div>
         </div>
       </form>
-      <div className={'flex justify-between items-center my-[2.5rem]'}>
+      <div className={'flex justify-between items-center mainPadding'}>
         <div className={'flex gap-[1.5rem]'}>
           <ExportBtn data={[]} headers={[]} />
           <ImportBtn readExcel={readExcel} />
@@ -387,18 +449,16 @@ function Products() {
         <h3 className={'text-blue-900 text-[xl] leading-[1.875rem]'}>
           Maxsulotlar
         </h3>
-        {total ? (
+        {data.length !== 0 && (
           <Pagination
             countPage={Number(showByTotal)}
-            totalDatas={total}
+            totalDatas={filteredDataTotal}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
           />
-        ) : (
-          ''
         )}
       </div>
-      <div className='flex items-stretch gap-[1.875rem] mb-[1.25rem]'>
+      <div className='flex items-stretch gap-[1.875rem] mainPadding'>
         <SelectForm onSelect={filterByTotal} />
         <FilterButtons
           label={'Maxsulot kodi'}
@@ -419,23 +479,25 @@ function Products() {
           onKeyUp={filterByNameWhenEnter}
         />
       </div>
-      {loading ? (
-        <Spinner />
-      ) : data.length === 0 ? (
-        <NotFind text={'Maxsulot mavjud emas'} />
-      ) : (
-        <Table
-          headers={headers}
-          Edit={editProduct}
-          Delete={deleteProduct}
-          page={'product'}
-          data={data}
-          Sort={filterData}
-          currentPage={currentPage}
-          countPage={showByTotal}
-          currency={currency}
-        />
-      )}
+      <div className='tableContainerPadding'>
+        {loading ? (
+          <Spinner />
+        ) : data.length === 0 ? (
+          <NotFind text={'Maxsulot mavjud emas'} />
+        ) : (
+          <Table
+            headers={headers}
+            Edit={editProduct}
+            Delete={deleteProduct}
+            page={'product'}
+            data={data}
+            Sort={filterData}
+            currentPage={currentPage}
+            countPage={showByTotal}
+            currency={currency}
+          />
+        )}
+      </div>
     </section>
   );
 }

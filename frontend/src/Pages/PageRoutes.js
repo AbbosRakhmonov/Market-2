@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Navbar from '../Components/Navbar/Navbar';
 import Incoming from './Incomings/Incoming';
@@ -7,18 +7,23 @@ import Incomings from './Incomings/Routes/Incomings';
 import SavedIncoming from './Incomings/Routes/SavedIncomings';
 import IncomingsList from './Incomings/Routes/IncomingsList';
 import CategoryPage from './CategoryPage/CategoryPage';
-
+import { useDispatch } from 'react-redux';
+import { getCurrency, getCurrencyType } from './Currency/currencySlice';
 
 //pages
 const MainPage = lazy(() => import('./MainPage/MainPage'));
 const Products = lazy(() => import('./Products/Create/Products'));
 
 const PageRoutes = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getCurrency());
+    dispatch(getCurrencyType());
+  }, [dispatch]);
   return (
     <section className={'flex bg-background'}>
       <Navbar />
-      <div className={'flex-grow p-0 h-screen overflow-y-auto'}>
-
+      <div className={'grow h-screen overflow-y-auto'}>
         <Suspense fallback={'loading'}>
           <Routes>
             <Route path='/' element={<MainPage />} />

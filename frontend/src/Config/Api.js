@@ -1,7 +1,6 @@
 import axios from "axios";
 import Store from "../App/store";
 import {logOut} from "../Pages/Login/loginSlice";
-import {toast} from 'react-toastify';
 
 const instance = axios.create({
     baseURL: `http://localhost:8801/api`,
@@ -36,8 +35,7 @@ instance.interceptors.response.use((response) => response, ({response: {data: {e
     }
     if (status === 401) {
         localStorage.removeItem("useData");
-        Store.dispatch(logOut());
-        toast.error(message)
+        Store.dispatch(logOut(error || message));
     }
     return Promise.reject(error || message);
 });
