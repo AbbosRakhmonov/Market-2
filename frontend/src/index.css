@@ -241,6 +241,18 @@
   .activelink {
     @apply bg-white-900 shadow-[0px_10px_10px] shadow-black-100;
   }
+
+
+  /* Discount Input style start */
+  .discountinput {
+    @apply px-[10px] py-[5px] rounded-l outline-none border border-blue-100 focus:border focus:border-warning-500 
+  }
+
+  .discountselect {
+    @apply py-[5px] px-[10px] outline-none bg-warning-500 text-white-900 rounded-r cursor-pointer
+  }
+
+  /* Discount Input style end */
 }
 
 html,
