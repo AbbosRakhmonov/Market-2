@@ -6,7 +6,7 @@ export const ExitBtn = ({ onClick }) => {
     <>
       <button 
       onClick={onClick} 
-      className='bg-error-400 py-[4px] px-[5px] text-white-900 rounded hover:bg-error-500'>
+      className='exitbtn'>
         <IoCloseSharp/>
       </button>
     </>

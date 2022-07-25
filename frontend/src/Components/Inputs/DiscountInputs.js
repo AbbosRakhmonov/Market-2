@@ -3,7 +3,7 @@ import React from 'react';
 export const DiscountInput = ({value, onChange, currency}) => {
   return (
     <div className='flex justify-around'>
-        <div className='inline-block'>Chegirma:</div>
+        <div className='flex items-center justify-center'>Chegirma:</div>
       <div className='inline-block'>
       <input
         placeholder='Chegirma'
