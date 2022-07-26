@@ -10,8 +10,9 @@ const toastWithHeader = (header, message) => (
 
 // Success Messages
 export const successLoggedIn = () => toast.success(toastWithHeader("Xush kelibsiz", "Kirish muvaffaqiyatli amalga oshirildi !"));
-export const successAddProduct = () => toast.success("Maxsulot muvaffaqiyatli yaratildi !");
-export const successUpdateProduct = () => toast.success("O'zgartirish muvaffaqiyatli amalga oshirildi !");
+export const successAddProductMessage = () => toast.success("Maxsulot muvaffaqiyatli yaratildi !");
+export const successUpdateProductMessage = () => toast.success("Maxsulot muvaffaqiyatli o'zgartirildi!");
+export const successDeleteProductMessage = () => toast.success("Maxsulot muvaffaqiyatli o'chirildi!");
 
 // Warning Messages
 export const warningEmptyInput = () => toast.warn("Ma'lumotlar to'liq kiritilmagan !");

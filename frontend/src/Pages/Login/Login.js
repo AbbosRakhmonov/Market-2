@@ -4,7 +4,7 @@ import Input from "../../Components/Inputs/Input";
 import {clearError, signIn} from "./loginSlice";
 import {useDispatch, useSelector} from "react-redux";
 import Timebar from "../../Components/TimeBar/Timebar";
-import {toast} from 'react-toastify';
+import {universalToast} from "../../Components/ToastMessages/ToastMessages";
 
 function Login() {
     const dispatch = useDispatch();
@@ -29,7 +29,7 @@ function Login() {
     }
     useEffect(() => {
         if (error) {
-            toast.error(error);
+            universalToast(error, "error");
             setTimeout(() => {
                 dispatch(clearError())
             }, 1000);

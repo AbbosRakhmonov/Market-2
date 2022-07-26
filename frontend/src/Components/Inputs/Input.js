@@ -1,7 +1,15 @@
 import { useState } from "react";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 
-function Input({ placeholder, forid, type, value, onChange, password, label ,onKeyUp}) {
+function Input({
+  placeholder,
+  type,
+  value,
+  onChange,
+  password,
+  label,
+  onKeyUp,
+}) {
   const [currentShow, setCurrentShow] = useState(false);
   const changeType = () => {
     setCurrentShow(!currentShow);
@@ -16,7 +24,6 @@ function Input({ placeholder, forid, type, value, onChange, password, label ,onK
         <input
           className="inputClass shadow-[0_10px_10px_rgba(0,0,0,0.05)] leading-[1.125rem]"
           placeholder={placeholder}
-          id={forid}
           type={currentShow ? "text" : type}
           value={value}
           onChange={onChange}

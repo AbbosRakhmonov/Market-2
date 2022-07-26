@@ -32,12 +32,14 @@ instance.interceptors.request.use(
 instance.interceptors.response.use((response) => response, ({response: {data: {error, message}, status}}) => {
     if (!status) {
         return Promise.reject({message: "Internet mavjud emas"})
-    }
-    if (status === 401) {
+    } else if (status === 401) {
         localStorage.removeItem("useData");
         Store.dispatch(logOut(error || message));
+    } else if (status === 404) {
+        return Promise.reject("Bunday manzil mavjud emas !");
+    } else {
+        return Promise.reject(error || message);
     }
-    return Promise.reject(error || message);
 });
 
 export default instance;
