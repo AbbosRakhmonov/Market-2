@@ -3,7 +3,16 @@ import Select from 'react-select';
 import CustomStyle from './CustomStyle';
 import { DropdownIcon } from './CustomStyle';
 
-const SelectInput = ({ onSelect, options,searcheble,disabled,selectRef,id,label} ) => {
+const SelectInput = ({
+  onSelect,
+  options,
+  searcheble,
+  disabled,
+  selectRef,
+  id,
+  label,
+  placeholder,
+}) => {
   return (
     <div className='w-[100%]'>
       <label
@@ -23,6 +32,7 @@ const SelectInput = ({ onSelect, options,searcheble,disabled,selectRef,id,label}
         isDisabled={disabled}
         ref={selectRef}
         id={id}
+        placeholder={placeholder}
         components={{
           IndicatorSeparator: () => null,
           DropdownIndicator: DropdownIcon,

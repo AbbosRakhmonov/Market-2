@@ -63,6 +63,9 @@ const Control = (styles) => ({
     boxShadow: '0px 10px 10px rgba(0, 0, 0, 0.05)',
     cursor: 'pointer',
     height: '100%',
+    '&:hover': {
+        backgroundColor: '#EAEAEA',
+      },
 });
 
 const CustomStyle = {

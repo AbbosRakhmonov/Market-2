@@ -49,6 +49,11 @@ const ValueContainer = (styles) => ({
   alignItems: 'center',
   justifyContent: 'center',
 });
+
+const Placeholder = (styles) => ({
+  ...styles,
+  color: '#86A7E9',
+});
 const Control = (styles) => ({
   ...styles,
   marginTop: '.625rem',
@@ -61,11 +66,10 @@ const Control = (styles) => ({
   border: '1px solid #86A7E9',
   boxShadow: '0px 10px 10px rgba(0, 0, 0, 0.05)',
   cursor: 'pointer',
-  "&:hover": {
-    backgroundColor: "#EAEAEA"
-  }
-}
-);
+  '&:hover': {
+    backgroundColor: '#EAEAEA',
+  },
+});
 
 const CustomStyle = {
   control: Control,
@@ -76,6 +80,7 @@ const CustomStyle = {
   valueContainer: ValueContainer,
   indicatorsContainer: IndicatorsContainer,
   dropdownIndicator: DropdownIndicator,
+  placeholder: Placeholder,
 };
 
 export default CustomStyle;
