@@ -125,7 +125,7 @@ module.exports = withAnimations({
         800: 'rgba(255, 255, 255, 0.8)',
         900: '#ffffff',
       },
-      inputHover: '#EAEAEA',
+      inputHover: 'rgba(234, 234, 234, 1)',
       loginButton: '#23BB86',
       background: '#EFF4F2',
       trHover: 'rgba(0, 0, 0, 0.03)',
