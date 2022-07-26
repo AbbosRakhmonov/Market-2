@@ -1,7 +1,7 @@
 import React from 'react';
 function MainPage() {
   return <div>
-    MainPage   
+    MainPage
   </div>;
 }
 export default MainPage;
