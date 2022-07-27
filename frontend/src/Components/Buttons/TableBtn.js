@@ -1,8 +1,15 @@
 import React from 'react';
-import {IoAdd, IoCreateOutline, IoPrint, IoSave, IoSwapHorizontal, IoTrashOutline,} from 'react-icons/io5';
-import {SiMicrosoftexcel} from 'react-icons/si';
+import {
+  IoAdd,
+  IoCreateOutline,
+  IoPrint,
+  IoSave,
+  IoSwapHorizontal,
+  IoTrashOutline,
+} from 'react-icons/io5';
+import { SiMicrosoftexcel } from 'react-icons/si';
 
-const TableBtn = ({ type, onClick, bgcolor}) => {
+const TableBtn = ({ type, onClick, bgcolor }) => {
   const chooseIcon = () => {
     switch (type) {
       case 'delete':
