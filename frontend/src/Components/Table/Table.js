@@ -1,5 +1,6 @@
 import { CategoryTableRow } from './TableRows/CategoryTableRow';
 import { RegisterIncomingTableRow } from './TableRows/RegisterIncomingTableRow';
+
 import { InventoriesTableRow } from './TableRows/InventoriesTableRow';
 import { InventoryTableRow } from './TableRows/InventoryTableRow';
 import { ProductReportTableRow } from './TableRows/ProductReportTableRow';
@@ -29,6 +30,7 @@ function Table({
   editincoming,
   editedIncoming,
   saveEditIncoming,
+  sortItem,
 }) {
   const checkRows = () => {
     switch (page) {
@@ -89,6 +91,7 @@ function Table({
           />
         );
       case 'registerincoming':
+
         return (
           <RegisterIncomingTableRow
             data={data}
@@ -141,7 +144,7 @@ function Table({
   return (
     <table className='overflow-x-auto w-full'>
       <thead className='rounded-t-lg'>
-        {<Thead headers={headers} onClick={Sort} />}
+        {<Thead headers={headers} onClick={Sort} sortItem={sortItem} />}
       </thead>
       <tbody>{checkRows()}</tbody>
     </table>
