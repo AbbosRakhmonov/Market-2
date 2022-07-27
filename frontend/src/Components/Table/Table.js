@@ -11,6 +11,7 @@ import { IncomingsTableRow } from './TableRows/IncomingsTableRow';
 import { RegisterSaleTableRow } from './TableRows/RegisterSaleTableRow';
 import { TemporaryIncomingsTableRow } from './TableRows/TemporaryIncomingsTableRow';
 import { TemporarySaleTableRow } from './TableRows/TemporarySaleTableRow';
+import { SalesListTableRow } from './TableRows/SalesListTableRow';
 
 function Table({
   page,
@@ -32,6 +33,8 @@ function Table({
   editedIncoming,
   saveEditIncoming,
   sortItem,
+  AddPayment,
+  ReturnPayment,
 }) {
   const checkRows = () => {
     switch (page) {
@@ -147,8 +150,8 @@ function Table({
             currency={currency}
             Delete={Delete}
             changeHandler={changeHandler}
-            />
-          )
+          />
+        );
       case 'temporaryincoming':
         return (
           <TemporaryIncomingsTableRow
@@ -170,6 +173,18 @@ function Table({
             currency={currency}
             Edit={Edit}
             Delete={Delete}
+          />
+        );
+      case 'saleslist':
+        return (
+          <SalesListTableRow
+            data={data}
+            currency={currency}
+            currentPage={currentPage}
+            countPage={countPage}
+            Print={Print}
+            AddPayment={AddPayment}
+            ReturnPayment={ReturnPayment}
           />
         );
       default:
