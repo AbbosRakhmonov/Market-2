@@ -78,7 +78,7 @@
   }
 
   .th {
-    @apply font-bold text-sm text-white-900 py-4 px-2;
+    @apply font-bold text-sm text-white-900 py-2 px-2;
   }
 
   .tr {
@@ -89,7 +89,7 @@
     @apply w-full py-[0.625rem] px-[0.58rem]  rounded-[0.25rem] border-[1px] border-blue-200 text-sm placeholder-blue-200 outline-transparent outline outline-0 focus:outline-blue-100 bg-white-900 hover:bg-inputHover focus:outline-4 focus:bg-white-900 transition-all ease-in-out duration-100;
   }
   .selectInput {
-    @apply placeholder-blue-200 outline-transparent outline outline-0 focus:outline-blue-100 bg-white-900 hover:bg-inputHover focus:outline-4 focus:bg-white-900 transition-all ease-in-out duration-100
+    @apply placeholder-blue-200 outline-transparent outline outline-0 focus:outline-blue-100 bg-white-900 hover:bg-inputHover focus:outline-4 focus:bg-white-900 transition-all ease-in-out duration-100;
   }
 
   .searchInput-container {
@@ -232,7 +232,6 @@
   .mainPadding {
     @apply pl-[2.5rem] pr-[1.25rem] py-[1.25rem];
   }
-
 
   .tableContainerPadding {
     @apply pl-[2.5rem] pr-[1.25rem] pb-[1.25rem];

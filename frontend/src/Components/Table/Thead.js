@@ -27,7 +27,7 @@ function Thead({ headers, Sort, sortItem }) {
           ${header.styles || ''}
           `}
           >
-            <div className='flex items-center ml-1'>
+            <div className='inline-flex items-center ml-1'>
               <span>{header.title}</span>{' '}
               {header.filter && (
                 <button onClick={() => Sort(header.filter)}>
