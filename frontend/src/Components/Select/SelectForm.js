@@ -1,7 +1,6 @@
-import React from 'react';
-import Select from 'react-select';
-import CustomStyle from "./CustomStyle";
-import {DropdownIcon} from "./CustomStyle";
+import React from 'react'
+import Select from 'react-select'
+import CustomStyle, {DropdownIcon} from './CustomStyle'
 
 const SelectForm = ({onSelect}) => {
     const options = [
@@ -9,12 +8,14 @@ const SelectForm = ({onSelect}) => {
         {value: 20, label: 20},
         {value: 50, label: 50},
         {value: 100, label: 100},
-    ];
+    ]
     return (
         <div className='flex items-center justify-center'>
             <label
                 htmlFor='select'
-                className={'text-[0.875rem] font-light text-blue-700 leading-[1rem]'}
+                className={
+                    'text-[0.875rem] font-light text-blue-700 leading-[1rem]'
+                }
             >
                 Ko'rsatish:
             </label>
@@ -25,10 +26,13 @@ const SelectForm = ({onSelect}) => {
                 defaultValue={options[0]}
                 options={options}
                 id={'select'}
-                components={{IndicatorSeparator: () => null, DropdownIndicator: DropdownIcon}}
+                components={{
+                    IndicatorSeparator: () => null,
+                    DropdownIndicator: DropdownIcon,
+                }}
             />
         </div>
-    );
-};
+    )
+}
 
-export default SelectForm;
+export default SelectForm

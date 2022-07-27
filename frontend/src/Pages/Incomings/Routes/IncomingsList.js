@@ -1,7 +1,7 @@
-import React from 'react';
+import React from 'react'
 
 const IncomingsList = () => {
-  return <div>IncomingsList</div>;
-};
+    return <div>IncomingsList</div>
+}
 
-export default IncomingsList;
+export default IncomingsList

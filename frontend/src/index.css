@@ -5,12 +5,12 @@
 @tailwind utilities;
 
 :root {
-  --clock-color: #a9c0ef;
-  --clock-width: 3rem;
-  --clock-radius: calc(var(--clock-width) / 2);
-  --clock-minute-length: calc(var(--clock-width) * 0.4);
-  --clock-hour-length: calc(var(--clock-width) * 0.2);
-  --clock-thickness: 0.1rem;
+    --clock-color: #a9c0ef;
+    --clock-width: 3rem;
+    --clock-radius: calc(var(--clock-width) / 2);
+    --clock-minute-length: calc(var(--clock-width) * 0.4);
+    --clock-hour-length: calc(var(--clock-width) * 0.2);
+    --clock-thickness: 0.1rem;
 }
 
 @layer base {
@@ -23,7 +23,7 @@
   }
 
   .tableInput {
-    @apply w-full placeholder-blue-200 pt-[0.3125rem] pb-[0.3125rem] pr-[.625rem] pl-[0.625rem] rounded-[0.25rem] border-2 border-blue-200 outline-0 font-roboto text-sm text-right;
+    @apply w-full placeholder-blue-200 pt-[0.625rem] pb-[0.625rem] pr-[0.45rem] pl-[0.3125rem] rounded-[0.25rem] border-2 border-blue-200 outline-0 font-roboto text-sm text-right;
   }
 
   .iconClass {
@@ -92,9 +92,13 @@
     @apply placeholder-blue-200 outline-transparent outline outline-0 focus:outline-blue-100 bg-white-900 hover:bg-inputHover focus:outline-4 focus:bg-white-900 transition-all ease-in-out duration-100;
   }
 
-  .searchInput-container {
-    @apply relative px-[0.625rem] rounded-[0.25rem] border-[1px] border-blue-200 text-sm placeholder-blue-200 outline-transparent outline outline-0 focus-within:outline-blue-100 bg-white-900 hover:bg-inputHover focus-within:outline-4 focus-within:bg-white-900 focus-within:hover:bg-white-900 transition-all ease-in-out duration-100;
-  }
+    .selectInputClass {
+        @apply w-full bg-transparent min-w-full max-w-full rounded-[0.25rem] text-sm placeholder-blue-200 focus:outline-none leading-[1.125rem];
+    }
+
+    .searchInput-container {
+        @apply relative px-[0.625rem] rounded-[0.25rem] border-[1px] border-blue-200 text-sm placeholder-blue-200 outline-transparent outline outline-0 focus-within:outline-blue-100 bg-white-900 hover:bg-inputHover focus-within:outline-4 focus-within:bg-white-900 focus-within:hover:bg-white-900 transition-all ease-in-out duration-100;
+    }
 
   .labelClass {
     @apply block mb-[10px] text-blue-700;
@@ -179,6 +183,19 @@
   .active_shop {
     @apply bg-white-900
   }
+
+  .searchInput {
+    @apply w-full pt-[0.625rem] pb-[0.625rem] pl-[2rem] rounded-[0.25rem] border-2 border-blue-200 outline-0 font-roboto text-sm;
+  }
+
+  .searchIcon {
+    @apply bottom-[0.6rem] w-[1.125rem] h-[1.125rem] text-blue-200;
+  }
+
+  .paragraf {
+    @apply text-[0.875rem] flex items-center text-blue-700 leading-[1rem];
+  }
+
   .cardStyle {
     @apply p-[1.15rem] bg-primary-800 text-white-900 inline-block rounded-[.5rem] transition ease-in-out hover:bg-black-700;
   }
@@ -258,6 +275,7 @@
   .linkstyles {
     @apply bg-inputHover w-[180px] py-[0.3rem] rounded-full flex items-center justify-center gap-[0.625rem];
   }
+
   .activelink {
     @apply bg-white-900 shadow-[0px_10px_10px] shadow-black-100;
   }
@@ -268,10 +286,6 @@
 
   .approveBtn {
     @apply p-[0.7rem_3rem] rounded-[0.5rem] text-white-900 text-sm transition-all ease-in duration-75;
-  }
-  ::-webkit-scrollbar {
-    width: 2px;
-    @apply bg-black-100;
   }
 
   /* DiscountInput and ExitBtn style start */
@@ -291,6 +305,7 @@
   .shopButton {
     @apply w-[2.125rem] h-[2.125rem] rounded-full flex items-center justify-center shadow-[0px_5px_10px_rgba(0,0,0,0.1)] hover:bg-black-700 duration-200 p-[5px];
   }
+
   .shopIcons {
     @apply text-[1.5rem] text-white-900;
   }
@@ -298,6 +313,7 @@
   .datePickerStyle {
     @apply text-[0.875rem] text-blue-200 border border-blue-200 w-[7rem] h-[2.375rem] rounded-md p-[0.625rem] bg-white-900 outline-0;
   }
+
   .datePickerIcon {
     @apply absolute top-[0.7rem] right-[0.625rem] w-[0.9rem] h-[0.9rem] text-blue-200;
   }
@@ -463,7 +479,7 @@ input[type='number'] {
     transform: rotate(1turn);
   }
 }
-shops-bg-color {
+.shops-bg-color {
   background:  linear-gradient(234.85deg, #00B4CC 0%, #0090A3 100%);
 }
 

@@ -1,14 +1,25 @@
-import Modal from 'react-modal';
-import ModalHeader from "./ModalHeader";
-import Approve from "./ModalBodys/Approve";
+import Modal from 'react-modal'
+import ModalHeader from './ModalHeader'
+import Approve from './ModalBodys/Approve'
 
-function UniversalModal({isOpen, toggleModal, body, approveFunction, closeModal}) {
+function UniversalModal({
+    isOpen,
+    toggleModal,
+    body,
+    approveFunction,
+    closeModal,
+}) {
     const switchBody = () => {
         switch (body) {
-            case "approve":
-                return <Approve approveFunction={approveFunction} toggleModal={toggleModal}/>;
+            case 'approve':
+                return (
+                    <Approve
+                        approveFunction={approveFunction}
+                        toggleModal={toggleModal}
+                    />
+                )
             default:
-                return "Bunday jadval topilmadi";
+                return 'Bunday jadval topilmadi'
         }
     }
     return (
@@ -16,13 +27,13 @@ function UniversalModal({isOpen, toggleModal, body, approveFunction, closeModal}
             isOpen={isOpen}
             onRequestClose={closeModal || toggleModal}
             closeTimeoutMS={200}
-            contentLabel="Example Modal"
+            contentLabel='Example Modal'
             appElement={document.getElementById('root') || undefined}
         >
-            <ModalHeader toggleModal={closeModal || toggleModal}/>
+            <ModalHeader toggleModal={closeModal || toggleModal} />
             {switchBody()}
         </Modal>
-    );
+    )
 }
 
-export default UniversalModal;
+export default UniversalModal

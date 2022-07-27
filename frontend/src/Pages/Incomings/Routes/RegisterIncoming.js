@@ -1,7 +1,7 @@
-import React from 'react';
+import React from 'react'
 
 const RegisterIncoming = () => {
-  return <div>RegisterIncoming</div>;
-};
+    return <div>RegisterIncoming</div>
+}
 
-export default RegisterIncoming;
+export default RegisterIncoming
