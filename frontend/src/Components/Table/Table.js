@@ -1,5 +1,6 @@
 import { CategoryTableRow } from './TableRows/CategoryTableRow';
-import { IncomingTableRow } from './TableRows/IncomingTableRow';
+import { RegisterIncomingTableRow } from './TableRows/RegisterIncomingTableRow';
+
 import { InventoriesTableRow } from './TableRows/InventoriesTableRow';
 import { InventoryTableRow } from './TableRows/InventoryTableRow';
 import { ProductReportTableRow } from './TableRows/ProductReportTableRow';
@@ -7,6 +8,7 @@ import { ProductTableRow } from './TableRows/ProductTableRow';
 import { SupplierTableRow } from './TableRows/SupplierTableRow';
 import { UnitTableRow } from './TableRows/UnitTableRow';
 import Thead from './Thead';
+import { IncomingsTableRow } from './TableRows/IncomingsTableRow';
 
 function Table({
   page,
@@ -25,6 +27,9 @@ function Table({
   inputValue,
   inputDisabled,
   Excel,
+  editincoming,
+  editedIncoming,
+  saveEditIncoming,
   sortItem,
 }) {
   const checkRows = () => {
@@ -85,9 +90,10 @@ function Table({
             inputValue={inputValue}
           />
         );
-      case 'incoming':
+      case 'registerincoming':
+
         return (
-          <IncomingTableRow
+          <RegisterIncomingTableRow
             data={data}
             currentPage={currentPage}
             countPage={countPage}
@@ -115,6 +121,20 @@ function Table({
             countPage={countPage}
             Excel={Excel}
             Print={Print}
+          />
+        );
+      case 'incomings':
+        return (
+          <IncomingsTableRow
+            Edit={Edit}
+            Delete={Delete}
+            editIncoming={editincoming}
+            editedIncoming={editedIncoming}
+            saveEditIncoming={saveEditIncoming}
+            data={data}
+            currency={currency}
+            currentPage={currentPage}
+            countPage={countPage}
           />
         );
       default:
