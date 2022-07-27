@@ -1,3 +1,4 @@
+import {PackmanTableRow} from './TableRows/PackmanTableRow'
 import {CategoryTableRow} from './TableRows/CategoryTableRow'
 import {RegisterIncomingTableRow} from './TableRows/RegisterIncomingTableRow'
 import {InventoriesTableRow} from './TableRows/InventoriesTableRow'
@@ -12,7 +13,8 @@ import {RegisterSaleTableRow} from './TableRows/RegisterSaleTableRow'
 import {TemporaryIncomingsTableRow} from './TableRows/TemporaryIncomingsTableRow'
 import {TemporarySaleTableRow} from './TableRows/TemporarySaleTableRow'
 import {SalesListTableRow} from './TableRows/SalesListTableRow'
-import {PackmanTableRow} from './TableRows/PackmanTableRow'
+import {ClientTableRow} from './TableRows/ClientTableRow'
+import {SellerTableRow} from '../../Pages/MainPage/SellerTableRow'
 
 function Table({
     page,
@@ -141,6 +143,7 @@ function Table({
                         countPage={countPage}
                     />
                 )
+
             case 'registersale':
                 return (
                     <RegisterSaleTableRow
@@ -200,6 +203,16 @@ function Table({
             case 'packman':
                 return (
                     <PackmanTableRow
+                        data={data}
+                        currentPage={currentPage}
+                        countPage={countPage}
+                        Edit={Edit}
+                        Delete={Delete}
+                    />
+                )
+            case 'seller':
+                return (
+                    <SellerTableRow
                         data={data}
                         currentPage={currentPage}
                         countPage={countPage}
