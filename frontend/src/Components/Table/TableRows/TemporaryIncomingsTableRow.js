@@ -38,7 +38,7 @@ export const TemporaryIncomingsTableRow = ({
             <div className='flex items-center justify-center gap-[0.625rem]'>
               <TableBtn
                 type={'print'}
-                bgcolor={'bg-primary-500'}
+                bgcolor={'bg-primary-800'}
                 onClick={() => Print(temporary)}
               />
               <TableBtn
