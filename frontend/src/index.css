@@ -23,7 +23,7 @@
   }
 
   .tableInput {
-    @apply w-full placeholder-blue-200 pt-[0.625rem] pb-[0.625rem] pr-[0.45rem] pl-[0.3125rem] rounded-[0.25rem] border-2 border-blue-200 outline-0 font-roboto text-sm text-right;
+    @apply w-full placeholder-blue-200 py-[0.313rem] pr-[0.45rem] pl-[0.3125rem] rounded-[0.25rem] border-2 border-blue-200 outline-0 font-roboto text-sm text-right;
   }
 
   .iconClass {
@@ -74,7 +74,7 @@
   }
 
   .td {
-    @apply px-2 py-2.5 border-r-2 border-b-2 border-primary-700 text-sm font-normal text-[#000];
+    @apply px-2 border-r-2 border-b-2 border-primary-700 text-sm font-normal text-[#000];
   }
 
   .th {
@@ -253,33 +253,32 @@
     @apply bg-black-100;
   }
 
-
   /* DiscountInput and ExitBtn style start */
   .discountinput {
-    @apply px-[10px] py-[5px] rounded-l outline-none border border-blue-100 focus:border focus:border-warning-500 
+    @apply px-[10px] py-[5px] rounded-l outline-none border border-blue-100 focus:border focus:border-warning-500;
   }
 
   .discountselect {
-    @apply py-[5px] px-[10px] outline-none bg-warning-500 text-white-900 rounded-r cursor-pointer
+    @apply py-[5px] px-[10px] outline-none bg-warning-500 text-white-900 rounded-r cursor-pointer;
   }
 
   .exitbtn {
-    @apply bg-error-400 py-[4px] px-[5px] text-white-900 rounded hover:bg-error-500
+    @apply bg-error-400 py-[4px] px-[5px] text-white-900 rounded hover:bg-error-500;
   }
 
   /* DiscountInput and ExitBtn style end */
   .shopButton {
-    @apply w-[2.125rem] h-[2.125rem] rounded-full flex items-center justify-center shadow-[0px_5px_10px_rgba(0,0,0,0.1)] hover:bg-black-700 duration-200 p-[5px]
+    @apply w-[2.125rem] h-[2.125rem] rounded-full flex items-center justify-center shadow-[0px_5px_10px_rgba(0,0,0,0.1)] hover:bg-black-700 duration-200 p-[5px];
   }
   .shopIcons {
-    @apply text-[1.5rem] text-white-900
+    @apply text-[1.5rem] text-white-900;
   }
-  
-  .datePickerStyle{
-    @apply text-[0.875rem] text-blue-200 border border-blue-200 w-[7rem] h-[2.375rem] rounded-md p-[0.625rem] bg-white-900 outline-0
+
+  .datePickerStyle {
+    @apply text-[0.875rem] text-blue-200 border border-blue-200 w-[7rem] h-[2.375rem] rounded-md p-[0.625rem] bg-white-900 outline-0;
   }
-  .datePickerIcon{
-    @apply absolute top-[0.7rem] right-[0.625rem] w-[0.9rem] h-[0.9rem] text-blue-200
+  .datePickerIcon {
+    @apply absolute top-[0.7rem] right-[0.625rem] w-[0.9rem] h-[0.9rem] text-blue-200;
   }
 }
 

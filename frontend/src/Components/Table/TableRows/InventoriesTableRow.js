@@ -13,18 +13,18 @@ export const InventoriesTableRow = ({
     <>
       {data.map((inventory, index) => (
         <tr key={inventory._id} className='tr'>
-          <th className='td text-left'>
+          <td className='td text-left'>
             {currentPage * countPage + 1 + index}
-          </th>
-          <th className='td text-right'>{inventory.createdAt}</th>
-          <th className='td text-right'>{inventory.id}</th>
-          <th className='td text-left'>{inventory.product.name}</th>
-          <th className='py-[0.375rem] td text-center'>
+          </td>
+          <td className='td text-right'>{inventory.createdAt}</td>
+          <td className='td text-right'>{inventory.id}</td>
+          <td className='td text-left'>{inventory.product.name}</td>
+          <td className='py-[0.375rem] td text-center'>
             <div className='flex items justify-center'>
               <StatusIcon status={inventory.status} />
             </div>
-          </th>
-          <th className='td border-r-0 text-center max-w-[50px]'>
+          </td>
+          <td className='td border-r-0 text-center max-w-[50px]'>
             <div className='flex items-center justify-center gap-[5px]'>
               <TableBtn
                 type={'print'}
@@ -37,7 +37,7 @@ export const InventoriesTableRow = ({
                 onClick={Excel}
               />
             </div>
-          </th>
+          </td>
         </tr>
       ))}
     </>

@@ -1,12 +1,13 @@
-import { CategoryTableRow } from "./TableRows/CategoryTableRow";
-import { IncomingTableRow } from "./TableRows/IncomingTableRow";
-import { InventoriesTableRow } from "./TableRows/InventoriesTableRow";
-import { InventoryTableRow } from "./TableRows/InventoryTableRow";
-import { ProductReportTableRow } from "./TableRows/ProductReportTableRow";
-import { ProductTableRow } from "./TableRows/ProductTableRow";
-import { SupplierTableRow } from "./TableRows/SupplierTableRow";
-import { UnitTableRow } from "./TableRows/UnitTableRow";
-import Thead from "./Thead";
+import { CategoryTableRow } from './TableRows/CategoryTableRow';
+import { RegisterIncomingTableRow } from './TableRows/RegisterIncomingTableRow';
+import { InventoriesTableRow } from './TableRows/InventoriesTableRow';
+import { InventoryTableRow } from './TableRows/InventoryTableRow';
+import { ProductReportTableRow } from './TableRows/ProductReportTableRow';
+import { ProductTableRow } from './TableRows/ProductTableRow';
+import { SupplierTableRow } from './TableRows/SupplierTableRow';
+import { UnitTableRow } from './TableRows/UnitTableRow';
+import Thead from './Thead';
+import { IncomingsTableRow } from './TableRows/IncomingsTableRow';
 
 function Table({
   page,
@@ -25,10 +26,13 @@ function Table({
   inputValue,
   inputDisabled,
   Excel,
+  editincoming,
+  editedIncoming,
+  saveEditIncoming,
 }) {
   const checkRows = () => {
     switch (page) {
-      case "product":
+      case 'product':
         return (
           <ProductTableRow
             data={data}
@@ -38,7 +42,7 @@ function Table({
             Delete={Delete}
           />
         );
-      case "category":
+      case 'category':
         return (
           <CategoryTableRow
             data={data}
@@ -48,7 +52,7 @@ function Table({
             Delete={Delete}
           />
         );
-      case "unit":
+      case 'unit':
         return (
           <UnitTableRow
             data={data}
@@ -58,7 +62,7 @@ function Table({
             Delete={Delete}
           />
         );
-      case "supplier":
+      case 'supplier':
         return (
           <SupplierTableRow
             data={data}
@@ -68,7 +72,7 @@ function Table({
             Delete={Delete}
           />
         );
-      case "productreport":
+      case 'productreport':
         return (
           <ProductReportTableRow
             data={data}
@@ -84,9 +88,9 @@ function Table({
             inputValue={inputValue}
           />
         );
-      case "incoming":
+      case 'registerincoming':
         return (
-          <IncomingTableRow
+          <RegisterIncomingTableRow
             data={data}
             currentPage={currentPage}
             countPage={countPage}
@@ -95,7 +99,7 @@ function Table({
             currency={currency}
           />
         );
-      case "inventory":
+      case 'inventory':
         return (
           <InventoryTableRow
             data={data}
@@ -106,7 +110,7 @@ function Table({
             Delete={Delete}
           />
         );
-      case "inventories":
+      case 'inventories':
         return (
           <InventoriesTableRow
             data={data}
@@ -116,13 +120,27 @@ function Table({
             Print={Print}
           />
         );
+      case 'incomings':
+        return (
+          <IncomingsTableRow
+            Edit={Edit}
+            Delete={Delete}
+            editIncoming={editincoming}
+            editedIncoming={editedIncoming}
+            saveEditIncoming={saveEditIncoming}
+            data={data}
+            currency={currency}
+            currentPage={currentPage}
+            countPage={countPage}
+          />
+        );
       default:
-        return "";
+        return '';
     }
   };
   return (
-    <table className="overflow-x-auto w-full">
-      <thead className="rounded-t-lg">
+    <table className='overflow-x-auto w-full'>
+      <thead className='rounded-t-lg'>
         {<Thead headers={headers} onClick={Sort} />}
       </thead>
       <tbody>{checkRows()}</tbody>
