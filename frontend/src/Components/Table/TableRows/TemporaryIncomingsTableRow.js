@@ -19,14 +19,16 @@ export const TemporaryIncomingsTableRow = ({
             {temporary.temporaryincoming.supplier.name}
           </td>
           <td className='td text-right'>
-            {temporary.temporaryincoming.incomings.reduce((prev, product) => {
-              return prev + product.pieces;
-            }, 0)}
+            {temporary.temporaryincoming.incomings.reduce(
+              (prev, product) => prev + product.pieces,
+              0
+            )}
           </td>
           <td className='td text-right'>
-            {temporary.temporaryincoming.incomings.reduce((prev, product) => {
-              return prev + product.totalprice;
-            }, 0)}
+            {temporary.temporaryincoming.incomings.reduce(
+              (prev, product) => prev + product.totalprice,
+              0
+            )}
           </td>
           <td className='td text-right'>
             {temporary.createdAt.toLocaleDateString()}
