@@ -9,6 +9,7 @@ import { UnitTableRow } from './TableRows/UnitTableRow';
 import Thead from './Thead';
 import { IncomingsTableRow } from './TableRows/IncomingsTableRow';
 import { RegisterSaleTableRow } from './TableRows/RegisterSaleTableRow';
+import { TemporaryIncomingsTableRow } from './TableRows/TemporaryIncomingsTableRow';
 
 function Table({
   page,
@@ -144,6 +145,16 @@ function Table({
             currency={currency}
             Delete={Delete}
             changeHandler={changeHandler}
+
+      case 'temporary':
+        return (
+          <TemporaryIncomingsTableRow
+            data={data}
+            currentPage={currentPage}
+            countPage={countPage}
+            Edit={Edit}
+            Delete={Delete}
+            Print={Print}
           />
         );
       default:
