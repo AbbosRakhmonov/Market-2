@@ -12,6 +12,7 @@ import { RegisterSaleTableRow } from './TableRows/RegisterSaleTableRow';
 import { TemporaryIncomingsTableRow } from './TableRows/TemporaryIncomingsTableRow';
 import { TemporarySaleTableRow } from './TableRows/TemporarySaleTableRow';
 import { SalesListTableRow } from './TableRows/SalesListTableRow';
+import { ClientTableRow } from './TableRows/ClientTableRow';
 
 function Table({
   page,
@@ -185,6 +186,16 @@ function Table({
             Print={Print}
             AddPayment={AddPayment}
             ReturnPayment={ReturnPayment}
+          />
+        );
+      case 'client':
+        return (
+          <ClientTableRow
+            data={data}
+            currentPage={currentPage}
+            countPage={countPage}
+            Edit={Edit}
+            Delete={Delete}
           />
         );
       default:
