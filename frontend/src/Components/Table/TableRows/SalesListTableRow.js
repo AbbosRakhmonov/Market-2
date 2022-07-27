@@ -14,6 +14,12 @@ export const SalesListTableRow = ({
     return currency === 'USD' ? prev + usd : prev + uzs;
   };
 
+  const reduceEl = (arr, usd, uzs) => {
+    return arr.reduce((prev, item) => {
+      return result(prev, item[usd], item[uzs]);
+    }, 0);
+  };
+
   return (
     <>
       {data.map((saleconnector, index) => (
@@ -26,37 +32,17 @@ export const SalesListTableRow = ({
             {saleconnector.client && saleconnector.client.name}
           </td>
           <td className='text-success-500 text-right td'>
-            {saleconnector.products.reduce(
-              (prev, product) =>
-                result(prev, product.totalprice, product.totalpriceuzs),
-              0
-            )}{' '}
+            {reduceEl(saleconnector.products, 'totalprice', 'totalpriceuzs')}{' '}
             {currency}
           </td>
           <td className='text-warning-500 text-right td'>
-            {saleconnector.discounts.reduce(
-              (prev, discount) =>
-                result(prev, discount.discount, discount.discountuzs),
-              0
-            )}{' '}
+            {reduceEl(saleconnector.discounts, 'discount', 'discountuzs')}{' '}
             {currency}
           </td>
           <td className='text-error-500 text-right td'>
-            {saleconnector.products.reduce(
-              (prev, product) =>
-                result(prev, product.totalprice, product.totalpriceuzs),
-              0
-            ) -
-              saleconnector.payments.reduce(
-                (prev, payment) =>
-                  result(prev, payment.payment, payment.paymentuzs),
-                0
-              ) -
-              saleconnector.discounts.reduce(
-                (prev, discount) =>
-                  result(prev, discount.discount, discount.discountuzs),
-                0
-              )}{' '}
+            {reduceEl(saleconnector.products, 'totalprice', 'totalpriceuzs') -
+              reduceEl(saleconnector.payments, 'payment', 'paymentuzs') -
+              reduceEl(saleconnector.discounts, 'discount', 'discountuzs')}{' '}
             {currency}
           </td>
           <td className='text-left td'>
