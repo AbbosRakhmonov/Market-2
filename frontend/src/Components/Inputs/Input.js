@@ -20,7 +20,7 @@ function Input({ placeholder, forid, type, value, onChange, password, label ,onK
           type={currentShow ? "text" : type}
           value={value}
           onChange={onChange}
-          onkeyup={onKeyUp}
+          onKeyUp={onKeyUp}
         />
         {password && (
           <button className={"iconButton"} type={"button"} onClick={changeType}>
