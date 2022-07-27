@@ -10,6 +10,7 @@ import Thead from './Thead';
 import { IncomingsTableRow } from './TableRows/IncomingsTableRow';
 import { RegisterSaleTableRow } from './TableRows/RegisterSaleTableRow';
 import { TemporaryIncomingsTableRow } from './TableRows/TemporaryIncomingsTableRow';
+import { TemporarySaleTableRow } from './TableRows/TemporarySaleTableRow';
 
 function Table({
   page,
@@ -136,6 +137,7 @@ function Table({
             countPage={countPage}
           />
         );
+
       case 'registersale':
         return (
           <RegisterSaleTableRow
@@ -145,8 +147,9 @@ function Table({
             currency={currency}
             Delete={Delete}
             changeHandler={changeHandler}
-
-      case 'temporary':
+            />
+          )
+      case 'temporaryincoming':
         return (
           <TemporaryIncomingsTableRow
             data={data}
@@ -155,6 +158,18 @@ function Table({
             Edit={Edit}
             Delete={Delete}
             Print={Print}
+            currency={currency}
+          />
+        );
+      case 'temporarysale':
+        return (
+          <TemporarySaleTableRow
+            data={data}
+            currentPage={currentPage}
+            countPage={countPage}
+            currency={currency}
+            Edit={Edit}
+            Delete={Delete}
           />
         );
       default:
