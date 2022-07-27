@@ -17,8 +17,8 @@ export const RegisterSaleTableRow = ({
           <td className='text-left td'>
             {currentPage * countPage + 1 + index}
           </td>
-          <td className='text-right td'>{product.productdata.code}</td>
-          <td className='text-left td'>{product.productdata.name}</td>
+          <td className='text-right td'>{product.code}</td>
+          <td className='text-left td'>{product.name}</td>
           <td className='text-right td'>
             <TableInput
               value={product.total}
@@ -27,7 +27,11 @@ export const RegisterSaleTableRow = ({
             />
           </td>
           <td className='text-right td'>
-            {product.price.sellingprice} {currency}
+            <TableInput
+              value={product.sellingprice}
+              onChange={(e) => changeHandler(e, 'price')}
+              type={'number'}
+            />
           </td>
           <td className='text-right td'>
             {product.totalprice} {currency}
