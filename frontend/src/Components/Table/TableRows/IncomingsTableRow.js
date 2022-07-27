@@ -6,7 +6,7 @@ export const IncomingsTableRow = ({
   editedIncoming,
   currency,
   saveEditIncoming,
-  editIncoming,
+  changeHandler,
   Delete,
   Edit,
   currentPage,
@@ -27,7 +27,7 @@ export const IncomingsTableRow = ({
             {(editedIncoming._id === incoming._id && (
               <TableInput
                 value={editedIncoming.total}
-                onChange={(e) => editIncoming(e, 'total')}
+                onChange={(e) => changeHandler(e, 'total')}
               />
             )) || (
               <span>
@@ -40,7 +40,7 @@ export const IncomingsTableRow = ({
             {(editedIncoming._id === incoming._id && (
               <TableInput
                 value={editedIncoming.price.incomingprice}
-                onChange={(e) => editIncoming(e, 'incomingprice')}
+                onChange={(e) => changeHandler(e, 'incomingprice')}
                 type={'number'}
               />
             )) || (
@@ -57,7 +57,7 @@ export const IncomingsTableRow = ({
             {(editedIncoming._id === incoming._id && (
               <TableInput
                 value={editedIncoming.price.sellingprice}
-                onChange={(e) => editedIncoming(e, 'sellingprice')}
+                onChange={(e) => changeHandler(e, 'sellingprice')}
                 type={'number'}
               />
             )) || (

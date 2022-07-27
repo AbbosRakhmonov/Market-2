@@ -1,6 +1,5 @@
 import { CategoryTableRow } from './TableRows/CategoryTableRow';
 import { RegisterIncomingTableRow } from './TableRows/RegisterIncomingTableRow';
-
 import { InventoriesTableRow } from './TableRows/InventoriesTableRow';
 import { InventoryTableRow } from './TableRows/InventoryTableRow';
 import { ProductReportTableRow } from './TableRows/ProductReportTableRow';
@@ -9,6 +8,7 @@ import { SupplierTableRow } from './TableRows/SupplierTableRow';
 import { UnitTableRow } from './TableRows/UnitTableRow';
 import Thead from './Thead';
 import { IncomingsTableRow } from './TableRows/IncomingsTableRow';
+import { RegisterSaleTableRow } from './TableRows/RegisterSaleTableRow';
 import { TemporaryIncomingsTableRow } from './TableRows/TemporaryIncomingsTableRow';
 
 function Table({
@@ -28,7 +28,6 @@ function Table({
   inputValue,
   inputDisabled,
   Excel,
-  editincoming,
   editedIncoming,
   saveEditIncoming,
   sortItem,
@@ -128,7 +127,7 @@ function Table({
           <IncomingsTableRow
             Edit={Edit}
             Delete={Delete}
-            editIncoming={editincoming}
+            changeHandler={changeHandler}
             editedIncoming={editedIncoming}
             saveEditIncoming={saveEditIncoming}
             data={data}
@@ -137,6 +136,16 @@ function Table({
             countPage={countPage}
           />
         );
+      case 'registersale':
+        return (
+          <RegisterSaleTableRow
+            data={data}
+            currentPage={currentPage}
+            countPage={countPage}
+            currency={currency}
+            Delete={Delete}
+            changeHandler={changeHandler}
+
       case 'temporary':
         return (
           <TemporaryIncomingsTableRow
