@@ -1,4 +1,4 @@
-function TableInput({ placeholder, type, value, onChange, label, disabled }) {
+function TableInput({ placeholder, type, value, onChange, label, disabled,onKeyUp }) {
   return (
     <div>
       <label>
@@ -10,6 +10,7 @@ function TableInput({ placeholder, type, value, onChange, label, disabled }) {
           type={type}
           value={value}
           onChange={onChange}
+          onKeyUp={onKeyUp}
         />
       </label>
     </div>

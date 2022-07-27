@@ -9,6 +9,7 @@ export const TemporaryIncomingsTableRow = ({
   Print,
   Edit,
   Delete,
+  currency,
 }) => {
   return (
     <>
@@ -24,17 +25,18 @@ export const TemporaryIncomingsTableRow = ({
               0
             )}
           </td>
-          <td className='td text-right'>
+          <td className='text-success-500 td text-right'>
             {temporary.temporaryincoming.incomings.reduce(
               (prev, product) => prev + product.totalprice,
               0
-            )}
+            )}{' '}
+            {currency}
           </td>
           <td className='td text-right'>
             {temporary.createdAt.toLocaleDateString()}
           </td>
           <td className='td text-right'>
-            {temporary.createdAt.toLocaleTimeString()}
+            {temporary.createdAt.toLocaleTimeString()} PM
           </td>
           <td className='td py-[6px] border-r-0'>
             <div className='flex items-center justify-center gap-[0.625rem]'>
