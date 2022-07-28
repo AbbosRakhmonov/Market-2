@@ -348,6 +348,27 @@
    .inverterizationCodeText{
      @apply text-[0.875rem] text-blue-700 pr-[0.75rem] font-[300]
    }
+   .productIncoHead{
+    @apply sm:flex block gap-[1rem] items-center
+  }
+  .productDates{
+    @apply lg:w-1/4 md:w-[2/5] duration-200 mb-3 sm:mb-0
+  }
+  .productSelectInput{
+    @apply border border-black-300 p-[0.8rem] lg:w-3/4 md:w-3/5 duration-200
+  }
+  .productTypeBlock{
+    @apply sm:flex block justify-end
+  }
+  .productType{
+    @apply mr-[1.25rem] text-blue-700 text-[0.875rem] duration-200 font-[300] sm:mb-0
+  }
+  .productSumAll{
+    @apply text-blue-700 text-[0.875rem] font-[300] duration-200
+  }
+  .productCard{
+    @apply flex gap-4 xl:gap-10 lg:gap-4 md:gap-2 sm:gap-8 md:justify-start justify-center duration-200 flex-wrap
+  }
 }
 
 html,
