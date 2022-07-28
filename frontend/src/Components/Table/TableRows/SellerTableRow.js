@@ -1,5 +1,5 @@
 import React from 'react';
-import TableBtn from '../../Components/Buttons/TableBtn';
+import TableBtn from '../../Buttons/TableBtn';
 
 export const SellerTableRow = ({
   data,
