@@ -1,14 +1,12 @@
-import React from 'react';
-import { IoCloseSharp } from 'react-icons/io5'
+import React from 'react'
+import {IoCloseSharp} from 'react-icons/io5'
 
-export const ExitBtn = ({ onClick }) => {
-  return (
-    <>
-      <button 
-      onClick={onClick} 
-      className='exitbtn'>
-        <IoCloseSharp/>
-      </button>
-    </>
-  );
-};
+export const ExitBtn = ({onClick}) => {
+    return (
+        <>
+            <button onClick={onClick} className='exitbtn'>
+                <IoCloseSharp />
+            </button>
+        </>
+    )
+}

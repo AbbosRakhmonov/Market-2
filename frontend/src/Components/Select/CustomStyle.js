@@ -1,33 +1,33 @@
-import React from "react";
-import {components} from "react-select";
-import {IoCaretDown} from "react-icons/io5";
+import React from 'react'
+import {components} from 'react-select'
+import {IoCaretDown} from 'react-icons/io5'
 
 export const DropdownIcon = (props) => {
     return (
         <components.DropdownIndicator {...props}>
-            <IoCaretDown size={'0.625rem'}/>
+            <IoCaretDown size={'0.625rem'} />
         </components.DropdownIndicator>
-    );
-};
+    )
+}
 const Container = (styles) => ({
     ...styles,
     height: '100%',
     marginLeft: '0.75rem',
-});
-const DropdownIndicator = (styles, { isFocused }) => ({
+})
+const DropdownIndicator = (styles, {isFocused}) => ({
     ...styles,
     padding: 0,
     color: isFocused ? '#193F8A' : '#071F45',
-});
+})
 const IndicatorsContainer = (styles) => ({
     ...styles,
     marginLeft: '5px',
-});
+})
 const Menu = (styles) => ({
     ...styles,
     overflow: 'hidden',
-});
-const Option = (styles, { isFocused, isSelected }) => ({
+})
+const Option = (styles, {isFocused, isSelected}) => ({
     ...styles,
     fontSize: '.875rem',
     fontWeight: '400',
@@ -36,21 +36,21 @@ const Option = (styles, { isFocused, isSelected }) => ({
     transition: 'all 0.2s ease',
     overflow: 'hidden',
     cursor: 'pointer',
-});
+})
 const SingleValue = (styles) => ({
     ...styles,
     fontSize: '.875rem',
     fontWeight: '400',
     color: '#071F45',
     margin: 0,
-});
+})
 const ValueContainer = (styles) => ({
     ...styles,
     padding: 0,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-});
+})
 const Control = (styles) => ({
     ...styles,
     borderRadius: '.5rem',
@@ -65,8 +65,8 @@ const Control = (styles) => ({
     height: '100%',
     '&:hover': {
         backgroundColor: '#EAEAEA',
-      },
-});
+    },
+})
 
 const CustomStyle = {
     control: Control,
@@ -76,7 +76,7 @@ const CustomStyle = {
     singleValue: SingleValue,
     valueContainer: ValueContainer,
     indicatorsContainer: IndicatorsContainer,
-    dropdownIndicator: DropdownIndicator
-};
+    dropdownIndicator: DropdownIndicator,
+}
 
-export default CustomStyle;
+export default CustomStyle

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 function NotFind({text}) {
     return (
@@ -7,7 +7,7 @@ function NotFind({text}) {
                 {text}...
             </h3>
         </div>
-    );
+    )
 }
 
-export default NotFind;
+export default NotFind

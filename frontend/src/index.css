@@ -1,16 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --clock-color: #a9c0ef;
-  --clock-width: 3rem;
-  --clock-radius: calc(var(--clock-width) / 2);
-  --clock-minute-length: calc(var(--clock-width) * 0.4);
-  --clock-hour-length: calc(var(--clock-width) * 0.2);
-  --clock-thickness: 0.1rem;
+    --clock-color: #a9c0ef;
+    --clock-width: 3rem;
+    --clock-radius: calc(var(--clock-width) / 2);
+    --clock-minute-length: calc(var(--clock-width) * 0.4);
+    --clock-hour-length: calc(var(--clock-width) * 0.2);
+    --clock-thickness: 0.1rem;
 }
 
 @layer base {
@@ -23,7 +23,7 @@
   }
 
   .tableInput {
-    @apply w-full placeholder-blue-200 pt-[0.3125rem] pb-[0.3125rem] pr-[.625rem] pl-[0.625rem] rounded-[0.25rem] border-2 border-blue-200 outline-0 font-roboto text-sm text-right;
+    @apply w-full placeholder-blue-200 pt-[0.625rem] pb-[0.625rem] pr-[0.45rem] pl-[0.3125rem] rounded-[0.25rem] border-2 border-blue-200 outline-0 font-roboto text-sm text-right;
   }
 
   .iconClass {
@@ -92,9 +92,13 @@
     @apply placeholder-blue-200 outline-transparent outline outline-0 focus:outline-blue-100 bg-white-900 hover:bg-inputHover focus:outline-4 focus:bg-white-900 transition-all ease-in-out duration-100;
   }
 
-  .searchInput-container {
-    @apply relative px-[0.625rem] rounded-[0.25rem] border-[1px] border-blue-200 text-sm placeholder-blue-200 outline-transparent outline outline-0 focus-within:outline-blue-100 bg-white-900 hover:bg-inputHover focus-within:outline-4 focus-within:bg-white-900 focus-within:hover:bg-white-900 transition-all ease-in-out duration-100;
-  }
+    .selectInputClass {
+        @apply w-full bg-transparent min-w-full max-w-full rounded-[0.25rem] text-sm placeholder-blue-200 focus:outline-none leading-[1.125rem];
+    }
+
+    .searchInput-container {
+        @apply relative px-[0.625rem] rounded-[0.25rem] border-[1px] border-blue-200 text-sm placeholder-blue-200 outline-transparent outline outline-0 focus-within:outline-blue-100 bg-white-900 hover:bg-inputHover focus-within:outline-4 focus-within:bg-white-900 focus-within:hover:bg-white-900 transition-all ease-in-out duration-100;
+    }
 
   .labelClass {
     @apply block mb-[10px] text-blue-700;
@@ -151,6 +155,33 @@
 
   .activeCard {
     @apply bg-black-700 hover:bg-black-700 shadow-[0px_25px_25px_rgba(0,0,0,0.25)];
+  }
+  .filial-btn {
+    @apply flex gap-[.625rem] justify-end pl-[1.25rem] pr-[1.25rem] items-center h-[50%]
+  }
+
+  /* Shops Card styled start */
+
+  .shops_card {
+    @apply flex w-[100%] shadow-[0px_10px_10px_rgba(0,0,0,0.05)] rounded-[.25rem] bg-white-300 justify-between hover:bg-white-900 transition ease-in duration-100 hover:cursor-pointer
+  }
+  .product-cost {
+    @apply flex w-[80%] justify-between p-[1.25rem]
+  }
+  .product {
+    @apply text-[1rem] font-normal leading-[1.175rem] text-black-700 mb-[.625rem] flex justify-center items-center
+  }
+  .product-number {
+    @apply text-[1.25rem] font-normal leading-[1.465rem] flex justify-center items-center
+  }
+  .product-total {
+    @apply font-normal text-[1.25rem] leading-[1.465rem] text-success-500 flex justify-center items-center
+  }
+  .shop-title {
+    @apply text-[1rem] h-[50%] font-medium leading-[1.17rem] text-white-900 w-[13.4375rem] flex justify-center items-center shops-bg-color rounded-bl-[3.125rem]
+  }
+  .active_shop {
+    @apply bg-white-900
   }
 
   .searchInput {
@@ -244,12 +275,17 @@
   .linkstyles {
     @apply bg-inputHover w-[180px] py-[0.3rem] rounded-full flex items-center justify-center gap-[0.625rem];
   }
+
   .activelink {
     @apply bg-white-900 shadow-[0px_10px_10px] shadow-black-100;
   }
-  ::-webkit-scrollbar {
-    width: 2px;
-    @apply bg-black-100;
+
+  .modalUniversal {
+    @apply z-50;
+  }
+
+  .approveBtn {
+    @apply p-[0.7rem_3rem] rounded-[0.5rem] text-white-900 text-sm transition-all ease-in duration-75;
   }
 
   /* DiscountInput and ExitBtn style start */
@@ -269,6 +305,7 @@
   .shopButton {
     @apply w-[2.125rem] h-[2.125rem] rounded-full flex items-center justify-center shadow-[0px_5px_10px_rgba(0,0,0,0.1)] hover:bg-black-700 duration-200 p-[5px];
   }
+
   .shopIcons {
     @apply text-[1.5rem] text-white-900;
   }
@@ -276,6 +313,7 @@
   .datePickerStyle {
     @apply text-[0.875rem] text-blue-200 border border-blue-200 w-[7rem] h-[2.375rem] rounded-md p-[0.625rem] bg-white-900 outline-0;
   }
+
   .datePickerIcon {
     @apply absolute top-[0.7rem] right-[0.625rem] w-[0.9rem] h-[0.9rem] text-blue-200;
   }
@@ -383,7 +421,7 @@ input[type='number'] {
 .clock-loader::before,
 .clock-loader::after {
   position: absolute;
-  content: '';
+  content: "";
   top: calc(var(--clock-radius) * 0.25);
   width: var(--clock-thickness);
   background: var(--clock-color);
@@ -403,8 +441,45 @@ input[type='number'] {
   animation-duration: 15s;
 }
 
+.ReactModal__Overlay {
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  z-index: 50;
+  overflow: auto;
+  perspective: 100px;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(5px) !important;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+}
+
+.ReactModal__Content {
+  width: 50%;
+  inset: auto !important;
+  border-radius: 8px !important;
+  background-color: #eff4f2 !important;
+  left: 50% !important;
+  top: 50% !important;
+  padding: 3rem !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+.modalIcon path {
+  stroke-width: 12;
+}
+
 @keyframes spin {
   to {
     transform: rotate(1turn);
   }
 }
+.shops-bg-color {
+  background:  linear-gradient(234.85deg, #00B4CC 0%, #0090A3 100%);
+}
+
