@@ -11,4 +11,4 @@ function PrintBtn({onClick}){
     )
 }
 
-export default PrintBtn; 
+export default PrintBtn;

@@ -348,6 +348,7 @@
    .inverterizationCodeText{
      @apply text-[0.875rem] text-blue-700 pr-[0.75rem] font-[300]
    }
+
    .print-btn-style{
     @apply flex items-center shadow-[0px_10px_10px_rgba(0,0,0,0.05)]
    }
