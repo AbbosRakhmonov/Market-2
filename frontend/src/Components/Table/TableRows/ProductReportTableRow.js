@@ -18,7 +18,7 @@ export const ProductReportTableRow = ({
     return (
         <>
             {data.map((product, index) => (
-                <tr className='tr group hover:bg-black-300' key={product._id}>
+                <tr className='tr' key={product._id}>
                     <td className='td'>
                         {currentPage * countPage + 1 + index}
                     </td>
