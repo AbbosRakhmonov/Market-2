@@ -1,4 +1,4 @@
-import {FaSortUp, FaSortDown} from 'react-icons/fa'
+import {FaSortDown, FaSortUp} from 'react-icons/fa'
 import {uniqueId} from 'lodash'
 
 function Thead({headers, Sort, sortItem}) {
