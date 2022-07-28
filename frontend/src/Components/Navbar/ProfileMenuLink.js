@@ -1,16 +1,20 @@
-import React from 'react';
-import {NavLink} from "react-router-dom";
+import React from 'react'
+import {NavLink} from 'react-router-dom'
 
 function ProfileMenuLink({path, label, icon}) {
     const profileLinkClasses = ({isActive}) => {
-        return `transition-all ease duration-200 w-full flex px-[20px] py-[10px] gap-[10px] items-center ${isActive ? "text-white-900 bg-primary-800" : "text-black-700 hover:bg-black-100"}`
+        return `transition-all ease duration-200 w-full flex px-[20px] py-[10px] gap-[10px] items-center ${
+            isActive
+                ? 'text-white-900 bg-primary-800'
+                : 'text-black-700 hover:bg-black-100'
+        }`
     }
     return (
         <NavLink className={profileLinkClasses} to={path}>
             <span>{icon}</span>
             <span className={'text-xs'}>{label}</span>
         </NavLink>
-    );
+    )
 }
 
-export default ProfileMenuLink;
+export default ProfileMenuLink

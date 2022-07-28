@@ -1,7 +1,7 @@
-import {useSelector} from 'react-redux';
+import {useSelector} from 'react-redux'
 
 function Avatar({border = false, navbarExpended}) {
-    const user = useSelector((state) => state.login.user);
+    const user = useSelector((state) => state.login.user)
     return (
         <>
             {border ? (
@@ -19,7 +19,8 @@ function Avatar({border = false, navbarExpended}) {
                             />
                         ) : (
                             `${
-                                user.firstname[0].toUpperCase() + user.lastname[0].toUpperCase()
+                                user.firstname[0].toUpperCase() +
+                                user.lastname[0].toUpperCase()
                             }`
                         )}
                     </div>
@@ -40,7 +41,7 @@ function Avatar({border = false, navbarExpended}) {
                 </div>
             )}
         </>
-    );
+    )
 }
 
-export default Avatar;
+export default Avatar
