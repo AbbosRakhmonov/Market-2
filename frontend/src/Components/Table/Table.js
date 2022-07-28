@@ -14,7 +14,7 @@ import {TemporaryIncomingsTableRow} from './TableRows/TemporaryIncomingsTableRow
 import {TemporarySaleTableRow} from './TableRows/TemporarySaleTableRow'
 import {SalesListTableRow} from './TableRows/SalesListTableRow'
 import {ClientTableRow} from './TableRows/ClientTableRow'
-import {SellerTableRow} from '../../Pages/MainPage/SellerTableRow'
+import {SellerTableRow} from './TableRows/SellerTableRow'
 
 function Table({
     page,
