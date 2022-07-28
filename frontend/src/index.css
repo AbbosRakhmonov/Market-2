@@ -238,6 +238,32 @@
 
   /* this is Product Report style end */
 
+  .pagination {
+    @apply flex flex-row justify-between items-center gap-[2.875rem]
+  }
+  .table_style {
+    @apply flex flex-col items-start 
+  }
+
+  /* this is Product Report style end */
+
+   /* this is Supplier Pages style start */
+
+   .new-product {
+    @apply w-full flex flex-col justify-center items-start pt-[1.25rem] pb-[1.25rem]
+   }
+   .supplier-style {
+    @apply w-full flex flex-row justify-center items-end  gap-[1.25rem]
+   }
+   .pagination-supplier {
+    @apply flex flex-row justify-between items-center gap-[2.875rem]
+   }
+   .supplier-title {
+    @apply font-normal text-[1.25rem] leading-[1.875rem] text-blue-900
+   }
+
+   /* this is Supplier Pages style start */
+
   ::-webkit-scrollbar {
     width: 2px;
     @apply bg-black-100;
