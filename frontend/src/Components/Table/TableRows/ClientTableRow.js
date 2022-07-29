@@ -11,7 +11,7 @@ export const ClientTableRow = ({
     return (
         <>
             {data.map((client, index) => (
-                <tr className='tr'>
+                <tr className='tr' key={client._id}>
                     <td className='text-left td'>
                         {currentPage * countPage + index + 1}
                     </td>
