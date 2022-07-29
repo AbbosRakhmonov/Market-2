@@ -450,6 +450,9 @@
     .currency-btn-unselected {
         @apply w-1/2 text-center h-full text-primary-800 text-base;
     }
+    .sale-deliver-form {
+        @apply flex gap-[1.25rem] mainPadding bg-background transition ease-linear duration-200 w-full;
+    }
 }
 
 html,

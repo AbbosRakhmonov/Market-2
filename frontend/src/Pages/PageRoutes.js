@@ -15,6 +15,7 @@ import Inventory from './Inventory/Inventory'
 import Inventories from './Inventories/Inventories'
 import Unit from './UnitPages/Unit'
 import Currency from '../Components/Currency/Currency.js'
+import SaleDelivers from './SalesPage/SaleDelivers'
 //pages
 const MainPage = lazy(() => import('./MainPage/MainPage'))
 const Products = lazy(() => import('./Products/Create/Products'))
@@ -79,6 +80,10 @@ const PageRoutes = () => {
                         />
 
 
+                       <Route
+                            path='/sotuv/santexniklar'
+                            element={<SaleDelivers />}
+                        />
                     </Routes>
                 </Suspense>
             </div>
