@@ -1,10 +1,6 @@
 import React from 'react'
 import ExportBtn from '../../Components/Buttons/ExportBtn'
 import Pagination from '../../Components/Pagination/Pagination'
-import SelectForm from '../../Components/Select/SelectForm'
-import FilterButtons from '../../Components/FilterButtons/FilterButtons'
-import Input from '../../Components/Inputs/Input'
-import SearchInput from '../../Components/Inputs/SearchInput'
 import Table from '../../Components/Table/Table'
 
 const ProductReport = () => {
