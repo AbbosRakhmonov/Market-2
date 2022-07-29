@@ -16,6 +16,10 @@ export const ProductTableRow = ({
                         {currentPage * countPage + 1 + index}
                     </td>
                     <td className='td text-center'>
+                        {product.category.code}{' '}
+                        {product.category.name && `-${product.category.name}`}
+                    </td>
+                    <td className='td text-center'>
                         {product.productdata.code}
                     </td>
                     <td className='td text-left'>{product.productdata.name}</td>

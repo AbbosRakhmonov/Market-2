@@ -32,7 +32,7 @@ const PageRoutes = () => {
         dispatch(getCurrencyType())
     }, [dispatch])
     return (
-        <section className={'flex bg-background relative overflow-auto'}>
+        <section className={'flex bg-background relative overflow-x-hidden'}>
             <Currency currency={'UZS'} />
             <Navbar />
             <div className={'grow h-screen overflow-y-auto'}>

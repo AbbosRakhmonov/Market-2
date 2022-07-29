@@ -2,7 +2,7 @@ import React from 'react'
 import {BiPlus} from 'react-icons/bi'
 import {MdOutlineClear} from 'react-icons/md'
 
-const BtnAddRemove = ({onClick, text, add, maxWidth, edit}) => {
+const BtnAddRemove = ({onClick, text, add, edit}) => {
     return (
         <button
             onClick={onClick}

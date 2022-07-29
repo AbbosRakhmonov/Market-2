@@ -28,6 +28,9 @@ export const warningEmptyInput = () =>
     toast.warn("Ma'lumotlar to'liq kiritilmagan !")
 export const warningCurrencyRate = () =>
     toast.warn('Valyuta kursi kiritilmagan !')
+export const warningCategory = () => {
+    toast.warn('Kategoriyalar mavjud emas !')
+}
 
 // Error Messages
 export const errorNetwork = () =>

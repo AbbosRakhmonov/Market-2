@@ -12,7 +12,11 @@ const SelectInput = ({
 }) => {
     return (
         <div>
-            <label className={'text-blue-700 leading-[1.125rem] mb-[.625rem]'}>
+            <label
+                className={
+                    'text-blue-700 block leading-[1.125rem] mb-[.625rem]'
+                }
+            >
                 {label}
             </label>
             <Select

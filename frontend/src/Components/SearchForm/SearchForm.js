@@ -7,7 +7,7 @@ function SearchForm({
     filterByTotal,
     searchByCode,
     filterByCode,
-    filterByCodeAndNameWhenPressEnter,
+    filterByCodeAndNameAndCategoryWhenPressEnter,
     searchByName,
     filterByName,
     filterBy,
@@ -32,7 +32,9 @@ function SearchForm({
                             maxWidth={'w-[7.4375rem]'}
                             value={searchByCode}
                             onChange={filterByCode}
-                            onKeyUp={filterByCodeAndNameWhenPressEnter}
+                            onKeyUp={
+                                filterByCodeAndNameAndCategoryWhenPressEnter
+                            }
                         />
                     }
                 />
@@ -41,11 +43,11 @@ function SearchForm({
             {/* maxsulot kategoriyasi bo`yicha qidirish */}
             {filterBy.includes('category') && (
                 <SearchInput
-                    placeholder={'kategoriya nomi...'}
+                    placeholder={'kategoriya kodi...'}
                     someClasses={'grow'}
                     value={searchByCategory}
                     onChange={filterByCategory}
-                    onKeyUp={filterByCodeAndNameWhenPressEnter}
+                    onKeyUp={filterByCodeAndNameAndCategoryWhenPressEnter}
                 />
             )}
 
@@ -56,7 +58,7 @@ function SearchForm({
                     someClasses={'grow'}
                     value={searchByName}
                     onChange={filterByName}
-                    onKeyUp={filterByCodeAndNameWhenPressEnter}
+                    onKeyUp={filterByCodeAndNameAndCategoryWhenPressEnter}
                 />
             )}
         </div>
