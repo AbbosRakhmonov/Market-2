@@ -24,5 +24,3 @@ export const RouteLink = ({path, title, iconType}) => {
         </NavLink>
     )
 }
-
-// bg-white-900 shadow-[0px_10px_10px_rgba(0, 0, 0, 0.05)]

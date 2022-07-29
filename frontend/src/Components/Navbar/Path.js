@@ -102,7 +102,7 @@ const navList = [
                 id: 1,
                 label: 'Sotish',
                 icon: '',
-                path: 'sotuv/sotish',
+                path: 'sotuv/sotish/sotuv',
                 submenu: false,
             },
             {

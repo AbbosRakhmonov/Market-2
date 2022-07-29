@@ -15,6 +15,10 @@ import Inventory from './Inventory/Inventory'
 import Inventories from './Inventories/Inventories'
 import Unit from './UnitPages/Unit'
 import Currency from '../Components/Currency/Currency.js'
+import Sale from './Sale/Sale.js'
+import RegisterSelling from './Sale/Routes/RegisterSelling.js'
+import SavedSellings from './Sale/Routes/SavedSellings.js'
+import Sellings from './Sale/Routes/Sellings.js'
 import SaleDelivers from './SalesPage/SaleDelivers'
 //pages
 const MainPage = lazy(() => import('./MainPage/MainPage'))
@@ -38,7 +42,6 @@ const PageRoutes = () => {
                             path='/maxsulotlar/yaratish/maxsulotlar'
                             element={<Products />}
                         />
-
                         <Route
                             path='/maxsulotlar/qabul/'
                             element={<Incoming />}
@@ -78,6 +81,14 @@ const PageRoutes = () => {
                             path='/maxsulotlar/yaratish/ulchov'
                             element={<Unit />}
                         />
+                        <Route path='/sotuv/sotish/' element={<Sale />}>
+                            <Route path='sotuv' element={<RegisterSelling />} />
+                            <Route
+                                path='saqlanganlar'
+                                element={<SavedSellings />}
+                            />
+                            <Route path='ruyxat' element={<Sellings />} />
+                        </Route>
 
 
                        <Route
