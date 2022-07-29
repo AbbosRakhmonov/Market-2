@@ -20,6 +20,7 @@ import RegisterSelling from './Sale/Routes/RegisterSelling.js'
 import SavedSellings from './Sale/Routes/SavedSellings.js'
 import Sellings from './Sale/Routes/Sellings.js'
 import SaleDelivers from './SalesPage/SaleDelivers'
+import ClientsPage from './Clients/Clients'
 //pages
 const MainPage = lazy(() => import('./MainPage/MainPage'))
 const Products = lazy(() => import('./Products/Create/Products'))
@@ -94,6 +95,11 @@ const PageRoutes = () => {
                        <Route
                             path='/sotuv/santexniklar'
                             element={<SaleDelivers />}
+                        />
+                        
+                       <Route
+                            path='/sotuv/mijozlar'
+                            element={<ClientsPage />}
                         />
                     </Routes>
                 </Suspense>
