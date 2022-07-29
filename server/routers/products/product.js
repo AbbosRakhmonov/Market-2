@@ -208,7 +208,6 @@ module.exports.registerAll = async (req, res) => {
       count,
     });
   } catch (error) {
-    console.log(error);
     res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
@@ -529,7 +528,6 @@ module.exports.update = async (req, res) => {
       count,
     });
   } catch (error) {
-    console.log(error);
     res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
@@ -664,7 +662,7 @@ module.exports.getAll = async (req, res) => {
       .sort({ code: 1 })
       .select('name code unit category producttype brand price total')
       .populate('category', 'name code')
-      .populate('productdata', 'name code')
+      .populate('pro', 'name code')
       .populate('producttype', 'name')
       .populate('unit', 'name')
       .populate('brand', 'name')
