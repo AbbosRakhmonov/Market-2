@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect} from 'react'
 import Excel from '../../Images/Excel.svg'
 import * as XLSX from 'xlsx'
 import {useDispatch, useSelector} from 'react-redux'
@@ -7,7 +7,6 @@ import {getProductsAll} from '../../Pages/Products/Create/productSlice'
 function ExportBtn({headers, fileName}) {
     const dispatch = useDispatch()
     const {allProducts, errorProducts} = useSelector((state) => state.products)
-    const [data, setData] = useState([])
     const autoFillColumnWidth = (json) => {
         const cols = Object.keys(json[0])
         const maxLength = cols.reduce((acc, curr) => {
@@ -17,7 +16,7 @@ function ExportBtn({headers, fileName}) {
             wch: maxLength,
         }))
     }
-    const continueHandleClick = () => {
+    const continueHandleClick = (data) => {
         const wscols = autoFillColumnWidth(data)
         const wb = XLSX.utils.book_new()
         const ws = XLSX.utils.json_to_sheet([])
@@ -35,7 +34,8 @@ function ExportBtn({headers, fileName}) {
     }
     useEffect(() => {
         if (!errorProducts && allProducts.length > 0) {
-            const newData = allProducts.map((item) => ({
+            const newData = allProducts.map((item, index) => ({
+                nth: index + 1,
                 category: item.category.code,
                 code: item.productdata.code,
                 name: item.productdata.name,
@@ -46,9 +46,9 @@ function ExportBtn({headers, fileName}) {
                 sellingprice: item.price.sellingprice,
                 sellingpriceuzs: item.price.sellingpriceuzs,
             }))
-            setData(newData)
-            continueHandleClick()
+            continueHandleClick(newData)
         }
+        //    eslint-disable-next-line react-hooks/exhaustive-deps
     }, [allProducts])
     return (
         <button className={'exportButton'} onClick={handleClick}>

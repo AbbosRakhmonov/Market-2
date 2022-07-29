@@ -7,8 +7,12 @@ import Incomings from './Incomings/Routes/Incomings'
 import SavedIncoming from './Incomings/Routes/SavedIncomings'
 import IncomingsList from './Incomings/Routes/IncomingsList'
 import CategoryPage from './CategoryPage/CategoryPage'
-import {useDispatch} from 'react-redux'
-import {getCurrency, getCurrencyType} from './Currency/currencySlice'
+import {useDispatch, useSelector} from 'react-redux'
+import {
+    changeCurrencyType,
+    getCurrency,
+    getCurrencyType,
+} from './Currency/currencySlice'
 import Supplier from './SupplierPage/SupplierPage'
 import ProductReport from './ProductReport/ProductReport'
 import Inventory from './Inventory/Inventory'
@@ -27,13 +31,19 @@ const Products = lazy(() => import('./Products/Create/Products'))
 
 const PageRoutes = () => {
     const dispatch = useDispatch()
+    const {currencyType} = useSelector((state) => state.currency)
+    const changeCurrency = () => {
+        const prevCurrencyType = currencyType === 'USD' ? 'UZS' : 'USD'
+        dispatch(changeCurrencyType({currency: prevCurrencyType}))
+    }
     useEffect(() => {
         dispatch(getCurrency())
         dispatch(getCurrencyType())
     }, [dispatch])
+
     return (
         <section className={'flex bg-background relative overflow-x-hidden'}>
-            <Currency currency={'UZS'} />
+            <Currency currency={currencyType} onClick={changeCurrency} />
             <Navbar />
             <div className={'grow h-screen overflow-y-auto'}>
                 <Suspense fallback={'loading'}>
@@ -91,13 +101,12 @@ const PageRoutes = () => {
                             <Route path='ruyxat' element={<Sellings />} />
                         </Route>
 
-
-                       <Route
+                        <Route
                             path='/sotuv/santexniklar'
                             element={<SaleDelivers />}
                         />
-                        
-                       <Route
+
+                        <Route
                             path='/sotuv/mijozlar'
                             element={<ClientsPage />}
                         />

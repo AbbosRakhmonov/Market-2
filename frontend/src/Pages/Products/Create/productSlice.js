@@ -99,10 +99,23 @@ export const addProductsFromExcel = createAsyncThunk(
     }
 )
 
+export const getCodeOfCategory = createAsyncThunk(
+    'products/getCodeOfCategory',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post('/products/product/productcode', body)
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
 const productSlice = createSlice({
     name: 'products',
     initialState: {
         products: [],
+        lastProductCode: null,
         allProducts: [],
         searchedProducts: [],
         total: 0,
@@ -222,6 +235,17 @@ const productSlice = createSlice({
             state.allProducts = payload
         },
         [getProductsAll.rejected]: (state, {payload}) => {
+            state.loading = false
+            state.errorProducts = payload
+        },
+        [getCodeOfCategory.pending]: (state) => {
+            state.loading = true
+        },
+        [getCodeOfCategory.fulfilled]: (state, {payload: {code}}) => {
+            state.loading = false
+            state.lastProductCode = code
+        },
+        [getCodeOfCategory.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorProducts = payload
         },

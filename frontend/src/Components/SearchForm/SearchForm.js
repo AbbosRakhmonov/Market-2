@@ -21,6 +21,24 @@ function SearchForm({
                 <SelectForm onSelect={filterByTotal} />
             )}
 
+            {/* maxsulot kategoriyasi bo`yicha qidirish */}
+            {filterBy.includes('category') && (
+                <FilterButtons
+                    label={'Kategoriya'}
+                    element={
+                        <FieldContainer
+                            placeholder={'kategoriya kodi...'}
+                            type={'text'}
+                            value={searchByCategory}
+                            onChange={filterByCategory}
+                            onKeyUp={
+                                filterByCodeAndNameAndCategoryWhenPressEnter
+                            }
+                        />
+                    }
+                />
+            )}
+
             {/* maxsulot kodi bo`yicha qidirish */}
             {filterBy.includes('code') && (
                 <FilterButtons
@@ -37,17 +55,6 @@ function SearchForm({
                             }
                         />
                     }
-                />
-            )}
-
-            {/* maxsulot kategoriyasi bo`yicha qidirish */}
-            {filterBy.includes('category') && (
-                <SearchInput
-                    placeholder={'kategoriya kodi...'}
-                    someClasses={'grow'}
-                    value={searchByCategory}
-                    onChange={filterByCategory}
-                    onKeyUp={filterByCodeAndNameAndCategoryWhenPressEnter}
                 />
             )}
 
