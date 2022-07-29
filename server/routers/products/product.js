@@ -664,7 +664,7 @@ module.exports.getAll = async (req, res) => {
       .sort({ code: 1 })
       .select('name code unit category producttype brand price total')
       .populate('category', 'name code')
-      .populate('pro', 'name code')
+      .populate('productdata', 'name code')
       .populate('producttype', 'name')
       .populate('unit', 'name')
       .populate('brand', 'name')
