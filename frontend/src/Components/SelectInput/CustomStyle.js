@@ -52,7 +52,6 @@ const Control = (styles) => ({
     ...styles,
     width: '100%',
     padding: '.625rem .58rem',
-    marginTop: '.625rem',
     borderRadius: '.25rem',
     fontSize: '.875rem',
     fontWeight: '400',

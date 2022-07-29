@@ -18,13 +18,10 @@ export const ConfirmBtn = ({onClick, text}) => {
     return (
         <button
             onClick={onClick}
-            className='mx-3 bg-[#0090A3] p-[10px] text-white-900 text-sm rounded-lg'
+            className='bg-[#0090A3] p-[10px] text-white-900 text-sm rounded-lg'
         >
             <BsShieldFillCheck className='text-white-900  inline-block w-[15px] h-[15px]' />{' '}
             {text}
         </button>
     )
 }
-
-
-
