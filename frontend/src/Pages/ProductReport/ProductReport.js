@@ -74,33 +74,31 @@ const ProductReport = () => {
     ]
 
     return (
-        <div>
-            <section>
-                <div className='pagination mainPadding'>
-                    <ExportBtn data={[]} headers={[]} />
-                    <p className='product_name'>Maxsulot hisoboti</p>
-                    <Pagination countPage={5} totalDatas={60} />
-                </div>
+        <section>
+            <div className='pagination mainPadding'>
+                <ExportBtn data={[]} headers={[]} />
+                <p className='product_name'>Maxsulot hisoboti</p>
+                <Pagination countPage={5} totalDatas={60} />
+            </div>
 
-                <div className='table_style tableContainerPadding'>
-                    <Table
-                        page={'productreport'}
-                        data={data}
-                        currentPage={0}
-                        countPage={1}
-                        Edit={() => {}}
-                        Delete={() => {}}
-                        currency='USD'
-                        changeHandler={() => {}}
-                        addProductCheque={() => {}}
-                        productCheque={{}}
-                        Print={() => {}}
-                        headers={headers}
-                        placeholder={'misol : 10'}
-                    />
-                </div>
-            </section>
-        </div>
+            <div className='table_style tableContainerPadding'>
+                <Table
+                    page={'productreport'}
+                    data={data}
+                    currentPage={0}
+                    countPage={1}
+                    Edit={() => {}}
+                    Delete={() => {}}
+                    currency='USD'
+                    changeHandler={() => {}}
+                    addProductCheque={() => {}}
+                    productCheque={{}}
+                    Print={() => {}}
+                    headers={headers}
+                    placeholder={'misol : 10'}
+                />
+            </div>
+        </section>
     )
 }
 
