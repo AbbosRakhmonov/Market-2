@@ -14,6 +14,7 @@ import ProductReport from './ProductReport/ProductReport'
 import Inventory from './Inventory/Inventory'
 import Inventories from './Inventories/Inventories'
 import Unit from './UnitPages/Unit'
+import Currency from '../Components/Currency/Currency.js'
 //pages
 const MainPage = lazy(() => import('./MainPage/MainPage'))
 const Products = lazy(() => import('./Products/Create/Products'))
@@ -25,7 +26,8 @@ const PageRoutes = () => {
         dispatch(getCurrencyType())
     }, [dispatch])
     return (
-        <section className={'flex bg-background'}>
+        <section className={'flex bg-background relative overflow-auto'}>
+            <Currency currency={'UZS'} />
             <Navbar />
             <div className={'grow h-screen overflow-y-auto'}>
                 <Suspense fallback={'loading'}>
