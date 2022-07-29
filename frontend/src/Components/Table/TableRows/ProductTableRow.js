@@ -17,7 +17,7 @@ export const ProductTableRow = ({
                     </td>
                     <td className='td text-center'>
                         {product.category.code}{' '}
-                        {product.category.name && `-${product.category.name}`}
+                        {product.category.name && `- ${product.category.name}`}
                     </td>
                     <td className='td text-center'>
                         {product.productdata.code}

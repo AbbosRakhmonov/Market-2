@@ -29,6 +29,20 @@ export const getCurrencyType = createAsyncThunk(
     }
 )
 
+export const changeCurrencyType = createAsyncThunk(
+    'currency/changeCurrencyType',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {
+                data: {currency},
+            } = await Api.put('/exchangerate/currencyupdate', body)
+            return currency
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
 const currencySlice = createSlice({
     name: 'currency',
     initialState: {
@@ -63,6 +77,17 @@ const currencySlice = createSlice({
             state.currencyType = action.payload
         },
         [getCurrencyType.rejected]: (state, action) => {
+            state.currencyLoading = false
+            state.currencyError = action.payload
+        },
+        [changeCurrencyType.pending]: (state) => {
+            state.currencyLoading = true
+        },
+        [changeCurrencyType.fulfilled]: (state, action) => {
+            state.currencyLoading = false
+            state.currencyType = action.payload
+        },
+        [changeCurrencyType.rejected]: (state, action) => {
             state.currencyLoading = false
             state.currencyError = action.payload
         },

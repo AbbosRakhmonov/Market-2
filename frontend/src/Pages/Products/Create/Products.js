@@ -16,6 +16,7 @@ import {
     clearSuccessDeleteProduct,
     clearSuccessUpdateProduct,
     deleteProduct,
+    getCodeOfCategory,
     getProducts,
     getProductsByFilter,
     updateProduct,
@@ -53,9 +54,7 @@ function Products() {
     const {categories, errorGetCategories} = useSelector(
         (state) => state.category
     )
-    const {currency, currencyType, currencyLoading} = useSelector(
-        (state) => state.currency
-    )
+    const {currency, currencyType} = useSelector((state) => state.currency)
     const {
         products,
         total,
@@ -63,6 +62,7 @@ function Products() {
         loading,
         successAddProduct,
         successUpdateProduct,
+        lastProductCode,
         searchedProducts,
         totalSearched,
         successDeleteProduct,
@@ -134,6 +134,7 @@ function Products() {
         {title: ''},
     ]
     const exportHeader = [
+        '№',
         'Mahsulot kategoriyasi',
         'Mahsulot kodi',
         'Mahsulot nomi',
@@ -189,6 +190,10 @@ function Products() {
     }
     const handleChangeCategoryOfProduct = (option) => {
         setCategoryOfProduct(option)
+        const body = {
+            categoryId: option.value,
+        }
+        dispatch(getCodeOfCategory(body))
     }
 
     // handle change of search inputs
@@ -297,10 +302,11 @@ function Products() {
                         category: searchByCategory.replace(/\s+/g, ' ').trim(),
                     },
                     product: {
-                        code: codeOfProduct.replace(/\s+/g, ' ').trim(),
+                        code: codeOfProduct,
                         name: nameOfProduct.replace(/\s+/g, ' ').trim(),
                         total: numberOfProduct,
                         unit: unitOfProduct.value,
+                        category: categoryOfProduct.value,
                         market: _id,
                         incomingprice:
                             currencyType === 'UZS'
@@ -489,6 +495,7 @@ function Products() {
                 category: searchByCategory.replace(/\s+/g, ' ').trim(),
             },
         }
+        console.log(body)
         dispatch(addProductsFromExcel(body))
     }
     const handleClickCancelToImport = () => {
@@ -535,7 +542,7 @@ function Products() {
     }
 
     useEffect(() => {
-        if (!currency && currencyLoading) {
+        if (!currency) {
             warningCurrencyRate()
         } else if (currencyType === 'UZS') {
             priceOfProduct &&
@@ -553,7 +560,7 @@ function Products() {
                 )
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currency, currencyType, currencyLoading])
+    }, [currency, currencyType])
     useEffect(() => {
         if (errorUnits) {
             universalToast(errorUnits, 'error')
@@ -664,7 +671,12 @@ function Products() {
             }))
         )
     }, [categories])
-
+    useEffect(() => {
+        if (lastProductCode) {
+            setCodeOfProduct(lastProductCode)
+        }
+    }, [lastProductCode])
+    // console.log(priceOfProduct)
     return (
         <section>
             {/* Modal */}
@@ -767,7 +779,7 @@ function Products() {
                         sortItem={sorItem}
                         currentPage={currentPage}
                         countPage={showByTotal}
-                        currency={currency}
+                        currency={currencyType}
                     />
                 )}
             </div>

@@ -1,5 +1,5 @@
-const { Schema, model, Types } = require('mongoose');
-const Joi = require('joi');
+const { Schema, model, Types } = require("mongoose");
+const Joi = require("joi");
 
 const product = new Schema(
   {
@@ -7,13 +7,13 @@ const product = new Schema(
 
     code: { type: Number },
     total: { type: Number, default: 0 },
-    productdata: { type: Schema.Types.ObjectId, ref: 'ProductData' },
-    unit: { type: Schema.Types.ObjectId, ref: 'Unit' },
-    price: { type: Schema.Types.ObjectId, ref: 'ProductPrice' },
-    category: { type: Schema.Types.ObjectId, ref: 'Category' },
-    producttype: { type: Schema.Types.ObjectId, ref: 'ProductType' },
-    brand: { type: Schema.Types.ObjectId, ref: 'Brand' },
-    market: { type: Schema.Types.ObjectId, ref: 'Market', required: true },
+    productdata: { type: Schema.Types.ObjectId, ref: "ProductData" },
+    unit: { type: Schema.Types.ObjectId, ref: "Unit" },
+    price: { type: Schema.Types.ObjectId, ref: "ProductPrice" },
+    category: { type: Schema.Types.ObjectId, ref: "Category" },
+    producttype: { type: Schema.Types.ObjectId, ref: "ProductType" },
+    brand: { type: Schema.Types.ObjectId, ref: "Brand" },
+    market: { type: Schema.Types.ObjectId, ref: "Market", required: true },
     isArchive: { type: Boolean, default: false },
   },
   {
@@ -45,7 +45,7 @@ function validateProductExcel(product) {
     name: Joi.string().required(),
     unit: Joi.string(),
     producttype: Joi.string(),
-    code: Joi.string().required(),
+    code: Joi.number().required(),
     category: Joi.number(),
     brand: Joi.string(),
     incomingprice: Joi.number(),
@@ -60,4 +60,4 @@ function validateProductExcel(product) {
 
 module.exports.validateProduct = validateProduct;
 module.exports.validateProductExcel = validateProductExcel;
-module.exports.Product = model('Product', product);
+module.exports.Product = model("Product", product);
