@@ -11,8 +11,8 @@ import {useDispatch} from 'react-redux'
 import {getCurrency, getCurrencyType} from './Currency/currencySlice'
 import Supplier from './SupplierPage/SupplierPage'
 import ProductReport from './ProductReport/ProductReport'
-import Inventories from './Inventories/Inventories'
 import Inventory from './Inventory/Inventory'
+import Inventories from './Inventories/Inventories'
 //pages
 const MainPage = lazy(() => import('./MainPage/MainPage'))
 const Products = lazy(() => import('./Products/Create/Products'))
@@ -54,13 +54,21 @@ const PageRoutes = () => {
                             path='/maxsulotlar/yaratish/kategoriyalar'
                             element={<CategoryPage />}
                         />
-                         <Route
+                        <Route
                             path='/maxsulotlar/yaratish/yetkazuvchilar'
                             element={<Supplier />}
                         />
-                         <Route
+                        <Route
                             path='/maxsulotlar/hisobot'
                             element={<ProductReport />}
+                        />
+                        <Route
+                            path='/maxsulotlar/inventarizatsiya/inventarizatsiya'
+                            element={<Inventory />}
+                        />
+                        <Route
+                            path='/maxsulotlar/inventarizatsiya/inventarizatsiyalar'
+                            element={<Inventories />}
                         />
                     </Routes>
                 </Suspense>
