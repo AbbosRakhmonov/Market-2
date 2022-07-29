@@ -9,6 +9,7 @@ import Spinner from '../../../Components/Spinner/SmallLoader'
 import NotFind from '../../../Components/NotFind/NotFind'
 import {
     addProduct,
+    addProductsFromExcel,
     clearErrorProducts,
     clearSearchedProducts,
     clearSuccessAddProduct,
@@ -25,6 +26,7 @@ import {
     successDeleteProductMessage,
     successUpdateProductMessage,
     universalToast,
+    warningCategory,
     warningCurrencyRate,
     warningEmptyInput,
 } from '../../../Components/ToastMessages/ToastMessages'
@@ -34,9 +36,13 @@ import {
 } from '../../../Components/RegularExpressions/RegularExpressions'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
 import CreateProductForm from '../../../Components/CreateProductForm/CreateProductForm'
-import {getCategories} from '../../CategoryPage/categorySlice'
+import {
+    clearErrorGetCategories,
+    getCategories,
+} from '../../CategoryPage/categorySlice'
 import {UsdToUzs, UzsToUsd} from '../../Currency/Currency'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
+import {universalSort} from '../../../App/globalFunctions'
 
 function Products() {
     const dispatch = useDispatch()
@@ -44,7 +50,9 @@ function Products() {
         market: {_id},
     } = useSelector((state) => state.login)
     const {errorUnits, units} = useSelector((state) => state.units)
-    const {categories} = useSelector((state) => state.category)
+    const {categories, errorGetCategories} = useSelector(
+        (state) => state.category
+    )
     const {currency, currencyType, currencyLoading} = useSelector(
         (state) => state.currency
     )
@@ -81,6 +89,12 @@ function Products() {
     const [unitOptions, setUnitOptions] = useState([])
     const [categoryOptions, setCategoryOptions] = useState([])
     const [excelData, setExcelData] = useState([])
+    const [createdData, setCreatedData] = useState([])
+    const [sorItem, setSorItem] = useState({
+        filter: '',
+        sort: '',
+        count: 0,
+    })
 
     // modal toggle
     const toggleModal = () => setModalVisible(!modalVisible)
@@ -93,42 +107,53 @@ function Products() {
     // table headers
     const headers = [
         {title: '№'},
-        {title: 'Kodi', filter: 'code'},
-        {title: 'Nomi'},
         {
-            title: 'Soni (dona)',
+            title: 'Kategoriyasi',
+            filter: 'category.code',
+        },
+        {title: 'Kodi', filter: 'productdata.code'},
+        {title: 'Nomi', filter: 'productdata.name'},
+        {
+            title: 'Soni',
             filter: 'total',
         },
-        {title: 'Olish', filter: 'incomingprice'},
-        {title: 'Sotish', filter: 'sellingprice'},
+        {
+            title: 'Olish',
+            filter:
+                currencyType === 'UZS'
+                    ? 'price.incomingpriceuzs'
+                    : 'price.incomingprice',
+        },
+        {
+            title: 'Sotish',
+            filter:
+                currencyType === 'UZS'
+                    ? 'price.sellingpriceuzs'
+                    : 'price.sellingprice',
+        },
         {title: ''},
     ]
     const exportHeader = [
-        {label: '№', key: '_id'},
-        {label: 'Kodi', key: 'productdata.code'},
-        {
-            label: 'Nomi',
-            key: 'productdata.name',
-        },
-        {
-            label: 'Kategoriya kodi',
-            key: 'category.code',
-        },
-        {
-            label: 'Kategoriya nomi',
-            key: 'category.name',
-        },
-        {label: 'Soni (dona)', key: 'total'},
-        {
-            label: 'Olish (USD)',
-            key: 'price.incomingprice',
-        },
-        {label: 'Sotish (USD)', key: 'price.sellingprice'},
-        {
-            label: 'Olish (UZS)',
-            key: 'price.incomingpriceuzs',
-        },
-        {label: 'Sotish (UZS)', key: 'price.sellingpriceuzs'},
+        'Mahsulot kategoriyasi',
+        'Mahsulot kodi',
+        'Mahsulot nomi',
+        'Soni',
+        "O'lchov birligi",
+        'Kelish narxi USD',
+        'Kelish narxi UZS',
+        'Sotish narxi USD',
+        'Sotish narxi UZS',
+    ]
+    const importHeaders = [
+        {name: 'Kategoriyasi', value: 'category'},
+        {name: 'Kodi', value: 'code'},
+        {name: 'Nomi', value: 'name'},
+        {name: "O'lchov birligi", value: 'unit'},
+        {name: 'Soni', value: 'total'},
+        {name: 'Kelish narxi USD', value: 'incomingprice'},
+        {name: 'Kelish narxi UZS', value: 'incomingpriceuzs'},
+        {name: 'Sotish narxi USD', value: 'sellingprice'},
+        {name: 'Sotish narxi UZS', value: 'sellingpriceuzs'},
     ]
 
     // handle change of inputs
@@ -186,7 +211,7 @@ function Products() {
     }
     const filterByCategory = (e) => {
         let val = e.target.value
-        let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
+        let valForSearch = val.replace(/\s+/g, ' ').trim()
         setSearchByCategory(val)
         ;(searchedProducts.length > 0 || totalSearched > 0) &&
             dispatch(clearSearchedProducts())
@@ -195,10 +220,7 @@ function Products() {
             setFilteredDataTotal(total)
         } else {
             const filteredProducts = products.filter((product) => {
-                return (
-                    product.category.code.includes(valForSearch) ||
-                    product.category.name.toLowerCase().includes(valForSearch)
-                )
+                return product.category.code.includes(valForSearch)
             })
             setData(filteredProducts)
             setFilteredDataTotal(filteredProducts.length)
@@ -223,14 +245,15 @@ function Products() {
             setFilteredDataTotal(filteredProducts.length)
         }
     }
-    const filterByCodeAndNameWhenPressEnter = (e) => {
+    const filterByCodeAndNameAndCategoryWhenPressEnter = (e) => {
         if (e.key === 'Enter') {
             const body = {
                 currentPage,
                 countPage: showByTotal,
                 search: {
-                    code: searchByCode.replace(/\s+/g, ' ').trim(),
                     name: searchByName.replace(/\s+/g, ' ').trim(),
+                    code: searchByCode.replace(/\s+/g, ' ').trim(),
+                    category: searchByCategory.replace(/\s+/g, ' ').trim(),
                 },
                 product: {
                     code: codeOfProduct.replace(/\s+/g, ' ').trim(),
@@ -269,8 +292,9 @@ function Products() {
                     countPage: showByTotal,
                     category: categoryOfProduct.value,
                     search: {
-                        code: searchByCode.replace(/\s+/g, ' ').trim(),
                         name: searchByName.replace(/\s+/g, ' ').trim(),
+                        code: searchByCode.replace(/\s+/g, ' ').trim(),
+                        category: searchByCategory.replace(/\s+/g, ' ').trim(),
                     },
                     product: {
                         code: codeOfProduct.replace(/\s+/g, ' ').trim(),
@@ -359,6 +383,7 @@ function Products() {
                 search: {
                     name: searchByName.replace(/\s+/g, ' ').trim(),
                     code: searchByCode.replace(/\s+/g, ' ').trim(),
+                    category: searchByCategory.replace(/\s+/g, ' ').trim(),
                 },
             }
             dispatch(updateProduct(body))
@@ -367,39 +392,44 @@ function Products() {
 
     // excel
     const readExcel = (file) => {
-        new Promise((resolve, reject) => {
-            const fileReader = new FileReader()
-            fileReader.readAsArrayBuffer(file)
+        const fileTypes = ['xls', 'xlsx']
+        if (fileTypes.includes(file.name.split('.').pop())) {
+            new Promise((resolve, reject) => {
+                const fileReader = new FileReader()
+                fileReader.readAsArrayBuffer(file)
 
-            fileReader.onload = (e) => {
-                const bufferArray = e.target.result
+                fileReader.onload = (e) => {
+                    const bufferArray = e.target.result
 
-                const wb = XLSX.read(bufferArray, {
-                    type: 'buffer',
-                })
+                    const wb = XLSX.read(bufferArray, {
+                        type: 'buffer',
+                    })
 
-                const wsname = wb.SheetNames[0]
+                    const wsname = wb.SheetNames[0]
 
-                const ws = wb.Sheets[wsname]
+                    const ws = wb.Sheets[wsname]
 
-                const data = XLSX.utils.sheet_to_json(ws)
+                    const data = XLSX.utils.sheet_to_json(ws)
 
-                resolve(data)
-            }
+                    resolve(data)
+                }
 
-            fileReader.onerror = (error) => {
-                reject(error)
-            }
-        })
-            .then((data) => {
-                setExcelData(data)
-                setModalBody('import')
-                toggleModal()
+                fileReader.onerror = (error) => {
+                    universalToast('Ошибка при загрузке файла', 'error')
+                    reject(error)
+                }
+            }).then((data) => {
+                if (data.length > 0) {
+                    setExcelData(data)
+                    setModalBody('import')
+                    toggleModal()
+                } else {
+                    universalToast('Jadvalda ma`lumot mavjud emas', 'error')
+                }
             })
-            .catch((err) => {
-                console.log(err)
-                universalToast('Ошибка при загрузке файла', 'error')
-            })
+        } else {
+            universalToast("Fayl formati noto'g'ri", 'error')
+        }
     }
 
     // table edit and delete
@@ -415,6 +445,7 @@ function Products() {
             search: {
                 name: searchByName.replace(/\s+/g, ' ').trim(),
                 code: searchByCode.replace(/\s+/g, ' ').trim(),
+                category: searchByCategory.replace(/\s+/g, ' ').trim(),
             },
             name: nameOfProduct.replace(/\s+/g, ' ').trim(),
             productdata: product.productdata._id,
@@ -425,24 +456,86 @@ function Products() {
     }
     const handleClickApproveToDelete = () => {
         dispatch(deleteProduct(deletedProduct))
-        toggleModal()
-        setTimeout(() => {
-            setModalBody(null)
-        }, 500)
+        handleClickCancelToDelete()
     }
     const handleClickCancelToDelete = () => {
-        toggleModal()
+        setModalVisible(false)
         setDeletedProduct(null)
         setTimeout(() => {
             setModalBody(null)
         }, 500)
     }
+    const handleClickApproveToImport = () => {
+        const oldKeys = Object.keys(excelData[0])
+        const newData = createdData.map((item) => {
+            const newItem = {}
+            for (const key in item) {
+                newItem[key] = item[key]
+            }
+            return newItem
+        })
+        newData.forEach((item) =>
+            oldKeys.forEach(
+                (key) => item.hasOwnProperty(key) && delete item[key]
+            )
+        )
+        const body = {
+            products: [...newData],
+            currentPage,
+            countPage: showByTotal,
+            search: {
+                name: searchByName.replace(/\s+/g, ' ').trim(),
+                code: searchByCode.replace(/\s+/g, ' ').trim(),
+                category: searchByCategory.replace(/\s+/g, ' ').trim(),
+            },
+        }
+        dispatch(addProductsFromExcel(body))
+    }
+    const handleClickCancelToImport = () => {
+        setModalVisible(false)
+        setTimeout(() => {
+            setModalBody(null)
+        }, 500)
+    }
     const filterData = (filterKey) => {
-        console.log(filterKey)
+        if (filterKey === sorItem.filter) {
+            switch (sorItem.count) {
+                case 1:
+                    setSorItem({
+                        filter: filterKey,
+                        sort: '1',
+                        count: 2,
+                    })
+                    universalSort(data, setData, filterKey, 1, products)
+                    break
+                case 2:
+                    setSorItem({
+                        filter: filterKey,
+                        sort: '',
+                        count: 0,
+                    })
+                    universalSort(data, setData, filterKey, '', products)
+                    break
+                default:
+                    setSorItem({
+                        filter: filterKey,
+                        sort: '-1',
+                        count: 1,
+                    })
+                    universalSort(data, setData, filterKey, -1, products)
+            }
+        } else {
+            setSorItem({
+                filter: filterKey,
+                sort: '-1',
+                count: 1,
+            })
+            universalSort(data, setData, filterKey, -1, products)
+        }
     }
 
     useEffect(() => {
-        if (!currency && loading) {
+        if (!currency && currencyLoading) {
             warningCurrencyRate()
         } else if (currencyType === 'UZS') {
             priceOfProduct &&
@@ -462,24 +555,37 @@ function Products() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currency, currencyType, currencyLoading])
     useEffect(() => {
-        errorUnits &&
-            universalToast(errorUnits, 'error') &&
+        if (errorUnits) {
+            universalToast(errorUnits, 'error')
             dispatch(clearErrorUnits())
-        errorProducts &&
-            universalToast(errorProducts, 'error') &&
+        }
+        if (errorProducts) {
+            universalToast(errorProducts, 'error')
             dispatch(clearErrorProducts())
-        successAddProduct &&
-            successAddProductMessage() &&
-            dispatch(clearSuccessAddProduct()) &&
+        }
+
+        if (successAddProduct) {
+            successAddProductMessage()
+            dispatch(clearSuccessAddProduct())
             clearForm()
-        successUpdateProduct &&
-            successUpdateProductMessage() &&
-            dispatch(clearSuccessUpdateProduct()) &&
-            clearForm() &&
+            handleClickCancelToImport()
+        }
+
+        if (successUpdateProduct) {
+            successUpdateProductMessage()
+            dispatch(clearSuccessUpdateProduct())
+            clearForm()
             setStickyForm(false)
-        successDeleteProduct &&
-            successDeleteProductMessage() &&
+        }
+
+        if (successDeleteProduct) {
+            successDeleteProductMessage()
             dispatch(clearSuccessDeleteProduct())
+        }
+        if (errorGetCategories) {
+            warningCategory()
+            dispatch(clearErrorGetCategories())
+        }
     }, [
         errorUnits,
         errorProducts,
@@ -487,6 +593,7 @@ function Products() {
         successAddProduct,
         successUpdateProduct,
         successDeleteProduct,
+        errorGetCategories,
     ])
     useEffect(() => {
         const body = {
@@ -495,6 +602,7 @@ function Products() {
             search: {
                 code: '',
                 name: '',
+                category: '',
             },
         }
         dispatch(getProducts(body))
@@ -563,9 +671,21 @@ function Products() {
             <UniversalModal
                 toggleModal={toggleModal}
                 body={modalBody}
-                approveFunction={handleClickApproveToDelete}
-                closeModal={handleClickCancelToDelete}
+                approveFunction={
+                    modalBody === 'approve'
+                        ? handleClickApproveToDelete
+                        : handleClickApproveToImport
+                }
+                closeModal={
+                    modalBody === 'approve'
+                        ? handleClickCancelToDelete
+                        : handleClickCancelToImport
+                }
                 isOpen={modalVisible}
+                excelData={excelData}
+                headers={importHeaders}
+                createdData={createdData}
+                setCreatedData={setCreatedData}
             />
 
             {/* Form */}
@@ -596,17 +716,10 @@ function Products() {
             />
             <div className={'flex justify-between items-center mainPadding'}>
                 <div className={'flex gap-[1.5rem]'}>
-                    {(data.length !== 0 || searchedProducts.length !== 0) && (
-                        <ExportBtn
-                            data={
-                                searchedProducts.length > 0
-                                    ? searchedProducts
-                                    : data
-                            }
-                            headers={exportHeader}
-                            fileName={'Maxsulotlar'}
-                        />
-                    )}
+                    <ExportBtn
+                        headers={exportHeader}
+                        fileName={'Maxsulotlar'}
+                    />
                     <ImportBtn readExcel={readExcel} />
                 </div>
                 <h3 className={'text-blue-900 text-[xl] leading-[1.875rem]'}>
@@ -624,8 +737,8 @@ function Products() {
             <SearchForm
                 filterBy={['code', 'name', 'total', 'category']}
                 filterByCode={filterByCode}
-                filterByCodeAndNameWhenPressEnter={
-                    filterByCodeAndNameWhenPressEnter
+                filterByCodeAndNameAndCategoryWhenPressEnter={
+                    filterByCodeAndNameAndCategoryWhenPressEnter
                 }
                 filterByName={filterByName}
                 filterByTotal={filterByTotal}
@@ -651,6 +764,7 @@ function Products() {
                                 : data
                         }
                         Sort={filterData}
+                        sortItem={sorItem}
                         currentPage={currentPage}
                         countPage={showByTotal}
                         currency={currency}

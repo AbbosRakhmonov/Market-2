@@ -24,6 +24,7 @@ function ImportBtn({readExcel}) {
                 type='file'
                 className={'hidden'}
                 id={'import-field'}
+                onClick={(e) => (e.target.value = null)}
                 onChange={handleChange}
             />
         </>

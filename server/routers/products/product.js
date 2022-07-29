@@ -783,6 +783,7 @@ module.exports.getAllProducttypes = async (req, res) => {
 
 // Product getProductExcel
 module.exports.getProductExcel = async (req, res) => {
+  console.log(req.body);
   try {
     const { market, search } = req.body;
     const marke = await Market.findById(market);

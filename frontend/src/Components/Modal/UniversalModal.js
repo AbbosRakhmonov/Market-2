@@ -1,6 +1,7 @@
 import Modal from 'react-modal'
 import ModalHeader from './ModalHeader'
 import Approve from './ModalBodys/Approve'
+import UploadExcel from './ModalBodys/UploadExcel'
 
 function UniversalModal({
     isOpen,
@@ -8,12 +9,35 @@ function UniversalModal({
     body,
     approveFunction,
     closeModal,
+    excelData,
+    headers,
+    setCreatedData,
+    createdData,
 }) {
+    const customStyles = {
+        content: {
+            width: '90%',
+            height: '85%',
+            padding: '1.25rem',
+            transform: 'auto',
+        },
+    }
     const switchBody = () => {
         switch (body) {
             case 'approve':
                 return (
                     <Approve
+                        approveFunction={approveFunction}
+                        toggleModal={toggleModal}
+                    />
+                )
+            case 'import':
+                return (
+                    <UploadExcel
+                        excelData={excelData}
+                        headers={headers}
+                        createdData={createdData}
+                        setCreatedData={setCreatedData}
                         approveFunction={approveFunction}
                         toggleModal={toggleModal}
                     />
@@ -25,6 +49,7 @@ function UniversalModal({
     return (
         <Modal
             isOpen={isOpen}
+            style={body === 'import' ? {...customStyles} : {}}
             onRequestClose={closeModal || toggleModal}
             closeTimeoutMS={200}
             contentLabel='Example Modal'

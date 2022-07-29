@@ -13,6 +13,30 @@ export const getProducts = createAsyncThunk(
     }
 )
 
+export const getProductsAll = createAsyncThunk(
+    'products/getexceldata',
+    async (
+        body = {
+            search: {
+                name: '',
+                code: '',
+                category: '',
+            },
+        },
+        {rejectWithValue}
+    ) => {
+        try {
+            const {data} = await Api.post(
+                '/products/product/getexceldata',
+                body
+            )
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
 export const getProductsByFilter = createAsyncThunk(
     'products/getProductsByFilter',
     async (body, {rejectWithValue}) => {
@@ -52,7 +76,6 @@ export const updateProduct = createAsyncThunk(
 export const deleteProduct = createAsyncThunk(
     'products/deleteProduct',
     async (body, {rejectWithValue}) => {
-        console.log(body)
         try {
             const {data} = await Api.delete('/products/product/delete', {
                 data: body,
@@ -64,10 +87,23 @@ export const deleteProduct = createAsyncThunk(
     }
 )
 
+export const addProductsFromExcel = createAsyncThunk(
+    'products/addProductsFromExcel',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post('/products/product/registerall', body)
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
 const productSlice = createSlice({
     name: 'products',
     initialState: {
         products: [],
+        allProducts: [],
         searchedProducts: [],
         total: 0,
         totalSearched: 0,
@@ -106,7 +142,7 @@ const productSlice = createSlice({
         },
         [getProducts.rejected]: (state, {payload}) => {
             state.loading = false
-            state.error = payload
+            state.errorProducts = payload
         },
         [getProductsByFilter.pending]: (state) => {
             state.loading = true
@@ -121,7 +157,7 @@ const productSlice = createSlice({
         },
         [getProductsByFilter.rejected]: (state, {payload}) => {
             state.loading = false
-            state.error = payload
+            state.errorProducts = payload
         },
         [addProduct.pending]: (state) => {
             state.loading = true
@@ -159,6 +195,33 @@ const productSlice = createSlice({
             state.successDeleteProduct = true
         },
         [deleteProduct.rejected]: (state, {payload}) => {
+            state.loading = false
+            state.errorProducts = payload
+        },
+        [addProductsFromExcel.pending]: (state) => {
+            state.loading = true
+        },
+        [addProductsFromExcel.fulfilled]: (
+            state,
+            {payload: {products, count}}
+        ) => {
+            state.loading = false
+            state.products = products
+            state.total = count
+            state.successAddProduct = true
+        },
+        [addProductsFromExcel.rejected]: (state, {payload}) => {
+            state.loading = false
+            state.errorProducts = payload
+        },
+        [getProductsAll.pending]: (state) => {
+            state.loading = true
+        },
+        [getProductsAll.fulfilled]: (state, {payload}) => {
+            state.loading = false
+            state.allProducts = payload
+        },
+        [getProductsAll.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorProducts = payload
         },
