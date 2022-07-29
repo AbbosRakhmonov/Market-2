@@ -13,6 +13,7 @@ import Supplier from './SupplierPage/SupplierPage'
 import ProductReport from './ProductReport/ProductReport'
 import Inventory from './Inventory/Inventory'
 import Inventories from './Inventories/Inventories'
+import Unit from './UnitPages/Unit'
 //pages
 const MainPage = lazy(() => import('./MainPage/MainPage'))
 const Products = lazy(() => import('./Products/Create/Products'))
@@ -70,6 +71,12 @@ const PageRoutes = () => {
                             path='/maxsulotlar/inventarizatsiya/inventarizatsiyalar'
                             element={<Inventories />}
                         />
+                        <Route
+                            path='/maxsulotlar/yaratish/ulchov'
+                            element={<Unit />}
+                        />
+
+
                     </Routes>
                 </Suspense>
             </div>
