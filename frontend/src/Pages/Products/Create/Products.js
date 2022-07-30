@@ -68,6 +68,7 @@ function Products() {
         successDeleteProduct,
     } = useSelector((state) => state.products)
     const [data, setData] = useState(products)
+    const [searchedData, setSearchedData] = useState(searchedProducts)
     const [codeOfProduct, setCodeOfProduct] = useState('')
     const [nameOfProduct, setNameOfProduct] = useState('')
     const [numberOfProduct, setNumberOfProduct] = useState('')
@@ -201,7 +202,7 @@ function Products() {
         let val = e.target.value
         let valForSearch = val.replace(/\s+/g, ' ').trim()
         setSearchByCode(val)
-        ;(searchedProducts.length > 0 || totalSearched > 0) &&
+        ;(searchedData.length > 0 || totalSearched > 0) &&
             dispatch(clearSearchedProducts())
         if (valForSearch === '') {
             setData(products)
@@ -218,7 +219,7 @@ function Products() {
         let val = e.target.value
         let valForSearch = val.replace(/\s+/g, ' ').trim()
         setSearchByCategory(val)
-        ;(searchedProducts.length > 0 || totalSearched > 0) &&
+        ;(searchedData.length > 0 || totalSearched > 0) &&
             dispatch(clearSearchedProducts())
         if (valForSearch === '') {
             setData(products)
@@ -235,7 +236,7 @@ function Products() {
         let val = e.target.value
         let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
         setSearchByName(val)
-        ;(searchedProducts.length > 0 || totalSearched > 0) &&
+        ;(searchedData.length > 0 || totalSearched > 0) &&
             dispatch(clearSearchedProducts())
         if (valForSearch === '') {
             setData(products)
@@ -261,7 +262,7 @@ function Products() {
                     category: searchByCategory.replace(/\s+/g, ' ').trim(),
                 },
                 product: {
-                    code: codeOfProduct.replace(/\s+/g, ' ').trim(),
+                    code: codeOfProduct,
                     name: nameOfProduct.replace(/\s+/g, ' ').trim(),
                     unit: unitOfProduct.value,
                     market: _id,
@@ -361,7 +362,7 @@ function Products() {
                 product: {
                     ...currentProduct,
                     name: nameOfProduct.replace(/\s+/g, ' ').trim(),
-                    code: codeOfProduct.replace(/\s+/g, ' ').trim(),
+                    code: codeOfProduct,
                     category: categoryOfProduct.value,
                     unit: unitOfProduct.value,
                     priceid: currentProduct.price._id,
@@ -513,7 +514,14 @@ function Products() {
                         sort: '1',
                         count: 2,
                     })
-                    universalSort(data, setData, filterKey, 1, products)
+                    universalSort(
+                        searchedData.length > 0 ? searchedData : data,
+                        searchedData.length > 0 ? setSearchedData : setData,
+                        filterKey,
+                        1,
+                        searchedData ? searchedProducts : products,
+                        searchedData.length > 0
+                    )
                     break
                 case 2:
                     setSorItem({
@@ -521,7 +529,14 @@ function Products() {
                         sort: '',
                         count: 0,
                     })
-                    universalSort(data, setData, filterKey, '', products)
+                    universalSort(
+                        searchedData.length > 0 ? searchedData : data,
+                        searchedData.length > 0 ? setSearchedData : setData,
+                        filterKey,
+                        '',
+                        searchedData ? searchedProducts : products,
+                        searchedData.length > 0
+                    )
                     break
                 default:
                     setSorItem({
@@ -529,7 +544,14 @@ function Products() {
                         sort: '-1',
                         count: 1,
                     })
-                    universalSort(data, setData, filterKey, -1, products)
+                    universalSort(
+                        searchedData.length > 0 ? searchedData : data,
+                        searchedData.length > 0 ? setSearchedData : setData,
+                        filterKey,
+                        -1,
+                        searchedData ? searchedProducts : products,
+                        searchedData.length > 0
+                    )
             }
         } else {
             setSorItem({
@@ -537,7 +559,14 @@ function Products() {
                 sort: '-1',
                 count: 1,
             })
-            universalSort(data, setData, filterKey, -1, products)
+            universalSort(
+                searchedData.length > 0 ? searchedData : data,
+                searchedData.length > 0 ? setSearchedData : setData,
+                filterKey,
+                -1,
+                searchedData ? searchedProducts : products,
+                searchedData.length > 0
+            )
         }
     }
 
@@ -676,6 +705,9 @@ function Products() {
             setCodeOfProduct(lastProductCode)
         }
     }, [lastProductCode])
+    useEffect(() => {
+        setSearchedData(searchedProducts)
+    }, [searchedProducts])
     // console.log(priceOfProduct)
     return (
         <section>
@@ -762,7 +794,7 @@ function Products() {
             <div className='tableContainerPadding'>
                 {loading ? (
                     <Spinner />
-                ) : data.length === 0 && searchedProducts.length === 0 ? (
+                ) : data.length === 0 && searchedData.length === 0 ? (
                     <NotFind text={'Maxsulot mavjud emas'} />
                 ) : (
                     <Table
@@ -770,11 +802,7 @@ function Products() {
                         Edit={handleEditProduct}
                         Delete={handleDeleteProduct}
                         page={'product'}
-                        data={
-                            searchedProducts.length > 0
-                                ? searchedProducts
-                                : data
-                        }
+                        data={searchedData.length > 0 ? searchedData : data}
                         Sort={filterData}
                         sortItem={sorItem}
                         currentPage={currentPage}

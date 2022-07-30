@@ -440,7 +440,7 @@
     }
 
     .currency {
-        @apply absolute z-50 w-[6.312rem] h-[1.5rem] rounded-lg border border-primary-800 -right-14 hover:right-0 top-2 overflow-hidden drop-shadow-sm transition-all;
+        @apply absolute z-50 w-[6.312rem] h-[1.5rem] bg-primary-800 rounded-lg border border-primary-800 -right-14 hover:right-0 top-2 overflow-hidden drop-shadow-sm transition-all;
     }
 
     .currency-btn-selected {
@@ -448,7 +448,7 @@
     }
 
     .currency-btn-unselected {
-        @apply w-1/2 text-center h-full text-primary-800 text-base;
+        @apply w-1/2 text-center bg-white-900 h-full text-primary-800 text-base;
     }
 
     .sale-deliver-form {

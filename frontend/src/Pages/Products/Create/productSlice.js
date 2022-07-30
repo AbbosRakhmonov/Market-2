@@ -143,6 +143,9 @@ const productSlice = createSlice({
         clearSuccessDeleteProduct: (state) => {
             state.successDeleteProduct = false
         },
+        setSearchedProducts: (state, {payload}) => {
+            state.searchedProducts = payload
+        },
     },
     extraReducers: {
         [getProducts.pending]: (state) => {
@@ -258,5 +261,6 @@ export const {
     clearSuccessUpdateProduct,
     clearSearchedProducts,
     clearSuccessDeleteProduct,
+    setSearchedProducts,
 } = productSlice.actions
 export default productSlice.reducer

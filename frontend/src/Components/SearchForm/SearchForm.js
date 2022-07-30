@@ -27,7 +27,7 @@ function SearchForm({
                     label={'Kategoriya'}
                     element={
                         <FieldContainer
-                            placeholder={'kategoriya kodi...'}
+                            placeholder={'misol: 101'}
                             type={'text'}
                             value={searchByCategory}
                             onChange={filterByCategory}
@@ -45,7 +45,7 @@ function SearchForm({
                     label={'Maxsulot kodi'}
                     element={
                         <FieldContainer
-                            placeholder={'misol: 000000'}
+                            placeholder={'misol: 1234'}
                             type={'text'}
                             maxWidth={'w-[7.4375rem]'}
                             value={searchByCode}
