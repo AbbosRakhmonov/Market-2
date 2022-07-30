@@ -49,7 +49,7 @@ const currencySlice = createSlice({
         currency: null,
         currencies: [],
         currencyType: '',
-        currencyLoading: false,
+        currencyLoading: true,
         currencyError: null,
     },
     reducers: {

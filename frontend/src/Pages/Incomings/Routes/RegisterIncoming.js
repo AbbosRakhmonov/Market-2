@@ -3,12 +3,12 @@ import {useDispatch, useSelector} from 'react-redux'
 import SelectInput from '../../../Components/SelectInput/SelectInput'
 import Table from '../../../Components/Table/Table'
 import {
-    getProducts,
-    getSuppliers,
     addIncoming,
     addTemporary,
+    getProducts,
+    getSuppliers,
 } from '../incomingSlice'
-import {getCurrencyType, getCurrency} from '../../Currency/currencySlice'
+import {getCurrency, getCurrencyType} from '../../Currency/currencySlice'
 import {ConfirmBtn, SaveBtn} from '../../../Components/Buttons/SaveConfirmBtn'
 import {CheckIncoming} from '../Functions/CheckIncoming'
 

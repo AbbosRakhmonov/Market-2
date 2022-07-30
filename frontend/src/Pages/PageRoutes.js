@@ -8,7 +8,12 @@ import SavedIncoming from './Incomings/Routes/SavedIncomings'
 import IncomingsList from './Incomings/Routes/IncomingsList'
 import CategoryPage from './CategoryPage/CategoryPage'
 import {useDispatch, useSelector} from 'react-redux'
-import {changeCurrencyType, getCurrency, getCurrencyType} from './Currency/currencySlice'
+import {
+    changeCurrencyType,
+    clearError,
+    getCurrency,
+    getCurrencyType,
+} from './Currency/currencySlice'
 import Supplier from './SupplierPage/SupplierPage'
 import ProductReport from './ProductReport/ProductReport'
 import Inventory from './Inventory/Inventory'
@@ -22,13 +27,18 @@ import Sellings from './Sale/Routes/Sellings.js'
 import SaleDelivers from './SalesPage/SaleDelivers'
 import ClientsPage from './Clients/Clients'
 import Exchangerate from './Exchangerate/Exchangerate.js'
+import {
+    universalToast,
+    warningCurrencyRate,
+} from '../Components/ToastMessages/ToastMessages.js'
 //pages
 const MainPage = lazy(() => import('./MainPage/MainPage'))
 const Products = lazy(() => import('./Products/Create/Products'))
 
 const PageRoutes = () => {
     const dispatch = useDispatch()
-    const {currencyType} = useSelector((state) => state.currency)
+    const {currency, currencyType, currencyError, currencyLoading} =
+        useSelector((state) => state.currency)
     const changeCurrency = () => {
         const prevCurrencyType = currencyType === 'USD' ? 'UZS' : 'USD'
         dispatch(changeCurrencyType({currency: prevCurrencyType}))
@@ -37,6 +47,17 @@ const PageRoutes = () => {
         dispatch(getCurrency())
         dispatch(getCurrencyType())
     }, [dispatch])
+    useEffect(() => {
+        if (!currency && !currencyLoading) {
+            warningCurrencyRate()
+        }
+    }, [currency, currencyLoading])
+    useEffect(() => {
+        if (currencyError) {
+            universalToast(currencyError, 'error')
+            dispatch(clearError())
+        }
+    }, [currencyError, dispatch])
 
     return (
         <section className={'flex bg-background relative overflow-x-hidden'}>
