@@ -37,21 +37,21 @@ module.exports.registerAll = async (req, res) => {
         message: "Diqqat! Do'kon ma'lumotlari topilmadi.",
       });
     }
-
     for (const product of products) {
       const category = await Category.findOne({
-        market: product.market,
+        market,
         code: product.category,
       });
+
       const productData = await ProductData.findOne({
-        market: market._id,
+        market,
         code: product.code,
         category: category && category._id,
       });
 
       if (productData) {
         return res.status(400).json({
-          message: `Diqqat! ${product.code} kodli mahsulot avval yaratilgan.`,
+          message: `Diqqat! ${product.category} kategoriyasida ${product.code} kodli mahsulot avval yaratilgan.`,
         });
       }
     }
@@ -413,11 +413,9 @@ module.exports.update = async (req, res) => {
         message: `Diqqat! ${code} kodli mahsulot avval yaratilmagan.`,
       });
     }
-    if (
-      product.category._id.toString() === category._id &&
-      code !== product.productdata.code
-    ) {
-      const check = await ProductData.findOne({ category: category._id, code });
+
+    if (product.category._id.toString() !== category) {
+      const check = await ProductData.findOne({ category, code });
       if (check) {
         return res.status(400).json({
           message: `Diqqat! ${code} kodli mahsulot avval yaratilgan.`,
@@ -426,10 +424,10 @@ module.exports.update = async (req, res) => {
     }
 
     if (
-      product.category._id.toString() !== category._id &&
+      product.category._id.toString() === category &&
       code !== product.productdata.code
     ) {
-      const check = await ProductData.findOne({ category: category._id, code });
+      const check = await ProductData.findOne({ category, code });
       if (check) {
         return res.status(400).json({
           message: `Diqqat! ${code} kodli mahsulot avval yaratilgan.`,
