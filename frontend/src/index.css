@@ -454,6 +454,10 @@
     .sale-deliver-form {
         @apply flex gap-[1.25rem] mainPadding bg-background transition ease-linear duration-200 w-full;
     }
+
+    .exchangerate-style {
+        @apply flex items-end gap-[1.25rem];
+}
     .customerPay-head-style{
         @apply p-[1.25rem] bg-white-400 rounded-[0.25rem] flex items-center flex-col w-[20.25rem]
     }
