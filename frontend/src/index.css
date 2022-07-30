@@ -364,11 +364,15 @@
     }
 
     .datePickerStyle {
-        @apply text-[0.875rem] text-blue-200 border border-blue-200 w-[7rem] h-[2.375rem] rounded-md p-[0.625rem] bg-white-900 outline-0;
+        @apply text-[0.875rem] w-full leading-[1.125rem] text-sm border border-blue-200 h-[2.375rem] rounded-md p-[0.625rem] bg-white-900 outline-0;
+    }
+
+    .datePickerStyle::placeholder {
+        @apply text-blue-200 leading-[1.125rem] text-[0.875rem];
     }
 
     .datePickerIcon {
-        @apply absolute top-[0.7rem] right-[0.625rem] w-[0.9rem] h-[0.9rem] text-blue-200;
+        @apply absolute top-[50%] translate-y-[-50%] right-[0.625rem] text-blue-200 pointer-events-none transition-all ease-in-out duration-200;
     }
 
     .inverterizationHead {
@@ -416,15 +420,15 @@
     }
 
     .print-btn-style {
-        @apply flex items-center shadow-[0px_10px_10px_rgba(0,0,0,0.05)];
+        @apply flex overflow-hidden transition-all ease-in-out duration-100 hover:bg-primary-900 rounded-[0.5rem] items-stretch shadow-[0px_10px_10px_rgba(0,0,0,0.05)] active:shadow-none;
     }
 
     .print-text-style {
-        @apply border border-primary-800 py-[0.75rem] px-[0.5rem] bg-primary-800 text-white-900 text-sm rounded-l-lg;
+        @apply py-[0.125rem] px-[0.5rem] leading-[1.875rem] transition-all ease-in-out duration-200 bg-primary-800 group-hover:bg-primary-900 text-white-900 text-sm;
     }
 
     .print-icon-style {
-        @apply border border-white-900 bg-white-900 py-[0.75rem] px-[0.625rem] rounded-r-lg;
+        @apply bg-white-900 flex items-center justify-center p-[0.5rem];
     }
 
     .inventoriesHead {

@@ -1,4 +1,4 @@
-import {useEffect, useLayoutEffect, useState} from 'react'
+import {useCallback, useEffect, useLayoutEffect, useState} from 'react'
 import Paths, {profileList} from './Path'
 import NavbarFooterLogo from '../../Images/logo-sm.svg'
 import Avatar from '../Avatar/Avatar'
@@ -14,10 +14,10 @@ function Navbar() {
     const [isAvatarMenuOpen, setIsAvatarMenuOpen] = useState(false)
     const [activeFirstSubMenuId, setActiveFirstSubMenuId] = useState(false)
     const [activeSecondSubMenuId, setActiveSecondSubMenuId] = useState(false)
-    const handleClickNavbarExpand = () => {
+    const handleClickNavbarExpand = useCallback(() => {
         setNavbarExpended(!navbarExpended)
         sessionStorage.setItem('navbarExpended', !navbarExpended)
-    }
+    }, [navbarExpended])
     const toggleAvatarMenu = () => {
         setIsAvatarMenuOpen(!isAvatarMenuOpen)
     }
@@ -45,15 +45,29 @@ function Navbar() {
     const handleClickLogout = () => {
         dispatch(logOut())
     }
+    const handleKeyDown = useCallback(
+        (e) => {
+            if (e.ctrlKey && e.keyCode === 32) {
+                handleClickNavbarExpand()
+            }
+        },
+        [handleClickNavbarExpand]
+    )
     useLayoutEffect(() => {
         const navbarExpanded =
             sessionStorage.getItem('navbarExpended') === 'true'
         if (navbarExpanded) setNavbarExpended(navbarExpanded)
     }, [])
-
     useEffect(() => {
         navbarExpended && setActiveFirstSubMenuId(null)
     }, [navbarExpended])
+
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyDown)
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown)
+        }
+    }, [handleKeyDown])
 
     return (
         <div className={'relative'}>

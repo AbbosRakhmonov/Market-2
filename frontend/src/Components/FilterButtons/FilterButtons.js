@@ -1,8 +1,10 @@
 import React from 'react'
 
-function FilterButtons({label, element}) {
+function FilterButtons({label, element, grow}) {
     return (
-        <div className={'flex items-center gap-[0.75rem]'}>
+        <div
+            className={`flex items-center gap-[0.75rem] ${grow ? 'grow' : ''}`}
+        >
             {label && (
                 <h3
                     className={
