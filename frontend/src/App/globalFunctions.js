@@ -20,7 +20,6 @@ export const universalSort = (data, setData, key, sort, prevData) => {
             : prevData
     )
 }
-
 export const UsdToUzs = (val, currency) => {
     return Math.round(val * currency)
 }
