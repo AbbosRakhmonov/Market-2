@@ -31,17 +31,19 @@ import {
     warningCurrencyRate,
     warningEmptyInput,
 } from '../../../Components/ToastMessages/ToastMessages'
-import {
-    regexForEmptyString,
-    regexForTypeNumber,
-} from '../../../Components/RegularExpressions/RegularExpressions'
+import {regexForTypeNumber} from '../../../Components/RegularExpressions/RegularExpressions'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
 import CreateProductForm from '../../../Components/CreateProductForm/CreateProductForm'
 import {
     clearErrorGetCategories,
     getCategories,
 } from '../../CategoryPage/categorySlice'
-import {universalSort, UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
+import {
+    checkEmptyString,
+    universalSort,
+    UsdToUzs,
+    UzsToUsd,
+} from '../../../App/globalFunctions'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
 import {clearError} from '../../Currency/currencySlice'
 
@@ -102,11 +104,6 @@ function Products() {
 
     // modal toggle
     const toggleModal = () => setModalVisible(!modalVisible)
-
-    // check empty string
-    const checkEmptyString = (values) => {
-        return values.some((value) => regexForEmptyString.test(value))
-    }
 
     // table headers
     const headers = [
