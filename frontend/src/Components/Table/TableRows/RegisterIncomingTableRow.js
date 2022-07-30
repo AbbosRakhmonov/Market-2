@@ -1,7 +1,6 @@
 import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
 import TableInput from '../../Inputs/TableInput'
-
 export const RegisterIncomingTableRow = ({
     changeHandler,
     data,
@@ -13,19 +12,17 @@ export const RegisterIncomingTableRow = ({
     return (
         <>
             {data.map((product, index) => (
-                <tr key={product._id} className='tr'>
+                <tr key={product.product._id} className='tr'>
                     <td className='py-0 td text-left'>{index + 1}</td>
                     <td className='py-0 td text-right'>
-                        {product.productdata.code}
+                        {product.product.code}
                     </td>
                     <td className='py-0 td text-left'>
-                        {product.productdata.name}
+                        {product.product.name}
                     </td>
                     <td className='py-1 td'>
                         <TableInput
-                            onChange={(e) =>
-                                changeHandler(e, 'pieces', product._id)
-                            }
+                            onChange={(e) => changeHandler(e, 'pieces', index)}
                             type={'number'}
                             value={product.pieces}
                         />
@@ -33,7 +30,7 @@ export const RegisterIncomingTableRow = ({
                     <td className='py-1 td'>
                         <TableInput
                             onChange={(e) =>
-                                changeHandler(e, propertyprice, product._id)
+                                changeHandler(e, propertyprice, index)
                             }
                             type={'number'}
                             value={
@@ -45,8 +42,8 @@ export const RegisterIncomingTableRow = ({
                     </td>
                     <td className='py-0 td text-error-500 text-right'>
                         {currency === 'USD'
-                            ? product.price.incomingprice
-                            : product.price.incomingpriceuzs}{' '}
+                            ? product.oldprice
+                            : product.oldpriceuzs}{' '}
                         {currency}
                     </td>
                     <td className='py-0 td text-right'>
@@ -60,7 +57,7 @@ export const RegisterIncomingTableRow = ({
                             <TableBtn
                                 type={'delete'}
                                 bgcolor={'bg-error-500'}
-                                onClick={() => Delete(product)}
+                                onClick={() => Delete(index)}
                             />
                         </div>
                     </td>
