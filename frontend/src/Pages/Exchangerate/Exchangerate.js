@@ -6,20 +6,20 @@ import Table from '../../Components/Table/Table'
 const Exchangerate = () => {
     const data = [
         {
-            _id:1,
-            createdAt : new Date(),
-            exchangenerate : '11 000'
+            _id: 1,
+            createdAt: new Date(),
+            exchangenerate: '11 000',
         },
         {
-            _id:2,
-            createdAt : new Date(),
-            exchangenerate : '11 000'
+            _id: 2,
+            createdAt: new Date(),
+            exchangenerate: '11 000',
         },
         {
-            _id:3,
-            createdAt : new Date(),
-            exchangenerate : '11 000'
-        }
+            _id: 3,
+            createdAt: new Date(),
+            exchangenerate: '11 000',
+        },
     ]
     const headers = [
         {title: '№', styles: 'w-[8%] text-left'},
@@ -31,7 +31,9 @@ const Exchangerate = () => {
     return (
         <section>
             <form
-                className={'flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200'}
+                className={
+                    'flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200'
+                }
             >
                 <div className='exchangerate-style'>
                     <FieldContainer
@@ -44,9 +46,7 @@ const Exchangerate = () => {
                         border={true}
                     />
                     <div
-                        className={
-                            'w-full flex gap-[1.25rem] grow w-[33.2rem] pl-[1.25rem]'
-                        }
+                        className={'w-full flex gap-[1.25rem] grow w-[33.2rem]'}
                     >
                         <Button
                             onClick={() => {}}
@@ -60,14 +60,14 @@ const Exchangerate = () => {
             </form>
 
             <div className='tableContainerPadding'>
-                <Table 
-                page={'exchange'}
-                data={data}
-                currentPage={0}
-                countPage={10}
-                headers={headers}
-                Edit={() => {}}
-                Delete={() => {}}
+                <Table
+                    page={'exchange'}
+                    data={data}
+                    currentPage={0}
+                    countPage={10}
+                    headers={headers}
+                    Edit={() => {}}
+                    Delete={() => {}}
                 />
             </div>
         </section>

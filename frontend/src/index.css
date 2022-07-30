@@ -454,6 +454,10 @@
     .sale-deliver-form {
         @apply flex gap-[1.25rem] mainPadding bg-background transition ease-linear duration-200 w-full;
     }
+
+    .exchangerate-style {
+        @apply flex items-end gap-[1.25rem];
+    }
 }
 
 html,
