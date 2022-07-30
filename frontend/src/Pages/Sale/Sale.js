@@ -22,7 +22,7 @@ const Sale = () => {
                     title={"Ro'yxat"}
                 />
             </div>
-            <div className='mainPadding'>
+            <div className=''>
                 <Outlet />
             </div>
         </section>
