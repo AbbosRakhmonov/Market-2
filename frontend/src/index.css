@@ -301,7 +301,7 @@
     }
 
     .paymentstyle {
-        @apply bg-[#12B76A] px-[4rem] py-[1.3rem] text-white-900 rounded-lg outline-none;
+        @apply bg-[#12B76A] px-[4rem] py-[1rem] text-white-900 rounded-lg outline-none duration-200 shadow-lg;
     }
 
     .paystyle {
@@ -309,7 +309,7 @@
     }
 
     .payclipstyle {
-        @apply bg-[#9E9E9E] px-[22px] py-[15px] text-white-900 rounded-lg mx-1 outline-none;
+        @apply bg-[#9E9E9E] shadow-lg px-[22px] py-[15px] text-white-900 rounded-lg mx-1 outline-none duration-200;
     }
 
     /* SaleBtns Style end */
@@ -343,7 +343,7 @@
 
     /* DiscountInput and ExitBtn style start */
     .discountinput {
-        @apply px-[10px] py-[5px] rounded-l outline-none border border-blue-100 focus:border focus:border-warning-500;
+        @apply px-[10px] py-[5px] rounded-l outline-none border-y border-l border-blue-100 focus:border focus:border-warning-500 placeholder:text-blue-200 placeholder:text-[0.875rem] placeholder:text-right text-right;
     }
 
     .discountselect {
@@ -453,6 +453,24 @@
 
     .sale-deliver-form {
         @apply flex gap-[1.25rem] mainPadding bg-background transition ease-linear duration-200 w-full;
+    }
+    .customerPay-head-style{
+        @apply p-[1.25rem] bg-white-400 rounded-[0.25rem] flex items-center flex-col w-[20.25rem]
+    }
+    .customer-head-icon{
+        @apply flex justify-between items-center w-full py-[0.5rem] mb-[1.25rem]
+    }
+    .custom-payment-ul{
+        @apply w-full border-b-2 border-black-200 pb-6 mb-[1.25rem]
+    }
+    .custom-payment-ul-li{
+        @apply flex justify-between items-center mb-[1rem]
+    }
+    .custom-payment-text-style{
+        @apply text-black-700 text-[0.875rem]
+    }
+    .custom-paymet-btn{
+        @apply flex justify-between w-full mb-[1.25rem] gap-[0.625rem]
     }
 }
 

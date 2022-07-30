@@ -19,7 +19,7 @@ export const SaleBtn = ({onClick, text, type}) => {
     }
     return (
         <>
-            <button onClick={onClick} className='salestyle'>
+            <button onClick={onClick} className='salestyle w-full h-[3.25rem] hover:bg-primary-700 hover:text-white-900 duration-200 shadow-lg'>
                 {icons[type]}
                 {text}
             </button>
@@ -29,7 +29,7 @@ export const SaleBtn = ({onClick, text, type}) => {
 
 export const DiscountBtn = ({onClick, text}) => {
     return (
-        <button onClick={onClick} className='discountstyle'>
+        <button onClick={onClick} className='discountstyle w-full h-[3.25rem] bg-warning-500 text-white-900 duration-200 shadow-lg'>
             <AiOutlineTag className='discstyle' />
             {text}
         </button>
@@ -38,7 +38,7 @@ export const DiscountBtn = ({onClick, text}) => {
 
 export const Payment = ({onClick, text}) => {
     return (
-        <button onClick={onClick} className='paymentstyle'>
+        <button onClick={onClick} className='paymentstyle w-[13.75rem]'>
             <IoWalletOutline className='paystyle' />
             {text}
         </button>
@@ -47,8 +47,8 @@ export const Payment = ({onClick, text}) => {
 
 export const PaymentClip = ({onClick, text}) => {
     return (
-        <button onClick={onClick} className='payclipstyle'>
-            <BsPaperclip className='w-[2rem] h-[18px]' />
+        <button onClick={onClick} className='payclipstyle w-[3.375rem] h-full'>
+            <BsPaperclip className='' />
         </button>
     )
 }
