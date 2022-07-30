@@ -13,19 +13,19 @@ const TableBtn = ({type, onClick, bgcolor}) => {
     const chooseIcon = () => {
         switch (type) {
             case 'delete':
-                return <IoTrashOutline color='white' />
+                return <IoTrashOutline color='white' size={14} />
             case 'edit':
-                return <IoCreateOutline color='white' />
+                return <IoCreateOutline color='white' size={14} />
             case 'print':
-                return <IoPrint color='white' />
+                return <IoPrint color='white' size={14} />
             case 'save':
-                return <IoSave color='white' />
+                return <IoSave color='white' size={14} />
             case 'excel':
-                return <SiMicrosoftexcel color='white' />
+                return <SiMicrosoftexcel color='white' size={14} />
             case 'add':
-                return <IoAdd color='white' />
+                return <IoAdd color='white' size={14} />
             case 'return':
-                return <IoSwapHorizontal color='white' />
+                return <IoSwapHorizontal color='white' size={14} />
             default:
                 return ''
         }

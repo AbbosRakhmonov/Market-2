@@ -1,4 +1,5 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
+import {universalToast} from '../../Components/ToastMessages/ToastMessages'
 import Api from '../../Config/Api'
 
 export const getSuppliers = createAsyncThunk(
@@ -17,7 +18,34 @@ export const getProducts = createAsyncThunk(
     'incoming/getproduct',
     async (body, {rejectWithValue}) => {
         try {
-            const {data} = await Api.post('/products/product/getall', {body})
+            const {data} = await Api.post('/products/product/getall', body)
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
+export const addIncoming = createAsyncThunk(
+    'incoming/register',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post(
+                '/products/incoming/registerall',
+                body
+            )
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
+export const addTemporary = createAsyncThunk(
+    'incoming/temporary',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post('/products/temporary/register', body)
             return data
         } catch (error) {
             return rejectWithValue(error)
@@ -59,6 +87,30 @@ const incomingSlice = createSlice({
         },
         [getProducts.rejected]: (state, {payload}) => {
             state.error = payload
+        },
+        [addIncoming.pending]: (state) => {
+            state.loading = true
+        },
+        [addIncoming.fulfilled]: (state) => {
+            state.loading = false
+            universalToast('Mahsulotlar qabul qilindi!', 'success')
+        },
+        [addIncoming.rejected]: (state, {payload}) => {
+            state.loading = false
+            state.error = payload
+            universalToast(`${payload}`, 'error')
+        },
+        [addTemporary.pending]: (state) => {
+            state.loading = true
+        },
+        [addTemporary.fulfilled]: (state) => {
+            state.loading = false
+            universalToast('Mahsulotlar saqlandi!', 'success')
+        },
+        [addTemporary.rejected]: (state, {payload}) => {
+            state.loading = false
+            state.error = payload
+            universalToast(`${payload}`, 'error')
         },
     },
 })

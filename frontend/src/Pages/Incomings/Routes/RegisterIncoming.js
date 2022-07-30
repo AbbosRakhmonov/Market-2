@@ -2,14 +2,21 @@ import React, {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import SelectInput from '../../../Components/SelectInput/SelectInput'
 import Table from '../../../Components/Table/Table'
-import {getProducts, getSuppliers} from '../incomingSlice'
+import {
+    getProducts,
+    getSuppliers,
+    addIncoming,
+    addTemporary,
+} from '../incomingSlice'
 import {getCurrencyType, getCurrency} from '../../Currency/currencySlice'
 import {ConfirmBtn, SaveBtn} from '../../../Components/Buttons/SaveConfirmBtn'
+import {CheckIncoming} from '../Functions/CheckIncoming'
 
 const RegisterIncoming = () => {
     const dispatch = useDispatch()
     const {
         market: {_id},
+        user,
     } = useSelector((state) => state.login)
     const {currency, currencyType} = useSelector((state) => state.currency)
     const {suppliers, products} = useSelector((state) => state.incoming)
@@ -23,6 +30,19 @@ const RegisterIncoming = () => {
     // functions for onchange of select
     const selectSupplier = (e) => {
         setSupplier(...suppliers.filter((supplier) => supplier._id === e.value))
+        if (incomings.length > 0) {
+            setIncomings([
+                ...incomings.map((product) => {
+                    return {
+                        ...product,
+                        supplier: {
+                            _id: e.value,
+                            name: e.label,
+                        },
+                    }
+                }),
+            ])
+        }
     }
 
     const selectProduct = (e) => {
@@ -37,25 +57,28 @@ const RegisterIncoming = () => {
         }
     }
 
-    // add to incomings func
+    // add to incomings. func
     const addProductToIncomings = (value) => {
         const product = [
             ...products.filter((product) => product._id === value),
         ][0]
         let obj = {
             ...product,
-            supplier: {...supplier},
         }
         setIncomings([
             ...incomings,
             {
-                ...obj,
+                oldprice: obj.price.incomingprice,
+                oldpriceuzs: obj.price.incomingpriceuzs,
+                product: {...obj.productdata, _id: obj._id},
                 pieces: 0,
                 unitprice: 0,
                 unitpriceuzs: 0,
                 totalprice: 0,
                 totalpriceuzs: 0,
-                product: {...obj},
+                user: user._id,
+                unit: obj.unit,
+                supplier: {...supplier},
             },
         ])
     }
@@ -82,9 +105,9 @@ const RegisterIncoming = () => {
     }
 
     // other functions
-    const changeAddedIncoming = (e, property, id) => {
+    const changeAddedIncoming = (e, property, ind) => {
         let target = Number(e.target.value)
-        const returnUsd = (item, property) => {
+        const returnUsd = (item) => {
             return {
                 ...item,
                 [property]: target,
@@ -102,18 +125,18 @@ const RegisterIncoming = () => {
                         : target * item.pieces) * currency,
             }
         }
-        const returnUzs = (item, property) => {
+        const returnUzs = (item) => {
             return {
                 ...item,
                 [property]: target,
                 unitprice:
                     property === 'unitpriceuzs'
-                        ? Number((target / currency).toFixed(2))
+                        ? ((target / currency) * 1000) / 1000
                         : item.unitprice,
                 totalprice:
                     property === 'pieces'
                         ? target * item.unitprice
-                        : Number((target / currency).toFixed(2)) * item.pieces,
+                        : (((target / currency) * 1000) / 1000) * item.pieces,
                 totalpriceuzs:
                     property === 'pieces'
                         ? target * item.unitpriceuzs
@@ -121,22 +144,46 @@ const RegisterIncoming = () => {
             }
         }
         setIncomings([
-            ...incomings.map((item) => {
-                if (item._id === id) {
+            ...incomings.map((item, index) => {
+                if (index === ind) {
                     if (currencyType === 'USD') {
-                        return returnUsd(item, property)
+                        return returnUsd(item)
                     }
-                    return returnUzs(item, property)
+                    return returnUzs(item)
                 }
                 return item
             }),
         ])
     }
 
-    const deleteIncoming = (product) => {
-        setIncomings([
-            ...incomings.filter((incoming) => incoming._id !== product._id),
-        ])
+    const deleteIncoming = (ind) => {
+        setIncomings([...incomings.filter((_, index) => index !== ind)])
+    }
+
+    // request functions
+    const createIncoming = () => {
+        if (!CheckIncoming(incomings)) {
+            dispatch(
+                addIncoming({
+                    products: [...incomings],
+                    user: user._id,
+                })
+            )
+            setIncomings([])
+        }
+    }
+
+    const createTemporary = () => {
+        dispatch(
+            addTemporary({
+                market: _id,
+                temporaryincoming: {
+                    supplier,
+                    incomings,
+                },
+            })
+        )
+        setIncomings([])
     }
 
     // Tableheader
@@ -180,7 +227,7 @@ const RegisterIncoming = () => {
     }, [dispatch, _id, suppliers])
 
     useEffect(() => {
-        products.length < 1 && dispatch(getProducts(_id))
+        products.length < 1 && dispatch(getProducts({market: _id}))
         products.length > 0 && changeProductsData(products)
     }, [dispatch, _id, products])
 
@@ -219,8 +266,16 @@ const RegisterIncoming = () => {
                     Delete={deleteIncoming}
                 />
                 <div className='flex items-center justify-end gap-[0.625rem] pt-[1.25rem]'>
-                    <SaveBtn text={'Saqlash'} onClick={() => {}} />
-                    <ConfirmBtn text={'Tasdiqlash'} onClick={() => {}} />
+                    <SaveBtn
+                        text={'Saqlash'}
+                        onClick={() => createTemporary()}
+                    />
+                    <ConfirmBtn
+                        text={'Tasdiqlash'}
+                        onClick={() => {
+                            createIncoming()
+                        }}
+                    />
                 </div>
             </div>
         </section>

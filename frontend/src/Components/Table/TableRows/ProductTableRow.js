@@ -40,7 +40,7 @@ export const ProductTableRow = ({
                             )}{' '}
                         USD
                     </td>
-                    <td className='td py-[0.375rem] border-r-0 text-center max-w-[50px]'>
+                    <td className='td py-[0.375rem] border-r-0'>
                         <div className='flex items-center justify-center'>
                             <TableBtn
                                 type={'edit'}
