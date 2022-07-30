@@ -1,6 +1,7 @@
 import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
 import TableInput from '../../Inputs/TableInput'
+
 export const RegisterIncomingTableRow = ({
     changeHandler,
     data,

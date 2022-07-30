@@ -257,6 +257,6 @@ export const {
     clearSuccessAddProduct,
     clearSuccessUpdateProduct,
     clearSearchedProducts,
-    clearSuccessDeleteProduct,
+    clearSuccessDeleteProduct
 } = productSlice.actions
 export default productSlice.reducer

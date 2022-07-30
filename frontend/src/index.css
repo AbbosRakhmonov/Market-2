@@ -461,23 +461,29 @@
 
     .exchangerate-style {
         @apply flex items-end gap-[1.25rem];
-}
-    .customerPay-head-style{
+    }
+
+    .customerPay-head-style {
         @apply p-[1.25rem] bg-white-400 rounded-[0.25rem] flex items-center flex-col w-[20.25rem]
     }
-    .customer-head-icon{
+
+    .customer-head-icon {
         @apply flex justify-between items-center w-full py-[0.5rem] mb-[1.25rem]
     }
-    .custom-payment-ul{
+
+    .custom-payment-ul {
         @apply w-full border-b-2 border-black-200 pb-6 mb-[1.25rem]
     }
-    .custom-payment-ul-li{
+
+    .custom-payment-ul-li {
         @apply flex justify-between items-center mb-[1rem]
     }
-    .custom-payment-text-style{
+
+    .custom-payment-text-style {
         @apply text-black-700 text-[0.875rem]
     }
-    .custom-paymet-btn{
+
+    .custom-paymet-btn {
         @apply flex justify-between w-full mb-[1.25rem] gap-[0.625rem]
     }
 }
@@ -491,9 +497,9 @@ body {
 .loginPage {
     height: 100vh;
     background: radial-gradient(
-        100% 316.36% at 0% 50%,
-        #0090a3 0%,
-        rgba(36, 86, 50, 0.9) 100%
+            100% 316.36% at 0% 50%,
+            #0090a3 0%,
+            rgba(36, 86, 50, 0.9) 100%
     );
 }
 
