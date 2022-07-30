@@ -160,7 +160,7 @@
     }
 
     .filial-btn {
-        @apply flex gap-[.625rem] justify-end pl-[1.25rem] pr-[1.25rem] items-center h-[50%];
+        @apply flex gap-[.625rem] justify-end pr-[1.25rem] items-center py-[0.65625rem];
     }
 
     /* Shops Card styled start */
@@ -169,7 +169,7 @@
     }
 
     .product-cost {
-        @apply flex w-[80%] justify-between p-[1.25rem];
+        @apply flex grow justify-between;
     }
 
     .product {
@@ -185,7 +185,7 @@
     }
 
     .shop-title {
-        @apply text-[1rem] h-[50%] font-medium leading-[1.17rem] text-white-900 w-[13.4375rem] flex justify-center items-center shops-bg-color rounded-bl-[3.125rem];
+        @apply text-[1rem] font-medium leading-[1.17rem] text-white-900 w-full py-[1.125rem] px-[1.25rem] flex justify-center items-center shops-bg-color rounded-bl-[3.125rem];
     }
 
     .active_shop {
@@ -464,27 +464,27 @@
     }
 
     .customerPay-head-style {
-        @apply p-[1.25rem] bg-white-400 rounded-[0.25rem] flex items-center flex-col w-[20.25rem]
+        @apply p-[1.25rem] bg-white-400 rounded-[0.25rem] flex items-center flex-col w-[20.25rem];
     }
 
     .customer-head-icon {
-        @apply flex justify-between items-center w-full py-[0.5rem] mb-[1.25rem]
+        @apply flex justify-between items-center w-full py-[0.5rem] mb-[1.25rem];
     }
 
     .custom-payment-ul {
-        @apply w-full border-b-2 border-black-200 pb-6 mb-[1.25rem]
+        @apply w-full border-b-2 border-black-200 pb-6 mb-[1.25rem];
     }
 
     .custom-payment-ul-li {
-        @apply flex justify-between items-center mb-[1rem]
+        @apply flex justify-between items-center mb-[1rem];
     }
 
     .custom-payment-text-style {
-        @apply text-black-700 text-[0.875rem]
+        @apply text-black-700 text-[0.875rem];
     }
 
     .custom-paymet-btn {
-        @apply flex justify-between w-full mb-[1.25rem] gap-[0.625rem]
+        @apply flex justify-between w-full mb-[1.25rem] gap-[0.625rem];
     }
 }
 
@@ -497,9 +497,9 @@ body {
 .loginPage {
     height: 100vh;
     background: radial-gradient(
-            100% 316.36% at 0% 50%,
-            #0090a3 0%,
-            rgba(36, 86, 50, 0.9) 100%
+        100% 316.36% at 0% 50%,
+        #0090a3 0%,
+        rgba(36, 86, 50, 0.9) 100%
     );
 }
 
@@ -651,4 +651,8 @@ input[type='number'] {
 
 .shops-bg-color {
     background: linear-gradient(234.85deg, #00b4cc 0%, #0090a3 100%);
+}
+
+.avatar-border {
+    background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='100' ry='100' stroke='%230090A3FF' stroke-width='2' stroke-dasharray='5' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
 }
