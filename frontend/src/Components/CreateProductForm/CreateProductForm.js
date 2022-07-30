@@ -36,7 +36,7 @@ function CreateProductForm({
                     value={categoryOfProduct}
                     onChange={handleChangeCategoryOfProduct}
                     label={'Kategoriya nomi'}
-                    placeholder={'misol: 0001 - Kompyuterlar'}
+                    placeholder={'tanlang...'}
                     select={true}
                     options={categoryOptions}
                     maxWidth={'w-[18.7rem]'}
@@ -46,7 +46,7 @@ function CreateProductForm({
                 {/* -- maxulot kodi -- */}
                 <FieldContainer
                     label={'Maxsulot kodi'}
-                    placeholder={'misol: 000000'}
+                    placeholder={'misol: 1234'}
                     onChange={handleChangeCodeOfProduct}
                     value={codeOfProduct}
                     type={'text'}
@@ -68,7 +68,7 @@ function CreateProductForm({
                     value={unitOfProduct}
                     onChange={handleChangeUnitOfProduct}
                     label={"O'lchov birligi"}
-                    placeholder={'misol: kg'}
+                    placeholder={'tanlang...'}
                     select={true}
                     maxWidth={'w-[8.75rem]'}
                     options={unitOptions}
