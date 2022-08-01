@@ -31,19 +31,21 @@ import {
     warningCurrencyRate,
     warningEmptyInput,
 } from '../../../Components/ToastMessages/ToastMessages'
-import {
-    regexForEmptyString,
-    regexForTypeNumber,
-} from '../../../Components/RegularExpressions/RegularExpressions'
+import {regexForTypeNumber} from '../../../Components/RegularExpressions/RegularExpressions'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
 import CreateProductForm from '../../../Components/CreateProductForm/CreateProductForm'
 import {
     clearErrorGetCategories,
     getCategories,
 } from '../../CategoryPage/categorySlice'
-import {UsdToUzs, UzsToUsd} from '../../Currency/Currency'
+import {
+    checkEmptyString,
+    universalSort,
+    UsdToUzs,
+    UzsToUsd,
+} from '../../../App/globalFunctions'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
-import {universalSort} from '../../../App/globalFunctions'
+import {clearError} from '../../Currency/currencySlice'
 
 function Products() {
     const dispatch = useDispatch()
@@ -54,7 +56,8 @@ function Products() {
     const {categories, errorGetCategories} = useSelector(
         (state) => state.category
     )
-    const {currency, currencyType} = useSelector((state) => state.currency)
+    const {currency, currencyType, currencyError, currencyLoading} =
+        useSelector((state) => state.currency)
     const {
         products,
         total,
@@ -75,6 +78,8 @@ function Products() {
     const [unitOfProduct, setUnitOfProduct] = useState('')
     const [priceOfProduct, setPriceOfProduct] = useState('')
     const [sellingPriceOfProduct, setSellingPriceOfProduct] = useState('')
+    const [priceOfProductUsd, setPriceOfProductsUsd] = useState('')
+    const [sellingPriceOfProductUsd, setSellingPriceOfProductUsd] = useState('')
     const [categoryOfProduct, setCategoryOfProduct] = useState('')
     const [searchByCode, setSearchByCode] = useState('')
     const [searchByName, setSearchByName] = useState('')
@@ -99,11 +104,6 @@ function Products() {
 
     // modal toggle
     const toggleModal = () => setModalVisible(!modalVisible)
-
-    // check empty string
-    const checkEmptyString = (values) => {
-        return values.some((value) => regexForEmptyString.test(value))
-    }
 
     // table headers
     const headers = [
@@ -177,13 +177,25 @@ function Products() {
     const handleChangePriceOfProduct = (e) => {
         let val = e.target.value
         if (regexForTypeNumber.test(val)) {
-            setPriceOfProduct(val)
+            if (currencyType === 'UZS') {
+                setPriceOfProduct(val)
+                setPriceOfProductsUsd(UzsToUsd(val, currency))
+            } else {
+                setPriceOfProductsUsd(val)
+                setPriceOfProduct(UsdToUzs(val, currency))
+            }
         }
     }
     const handleChangeSellingPriceOfProduct = (e) => {
         let val = e.target.value
         if (regexForTypeNumber.test(val)) {
-            setSellingPriceOfProduct(val)
+            if (currencyType === 'UZS') {
+                setSellingPriceOfProduct(val)
+                setSellingPriceOfProductUsd(UzsToUsd(val, currency))
+            } else {
+                setSellingPriceOfProductUsd(val)
+                setSellingPriceOfProduct(UsdToUzs(val, currency))
+            }
         }
     }
     const handleChangeUnitOfProduct = (option) => {
@@ -309,22 +321,10 @@ function Products() {
                         unit: unitOfProduct.value,
                         category: categoryOfProduct.value,
                         market: _id,
-                        incomingprice:
-                            currencyType === 'UZS'
-                                ? UzsToUsd(priceOfProduct, currency)
-                                : priceOfProduct,
-                        sellingprice:
-                            currencyType === 'UZS'
-                                ? UzsToUsd(sellingPriceOfProduct, currency)
-                                : sellingPriceOfProduct,
-                        incomingpriceuzs:
-                            currencyType === 'UZS'
-                                ? priceOfProduct
-                                : UsdToUzs(priceOfProduct, currency),
-                        sellingpriceuzs:
-                            currencyType === 'UZS'
-                                ? sellingPriceOfProduct
-                                : UsdToUzs(sellingPriceOfProduct, currency),
+                        incomingprice: priceOfProductUsd,
+                        sellingprice: sellingPriceOfProductUsd,
+                        incomingpriceuzs: priceOfProduct,
+                        sellingpriceuzs: sellingPriceOfProduct,
                     },
                 }
                 dispatch(addProduct(body))
@@ -340,6 +340,8 @@ function Products() {
         setNumberOfProduct('')
         setPriceOfProduct('')
         setSellingPriceOfProduct('')
+        setPriceOfProductsUsd('')
+        setSellingPriceOfProductUsd('')
         setUnitOfProduct('')
         setCategoryOfProduct('')
         setCurrentProduct(null)
@@ -367,22 +369,10 @@ function Products() {
                     unit: unitOfProduct.value,
                     priceid: currentProduct.price._id,
                     productdata: currentProduct.productdata._id,
-                    incomingprice:
-                        currencyType === 'UZS'
-                            ? UzsToUsd(priceOfProduct, currency)
-                            : priceOfProduct,
-                    sellingprice:
-                        currencyType === 'UZS'
-                            ? UzsToUsd(sellingPriceOfProduct, currency)
-                            : sellingPriceOfProduct,
-                    incomingpriceuzs:
-                        currencyType === 'UZS'
-                            ? priceOfProduct
-                            : UsdToUzs(priceOfProduct, currency),
-                    sellingpriceuzs:
-                        currencyType === 'UZS'
-                            ? sellingPriceOfProduct
-                            : UsdToUzs(sellingPriceOfProduct, currency),
+                    incomingprice: priceOfProductUsd,
+                    sellingprice: sellingPriceOfProductUsd,
+                    incomingpriceuzs: priceOfProduct,
+                    sellingpriceuzs: sellingPriceOfProduct,
                     total: numberOfProduct,
                 },
                 currentPage,
@@ -496,7 +486,6 @@ function Products() {
                 category: searchByCategory.replace(/\s+/g, ' ').trim(),
             },
         }
-        console.log(body)
         dispatch(addProductsFromExcel(body))
     }
     const handleClickCancelToImport = () => {
@@ -571,26 +560,9 @@ function Products() {
     }
 
     useEffect(() => {
-        if (!currency) {
+        if (!currency && !currencyLoading) {
             warningCurrencyRate()
-        } else if (currencyType === 'UZS') {
-            priceOfProduct &&
-                setPriceOfProduct(UsdToUzs(priceOfProduct, currency))
-            sellingPriceOfProduct &&
-                setSellingPriceOfProduct(
-                    UsdToUzs(sellingPriceOfProduct, currency)
-                )
-        } else {
-            priceOfProduct &&
-                setPriceOfProduct(UzsToUsd(priceOfProduct, currency))
-            sellingPriceOfProduct &&
-                setSellingPriceOfProduct(
-                    UzsToUsd(sellingPriceOfProduct, currency)
-                )
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currency, currencyType])
-    useEffect(() => {
         if (errorUnits) {
             universalToast(errorUnits, 'error')
             dispatch(clearErrorUnits())
@@ -622,6 +594,11 @@ function Products() {
             warningCategory()
             dispatch(clearErrorGetCategories())
         }
+        if (currencyError) {
+            universalToast(currencyError, 'error')
+            dispatch(clearError())
+        }
+        console.clear()
     }, [
         errorUnits,
         errorProducts,
@@ -630,6 +607,9 @@ function Products() {
         successUpdateProduct,
         successDeleteProduct,
         errorGetCategories,
+        currencyError,
+        currencyLoading,
+        currency,
     ])
     useEffect(() => {
         const body = {
@@ -676,12 +656,13 @@ function Products() {
                 value: category._id,
                 label: `${category.code} - ${category.name}`,
             })
-            setPriceOfProduct(
-                currencyType === 'UZS' ? incomingpriceuzs : incomingprice
-            )
-            setSellingPriceOfProduct(
-                currencyType === 'UZS' ? sellingpriceuzs : sellingprice
-            )
+            if (currencyType === 'UZS') {
+                setPriceOfProduct(incomingpriceuzs)
+                setSellingPriceOfProduct(sellingpriceuzs)
+            } else {
+                setPriceOfProductsUsd(incomingprice)
+                setSellingPriceOfProductUsd(sellingprice)
+            }
         }
     }, [currentProduct, currencyType])
     useEffect(() => {
@@ -696,7 +677,9 @@ function Products() {
         setCategoryOptions(
             categories.map((category) => ({
                 value: category._id,
-                label: `${category.code} - ${category.name}`,
+                label:
+                    category.code +
+                    `${category.name ? ` - ${category.name}` : ''}`,
             }))
         )
     }, [categories])
@@ -708,7 +691,6 @@ function Products() {
     useEffect(() => {
         setSearchedData(searchedProducts)
     }, [searchedProducts])
-    // console.log(priceOfProduct)
     return (
         <section>
             {/* Modal */}
@@ -738,9 +720,15 @@ function Products() {
                 unitOfProduct={unitOfProduct}
                 categoryOfProduct={categoryOfProduct}
                 codeOfProduct={codeOfProduct}
-                sellingPriceOfProduct={sellingPriceOfProduct}
+                priceOfProduct={
+                    currencyType === 'UZS' ? priceOfProduct : priceOfProductUsd
+                }
+                sellingPriceOfProduct={
+                    currencyType === 'UZS'
+                        ? sellingPriceOfProduct
+                        : sellingPriceOfProductUsd
+                }
                 numberOfProduct={numberOfProduct}
-                priceOfProduct={priceOfProduct}
                 handleChangeSellingPriceOfProduct={
                     handleChangeSellingPriceOfProduct
                 }
@@ -779,7 +767,7 @@ function Products() {
                 )}
             </div>
             <SearchForm
-                filterBy={['code', 'name', 'total', 'category']}
+                filterBy={['total', 'category', 'code', 'name', 'doubleDate']}
                 filterByCode={filterByCode}
                 filterByCodeAndNameAndCategoryWhenPressEnter={
                     filterByCodeAndNameAndCategoryWhenPressEnter

@@ -1,10 +1,7 @@
 import React from 'react'
 import Table from '../../Components/Table/Table'
 import Pagination from '../../Components/Pagination/Pagination'
-import SelectForm from '../../Components/Select/SelectForm'
-import Input from '../../Components/Inputs/Input'
-import SearchInput from '../../Components/Inputs/SearchInput'
-import {ConfirmBtn} from '../../Components/Buttons/SaveConfirmBtn'
+
 function Inventory() {
     const data = [
         {

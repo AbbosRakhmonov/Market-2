@@ -17,12 +17,12 @@ const Supplier = () => {
         {
             _id: 3,
             name: 'Abbos',
-        }
+        },
     ]
     const headers = [
-        {title: '№', styles:'w-[8%] text-left'},
+        {title: '№', styles: 'w-[8%] text-left'},
         {title: 'Yetkazuvchi', styles: 'w-[84%] text-left'},
-        {title: '',styles:'w-[8%] text-left'},
+        {title: '', styles: 'w-[8%] text-left'},
     ]
 
     return (

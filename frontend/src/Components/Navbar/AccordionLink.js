@@ -82,7 +82,9 @@ function AccordionLink({
                                 onClick={(e) => handleClickSecondMenu(null)}
                                 className={({isActive}) => {
                                     return `flex items-center transition ease-in-out duration-100 py-[5px] px-[0.9375rem] rounded-[4px] border-b-[1px] ${
-                                        isActive
+                                        isActive ||
+                                        globalPath[1] ===
+                                            item.path.split('/')[1]
                                             ? 'bg-primary-700 text-white-900 border-primary-800'
                                             : 'border-transparent text-black-700 hover:bg-black-100'
                                     }`

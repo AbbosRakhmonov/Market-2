@@ -10,41 +10,42 @@ const ClientsPage = () => {
             _id: 1,
             name: 'Navro`z',
             packman: {
-                name: 'Dilso`z'
-            }
+                name: 'Dilso`z',
+            },
         },
         {
             _id: 2,
             name: 'Abbos',
             packman: {
-                name: 'Navro`z'
-            }
+                name: 'Navro`z',
+            },
         },
-      
     ]
     const headers = [
-        {title: '№', styles:'w-[8%] text-left'},
+        {title: '№', styles: 'w-[8%] text-left'},
         {title: 'Yetkazuvchi', styles: 'w-[41%] text-left'},
-        {title: 'Mijoz', styles:'w-[41%] text-left'},
-        {title: '',styles:'w-[8%] text-left'},
+        {title: 'Mijoz', styles: 'w-[41%] text-left'},
+        {title: '', styles: 'w-[8%] text-left'},
     ]
 
     return (
         <section>
             <form
-                className={"flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200"}
+                className={
+                    'flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200'
+                }
             >
                 <div className='supplier-style'>
-                <FieldContainer
-                    value={''}
-                    onChange={() => {}}
-                    label={'Yetkazuvchini tanlang'}
-                    placeholder={'misol: Dilso`z'}
-                    select={true}
-                    options={[]}
-                    maxWidth={'w-[21rem]'}
-                    border={true}
-                />
+                    <FieldContainer
+                        value={''}
+                        onChange={() => {}}
+                        label={'Yetkazuvchini tanlang'}
+                        placeholder={'misol: Dilso`z'}
+                        select={true}
+                        options={[]}
+                        maxWidth={'w-[21rem]'}
+                        border={true}
+                    />
 
                     <FieldContainer
                         label={'Mijoz ismi'}
@@ -81,7 +82,7 @@ const ClientsPage = () => {
                 />
             </div>
         </section>
-    )  
+    )
 }
 
 export default ClientsPage

@@ -19,7 +19,10 @@ export const SaleBtn = ({onClick, text, type}) => {
     }
     return (
         <>
-            <button onClick={onClick} className='salestyle w-full h-[3.25rem] hover:bg-primary-700 hover:text-white-900 duration-200 shadow-lg'>
+            <button
+                onClick={onClick}
+                className='salestyle w-full h-[3.25rem] hover:bg-primary-700 hover:text-white-900 duration-200 shadow-lg'
+            >
                 {icons[type]}
                 {text}
             </button>
@@ -29,7 +32,10 @@ export const SaleBtn = ({onClick, text, type}) => {
 
 export const DiscountBtn = ({onClick, text}) => {
     return (
-        <button onClick={onClick} className='discountstyle w-full h-[3.25rem] bg-warning-500 text-white-900 duration-200 shadow-lg'>
+        <button
+            onClick={onClick}
+            className='discountstyle w-full h-[3.25rem] bg-warning-500 text-white-900 duration-200 shadow-lg'
+        >
             <AiOutlineTag className='discstyle' />
             {text}
         </button>

@@ -21,12 +21,10 @@ const Sale = () => {
                     title={"Ro'yxat"}
                 />
             </div>
-           
 
             <div className=''>
                 <Outlet />
             </div>
-
         </section>
     )
 }
