@@ -31,6 +31,7 @@ import {
     universalToast,
     warningCurrencyRate,
 } from '../Components/ToastMessages/ToastMessages.js'
+import Checkout from './Checkout/Checkout'
 //pages
 const MainPage = lazy(() => import('./MainPage/MainPage'))
 const Products = lazy(() => import('./Products/Create/Products'))
@@ -130,6 +131,10 @@ const PageRoutes = () => {
                         />
 
                         <Route path='/valyuta' element={<Exchangerate />} />
+                        <Route
+                            path='/kassa'
+                            element={<Checkout />}
+                        />
                     </Routes>
                 </Suspense>
             </div>
