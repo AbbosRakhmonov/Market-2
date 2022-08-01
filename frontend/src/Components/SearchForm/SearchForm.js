@@ -5,51 +5,51 @@ import FieldContainer from '../FieldContainer/FieldContainer.js'
 import PrintBtn from '../Buttons/PrintBtn.js'
 import {ConfirmBtn} from '../Buttons/SaveConfirmBtn.js'
 import Dates from '../Dates/Dates.js'
-import {uniqueId} from 'lodash'
 
-function SearchForm({
-    filterByTotal,
-    searchByCode,
-    searchById,
-    searchByDelivererName,
-    filterByDelivererName,
-    filterByDelivererNameWhenPressEnter,
-    searchByClientName,
-    filterByClientName,
-    filterByClientNameWhenPressEnter,
-    filterById,
-    filterByIdWhenPressEnter,
-    filterByCode,
-    filterByCodeAndNameAndCategoryWhenPressEnter,
-    searchByName,
-    filterByName,
-    filterBy,
-    searchByCategory,
-    filterByCategory,
-    numberOfChecks,
-    setNumberOfChecks,
-    clickPrintBtn,
-    startDate,
-    endDate,
-    setStartDate,
-    setEndDate,
-    date,
-    setDate,
-    clickConfirmBtn,
-}) {
+function SearchForm(
+    {
+        filterByTotal,
+        searchByCode,
+        searchById,
+        searchByDelivererName,
+        filterByDelivererName,
+        filterByDelivererNameWhenPressEnter,
+        searchByClientName,
+        filterByClientName,
+        filterByClientNameWhenPressEnter,
+        filterById,
+        filterByIdWhenPressEnter,
+        filterByCode,
+        filterByCodeAndNameAndCategoryWhenPressEnter,
+        searchByName,
+        filterByName,
+        filterBy,
+        searchByCategory,
+        filterByCategory,
+        numberOfChecks,
+        setNumberOfChecks,
+        clickPrintBtn,
+        startDate,
+        endDate,
+        setStartDate,
+        setEndDate,
+        date,
+        setDate,
+        clickConfirmBtn
+    }) {
     const chooseComponent = (key) => {
         switch (key) {
             case 'total':
                 return (
                     <SelectForm
-                        key={uniqueId('select')}
+                        key={'total_1'}
                         onSelect={filterByTotal}
                     />
                 )
             case 'category':
                 return (
                     <FilterButtons
-                        key={uniqueId('category')}
+                        key={'category_1'}
                         label={'Kategoriya'}
                         element={
                             <FieldContainer
@@ -67,7 +67,7 @@ function SearchForm({
             case 'code':
                 return (
                     <FilterButtons
-                        key={uniqueId('code')}
+                        key={'code_1'}
                         label={'Maxsulot kodi'}
                         element={
                             <FieldContainer
@@ -86,7 +86,7 @@ function SearchForm({
             case 'id':
                 return (
                     <FilterButtons
-                        key={uniqueId('id')}
+                        key={'id_1'}
                         label={'ID'}
                         element={
                             <FieldContainer
@@ -103,7 +103,7 @@ function SearchForm({
             case 'name':
                 return (
                     <SearchInput
-                        key={uniqueId('qidirish')}
+                        key={'search_1'}
                         placeholder={'qidirish...'}
                         someClasses={'grow'}
                         value={searchByName}
@@ -114,7 +114,7 @@ function SearchForm({
             case 'delivererName':
                 return (
                     <SearchInput
-                        key={uniqueId('yetkazuvchi-ismi')}
+                        key={'yetkazuvchi_ismi_1'}
                         placeholder={'yetkazuchi ismi...'}
                         someClasses={'grow'}
                         value={searchByDelivererName}
@@ -125,7 +125,7 @@ function SearchForm({
             case 'clientName':
                 return (
                     <SearchInput
-                        key={uniqueId('mijoz-ismi')}
+                        key={'mijoz_ismi_1'}
                         placeholder={'mijoz ismi...'}
                         someClasses={'grow'}
                         value={searchByClientName}
@@ -136,7 +136,7 @@ function SearchForm({
             case 'checks':
                 return (
                     <FilterButtons
-                        key={uniqueId('cheklar-soni')}
+                        key={'cheklar_soni_1'}
                         label={'Cheklar soni'}
                         element={
                             <FieldContainer
@@ -152,15 +152,15 @@ function SearchForm({
             case 'printBtn':
                 return (
                     <PrintBtn
-                        key={uniqueId('print-btn')}
+                        key={'print_btn_1'}
                         onClick={clickPrintBtn}
                     />
                 )
             case 'startDate':
                 return (
                     <FilterButtons
-                        key={uniqueId('start-date')}
-                        label={"Boshlang'ich sana"}
+                        key={'start_date_1'}
+                        label={'Boshlang\'ich sana'}
                         element={
                             <Dates
                                 value={startDate}
@@ -174,6 +174,7 @@ function SearchForm({
             case 'endDate':
                 return (
                     <FilterButtons
+                        key={'end_date_1'}
                         label={'Tugash sana'}
                         element={
                             <Dates
@@ -188,7 +189,7 @@ function SearchForm({
             case 'singleDate':
                 return (
                     <FilterButtons
-                        key={uniqueId('single-date')}
+                        key={'single_date_1'}
                         label={'Sanani tanlang'}
                         element={
                             <Dates
@@ -203,7 +204,7 @@ function SearchForm({
             case 'confirmBtn':
                 return (
                     <ConfirmBtn
-                        key={uniqueId('confirm')}
+                        key={'confirm_btn_1'}
                         text={'Yakunlash'}
                         onClick={clickConfirmBtn}
                     />
