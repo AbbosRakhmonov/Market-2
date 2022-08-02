@@ -31,7 +31,7 @@ function FieldContainer({
                     placeholder={placeholder}
                     onSelect={onChange}
                     label={label}
-                    disabled={disabled}
+                    isDisabled={disabled}
                     options={options}
                     value={value}
                 />
@@ -43,6 +43,7 @@ function FieldContainer({
                     label={label}
                     placeholder={placeholder}
                     onKeyUp={onKeyUp}
+                    disabled={disabled}
                 />
             )}
         </div>

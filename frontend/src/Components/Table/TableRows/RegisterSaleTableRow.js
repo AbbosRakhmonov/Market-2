@@ -2,46 +2,45 @@ import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
 import TableInput from '../../Inputs/TableInput'
 
-export const RegisterSaleTableRow = ({
-    data,
-    currentPage,
-    countPage,
-    Delete,
-    changeHandler,
-    currency,
-}) => {
+export const RegisterSaleTableRow = (
+    {
+        data,
+        Delete,
+        changeHandler,
+        currency
+    }) => {
     return (
         <>
             {data.map((product, index) => (
-                <tr className='tr'>
+                <tr className='tr' key={'salerow-' + index + 1}>
                     <td className='text-left td'>
-                        {currentPage * countPage + 1 + index}
+                        {index + 1}
                     </td>
-                    <td className='text-right td'>{product.code}</td>
-                    <td className='text-left td'>{product.name}</td>
+                    <td className='text-right td'>{product.product.code}</td>
+                    <td className='text-left td'>{product.product.name}</td>
                     <td className='text-right td'>
                         <TableInput
-                            value={product.total}
-                            onChange={(e) => changeHandler(e, 'total')}
+                            value={product.pieces}
+                            onChange={(e) => changeHandler(product.product._id, e.target.value, 'pieces')}
                             type={'number'}
                         />
                     </td>
                     <td className='text-right td'>
                         <TableInput
-                            value={product.sellingprice}
-                            onChange={(e) => changeHandler(e, 'price')}
+                            value={currency !== 'UZS' ? product.unitprice : product.unitpriceuzs}
+                            onChange={(e) => changeHandler(product.product._id, e.target.value, 'unitprice')}
                             type={'number'}
                         />
                     </td>
                     <td className='text-right td'>
-                        {product.totalprice} {currency}
+                        {currency !== 'UZS' ? (product.totalprice).toLocaleString("ru-Ru") : (product.totalpriceuzs).toLocaleString("ru-Ru")} {currency}
                     </td>
                     <td className='td border-r-0'>
                         <div className='flex items-center justify-center'>
                             <TableBtn
                                 type={'delete'}
                                 bgcolor={'bg-error-500'}
-                                onClick={() => Delete(product)}
+                                onClick={() => Delete(index)}
                             />
                         </div>
                     </td>

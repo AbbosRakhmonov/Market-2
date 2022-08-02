@@ -5,7 +5,7 @@ export const ExitBtn = ({onClick}) => {
     return (
         <>
             <button onClick={onClick} className='exitbtn'>
-                <IoCloseSharp />
+                <IoCloseSharp size={"0.75rem"} />
             </button>
         </>
     )
