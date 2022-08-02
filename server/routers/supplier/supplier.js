@@ -1,21 +1,20 @@
 const {
   Supplier,
   validateSupplier,
-} = require('../../models/Supplier/Supplier');
-const { Market } = require('../../models/MarketAndBranch/Market');
+} = require("../../models/Supplier/Supplier");
+const { Market } = require("../../models/MarketAndBranch/Market");
 
 //Supplier register
 
 module.exports.register = async (req, res) => {
   try {
-    const { error } = validateSupplier(req.body);
+    const { name, market, currentPage, countPage, search } = req.body;
+    const { error } = validateSupplier({ market, name });
     if (error) {
       return res.status(400).json({
         error: error.message,
       });
     }
-
-    const { name, market } = req.body;
 
     const supplier = await Supplier.findOne({
       market,
@@ -24,7 +23,7 @@ module.exports.register = async (req, res) => {
 
     if (supplier) {
       return res.status(400).json({
-        message: 'Diqqat! Ushbu yetkazib beruvchi avval yaratilgan.',
+        message: "Diqqat! Ushbu yetkazib beruvchi avval yaratilgan.",
       });
     }
 
@@ -42,16 +41,26 @@ module.exports.register = async (req, res) => {
     });
     await newSupplier.save();
 
-    res.send(newSupplier);
+    const suppliername = new RegExp(".*" + search.name + ".*", "i");
+
+    const count = await Supplier.find({ market, name: suppliername }).count();
+
+    const suppliers = await Supplier.find({ market, name: suppliername })
+      .sort({ _id: -1 })
+      .select("name market")
+      .skip(currentPage * countPage)
+      .limit(countPage);
+
+    res.status(201).json({ suppliers: suppliers, count: count });
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
 //Supplier update
 module.exports.update = async (req, res) => {
   try {
-    const { name, market } = req.body;
+    const { name, market, currentPage, countPage, search } = req.body;
 
     const marke = await Market.findById(market);
 
@@ -68,7 +77,7 @@ module.exports.update = async (req, res) => {
 
     if (old) {
       return res.status(400).json({
-        message: 'Diqqat! Ushbu yetkazib beruvchi avval yaratilgan.',
+        message: "Diqqat! Ushbu yetkazib beruvchi avval yaratilgan.",
       });
     }
 
@@ -76,29 +85,49 @@ module.exports.update = async (req, res) => {
 
     if (!supplier) {
       return res.status(400).json({
-        message: 'Diqqat! Ushbu yetkazib beruvchi topilmadi.',
+        message: "Diqqat! Ushbu yetkazib beruvchi topilmadi.",
       });
     }
 
     supplier.name = name;
     await supplier.save();
 
-    res.send(supplier);
+    const suppliername = new RegExp(".*" + search.name + ".*", "i");
+
+    const count = await Supplier.find({ market, name: suppliername }).count();
+
+    const suppliers = await Supplier.find({ market, name: suppliername })
+      .sort({ _id: -1 })
+      .select("name market")
+      .skip(currentPage * countPage)
+      .limit(countPage);
+
+    res.status(201).json({ suppliers: suppliers, count: count });
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
 //Supplier update
 module.exports.delete = async (req, res) => {
   try {
-    const { _id } = req.body;
+    const { _id, market, currentPage, countPage, search } = req.body;
 
-    const supplier = await Supplier.findByIdAndDelete(_id);
+    await Supplier.findByIdAndDelete(_id);
+    const suppliername = new RegExp(".*" + search.name + ".*", "i");
 
-    res.send(supplier);
+    const count = await Supplier.find({ market, name: suppliername }).count();
+
+    const suppliers = await Supplier.find({ market, name: suppliername })
+      .sort({ _id: -1 })
+      .select("name market")
+      .skip(currentPage * countPage)
+      .limit(countPage);
+
+    res.status(201).json({ suppliers: suppliers, count: count });
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    console.log(error);
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -117,11 +146,11 @@ module.exports.getAll = async (req, res) => {
 
     const suppliers = await Supplier.find({
       market,
-    }).select('name market');
+    }).select("name market");
 
     res.send(suppliers);
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -136,19 +165,19 @@ module.exports.getSuppliers = async (req, res) => {
         .json({ message: "Diqqat! Do'kon malumotlari topilmadi." });
     }
 
-    const name = new RegExp('.*' + search.name + '.*', 'i');
+    const name = new RegExp(".*" + search.name + ".*", "i");
 
     const count = await Supplier.find({ market, name }).count();
 
     const suppliers = await Supplier.find({ market, name })
       .sort({ _id: -1 })
-      .select('name market')
+      .select("name market")
       .skip(currentPage * countPage)
       .limit(countPage);
 
     res.status(201).json({ suppliers: suppliers, count: count });
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -163,15 +192,15 @@ module.exports.getSuppliersExcel = async (req, res) => {
         .json({ message: "Diqqat! Do'kon malumotlari topilmadi." });
     }
 
-    const name = new RegExp('.*' + search.name + '.*', 'i');
+    const name = new RegExp(".*" + search.name + ".*", "i");
 
     const suppliers = await Supplier.find({ market, name })
       .sort({ _id: -1 })
-      .select('name market');
+      .select("name market");
 
     res.status(201).json(suppliers);
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -188,10 +217,10 @@ module.exports.getincoming = async (req, res) => {
 
     const suppliers = await Supplier.find({ market })
       .sort({ _id: -1 })
-      .select('name');
+      .select("name");
 
     res.status(201).json(suppliers);
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
