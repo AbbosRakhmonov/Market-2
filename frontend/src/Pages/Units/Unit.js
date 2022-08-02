@@ -21,6 +21,8 @@ import {
     updateUnit,
 } from './unitsSlice.js'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
+import Spinner from '../../Components/Spinner/SmallLoader.js'
+import NotFind from '../../Components/NotFind/NotFind.js'
 
 function Unit() {
     const dispatch = useDispatch()
@@ -30,6 +32,7 @@ function Unit() {
         successAddUnit,
         successUpdateUnit,
         successDeleteUnit,
+        loading,
     } = useSelector((state) => state.units)
     const headers = [
         {styles: 'w-[10%] text-start', filter: '', title: '№'},
@@ -180,15 +183,21 @@ function Unit() {
             </div>
 
             <div className='tableContainerPadding'>
-                <Table
-                    page='unit'
-                    data={data}
-                    headers={headers}
-                    currentPage={0}
-                    countPage={0}
-                    Delete={handleDeleteUnit}
-                    Edit={handleEditUnit}
-                />
+                {loading ? (
+                    <Spinner />
+                ) : data.length === 0 ? (
+                    <NotFind text={'Maxsulot mavjud emas'} />
+                ) : (
+                    <Table
+                        page='unit'
+                        data={data}
+                        headers={headers}
+                        currentPage={0}
+                        countPage={0}
+                        Delete={handleDeleteUnit}
+                        Edit={handleEditUnit}
+                    />
+                )}
             </div>
         </section>
     )
