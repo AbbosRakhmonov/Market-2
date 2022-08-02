@@ -1,7 +1,7 @@
 import React from 'react'
 import {IoCartOutline, IoCubeOutline, IoNewspaperOutline} from 'react-icons/io5'
 
-function FilialButtons({type, onClick}) {
+function FilialButtons({type, onClick, active}) {
     const propsType = {
         product: {
             icon: <IoNewspaperOutline className='shopIcons' />,
@@ -18,12 +18,12 @@ function FilialButtons({type, onClick}) {
     }
 
     return (
-        <button
-            onClick={onClick}
-            className={`shopButton ${propsType[type].bgColor}`}
+    <button
+        onClick={onClick}
+        className={`${active ? "filial-active" : propsType[type].bgColor} shopButton`}
         >
-            {propsType[type].icon}
-        </button>
+        {propsType[type].icon}
+    </button>
     )
 }
 

@@ -2,7 +2,7 @@ import React from 'react'
 import ExportBtn from '../../Components/Buttons/ExportBtn'
 import Pagination from '../../Components/Pagination/Pagination'
 import Table from '../../Components/Table/Table'
-
+import {motion } from "framer-motion"
 const ProductReport = () => {
     const onChange = () => {}
 
@@ -74,7 +74,17 @@ const ProductReport = () => {
     ]
 
     return (
-        <section>
+        <motion.section
+            key="content"
+            initial="collapsed"
+            animate="open"
+            exit="collapsed"
+            variants={{
+            open: { opacity: 1, height: "auto" },
+            collapsed: { opacity: 0, height: 0 }
+            }}
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
+        >
             <div className='pagination mainPadding'>
                 <ExportBtn data={[]} headers={[]} />
                 <p className='product_name'>Maxsulot hisoboti</p>
@@ -98,7 +108,7 @@ const ProductReport = () => {
                     placeholder={'misol : 10'}
                 />
             </div>
-        </section>
+        </motion.section>
     )
 }
 

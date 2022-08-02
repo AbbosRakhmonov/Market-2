@@ -2,6 +2,7 @@ import React from 'react'
 import FieldContainer from '../../Components/FieldContainer/FieldContainer'
 import Button from '../../Components/Buttons/BtnAddRemove'
 import Table from '../../Components/Table/Table'
+import {motion } from "framer-motion"
 
 const Exchangerate = () => {
     const data = [
@@ -29,7 +30,17 @@ const Exchangerate = () => {
     ]
 
     return (
-        <section>
+        <motion.section
+            key="content"
+            initial="collapsed"
+            animate="open"
+            exit="collapsed"
+            variants={{
+            open: { opacity: 1, height: "auto" },
+            collapsed: { opacity: 0, height: 0 }
+            }}
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
+        >
             <form
                 className={
                     'flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200'
@@ -70,7 +81,7 @@ const Exchangerate = () => {
                     Delete={() => {}}
                 />
             </div>
-        </section>
+        </motion.section>
     )
 }
 
