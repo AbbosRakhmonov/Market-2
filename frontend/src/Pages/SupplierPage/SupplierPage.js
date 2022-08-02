@@ -257,7 +257,7 @@ const Supplier = () => {
                             }
                             onClick={stickyForm ? handleEdit : addNewSupplier}
                         />
-                        <Button onClick={() => {}} text={'Tozalash'} />
+                        <Button onClick={clearForm} text={'Tozalash'} />
                     </div>
                 </div>
             </form>
