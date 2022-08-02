@@ -1,10 +1,10 @@
 const {
   Category,
   validateCategory,
-} = require('../../models/Products/Category');
-const { Market } = require('../../models/MarketAndBranch/Market');
-const { Product } = require('../../models/Products/Product');
-const { ProductType } = require('../../models/Products/ProductType');
+} = require("../../models/Products/Category");
+const { Market } = require("../../models/MarketAndBranch/Market");
+const { Product } = require("../../models/Products/Product");
+const { ProductType } = require("../../models/Products/ProductType");
 
 //Category register
 module.exports.registerAll = async (req, res) => {
@@ -51,7 +51,7 @@ module.exports.registerAll = async (req, res) => {
 
     res.send(all);
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -73,7 +73,7 @@ module.exports.register = async (req, res) => {
     });
     if (category) {
       return res.status(400).json({
-        message: 'Diqqat! Ushbu kategoriya avval yaratilgan.',
+        message: "Diqqat! Ushbu kategoriya avval yaratilgan.",
       });
     }
 
@@ -94,7 +94,7 @@ module.exports.register = async (req, res) => {
 
     res.send(newCategory);
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -119,7 +119,7 @@ module.exports.update = async (req, res) => {
 
     if (old) {
       return res.status(400).json({
-        message: 'Diqqat! Ushbu kategoriya avval yaratilgan.',
+        message: "Diqqat! Ushbu kategoriya avval yaratilgan.",
       });
     }
 
@@ -127,7 +127,7 @@ module.exports.update = async (req, res) => {
 
     if (!category) {
       return res.status(400).json({
-        message: 'Diqqat! Ushbu kategoriya topilmadi.',
+        message: "Diqqat! Ushbu kategoriya topilmadi.",
       });
     }
 
@@ -137,7 +137,7 @@ module.exports.update = async (req, res) => {
 
     res.send(category);
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -154,11 +154,11 @@ module.exports.getAll = async (req, res) => {
     }
 
     const categories = await Category.find({ market }).select(
-      'code market name'
+      "code market name products"
     );
     res.status(201).json(categories);
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -174,7 +174,7 @@ module.exports.getCategories = async (req, res) => {
         message: "Diqqat! Do'kon ma'lumotlari topilmadi.",
       });
     }
-    const code = new RegExp('.*' + (search ? search.code : '') + '.*', 'i');
+    const code = new RegExp(".*" + (search ? search.code : "") + ".*", "i");
 
     const categoryCount = await Category.find({
       market,
@@ -186,13 +186,13 @@ module.exports.getCategories = async (req, res) => {
       code: code,
     })
       .sort({ code: 1 })
-      .select('code market name')
+      .select("code market name")
       .skip(currentPage * countPage)
       .limit(countPage);
 
     res.status(201).json({ categories: categorys, count: categoryCount });
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -212,11 +212,11 @@ module.exports.getCategoriesExcel = async (req, res) => {
       market,
     })
       .sort({ _id: -1 })
-      .select('name code market');
+      .select("name code market");
 
     res.status(201).json(categorys);
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -245,6 +245,6 @@ module.exports.delete = async (req, res) => {
 
     res.send(category);
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
