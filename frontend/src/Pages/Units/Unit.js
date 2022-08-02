@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react'
-import SearchInput from '../../Components/Inputs/SearchInput.js'
 import Button from '../../Components/Buttons/BtnAddRemove.js'
 import Table from '../../Components/Table/Table.js'
 import FieldContainer from '../../Components/FieldContainer/FieldContainer.js'
@@ -174,12 +173,7 @@ function Unit() {
             </form>
 
             <div className='mainPadding text-[1.25rem] text-blue-900'>
-                {' '}
                 O'lchov birliklari
-            </div>
-
-            <div className='mainPadding'>
-                <SearchInput placeholder={`qidirish...`} />
             </div>
 
             <div className='tableContainerPadding'>

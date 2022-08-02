@@ -83,7 +83,7 @@ const unitsSlice = createSlice({
         },
         [getUnits.rejected]: (state, {payload}) => {
             state.loading = false
-            state.error = payload
+            state.errorUnits = payload
         },
         [addUnit.pending]: (state) => {
             state.loading = true
