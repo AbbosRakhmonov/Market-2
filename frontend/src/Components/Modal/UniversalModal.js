@@ -13,6 +13,8 @@ function UniversalModal({
     headers,
     setCreatedData,
     createdData,
+    headerText,
+    title,
 }) {
     const customStyles = {
         content: {
@@ -27,6 +29,8 @@ function UniversalModal({
             case 'approve':
                 return (
                     <Approve
+                        headerText={headerText}
+                        title={title}
                         approveFunction={approveFunction}
                         toggleModal={toggleModal}
                     />
