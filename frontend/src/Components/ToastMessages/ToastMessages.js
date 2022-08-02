@@ -23,6 +23,13 @@ export const successUpdateProductMessage = () =>
 export const successDeleteProductMessage = () =>
     toast.success("Maxsulot muvaffaqiyatli o'chirildi!")
 
+export const successAddUnitMessage = () =>
+    toast.success("O'lchov birligi muvaffaqiyatli yaratildi !")
+export const successUpdateUnitMessage = () =>
+    toast.success("O'lchov birligi muvaffaqiyatli o'zgartirildi !")
+export const successDeleteUnitMessage = () =>
+    toast.success("O'lchov birligi muvaffaqiyatli o'chirildi !")
+
 // Warning Messages
 export const warningEmptyInput = () =>
     toast.warn("Ma'lumotlar to'liq kiritilmagan !")

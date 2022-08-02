@@ -697,6 +697,14 @@ function Products() {
             <UniversalModal
                 toggleModal={toggleModal}
                 body={modalBody}
+                headerText={
+                    modalBody === 'approve' &&
+                    "Mahsulotni o'chirishni tasdiqlaysizmi?"
+                }
+                title={
+                    modalBody === 'approve' &&
+                    "O'chirilgan mahsulotni tiklashning imkoni mavjud emas!"
+                }
                 approveFunction={
                     modalBody === 'approve'
                         ? handleClickApproveToDelete

@@ -1,7 +1,7 @@
-const { Unit, validateUnit } = require('../../models/Products/Unit');
-const { Market } = require('../../models/MarketAndBranch/Market');
-const { Product } = require('../../models/Products/Product');
-const { ProductType } = require('../../models/Products/ProductType');
+const { Unit, validateUnit } = require("../../models/Products/Unit");
+const { Market } = require("../../models/MarketAndBranch/Market");
+const { Product } = require("../../models/Products/Product");
+const { ProductType } = require("../../models/Products/ProductType");
 
 //Unit register
 // module.exports.registerAll = async (req, res) => {
@@ -62,7 +62,6 @@ module.exports.register = async (req, res) => {
         error: error.message,
       });
     }
-
     const { name, market } = req.body;
 
     const unit = await Unit.findOne({
@@ -89,10 +88,9 @@ module.exports.register = async (req, res) => {
       market,
     });
     await newUnit.save();
-
     res.send(newUnit);
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -108,7 +106,6 @@ module.exports.update = async (req, res) => {
         message: "Diqqat! Do'kon ma'lumotlari topilmadi.",
       });
     }
-
     const old = await Unit.findOne({
       market,
       name,
@@ -131,9 +128,11 @@ module.exports.update = async (req, res) => {
     unit.name = name;
     await unit.save();
 
-    res.send(unit);
+    const units = await Unit.find({ market }).select("name").sort({ _id: -1 });
+
+    res.status(201).send(units);
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -141,12 +140,13 @@ module.exports.update = async (req, res) => {
 module.exports.delete = async (req, res) => {
   try {
     const { _id } = req.body;
-
-    const unit = await Unit.findByIdAndDelete(_id);
-
-    res.send(unit);
+    await Unit.findByIdAndDelete(_id);
+    const units = await Unit.find({ market: req.body.market })
+      .select("name")
+      .sort({ _id: -1 });
+    res.status(200).send(units);
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -165,11 +165,11 @@ module.exports.getAll = async (req, res) => {
     const units = await Unit.find({
       market,
     })
-      .select('name market')
+      .select("name market")
       .sort({ _id: -1 });
 
     res.send(units);
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
