@@ -2,7 +2,7 @@ import React from 'react'
 import Select from 'react-select'
 import CustomStyle, {DropdownIcon} from './CustomStyle'
 
-const SelectForm = ({onSelect}) => {
+const SelectForm = ({onSelect, isDisabled}) => {
     const options = [
         {value: 10, label: 10},
         {value: 20, label: 20},
@@ -25,6 +25,7 @@ const SelectForm = ({onSelect}) => {
                 isSearchable={false}
                 defaultValue={options[0]}
                 options={options}
+                isDisabled={isDisabled}
                 id={'select'}
                 components={{
                     IndicatorSeparator: () => null,

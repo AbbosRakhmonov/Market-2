@@ -2,7 +2,7 @@ import React from 'react'
 import {components} from 'react-select'
 import {IoCaretDown} from 'react-icons/io5'
 
-export const DropdownIcon = (props) => {
+export const DropdownIcon = (props, {isDisabled}) => {
     return (
         <components.DropdownIndicator {...props}>
             <IoCaretDown size={'0.625rem'} />
@@ -14,11 +14,16 @@ const Container = (styles) => ({
     height: '100%',
     marginLeft: '0.75rem',
 })
-const DropdownIndicator = (styles, {isFocused}) => ({
+const DropdownIndicator = (styles, {isFocused, isDisabled}) => ({
     ...styles,
     padding: 0,
-    color: isFocused ? '#193F8A' : '#071F45',
+    color: isFocused
+        ? '#193F8A'
+        : '#071F45' || isDisabled
+        ? 'rgba(28, 28, 28, 0.2)'
+        : '#071F45',
 })
+
 const IndicatorsContainer = (styles) => ({
     ...styles,
     marginLeft: '5px',
@@ -37,12 +42,13 @@ const Option = (styles, {isFocused, isSelected}) => ({
     overflow: 'hidden',
     cursor: 'pointer',
 })
-const SingleValue = (styles) => ({
+const SingleValue = (styles, {isDisabled}) => ({
     ...styles,
     fontSize: '.875rem',
     fontWeight: '400',
     color: '#071F45',
     margin: 0,
+    color: isDisabled ? 'rgba(28, 28, 28, 0.2)' : '#071F45',
 })
 const ValueContainer = (styles) => ({
     ...styles,
@@ -51,7 +57,7 @@ const ValueContainer = (styles) => ({
     alignItems: 'center',
     justifyContent: 'center',
 })
-const Control = (styles) => ({
+const Control = (styles, {isDisabled}) => ({
     ...styles,
     borderRadius: '.5rem',
     fontSize: '.875rem',
@@ -66,6 +72,7 @@ const Control = (styles) => ({
     '&:hover': {
         backgroundColor: '#EAEAEA',
     },
+    backgroundColor: isDisabled ? 'rgba(28, 28, 28, 0.2)' : '',
 })
 
 const CustomStyle = {

@@ -1,7 +1,16 @@
 import {useState} from 'react'
 import {IoEye, IoEyeOff} from 'react-icons/io5'
 
-function Input({placeholder, type, value, onChange, password, label, onKeyUp}) {
+function Input({
+    placeholder,
+    type,
+    value,
+    onChange,
+    password,
+    label,
+    onKeyUp,
+    disabled,
+}) {
     const [currentShow, setCurrentShow] = useState(false)
     const changeType = () => {
         setCurrentShow(!currentShow)
@@ -16,12 +25,15 @@ function Input({placeholder, type, value, onChange, password, label, onKeyUp}) {
             )}
             <div className='relative'>
                 <input
-                    className='inputClass shadow-[0_10px_10px_rgba(0,0,0,0.05)] leading-[1.125rem]'
                     placeholder={placeholder}
                     type={currentShow ? 'text' : type}
                     value={value}
                     onChange={onChange}
                     onKeyUp={onKeyUp}
+                    disabled={disabled}
+                    className={`${
+                        disabled ? 'disabled-class' : ''
+                    } inputClass shadow-[0_10px_10px_rgba(0,0,0,0.05)] leading-[1.125rem]`}
                 />
                 {password && (
                     <button

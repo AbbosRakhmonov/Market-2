@@ -87,7 +87,13 @@
     }
 
     .inputClass {
-        @apply w-full py-[0.625rem] px-[0.58rem]  rounded-[0.25rem] border-[1px] border-blue-200 text-sm placeholder-blue-200 outline-transparent outline outline-0 focus:outline-blue-100 bg-white-900 hover:bg-inputHover focus:outline-4 focus:bg-white-900 transition-all ease-in-out duration-100;
+        @apply w-full py-[0.625rem] px-[0.58rem]  rounded-[0.25rem] border-[1px] border-blue-200 text-sm placeholder-blue-200 outline-transparent outline outline-0 focus:outline-blue-100 hover:bg-inputHover focus:outline-4 focus:bg-white-900 transition-all ease-in-out duration-100 ;
+    }
+    .search-input {
+        @apply  leading-[1.125rem] placeholder-blue-200 transition-all ease-in-out duration-100 px-[8px] py-[0.625rem] w-full bg-transparent outline-none
+    }
+    .disabled-class {
+        @apply rounded-[0.25rem] border-[0px] border-0 text-black-200 placeholder-black-200 outline-transparent outline outline-0 focus-within:outline-0 bg-black-200 hover:bg-black-200 focus-within:outline-0 focus-within:bg-black-200 focus-within:hover:bg-black-200 transition-all ease-in-out duration-100 shadow-[0_10px_10px_rgba(0,0,0,0.05)] flex items-center;
     }
 
     .selectInput {
@@ -99,7 +105,7 @@
     }
 
     .searchInput-container {
-        @apply relative px-[0.625rem] rounded-[0.25rem] border-[1px] border-blue-200 text-sm placeholder-blue-200 outline-transparent outline outline-0 focus-within:outline-blue-100 bg-white-900 hover:bg-inputHover focus-within:outline-4 focus-within:bg-white-900 focus-within:hover:bg-white-900 transition-all ease-in-out duration-100;
+        @apply relative px-[0.625rem] rounded-[0.25rem] border-[1px] border-blue-200 text-sm placeholder-blue-200 outline-transparent outline outline-0 focus-within:outline-blue-100 bg-white-900 hover:bg-inputHover focus-within:outline-4 focus-within:bg-white-900 focus-within:hover:bg-white-900 transition-all ease-in-out duration-100 shadow-[0_10px_10px_rgba(0,0,0,0.05)] flex items-center;
     }
 
     .labelClass {
@@ -116,7 +122,7 @@
 
     /* this is checkout style */
     .cardContainer {
-        @apply pl-[1.875rem] pr-[1.875rem] pt-[2.3rem] pb-[2.3rem] w-[20.5rem] inline-block rounded-[.5rem] shadow-[0px_15px_15px_rgba(0,0,0,0.05)] transition ease-in-out;
+        @apply pl-[1.875rem] pr-[1.875rem] pt-[2.3rem] pb-[2.3rem] w-full inline-block rounded-[.5rem] shadow-[0px_15px_15px_rgba(0,0,0,0.05)] transition ease-in-out;
     }
 
     .tradeCard {
@@ -489,7 +495,7 @@
     /* This is Checkout Pages styled start */
   
     .checkout-card {
-        @apply flex flex-col items-start gap-[1.5rem] grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2;
+        @apply flex justify-center items-center text-center gap-[1.6rem] w-full grid sm:grid-cols-1 xl:grid-cols-3 md:grid-cols-2
     }
    
     /* This is Checkout Pages styled end */
