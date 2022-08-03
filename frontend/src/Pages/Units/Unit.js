@@ -180,7 +180,7 @@ function Unit() {
                 {loading ? (
                     <Spinner />
                 ) : data.length === 0 ? (
-                    <NotFind text={'Maxsulot mavjud emas'} />
+                    <NotFind text={"O'lchov birliklari mavjud emas"} />
                 ) : (
                     <Table
                         page='unit'

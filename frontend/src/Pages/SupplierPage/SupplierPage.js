@@ -286,7 +286,7 @@ const Supplier = () => {
                 {loading ? (
                     <Spinner />
                 ) : data.length === 0 ? (
-                    <NotFind text={'Maxsulot mavjud emas'} />
+                    <NotFind text={'Yetkazib beruvchilar mavjud emas'} />
                 ) : (
                     <Table
                         data={searchedData.length > 0 ? searchedData : data}
