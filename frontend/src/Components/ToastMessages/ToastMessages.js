@@ -37,6 +37,13 @@ export const successUpdateSupplierMessage = () =>
 export const successDeleteSupplierMessage = () =>
     toast.success("Yertkazib beruvchi muvaffaqiyatli o'chirildi !")
 
+export const successAddPackmanMessage = () =>
+    toast.success('Agent muvaffaqiyatli yaratildi !')
+export const successUpdatePackmanMessage = () =>
+    toast.success("Agent muvaffaqiyatli o'zgartirildi !")
+export const successDeletePackmanMessage = () =>
+    toast.success("Agent muvaffaqiyatli o'chirildi !")
+
 // Warning Messages
 export const warningEmptyInput = () =>
     toast.warn("Ma'lumotlar to'liq kiritilmagan !")

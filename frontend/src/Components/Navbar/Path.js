@@ -107,9 +107,9 @@ const navList = [
             },
             {
                 id: 2,
-                label: 'Santexniklar',
+                label: 'Agentlar',
                 icon: '',
-                path: 'sotuv/santexniklar',
+                path: 'sotuv/agentlar',
                 submenu: false,
             },
             {

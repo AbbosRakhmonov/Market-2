@@ -3,8 +3,8 @@ const { Market } = require('../../models/MarketAndBranch/Market');
 
 module.exports.register = async (req, res) => {
   try {
-    const { name, market } = req.body;
-    const { error } = validatePackman(req.body);
+    const { name, market, currentPage, countPage, search } = req.body;
+    const { error } = validatePackman({name, market});
     if (error) {
       return res.status(400).json({
         error: error.message,
@@ -34,7 +34,16 @@ module.exports.register = async (req, res) => {
     });
 
     await newPackman.save();
-    res.status(201).send(newPackman);
+    const namepackman = new RegExp('.*' + search ? search.name : '' + '.*', 'i');
+
+    const packmansCount = await Packman.find({ market, name: namepackman }).count();
+
+    const packmans = await Packman.find({ market, name: namepackman })
+      .sort({ _id: -1 })
+      .select('name market')
+      .skip(currentPage * countPage)
+      .limit(countPage);
+    res.status(201).json({ packmans: packmans, count: packmansCount });
   } catch (error) {
     res.status(400).json({ error: 'Serverda xatolik yuz berdi...' });
   }

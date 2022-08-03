@@ -6,6 +6,7 @@ import UnitsReducer from '../Pages/Units/unitsSlice'
 import SuppliersReducer from '../Pages/SupplierPage/suppliersSlice.js'
 import CategoryReducer from '../Pages/CategoryPage/categorySlice'
 import incomingReducer from '../Pages/Incomings/incomingSlice'
+import packmanReducer from '../Pages/Packman/packmanSlice'
 
 export default configureStore({
     devTools: process.env.NODE_ENV === 'development',
@@ -17,5 +18,6 @@ export default configureStore({
         suppliers: SuppliersReducer,
         category: CategoryReducer,
         incoming: incomingReducer,
+        packmans: packmanReducer,
     },
 })
