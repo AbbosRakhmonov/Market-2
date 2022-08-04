@@ -19,7 +19,7 @@ import Sale from './Sale/Sale.js'
 import RegisterSelling from './Sale/Routes/RegisterSelling.js'
 import SavedSellings from './Sale/Routes/SavedSellings.js'
 import Sellings from './Sale/Routes/Sellings.js'
-import SaleDelivers from './SalesPage/SaleDelivers'
+import Packman from './Packman/Packman'
 import ClientsPage from './Clients/Clients'
 import Exchangerate from './Exchangerate/Exchangerate.js'
 import {universalToast, warningCurrencyRate} from '../Components/ToastMessages/ToastMessages.js'
@@ -115,8 +115,8 @@ const PageRoutes = () => {
                         </Route>
 
                         <Route
-                            path='/sotuv/santexniklar'
-                            element={<SaleDelivers />}
+                            path='/sotuv/agentlar'
+                            element={<Packman />}
                         />
 
                         <Route
