@@ -508,8 +508,7 @@ function Products() {
                         searchedData.length > 0 ? setSearchedData : setData,
                         filterKey,
                         1,
-                        searchedData ? searchedProducts : products,
-                        searchedData.length > 0
+                        searchedData.length > 0 ? searchedProducts : products
                     )
                     break
                 case 2:
@@ -523,8 +522,7 @@ function Products() {
                         searchedData.length > 0 ? setSearchedData : setData,
                         filterKey,
                         '',
-                        searchedData ? searchedProducts : products,
-                        searchedData.length > 0
+                        searchedData.length > 0 ? searchedProducts : products
                     )
                     break
                 default:
@@ -538,8 +536,7 @@ function Products() {
                         searchedData.length > 0 ? setSearchedData : setData,
                         filterKey,
                         -1,
-                        searchedData ? searchedProducts : products,
-                        searchedData.length > 0
+                        searchedData.length > 0 ? searchedProducts : products
                     )
             }
         } else {

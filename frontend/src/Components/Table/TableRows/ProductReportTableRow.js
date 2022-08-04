@@ -67,13 +67,23 @@ export const ProductReportTableRow = ({
                         </span>
                     </td>
                     <td className='td text-right'>
-                        {product.price.incomingprice.toLocaleString('ru-RU')}{' '}
+                        {currency === 'UZS'
+                            ? product.price.incomingpriceuzs.toLocaleString(
+                                  'ru-RU'
+                              )
+                            : product.price.incomingprice.toLocaleString(
+                                  'ru-RU'
+                              )}{' '}
                         {currency}
                     </td>
                     <td className='td text-right'>
-                        {(
-                            product.price.incomingprice * product.total
-                        ).toLocaleString('ru-RU')}{' '}
+                        {currency === 'UZS'
+                            ? (
+                                  product.price.incomingpriceuzs * product.total
+                              ).toLocaleString('ru-RU')
+                            : (
+                                  product.price.incomingprice * product.total
+                              ).toLocaleString('ru-RU')}{' '}
                         {currency}
                     </td>
                     <td
@@ -88,18 +98,28 @@ export const ProductReportTableRow = ({
                             )
                         }
                     >
-                        {product.price.sellingprice.toLocaleString('ru-RU')}{' '}
+                        {currency === 'UZS'
+                            ? product.price.sellingpriceuzs.toLocaleString(
+                                  'ru-RU'
+                              )
+                            : product.price.sellingprice.toLocaleString(
+                                  'ru-RU'
+                              )}{' '}
                         {currency}
                     </td>
                     <td className='td text-right'>
-                        {(
-                            product.price.sellingprice * product.total
-                        ).toLocaleString('ru-RU')}{' '}
+                        {currency === 'UZS'
+                            ? (
+                                  product.price.sellingpriceuzs * product.total
+                              ).toLocaleString('ru-RU')
+                            : (
+                                  product.price.sellingprice * product.total
+                              ).toLocaleString('ru-RU')}{' '}
                         {currency}
                     </td>
                     <td className='py-[0.25rem] td'>
                         <TableInput
-                            onChange={() => changeHandler(product)}
+                            onChange={(e) => changeHandler(e, product)}
                             type={'number'}
                             value={inputValue}
                         />

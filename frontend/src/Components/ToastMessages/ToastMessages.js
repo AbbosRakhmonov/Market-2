@@ -30,6 +30,13 @@ export const successUpdateUnitMessage = () =>
 export const successDeleteUnitMessage = () =>
     toast.success("O'lchov birligi muvaffaqiyatli o'chirildi !")
 
+export const successAddSupplierMessage = () =>
+    toast.success('Yertkazib beruvchi muvaffaqiyatli yaratildi !')
+export const successUpdateSupplierMessage = () =>
+    toast.success("Yertkazib beruvchi muvaffaqiyatli o'zgartirildi !")
+export const successDeleteSupplierMessage = () =>
+    toast.success("Yertkazib beruvchi muvaffaqiyatli o'chirildi !")
+
 // Warning Messages
 export const warningEmptyInput = () =>
     toast.warn("Ma'lumotlar to'liq kiritilmagan !")
