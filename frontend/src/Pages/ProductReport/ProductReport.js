@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react'
 import ExportBtn from '../../Components/Buttons/ExportBtn'
 import Pagination from '../../Components/Pagination/Pagination'
 import Table from '../../Components/Table/Table'
-import {motion } from "framer-motion"
+import {motion} from 'framer-motion'
 import SearchForm from '../../Components/SearchForm/SearchForm.js'
 import {useDispatch, useSelector} from 'react-redux'
 import Spinner from '../../Components/Spinner/SmallLoader.js'
@@ -213,8 +213,9 @@ const ProductReport = () => {
 
     const filterByCodeAndNameAndCategoryWhenPressEnter = (e) => {
         if (e.key === 'Enter') {
+            setCurrentPage(0)
             const body = {
-                currentPage,
+                currentPage: 0,
                 countPage: showByTotal,
                 search: {
                     name: searchByName.replace(/\s+/g, ' ').trim(),
@@ -237,7 +238,6 @@ const ProductReport = () => {
         }
         dispatch(getProducts(body))
     }, [currentPage, showByTotal, dispatch])
-
     useEffect(() => {
         setData(products)
     }, [products])
@@ -246,17 +246,21 @@ const ProductReport = () => {
         setFilteredDataTotal(total)
     }, [total])
 
+    useEffect(() => {
+        setSearchedData(searchedProducts)
+    }, [searchedProducts])
+
     return (
         <motion.section
-            key="content"
-            initial="collapsed"
-            animate="open"
-            exit="collapsed"
+            key='content'
+            initial='collapsed'
+            animate='open'
+            exit='collapsed'
             variants={{
-            open: { opacity: 1, height: "auto" },
-            collapsed: { opacity: 0, height: 0 }
+                open: {opacity: 1, height: 'auto'},
+                collapsed: {opacity: 0, height: 0},
             }}
-            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
+            transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
         >
             <div className='pagination mainPadding'>
                 <ExportBtn data={[]} headers={[]} />

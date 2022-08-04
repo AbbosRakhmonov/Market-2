@@ -5,7 +5,7 @@ import {IoCaretDown} from 'react-icons/io5'
 export const DropdownIcon = (props, {isDisabled}) => {
     return (
         <components.DropdownIndicator {...props}>
-            <IoCaretDown size={'0.625rem'} />
+            <IoCaretDown size={'0.625rem'} color='86A7E9' />
         </components.DropdownIndicator>
     )
 }
@@ -46,7 +46,6 @@ const SingleValue = (styles, {isDisabled}) => ({
     ...styles,
     fontSize: '.875rem',
     fontWeight: '400',
-    color: '#071F45',
     margin: 0,
     color: isDisabled ? 'rgba(28, 28, 28, 0.2)' : '#071F45',
 })
@@ -72,7 +71,7 @@ const Control = (styles, {isDisabled}) => ({
     '&:hover': {
         backgroundColor: '#EAEAEA',
     },
-    backgroundColor: isDisabled ? 'rgba(28, 28, 28, 0.2)' : '',
+    backgroundColor: isDisabled ? 'rgba(28, 28, 28, 0.2)' : '#fff',
 })
 
 const CustomStyle = {
