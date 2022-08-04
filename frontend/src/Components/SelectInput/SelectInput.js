@@ -5,7 +5,7 @@ import CustomStyle, {DropdownIcon} from './CustomStyle'
 const SelectInput = ({
     onSelect,
     options,
-    disabled,
+    isDisabled,
     label,
     placeholder,
     value,
@@ -25,7 +25,7 @@ const SelectInput = ({
                 value={value}
                 defaultValue={''}
                 options={options}
-                isDisabled={disabled}
+                isDisabled={isDisabled}
                 placeholder={placeholder}
                 components={{
                     IndicatorSeparator: () => null,
