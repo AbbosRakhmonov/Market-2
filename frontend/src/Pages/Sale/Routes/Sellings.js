@@ -2,6 +2,7 @@ import React from 'react'
 import ExportBtn from '../../../Components/Buttons/ExportBtn.js'
 import Pagination from '../../../Components/Pagination/Pagination.js'
 import Table from '../../../Components/Table/Table.js'
+import {motion } from "framer-motion"
 
 const Sellings = () => {
     const headers = [
@@ -48,7 +49,17 @@ const Sellings = () => {
         },
     ]
     return (
-        <div>
+        <motion.section
+            key="content"
+            initial="collapsed"
+            animate="open"
+            exit="collapsed"
+            variants={{
+            open: { opacity: 1, height: "auto" },
+            collapsed: { opacity: 0, height: 0 }
+            }}
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
+        >
             <div className='pagination mainPadding'>
                 <ExportBtn
                     data={[]}
@@ -72,7 +83,7 @@ const Sellings = () => {
                     headers={headers}
                 />
             </div>
-        </div>
+        </motion.section>
     )
 }
 

@@ -23,6 +23,7 @@ import SaleDelivers from './SalesPage/SaleDelivers'
 import ClientsPage from './Clients/Clients'
 import Exchangerate from './Exchangerate/Exchangerate.js'
 import {universalToast, warningCurrencyRate} from '../Components/ToastMessages/ToastMessages.js'
+import Shops from './ShopsPage/Shops'
 import Checkout from './Checkout/Checkout'
 
 //pages
@@ -125,6 +126,14 @@ const PageRoutes = () => {
 
                         <Route path='/valyuta' element={<Exchangerate />} />
                         <Route path='/kassa' element={<Checkout />} />
+                        <Route
+                            path='/kassa'
+                            element={<Checkout />}
+                        />
+
+                        <Route path='/dukonlar/' element={<Shops />}> 
+                           <Route path=':tablename/:_id' element={<Shops/>}/>                          
+                        </Route>
                     </Routes>
                 </Suspense>
             </div>
