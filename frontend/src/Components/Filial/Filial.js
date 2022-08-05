@@ -1,12 +1,12 @@
 import React, {useState} from 'react'
 import FilialButtons from '../FilialButtons/FilialButtons'
 import Avatar from '../Avatar/Avatar.js'
-import {Link, Route, Routes, useLocation} from 'react-router-dom'
+import {Link, Route, Routes, useLocation, useParams} from 'react-router-dom'
 import ProductReport from '../../Pages/ProductReport/ProductReport'
-import {useParams} from 'react-router-dom'
 import Exchangerate from '../../Pages/Exchangerate/Exchangerate'
-import { AnimatePresence, motion } from "framer-motion"
+import {AnimatePresence} from 'framer-motion'
 import Sellings from '../../Pages/Sale/Routes/Sellings'
+
 const Filial = ({
     typecount,
     productcount,
@@ -16,15 +16,13 @@ const Filial = ({
     currency,
     director,
     id,
-   }) => {
+}) => {
     const {tablename, _id} = useParams()
     const location = useLocation()
-   
+
     const [reportOpen, setReprotOpen] = useState(true)
     const [salesOpen, setSalesOpen] = useState(true)
     const [paymentOpen, setPaymentOpen] = useState(true)
-    
-    
 
     return (
         <section>
@@ -61,58 +59,69 @@ const Filial = ({
                         <p>{shopname}</p>
                     </div>
                     <div className={'filial-btn'}>
-                            <Link to={`${reportOpen ? `/dukonlar/report/${id}` : "/dukonlar"}`} onClick={() => setReprotOpen(!reportOpen)}>
-                                <FilialButtons
-                                    type={'product'}
-                                    active={_id === id && tablename === 'report'}
-                                />
-                            </Link>
-   
-                        
                         <Link
-                            to={`${salesOpen ? `/dukonlar/sales/${id}` : "/dukonlar"} `}
+                            to={`${
+                                reportOpen
+                                    ? `/dukonlar/report/${id}`
+                                    : '/dukonlar'
+                            }`}
+                            onClick={() => setReprotOpen(!reportOpen)}
+                        >
+                            <FilialButtons
+                                type={'product'}
+                                active={_id === id && tablename === 'report'}
+                            />
+                        </Link>
+
+                        <Link
+                            to={`${
+                                salesOpen
+                                    ? `/dukonlar/sales/${id}`
+                                    : '/dukonlar'
+                            } `}
                             onClick={() => setSalesOpen(!salesOpen)}
                         >
-                            <FilialButtons 
-                                type={'selling'} 
+                            <FilialButtons
+                                type={'selling'}
                                 active={_id === id && tablename === 'sales'}
                             />
                         </Link>
                         <Link
-                            to={`${paymentOpen ? `/dukonlar/payment/${id}`: "/dukonlar"}`}
+                            to={`${
+                                paymentOpen
+                                    ? `/dukonlar/payment/${id}`
+                                    : '/dukonlar'
+                            }`}
                             onClick={() => setPaymentOpen(!paymentOpen)}
                         >
-                            <FilialButtons 
-                               type={'payments'} 
-                               active={_id === id && tablename === 'payment'}
+                            <FilialButtons
+                                type={'payments'}
+                                active={_id === id && tablename === 'payment'}
                             />
                         </Link>
                     </div>
                 </div>
             </div>
-          <AnimatePresence>
-                 <Routes location={location} key={location.pathname}>
-                <Route
-                    path={`/:tablename/:_id`}
-                    element={
-                        _id === id ? (
-                            tablename === 'report' ? (
-                                <ProductReport id={_id}/>
-                            ) : tablename === 'sales' ? (
-                                <Sellings id={_id}/>
+            <AnimatePresence>
+                <Routes location={location} key={location.pathname}>
+                    <Route
+                        path={`/:tablename/:_id`}
+                        element={
+                            _id === id ? (
+                                tablename === 'report' ? (
+                                    <ProductReport id={_id} />
+                                ) : tablename === 'sales' ? (
+                                    <Sellings id={_id} />
+                                ) : (
+                                    <Exchangerate id={_id} />
+                                )
                             ) : (
-                                <Exchangerate id={_id}/>
+                                ''
                             )
-                        ) : (
-                           ""
-                        )
-                    }
-                />
-                 </Routes>
-          </AnimatePresence>
-                 
-       
-           
+                        }
+                    />
+                </Routes>
+            </AnimatePresence>
         </section>
     )
 }

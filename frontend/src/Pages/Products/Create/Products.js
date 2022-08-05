@@ -265,8 +265,9 @@ function Products() {
     }
     const filterByCodeAndNameAndCategoryWhenPressEnter = (e) => {
         if (e.key === 'Enter') {
+            setCurrentPage(0)
             const body = {
-                currentPage,
+                currentPage: 0,
                 countPage: showByTotal,
                 search: {
                     name: searchByName.replace(/\s+/g, ' ').trim(),
@@ -595,7 +596,6 @@ function Products() {
             universalToast(currencyError, 'error')
             dispatch(clearError())
         }
-        console.clear()
     }, [
         errorUnits,
         errorProducts,
@@ -619,9 +619,13 @@ function Products() {
             },
         }
         dispatch(getProducts(body))
+    }, [currentPage, showByTotal, dispatch])
+
+    useEffect(() => {
         dispatch(getUnits())
         dispatch(getCategories())
-    }, [currentPage, showByTotal, dispatch])
+    }, [dispatch])
+
     useEffect(() => {
         setData(products)
     }, [products])

@@ -39,6 +39,8 @@ function Table({
     sortItem,
     AddPayment,
     ReturnPayment,
+    Save,
+    onKeyUp,
 }) {
     const checkRows = () => {
         switch (page) {
@@ -117,7 +119,8 @@ function Table({
                         countPage={countPage}
                         changeHandler={changeHandler}
                         inputDisabled={inputDisabled}
-                        Delete={Delete}
+                        Save={Save}
+                        onKeyUp={onKeyUp}
                     />
                 )
             case 'inventories':

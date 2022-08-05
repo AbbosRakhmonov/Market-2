@@ -6,6 +6,8 @@ import UnitsReducer from '../Pages/Units/unitsSlice'
 import SuppliersReducer from '../Pages/SupplierPage/suppliersSlice.js'
 import CategoryReducer from '../Pages/CategoryPage/categorySlice'
 import incomingReducer from '../Pages/Incomings/incomingSlice'
+import inventoryReducer from '../Pages/Inventory/inventorySlice'
+import inventoryConnectorReducer from '../Pages/Inventories/inventorieSlice.js'
 import packmanReducer from '../Pages/Packman/packmanSlice'
 
 export default configureStore({
@@ -18,6 +20,8 @@ export default configureStore({
         suppliers: SuppliersReducer,
         category: CategoryReducer,
         incoming: incomingReducer,
+        inventories: inventoryReducer,
+        inventoryConnectors: inventoryConnectorReducer,
         packmans: packmanReducer,
     },
 })
