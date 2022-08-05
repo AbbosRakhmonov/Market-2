@@ -1,5 +1,5 @@
-import {lazy, Suspense, useEffect} from 'react'
-import {Route, Routes} from 'react-router-dom'
+import { lazy, Suspense, useEffect } from 'react'
+import { Route, Routes } from 'react-router-dom'
 import Navbar from '../Components/Navbar/Navbar'
 import Incoming from './Incomings/Incoming'
 import RegisterIncoming from './Incomings/Routes/RegisterIncoming'
@@ -7,8 +7,8 @@ import Incomings from './Incomings/Routes/Incomings'
 import SavedIncoming from './Incomings/Routes/SavedIncomings'
 import IncomingsList from './Incomings/Routes/IncomingsList'
 import CategoryPage from './CategoryPage/CategoryPage'
-import {useDispatch, useSelector} from 'react-redux'
-import {changeCurrencyType, clearError, getCurrency, getCurrencyType} from './Currency/currencySlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { changeCurrencyType, clearError, getCurrency, getCurrencyType } from './Currency/currencySlice'
 import Supplier from './SupplierPage/SupplierPage'
 import ProductReport from './ProductReport/ProductReport'
 import Inventory from './Inventory/Inventory'
@@ -21,10 +21,10 @@ import SavedSellings from './Sale/Routes/SavedSellings.js'
 import Sellings from './Sale/Routes/Sellings.js'
 import Packman from './Packman/Packman'
 import ClientsPage from './Clients/Clients'
-import Exchangerate from './Exchangerate/Exchangerate.js'
-import {universalToast, warningCurrencyRate} from '../Components/ToastMessages/ToastMessages.js'
+import { universalToast, warningCurrencyRate } from '../Components/ToastMessages/ToastMessages.js'
 import Shops from './ShopsPage/Shops'
 import Checkout from './Checkout/Checkout'
+import Exchangerate from './Exchangerate/Exchangerate'
 
 //pages
 const MainPage = lazy(() => import('./MainPage/MainPage'))
@@ -32,11 +32,11 @@ const Products = lazy(() => import('./Products/Create/Products'))
 
 const PageRoutes = () => {
     const dispatch = useDispatch()
-    const {currency, currencyType, currencyError, currencyLoading} =
+    const { currency, currencyType, currencyError, currencyLoading } =
         useSelector((state) => state.currency)
     const changeCurrency = () => {
         const prevCurrencyType = currencyType === 'USD' ? 'UZS' : 'USD'
-        dispatch(changeCurrencyType({currency: prevCurrencyType}))
+        dispatch(changeCurrencyType({ currency: prevCurrencyType }))
     }
     useEffect(() => {
         dispatch(getCurrency())
@@ -131,8 +131,8 @@ const PageRoutes = () => {
                             element={<Checkout />}
                         />
 
-                        <Route path='/dukonlar/' element={<Shops />}> 
-                           <Route path=':tablename/:_id' element={<Shops/>}/>                          
+                        <Route path='/dukonlar/' element={<Shops />}>
+                            <Route path=':tablename/:_id' element={<Shops />} />
                         </Route>
                     </Routes>
                 </Suspense>
