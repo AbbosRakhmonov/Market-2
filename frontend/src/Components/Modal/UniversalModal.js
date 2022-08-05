@@ -2,6 +2,7 @@ import Modal from 'react-modal'
 import ModalHeader from './ModalHeader'
 import Approve from './ModalBodys/Approve'
 import UploadExcel from './ModalBodys/UploadExcel'
+import Complate from './ModalBodys/Complate.js'
 
 function UniversalModal({
     isOpen,
@@ -29,6 +30,15 @@ function UniversalModal({
             case 'approve':
                 return (
                     <Approve
+                        headerText={headerText}
+                        title={title}
+                        approveFunction={approveFunction}
+                        toggleModal={toggleModal}
+                    />
+                )
+            case 'complete':
+                return (
+                    <Complate
                         headerText={headerText}
                         title={title}
                         approveFunction={approveFunction}

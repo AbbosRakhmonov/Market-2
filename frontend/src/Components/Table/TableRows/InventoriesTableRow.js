@@ -16,12 +16,16 @@ export const InventoriesTableRow = ({
                     <td className='td text-left'>
                         {currentPage * countPage + 1 + index}
                     </td>
-                    <td className='td text-right'>{inventory.createdAt}</td>
+                    <td className='td text-right'>
+                        {new Date(inventory.createdAt).toLocaleDateString()}
+                    </td>
                     <td className='td text-right'>{inventory.id}</td>
-                    <td className='td text-left'>{inventory.product.name}</td>
+                    <td className='td text-left'>
+                        {inventory.inventories.length}
+                    </td>
                     <td className='py-[0.375rem] td text-center'>
                         <div className='flex items justify-center'>
-                            <StatusIcon status={inventory.status} />
+                            <StatusIcon status={inventory.completed} />
                         </div>
                     </td>
                     <td className='td border-r-0 text-center max-w-[50px]'>

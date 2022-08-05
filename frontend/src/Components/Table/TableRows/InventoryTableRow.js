@@ -8,7 +8,8 @@ export const InventoryTableRow = ({
     countPage,
     changeHandler,
     inputDisabled,
-    Delete,
+    Save,
+    onKeyUp,
 }) => {
     return (
         <>
@@ -17,18 +18,47 @@ export const InventoryTableRow = ({
                     <td className='td text-left'>
                         {currentPage * countPage + 1 + index}
                     </td>
-                    <td className='td text-left'>{product.productdata.code}</td>
+                    <td className='td text-center'>{product.category.code}</td>
+                    <td className='td text-center'>
+                        {product.productdata.code}
+                    </td>
                     <td className='td text-left'>{product.productdata.name}</td>
                     <td className='td text-right'>{product.total}</td>
                     <td className='py-1 td'>
                         <TableInput
                             disabled={inputDisabled}
-                            onChange={(e) => changeHandler(e)}
+                            onChange={(e) =>
+                                changeHandler(e, index, product, 'count')
+                            }
                             type={'number'}
+                            value={
+                                product.inventory.inventorycount &&
+                                product.inventory.inventorycount
+                            }
+                            onKeyUp={(e) => onKeyUp(e, index)}
                         />
                     </td>
                     <td className='td text-error-500 text-right'>
-                        {product.difference}{' '}
+                        {product.inventory && product.inventory.inventorycount
+                            ? product.inventory.inventorycount -
+                                  product.inventory.productcount >
+                              0
+                                ? '+' +
+                                  (
+                                      Math.round(
+                                          (product.inventory.inventorycount -
+                                              product.inventory.productcount) *
+                                              100
+                                      ) / 100
+                                  ).toLocaleString('ru-RU')
+                                : (
+                                      Math.round(
+                                          (product.inventory.inventorycount -
+                                              product.inventory.productcount) *
+                                              100
+                                      ) / 100
+                                  ).toLocaleString('ru-RU')
+                            : ''}{' '}
                         <span className='text-error-500'>
                             {product.unit.name}
                         </span>
@@ -36,8 +66,15 @@ export const InventoryTableRow = ({
                     <td className='py-1 td'>
                         <TableInput
                             disabled={inputDisabled}
-                            onChange={(e) => changeHandler(e)}
+                            onChange={(e) =>
+                                changeHandler(e, index, product, 'comment')
+                            }
                             type={'text'}
+                            value={
+                                product.inventory.comment &&
+                                product.inventory.comment
+                            }
+                            onKeyUp={(e) => onKeyUp(e, index)}
                         />
                     </td>
                     <td className='py-0 td'>
@@ -45,7 +82,7 @@ export const InventoryTableRow = ({
                             <TableBtn
                                 type={'save'}
                                 bgcolor={'bg-success-500'}
-                                onClick={() => Delete(product)}
+                                onClick={() => Save(index)}
                             />
                         </div>
                     </td>

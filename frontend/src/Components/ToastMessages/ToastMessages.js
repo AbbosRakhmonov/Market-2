@@ -37,6 +37,11 @@ export const successUpdateSupplierMessage = () =>
 export const successDeleteSupplierMessage = () =>
     toast.success("Yertkazib beruvchi muvaffaqiyatli o'chirildi !")
 
+export const successUpdateInventoryMessage = () =>
+    toast.success('Inventarizatsiya muvaffaqqiyatli saqlandi!')
+export const successCompleteInventoryMessage = () =>
+    toast.success('Inventarizatsiya muvaffaqqiyatli yakunlandi!')
+
 export const successAddPackmanMessage = () =>
     toast.success('Agent muvaffaqiyatli yaratildi !')
 export const successUpdatePackmanMessage = () =>

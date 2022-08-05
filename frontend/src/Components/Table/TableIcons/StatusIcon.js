@@ -12,7 +12,7 @@ export const StatusIcon = ({status}) => {
     }
     return (
         <Link
-            to={'/'}
+            to={'/maxsulotlar/inventarizatsiya/inventarizatsiya'}
             className='w-[38px] h-[24px] flex items-center justify-center bg-warning-500 rounded-lg'
         >
             <IoHourglass color='white' />
