@@ -11,6 +11,7 @@ import inventoryConnectorReducer from '../Pages/Inventories/inventorieSlice.js'
 import packmanReducer from '../Pages/Packman/packmanSlice'
 import ExchangerateSlice from '../Pages/Exchangerate/ExchangerateSlice'
 
+import clientsReducer from '../Pages/Clients/clientsSlice'
 export default configureStore({
     devTools: process.env.NODE_ENV === 'development',
     reducer: {
@@ -24,6 +25,7 @@ export default configureStore({
         inventories: inventoryReducer,
         inventoryConnectors: inventoryConnectorReducer,
         packmans: packmanReducer,
-        exchangerate:ExchangerateSlice
+        exchangerate:ExchangerateSlice,
+        clients: clientsReducer
     },
 })

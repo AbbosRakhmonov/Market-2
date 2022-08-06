@@ -4,9 +4,8 @@ const { Packman } = require('../../models/Sales/Packman.js');
 
 module.exports.register = async (req, res) => {
   try {
-    const { name, market, packman } = req.body;
+    const { name, market, packman, search, currentPage, countPage } = req.body;
     const { error } = validateClient({ name, market });
-
     if (error) {
       return res.status(400).json({
         error: error.message,
@@ -35,6 +34,7 @@ module.exports.register = async (req, res) => {
       market,
     });
     await newClient.save();
+    if(packman.length > 0){
     const checkpackman = await Packman.findById(packman);
     if (checkpackman) {
       newClient.packman = checkpackman._id;
@@ -44,13 +44,32 @@ module.exports.register = async (req, res) => {
         },
       });
       await newClient.save();
-    }
+    }}
+    const clientname = new RegExp('.*' + search ? search.client : '' + '.*', 'i');
+    const clientpackman = new RegExp('.*' + search ? search.packman : '' + '.*', 'i');
 
-    const sendingClient = await Client.findById(newClient._id)
-      .select('name')
-      .populate('packman', 'name');
+    const clientsCount = await Client.find({ market, name: clientname })
+      .sort({ _id: -1 })
+      .select('name market packman')
+      .populate({ path: 'packman', match: { name: clientpackman } });
 
-    res.status(201).send(sendingClient);
+    const filterCount = clientsCount.filter((item) => {
+      return item.packman !== null;
+    });
+
+    const clients = await Client.find({ market, name: clientname })
+      .sort({ _id: -1 })
+      .select('name market packman')
+      .populate({ path: 'packman', match: { name: clientpackman } })
+      .populate('packman', 'name')
+      .skip(currentPage * countPage)
+      .limit(countPage);
+
+    const filter = clients.filter((item) => {
+      return item.packman !== null;
+    });
+
+    res.status(201).json({ clients: filter, count: filterCount.length });
   } catch (error) {
     res.status(400).json({ error: 'Serverda xatolik yuz berdi...' });
   }
@@ -78,7 +97,7 @@ module.exports.getAll = async (req, res) => {
 
 module.exports.updateClient = async (req, res) => {
   try {
-    const { _id, market, name, packman } = req.body;
+    const { _id, market, name, packman, search, currentPage, countPage } = req.body;
     const marke = await Market.findById(market);
     if (!marke) {
       return res
@@ -121,11 +140,31 @@ module.exports.updateClient = async (req, res) => {
       ...updatedClient,
     });
 
-    const sendingClient = await Client.findById(_id)
-      .select('name')
-      .populate('packman name');
+    const clientname = new RegExp('.*' + search ? search.client : '' + '.*', 'i');
+    const clientpackman = new RegExp('.*' + search ? search.packman : '' + '.*', 'i');
 
-    res.status(201).send(sendingClient);
+    const clientsCount = await Client.find({ market, name: clientname })
+      .sort({ _id: -1 })
+      .select('name market packman')
+      .populate({ path: 'packman', match: { name: clientpackman } });
+
+    const filterCount = clientsCount.filter((item) => {
+      return item.packman !== null;
+    });
+
+    const clients = await Client.find({ market, name: clientname })
+      .sort({ _id: -1 })
+      .select('name market packman')
+      .populate({ path: 'packman', match: { name: clientpackman } })
+      .populate('packman', 'name')
+      .skip(currentPage * countPage)
+      .limit(countPage);
+
+    const filter = clients.filter((item) => {
+      return item.packman !== null;
+    });
+
+    res.status(201).json({ clients: filter, count: filterCount.length });
   } catch (error) {
     res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
@@ -133,7 +172,7 @@ module.exports.updateClient = async (req, res) => {
 
 module.exports.deleteClient = async (req, res) => {
   try {
-    const { _id, market, name, packman } = req.body;
+    const { _id, market, name, packman, search, currentPage, countPage } = req.body;
 
     const marke = await Market.findById(market);
     if (!marke) {
@@ -148,6 +187,7 @@ module.exports.deleteClient = async (req, res) => {
         .json({ message: `Diqqat! ${name} mijoz avval yaratilmagan!` });
     }
 
+    if(packman){
     const packMan = await Packman.findById(packman);
 
     if (packMan) {
@@ -156,10 +196,34 @@ module.exports.deleteClient = async (req, res) => {
           clients: client._id,
         },
       });
-    }
+    }}
     await Client.findByIdAndDelete(_id);
 
-    res.status(201).send(client);
+    const clientname = new RegExp('.*' + search ? search.client : '' + '.*', 'i');
+    const clientpackman = new RegExp('.*' + search ? search.packman : '' + '.*', 'i');
+
+    const clientsCount = await Client.find({ market, name: clientname })
+      .sort({ _id: -1 })
+      .select('name market packman')
+      .populate({ path: 'packman', match: { name: clientpackman } });
+
+    const filterCount = clientsCount.filter((item) => {
+      return item.packman !== null;
+    });
+
+    const clients = await Client.find({ market, name: clientname })
+      .sort({ _id: -1 })
+      .select('name market packman')
+      .populate({ path: 'packman', match: { name: clientpackman } })
+      .populate('packman', 'name')
+      .skip(currentPage * countPage)
+      .limit(countPage);
+
+    const filter = clients.filter((item) => {
+      return item.packman !== null;
+    });
+
+    res.status(201).json({ clients: filter, count: filterCount.length });
   } catch (error) {
     res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
