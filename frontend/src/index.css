@@ -501,6 +501,24 @@
         @apply flex justify-center items-center text-center gap-[1.6rem] w-full grid sm:grid-cols-1 xl:grid-cols-3 md:grid-cols-2;
     }
 
+    .check-ul-li {
+        @apply flex justify-between items-center py-1 text-[0.875rem] font-bold 
+    }
+    .check-ul-li-span {
+        @apply text-[0.875rem] text-black-700
+    }
+    .check-text-style {
+        @apply text-[1.5rem] font-bold
+    }
+    .check-ul-li-foot {
+        @apply text-[0.875rem] text-black-700 font-bold flex justify-between py-[0.675rem] border-t-[0.8px] border-black-700 
+    }
+    .check-table-rtr {
+        @apply border text-center text-[0.875rem] font-bold p-1
+    }
+    .check-table-body{
+        @apply p-1 border text-end text-[0.875rem] font-bold
+    }
     /* This is Checkout Pages styled end */
 }
 
