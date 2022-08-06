@@ -3,6 +3,7 @@ import ModalHeader from './ModalHeader'
 import Approve from './ModalBodys/Approve'
 import UploadExcel from './ModalBodys/UploadExcel'
 import Complate from './ModalBodys/Complate.js'
+import RegisterIncomingModal from './ModalBodys/RegisterIncomingModal'
 
 function UniversalModal({
     isOpen,
@@ -16,6 +17,8 @@ function UniversalModal({
     createdData,
     headerText,
     title,
+    product,
+    changeProduct,
 }) {
     const customStyles = {
         content: {
@@ -56,6 +59,14 @@ function UniversalModal({
                         toggleModal={toggleModal}
                     />
                 )
+            case 'registerincomingbody':
+                return (
+                    <RegisterIncomingModal
+                        product={product}
+                        changeProduct={changeProduct}
+                        approveFunction={approveFunction}
+                    />
+                )
             default:
                 return 'Bunday jadval topilmadi'
         }
@@ -63,7 +74,7 @@ function UniversalModal({
     return (
         <Modal
             isOpen={isOpen}
-            style={body === 'import' ? {...customStyles} : {}}
+            style={body !== 'approve' ? {...customStyles} : {}}
             onRequestClose={closeModal || toggleModal}
             closeTimeoutMS={200}
             contentLabel='Example Modal'

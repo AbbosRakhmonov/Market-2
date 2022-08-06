@@ -11,6 +11,7 @@ import {
 import {getCurrency, getCurrencyType} from '../../Currency/currencySlice'
 import {ConfirmBtn, SaveBtn} from '../../../Components/Buttons/SaveConfirmBtn'
 import {CheckIncoming} from '../Functions/CheckIncoming'
+import UniversalModal from '../../../Components/Modal/UniversalModal'
 
 const RegisterIncoming = () => {
     const dispatch = useDispatch()
@@ -26,6 +27,8 @@ const RegisterIncoming = () => {
     const [productsData, setProductsData] = useState([])
     const [supplier, setSupplier] = useState({})
     const [incomings, setIncomings] = useState([])
+    const [incomingModal, setIncomingModal] = useState({})
+    const [modal, setModal] = useState(false)
 
     // functions for onchange of select
     const selectSupplier = (e) => {
@@ -53,34 +56,117 @@ const RegisterIncoming = () => {
                     incoming.supplier._id === supplier._id
             )
         ) {
-            addProductToIncomings(e.value)
+            addIncomingToModal(e.value)
         }
     }
 
-    // add to incomings. func
-    const addProductToIncomings = (value) => {
+    // add to product to modalincoming. function
+    const addIncomingToModal = (value) => {
         const product = [
             ...products.filter((product) => product._id === value),
         ][0]
-        let obj = {
-            ...product,
+        setIncomingModal({
+            _id: product._id,
+            oldprice: product.price.incomingprice,
+            oldpriceuzs: product.price.incomingpriceuzs,
+            product: {...product.productdata, _id: product._id},
+            pieces: 0,
+            unitprice: 0,
+            unitpriceuzs: 0,
+            totalprice: 0,
+            totalpriceuzs: 0,
+            user: user._id,
+            unit: product.unit,
+            sellingprice: product.price.sellingprice,
+            sellingpriceuzs: product.price.sellingpriceuzs,
+            supplier: {...supplier},
+        })
+        setModal(true)
+    }
+    // change product in modalincoming. function
+    const changeModalIncoming = (e, property) => {
+        let target = Number(e.target.value)
+        const check = (key) => key === property
+        const changepieces = () => {
+            const obj = {
+                ...incomingModal,
+                pieces: target,
+                totalprice: target * incomingModal.unitprice,
+                totalpriceuzs: target * incomingModal.unitprice * currency,
+            }
+            setIncomingModal(obj)
         }
-        setIncomings([
-            ...incomings,
-            {
-                oldprice: obj.price.incomingprice,
-                oldpriceuzs: obj.price.incomingpriceuzs,
-                product: {...obj.productdata, _id: obj._id},
-                pieces: 0,
-                unitprice: 0,
-                unitpriceuzs: 0,
-                totalprice: 0,
-                totalpriceuzs: 0,
-                user: user._id,
-                unit: obj.unit,
-                supplier: {...supplier},
-            },
-        ])
+        const changeunitprice = () => {
+            const obj = {
+                ...incomingModal,
+                unitprice: target,
+                unitpriceuzs: target * currency,
+                totalprice: target * incomingModal.pieces,
+                totalpriceuzs: target * incomingModal.pieces * currency,
+            }
+            setIncomingModal(obj)
+        }
+        const changesellingprice = () => {
+            const obj = {
+                ...incomingModal,
+                sellingprice: target,
+                sellingpriceuzs: target * currency,
+            }
+            setIncomingModal(obj)
+        }
+
+        check('pieces') && changepieces()
+        check('unitprice') && changeunitprice()
+        check('sellingprice') && changesellingprice()
+    }
+
+    // add modalincoming to incomings
+    const addProductToIncomings = () => {
+        setIncomings([incomingModal, ...incomings])
+        setModal(false)
+    }
+
+    // change product in incomings
+    const changeIncomings = (e, key, id) => {
+        const target = Number(e.target.value)
+        const check = (property) => key === property
+        let currentUsd =
+            currencyType === 'USD'
+                ? target
+                : ((target / currency) * 1000) / 1000
+        let currentUzs =
+            currencyType === 'USD'
+                ? target * currency
+                : ((target / currency) * 1000) / 1000
+
+        const changepieces = (obj) => {
+            obj.pieces = target
+            obj.totalprice = target * obj.unitprice
+            obj.totalpriceuzs = target * obj.unitpriceuzs
+        }
+
+        const changeunitprice = (obj) => {
+            obj.unitprice = currentUsd
+            obj.unitpriceuzs = currentUzs
+            obj.totalprice = currentUsd * obj.pieces
+            obj.totalpriceuzs = currentUzs * obj.pieces
+        }
+
+        const changesellingprice = (obj) => {
+            obj.sellingprice = currentUsd
+            obj.sellingpriceuzs = currentUzs
+        }
+
+        let products = incomings.map((incoming) => {
+            if (incoming._id === id) {
+                check('pieces') && changepieces(incoming)
+                check('unitprice') && changeunitprice(incoming)
+                check('sellingprice') && changesellingprice(incoming)
+                return incoming
+            }
+            return incoming
+        })
+        setIncomings(products)
     }
 
     // change datas for react-select //
@@ -104,68 +190,23 @@ const RegisterIncoming = () => {
         setProductsData(products)
     }
 
-    // other functions
-    const changeAddedIncoming = (e, property, ind) => {
-        let target = Number(e.target.value)
-        const returnUsd = (item) => {
-            return {
-                ...item,
-                [property]: target,
-                unitpriceuzs:
-                    property === 'unitprice'
-                        ? target * currency
-                        : item.unitpriceuzs,
-                totalprice:
-                    property === 'pieces'
-                        ? target * item.unitprice
-                        : target * item.pieces,
-                totalpriceuzs:
-                    (property === 'pieces'
-                        ? target * item.unitpriceuzs
-                        : target * item.pieces) * currency,
-            }
-        }
-        const returnUzs = (item) => {
-            return {
-                ...item,
-                [property]: target,
-                unitprice:
-                    property === 'unitpriceuzs'
-                        ? ((target / currency) * 1000) / 1000
-                        : item.unitprice,
-                totalprice:
-                    property === 'pieces'
-                        ? target * item.unitprice
-                        : (((target / currency) * 1000) / 1000) * item.pieces,
-                totalpriceuzs:
-                    property === 'pieces'
-                        ? target * item.unitpriceuzs
-                        : target * item.pieces,
-            }
-        }
-        setIncomings([
-            ...incomings.map((item, index) => {
-                if (index === ind) {
-                    if (currencyType === 'USD') {
-                        return returnUsd(item)
-                    }
-                    return returnUzs(item)
-                }
-                return item
-            }),
-        ])
-    }
-
-    const deleteIncoming = (ind) => {
-        setIncomings([...incomings.filter((_, index) => index !== ind)])
+    const deleteIncoming = (product) => {
+        const filter = incomings.filter(
+            (incoming) => incoming._id !== product._id
+        )
+        setIncomings(filter)
     }
 
     // request functions
     const createIncoming = () => {
-        if (!CheckIncoming(incomings)) {
+        const postincoming = incomings.map((incoming) => {
+            delete incoming._id
+            return incoming
+        })
+        if (!CheckIncoming(postincoming)) {
             dispatch(
                 addIncoming({
-                    products: [...incomings],
+                    products: [...postincoming],
                     user: user._id,
                 })
             )
@@ -216,6 +257,10 @@ const RegisterIncoming = () => {
             styles: 'w-[15%]',
         },
         {
+            title: 'Sotish',
+            styles: 'w-[15%]',
+        },
+        {
             title: '',
             styles: 'w-[5%]',
         },
@@ -238,7 +283,7 @@ const RegisterIncoming = () => {
 
     return (
         <section>
-            <div className='flex items-center mb-[1.25rem]'>
+            <div className='flex items-center mainPadding'>
                 <div className='w-full pr-[1.25rem] border-r border-blue-100'>
                     <SelectInput
                         options={suppliersData}
@@ -253,16 +298,18 @@ const RegisterIncoming = () => {
                     />
                 </div>
             </div>
-            <p className='text-[1.25rem] text-blue-900 mb-[1.25rem]'>
+            <p className='text-[1.25rem] text-blue-900 mainPadding'>
                 Yetkazib beruvchi :
             </p>
-            <div className={`${incomings.length > 0 ? '' : 'hidden'}`}>
+            <div
+                className={`${incomings.length > 0 ? 'mainPadding' : 'hidden'}`}
+            >
                 <Table
                     page={'registerincoming'}
                     headers={headers}
                     data={incomings}
                     currency={currencyType}
-                    changeHandler={changeAddedIncoming}
+                    changeHandler={changeIncomings}
                     Delete={deleteIncoming}
                 />
                 <div className='flex items-center justify-end gap-[0.625rem] pt-[1.25rem]'>
@@ -278,6 +325,16 @@ const RegisterIncoming = () => {
                     />
                 </div>
             </div>
+            <UniversalModal
+                headerText={'Its modal!'}
+                title={'wfwwvwrb'}
+                isOpen={modal}
+                body={'registerincomingbody'}
+                product={incomingModal}
+                closeModal={() => setModal(false)}
+                changeProduct={changeModalIncoming}
+                approveFunction={addProductToIncomings}
+            />
         </section>
     )
 }

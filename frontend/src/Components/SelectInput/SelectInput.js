@@ -11,7 +11,7 @@ const SelectInput = ({
     value,
 }) => {
     return (
-        <div>
+        <div className='grow'>
             <label
                 className={
                     'text-blue-700 block leading-[1.125rem] mb-[.625rem]'

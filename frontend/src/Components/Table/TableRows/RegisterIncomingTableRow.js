@@ -8,12 +8,10 @@ export const RegisterIncomingTableRow = ({
     Delete,
     currency,
 }) => {
-    const propertyprice = currency === 'USD' ? 'unitprice' : 'unitpriceuzs'
-
     return (
         <>
             {data.map((product, index) => (
-                <tr key={product.product._id} className='tr'>
+                <tr key={product._id} className='tr'>
                     <td className='py-0 td text-left'>{index + 1}</td>
                     <td className='py-0 td text-right'>
                         {product.product.code}
@@ -23,7 +21,9 @@ export const RegisterIncomingTableRow = ({
                     </td>
                     <td className='py-1 td'>
                         <TableInput
-                            onChange={(e) => changeHandler(e, 'pieces', index)}
+                            onChange={(e) =>
+                                changeHandler(e, 'pieces', product._id)
+                            }
                             type={'number'}
                             value={product.pieces}
                         />
@@ -31,7 +31,7 @@ export const RegisterIncomingTableRow = ({
                     <td className='py-1 td'>
                         <TableInput
                             onChange={(e) =>
-                                changeHandler(e, propertyprice, index)
+                                changeHandler(e, 'unitprice', product._id)
                             }
                             type={'number'}
                             value={
@@ -53,12 +53,25 @@ export const RegisterIncomingTableRow = ({
                             : product.totalpriceuzs}{' '}
                         {currency}
                     </td>
+                    <td className='py-1 td'>
+                        <TableInput
+                            onChange={(e) =>
+                                changeHandler(e, 'sellingprice', product._id)
+                            }
+                            type={'number'}
+                            value={
+                                currency === 'USD'
+                                    ? product.sellingprice
+                                    : product.sellingpriceuzs
+                            }
+                        />
+                    </td>
                     <td className='py-0 td border-r-0'>
                         <div className='flex justify-center items-center'>
                             <TableBtn
                                 type={'delete'}
                                 bgcolor={'bg-error-500'}
-                                onClick={() => Delete(index)}
+                                onClick={() => Delete(product)}
                             />
                         </div>
                     </td>

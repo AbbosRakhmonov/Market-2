@@ -53,6 +53,33 @@ export const addTemporary = createAsyncThunk(
     }
 )
 
+export const getIncomingConnectors = createAsyncThunk(
+    'incoming/getConnectors',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post(
+                '/products/incoming/getconnectors',
+                body
+            )
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
+export const getIncomings = createAsyncThunk(
+    'incoming/getincomings',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post('/products/incoming/get', body)
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
 const incomingSlice = createSlice({
     name: 'incoming',
     initialState: {
@@ -60,6 +87,9 @@ const incomingSlice = createSlice({
         products: [],
         loading: false,
         error: null,
+        incomingconnectors: [],
+        incomings: [],
+        incomingscount: 0,
     },
     reducers: {
         clearError: (state) => {
@@ -110,6 +140,29 @@ const incomingSlice = createSlice({
         [addTemporary.rejected]: (state, {payload}) => {
             state.loading = false
             state.error = payload
+            universalToast(`${payload}`, 'error')
+        },
+        [getIncomingConnectors.pending]: (state) => {
+            state.loading = true
+        },
+        [getIncomingConnectors.fulfilled]: (state, {payload}) => {
+            state.loading = false
+            state.incomingconnectors = payload
+        },
+        [getIncomingConnectors.rejected]: (state, {payload}) => {
+            state.loading = false
+            universalToast(`${payload}`, 'error')
+        },
+        [getIncomings.pending]: (state) => {
+            state.loading = true
+        },
+        [getIncomings.fulfilled]: (state, {payload: {incomings, count}}) => {
+            state.loading = false
+            state.incomings = incomings
+            state.incomingscount = count
+        },
+        [getIncomings.rejected]: (state, {payload}) => {
+            state.loading = false
             universalToast(`${payload}`, 'error')
         },
     },
