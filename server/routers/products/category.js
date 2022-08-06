@@ -58,20 +58,22 @@ module.exports.registerAll = async (req, res) => {
 //Category register
 module.exports.register = async (req, res) => {
   try {
-    const { error } = validateCategory(req.body);
+    const { category, market, search, currentPage, countPage } = req.body;
+    const name = category.name;
+    const code = category.code;
+    const { error } = validateCategory({ name, code, market });
     if (error) {
       return res.status(400).json({
         error: error.message,
       });
     }
-    const { name, market, code } = req.body;
 
-    const category = await Category.findOne({
+    const categor = await Category.findOne({
       market,
       code,
       name,
     });
-    if (category) {
+    if (categor) {
       return res.status(400).json({
         message: "Diqqat! Ushbu kategoriya avval yaratilgan.",
       });
@@ -92,7 +94,32 @@ module.exports.register = async (req, res) => {
     });
     await newCategory.save();
 
-    res.send(newCategory);
+    const categorycode = new RegExp(
+      ".*" + (search ? search.code : "") + ".*",
+      "i"
+    );
+    // const categoryname = new RegExp(
+    //   ".*" + (search ? search.name : "") + ".*",
+    //   "i"
+    // );
+
+    const categoryCount = await Category.find({
+      market,
+      code: categorycode,
+      // name: categoryname,
+    }).count();
+
+    const categorys = await Category.find({
+      market,
+      code: categorycode,
+      // name: categoryname,
+    })
+      .sort({ code: 1 })
+      .select("code market name")
+      .skip(currentPage * countPage)
+      .limit(countPage);
+
+    res.status(201).json({ categories: categorys, count: categoryCount });
   } catch (error) {
     res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
@@ -101,7 +128,9 @@ module.exports.register = async (req, res) => {
 //Category update
 module.exports.update = async (req, res) => {
   try {
-    const { name, market, code } = req.body;
+    const { market, category, search, currentPage, countPage } = req.body;
+
+    const { name, code, _id } = category;
 
     const marke = await Market.findById(market);
 
@@ -114,29 +143,54 @@ module.exports.update = async (req, res) => {
     const old = await Category.findOne({
       market,
       code,
-      name,
     });
 
-    if (old) {
+    if (old && old._id.toString() !== _id) {
       return res.status(400).json({
         message: "Diqqat! Ushbu kategoriya avval yaratilgan.",
       });
     }
 
-    const category = await Category.findById(req.body._id);
+    const categor = await Category.findById(_id);
 
-    if (!category) {
+    if (!categor) {
       return res.status(400).json({
         message: "Diqqat! Ushbu kategoriya topilmadi.",
       });
     }
 
-    category.name = name;
-    category.code = code;
-    await category.save();
+    categor.name = name;
+    categor.code = code;
+    await categor.save();
 
-    res.send(category);
+    const categorycode = new RegExp(
+      ".*" + (search ? search.code : "") + ".*",
+      "i"
+    );
+    // const categoryname = new RegExp(
+    //   ".*" + (search ? search.name : "") + ".*",
+    //   "i"
+    // );
+
+    const categoryCount = await Category.find({
+      market,
+      code: categorycode,
+      // name: categoryname,
+    }).count();
+
+    const categorys = await Category.find({
+      market,
+      code: categorycode,
+      // name: categoryname,
+    })
+      .sort({ code: 1 })
+      .select("code market name")
+      .skip(currentPage * countPage)
+      .limit(countPage);
+
+    res.status(201).json({ categories: categorys, count: categoryCount });
   } catch (error) {
+    console.log(error);
     res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
@@ -174,16 +228,20 @@ module.exports.getCategories = async (req, res) => {
         message: "Diqqat! Do'kon ma'lumotlari topilmadi.",
       });
     }
+
     const code = new RegExp(".*" + (search ? search.code : "") + ".*", "i");
+    // const name =  new RegExp(".*" + (search ? search.name : "") + ".*", "i");
 
     const categoryCount = await Category.find({
       market,
-      code: code,
+      code,
+      // name,
     }).count();
 
     const categorys = await Category.find({
       market,
-      code: code,
+      code,
+      // name,
     })
       .sort({ code: 1 })
       .select("code market name")
@@ -223,28 +281,64 @@ module.exports.getCategoriesExcel = async (req, res) => {
 //Category delete
 module.exports.delete = async (req, res) => {
   try {
-    const { _id } = req.body;
+    const { _id, market, search, currentPage, countPage } = req.body;
 
-    const category = await Category.findById(_id);
+    const marke = await Market.findById(market);
 
-    if (category.producttypes.length > 0) {
+    if (!marke) {
       return res.status(400).json({
-        message:
-          "Diqqat! Ushbu kategoriyada mahsulotlar turlari mavjud bo'lganligi sababli kategoriyani o'chirish mumkin emas.",
+        message: "Diqqat! Do'kon ma'lumotlari topilmadi.",
       });
     }
 
-    if (category.products.length > 0) {
+    const category = await Category.findById(_id);
+
+    // if (category.producttypes && category.producttypes.length > 0) {
+    //   return res.status(400).json({
+    //     message:
+    //       "Diqqat! Ushbu kategoriyada mahsulotlar turlari mavjud bo'lganligi sababli kategoriyani o'chirish mumkin emas.",
+    //   });
+    // }
+    if (
+      category &&
+      category.products !== null &&
+      category.products.length > 0
+    ) {
       return res.status(400).json({
         message:
           "Diqqat! Ushbu kategoriyada mahsulotlar mavjud bo'lganligi sababli kategoriyani o'chirish mumkin emas.",
       });
     }
-
     await Category.findByIdAndDelete(_id);
 
-    res.send(category);
+    const categorycode = new RegExp(
+      ".*" + (search ? search.code : "") + ".*",
+      "i"
+    );
+    // const categoryname = new RegExp(
+    //   ".*" + (search ? search.name : "") + ".*",
+    //   "i"
+    // );
+
+    const categoryCount = await Category.find({
+      market,
+      code: categorycode,
+      // name: categoryname,
+    }).count();
+
+    const categorys = await Category.find({
+      market,
+      code: categorycode,
+      // name: categoryname,
+    })
+      .sort({ code: 1 })
+      .select("code market name")
+      .skip(currentPage * countPage)
+      .limit(countPage);
+
+    res.status(201).json({ categories: categorys, count: categoryCount });
   } catch (error) {
+    console.log(error);
     res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };

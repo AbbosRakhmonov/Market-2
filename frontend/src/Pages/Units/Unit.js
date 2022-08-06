@@ -156,7 +156,7 @@ function Unit() {
                 <FieldContainer
                     onChange={handleChangeUnitName}
                     value={unitName}
-                    label={'Olchov birligini kiriting'}
+                    label={"O'lchov birligini kiriting"}
                     placeholder={'misol: kg'}
                     maxWidth={'w-[43.75rem]'}
                 />
