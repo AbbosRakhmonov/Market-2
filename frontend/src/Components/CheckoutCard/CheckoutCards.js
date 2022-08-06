@@ -19,32 +19,35 @@ const CheckoutCards = ({type, onClick, percentage, name, cost, active}) => {
 
     return (
         <button onClick={onClick}>
-            <div className={chooseCardName}>
-                <div className='tradeIn'>
-                    <div
+            <span className={chooseCardName}>
+                <span className='tradeIn'>
+                    <span className={type === 'profit' ? 'hidden' : 'parcentageWidth'}>
+                    <span
                         className={
                             type === 'profit' ? 'hidden' : 'percentageCircle'
                         }
                     >
-                        <p> {percentage} </p>
-                    </div>
-                    <div>
-                        <div
+                        <span> {percentage} </span>
+                    </span>
+
+                    </span>
+                    <span className='w-full'>
+                        <span
                             className={
                                 type === 'profit' ? 'checkName' : 'checkoutName'
                             }
                         >
                             <p className='text-[1.5rem]'>{name}</p>
                             <p className='text-[1.25rem] '>$</p>
-                        </div>
+                        </span>
                         <div>
                             <p className='costCard float-right'>
                                 {cost.toLocaleString('ru-Ru')}
                             </p>
                         </div>
-                    </div>
-                </div>
-            </div>
+                    </span>
+                </span>
+            </span>
         </button>
     )
 }

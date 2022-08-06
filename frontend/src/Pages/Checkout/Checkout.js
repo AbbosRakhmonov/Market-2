@@ -46,7 +46,7 @@ const Checkout = (onClick) => {
             cost: 123456789,
         },
         {
-            name: 'Chegirmalat',
+            name: 'Chegirmalar',
             type: 'discount',
             percentage: 99,
             cost: 123456789,
