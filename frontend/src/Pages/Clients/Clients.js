@@ -1,39 +1,40 @@
-import React, {useState, useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import FieldContainer from '../../Components/FieldContainer/FieldContainer'
 import Button from '../../Components/Buttons/BtnAddRemove'
 import Pagination from '../../Components/Pagination/Pagination'
 import Table from '../../Components/Table/Table'
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch, useSelector} from 'react-redux'
 import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
 import SearchForm from '../../Components/SearchForm/SearchForm'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
-import {getPackmans} from './../Packman/packmanSlice'
 import {
     successAddSupplierMessage,
     successDeleteSupplierMessage,
     successUpdateSupplierMessage,
     universalToast,
+    warningEmptyInput,
 } from '../../Components/ToastMessages/ToastMessages.js'
 import {
     addClients,
     clearErrorClients,
     clearSearchedClients,
     clearSuccessAddClients,
-    clearSuccessUpdateClients,
     clearSuccessDeleteClients,
+    clearSuccessUpdateClients,
     deleteClients,
+    getAllPackmans,
     getClients,
     getClientsByFilter,
-    updateClients
-} from "./clientsSlice"
-const ClientsPage = () => {
-   
+    updateClients,
+} from './clientsSlice'
+import {checkEmptyString} from '../../App/globalFunctions.js'
 
+const ClientsPage = () => {
     const dispatch = useDispatch()
 
     const {
-        options,
+        packmans,
         errorClients,
         clients,
         successAddClients,
@@ -41,13 +42,13 @@ const ClientsPage = () => {
         successDeleteClients,
         loading,
         searchedClients,
-        total,   
-        totalSearched,     
+        total,
+        totalSearched,
     } = useSelector((state) => state.clients)
 
     const headers = [
         {title: '№', styles: 'w-[8%] text-left'},
-        {title: 'Yetkazuvchi', styles: 'w-[41%] text-left'},
+        {title: 'Agent', styles: 'w-[41%] text-left'},
         {title: 'Mijoz', styles: 'w-[41%] text-left'},
         {title: '', styles: 'w-[8%] text-left'},
     ]
@@ -57,28 +58,31 @@ const ClientsPage = () => {
     const [data, setData] = useState([])
     const [searchedData, setSearchedData] = useState()
     const [clientName, setClientName] = useState('')
+    const [packman, setPackman] = useState(null)
     const [currentClient, setCurrentClient] = useState()
     const [deletedCLients, setDeletedClients] = useState(null)
     const [modalVisible, setModalViseble] = useState(false)
     const [stickyForm, setStickyForm] = useState(false)
-    const [showByTotal, setShowByTotal] = useState('10');
+    const [showByTotal, setShowByTotal] = useState('10')
     const [currentPage, setCurrentPage] = useState(0)
-    const [filteredDataTotal, setFilteredDataTotal] = useState()
+    const [filteredDataTotal, setFilteredDataTotal] = useState(total)
     const [searchByName, setSearchByName] = useState('')
     const [getOptions, setGetOptions] = useState('')
     // modal toggle
-    const toggleModal = () => setModalViseble(!modalVisible) 
+    const toggleModal = () => setModalViseble(!modalVisible)
 
     // handle change of input
     const handleChangeClientName = (e) => {
         setClientName(e.target.value)
     }
-    
-    // table edit and delete 
+
+    // table edit and delete
     const handleEditClients = (client) => {
-       setCurrentClient(client)
-       setClientName(client.name)
-       setStickyForm(true)
+        setCurrentClient(client)
+        client.packman &&
+            setPackman({label: client.packman.name, value: client.packman._id})
+        setClientName(client.name)
+        setStickyForm(true)
     }
 
     const handleDeleteClient = (client) => {
@@ -88,13 +92,13 @@ const ClientsPage = () => {
 
     const handleClickApproveToDelete = () => {
         const body = {
-             name : deletedCLients.name,
-            _id : deletedCLients._id,
-            packman : getOptions.length > 0 ? getOptions.label : "",
+            name: deletedCLients.name,
+            _id: deletedCLients._id,
+            packman: deletedCLients.packman,
             currentPage,
-            countPage : showByTotal,
-            search : {
-                name: searchByName
+            countPage: showByTotal,
+            search: {
+                name: searchByName,
             },
         }
         dispatch(deleteClients(body))
@@ -105,144 +109,127 @@ const ClientsPage = () => {
         setModalViseble(false)
         setDeletedClients(null)
     }
-
     // handle submit of inputs
     const addNewClients = (e) => {
-     e.preventDefault()
-     const body = {
-        name : clientName,
-        packman : getOptions.length>0 ? getOptions.label : "",
-        currentPage,
-        countPage: showByTotal,
-        search: {
-            name: searchByName,
-        },
-     }
-     dispatch(addClients(body))
+        e.preventDefault()
+        const filter = checkEmptyString([clientName])
+        if (filter) {
+            warningEmptyInput()
+        } else {
+            const body = {
+                name: clientName,
+                packman: (packman && packman.value) || null,
+                currentPage,
+                countPage: showByTotal,
+                search: {
+                    name: searchByName,
+                },
+            }
+            dispatch(addClients(body))
+        }
     }
 
     const handleEdit = (e) => {
         e.preventDefault()
         const body = {
-            name : clientName,
-            _id : currentClient._id,
+            name: clientName,
+            _id: currentClient._id,
+            packman: (packman && packman.value) || null,
             currentPage,
-            countPage : showByTotal,
-            search : {
-                name :searchByName
-            }
+            countPage: showByTotal,
+            search: {
+                name: searchByName,
+            },
         }
         dispatch(updateClients(body))
     }
 
     const clearForm = (e) => {
-      e && e.preventDefault()
-      setClientName('')
-      setGetOptions('')
+        e && e.preventDefault()
+        setClientName('')
+        setGetOptions('')
+        setPackman(null)
+        setStickyForm(false)
     }
 
-    // filter by total 
+    // filter by total
     const filterByTotal = ({value}) => {
-       setShowByTotal(value)
-       setCurrentPage(0)
+        setShowByTotal(value)
+        setCurrentPage(0)
     }
 
-    // handle change of search inputs 
+    // handle change of search inputs
     const filterByClientName = (e) => {
         let val = e.target.value
         let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
-        setSearchByName(val);
-        (searchedData.length > 0 || totalSearched > 0) &&
-         dispatch(clearSearchedClients())
-         if(val === '') {
-           setData(clients)
-           setFilteredDataTotal(total)
+        setSearchByName(val)
+        ;(searchedData.length > 0 || totalSearched > 0) &&
+            dispatch(clearSearchedClients())
+        if (val === '') {
+            setData(clients)
+            setFilteredDataTotal(total)
         } else {
-          const filteredClients = clients.filter((client) => {
+            const filteredClients = clients.filter((client) => {
                 return client.name.toLowerCase().includes(valForSearch)
-         })
+            })
             setData(filteredClients)
-           setFilteredDataTotal(filteredClients.length)
-         }
-     }
+            setFilteredDataTotal(filteredClients.length)
+        }
+    }
 
-     const filterByNameWhenPressEnter = (e) => {
-        if(e.key === 'Enter'){
+    const filterByNameWhenPressEnter = (e) => {
+        if (e.key === 'Enter') {
             const body = {
                 currentPage,
                 countPage: showByTotal,
-                search : {
-                    client :searchByName
-                }
+                search: {
+                    client: searchByName,
+                },
             }
             dispatch(getClientsByFilter(body))
         }
-     }
+    }
 
-     const packmansOption = packmanOptions ? packmanOptions.map((item) => {
-        return {label : item.name, value : item._id}
-     }) : ""
+    const handleChangeOptions = (e) => {
+        setPackman(e)
+    }
 
-     const handleChangeOptions = (e) => {
-        setGetOptions(e)  
-     }
-
-     // useEffects 
-     useEffect(() => {
-        if(errorClients) {
-            universalToast(errorClients, "error")
+    // useEffects
+    useEffect(() => {
+        if (errorClients) {
+            universalToast(errorClients, 'error')
             dispatch(clearErrorClients())
         }
-        if(successAddClients){
+        if (successAddClients) {
             successAddSupplierMessage()
             dispatch(clearSuccessAddClients())
             clearForm()
-           // 
+            //
         }
-        if(successUpdateClients){
+        if (successUpdateClients) {
             successUpdateSupplierMessage()
             dispatch(clearSuccessUpdateClients())
             setCurrentClient('')
             setStickyForm(false)
             clearForm()
         }
-        if(successDeleteClients) {
+        if (successDeleteClients) {
             successDeleteSupplierMessage()
             dispatch(clearSuccessDeleteClients())
             clearForm()
         }
-     }, [
+    }, [
         dispatch,
         errorClients,
         successAddClients,
         successDeleteClients,
-        successUpdateClients
-     ])
+        successUpdateClients,
+    ])
+    useEffect(() => {
+        dispatch(getAllPackmans())
+    }, [dispatch])
 
-     useEffect(() => {
-        const body = {
-            currentPage,
-            countPage : showByTotal,
-            search : {
-                name : '',
-            },
-        }
-        dispatch(getClients(body))
-     }, [dispatch, showByTotal, currentPage])
-
-     useEffect(() => {
-      setData(clients)
-     },[clients])
-     
-     useEffect(() => {
-        setFilteredDataTotal(total)
-     }, [total])
-
-     useEffect(() => {
-        setSearchedData(searchedClients)
-     }, [searchedClients])
-     
-     useEffect(() => {
+    useEffect(() => {
         const body = {
             currentPage,
             countPage: showByTotal,
@@ -250,15 +237,27 @@ const ClientsPage = () => {
                 name: '',
             },
         }
-        dispatch(getPackmans(body))
+        dispatch(getClients(body))
     }, [dispatch, showByTotal, currentPage])
 
-
+    useEffect(() => {
+        setData(clients)
+    }, [clients])
 
     useEffect(() => {
-        setPackmanOptions(options)     
-    }, [options])
+        setFilteredDataTotal(total)
+    }, [total])
 
+    useEffect(() => {
+        setSearchedData(searchedClients)
+    }, [searchedClients])
+
+    useEffect(() => {
+        const options = packmans.map((packman) => {
+            return {label: packman.name, value: packman._id}
+        })
+        setPackmanOptions(options)
+    }, [packmans])
 
     return (
         <section>
@@ -274,26 +273,24 @@ const ClientsPage = () => {
                 isOpen={modalVisible}
             />
             <form
-                className={
-                    `flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200 ${
-                        stickyForm && 'stickyForm'
-                    }`
-                }
+                className={`flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200 ${
+                    stickyForm && 'stickyForm'
+                }`}
             >
                 <div className='supplier-style'>
                     <FieldContainer
-                        value={getOptions}
+                        value={packman}
                         onChange={handleChangeOptions}
-                        label={'Yetkazuvchini tanlang'}
+                        label={'Agentni tanlang'}
                         placeholder={'misol: Dilso`z'}
                         select={true}
-                        options={packmansOption}
+                        options={packmanOptions}
                         maxWidth={'w-[21rem]'}
                         border={true}
                     />
 
                     <FieldContainer
-                        value = {clientName}
+                        value={clientName}
                         label={'Mijoz ismi'}
                         placeholder={'misol: Navro`z'}
                         maxWidth={'w-[21rem]'}
@@ -305,9 +302,7 @@ const ClientsPage = () => {
                             add={!stickyForm}
                             edit={stickyForm}
                             text={
-                                stickyForm
-                                    ? `Saqlash`
-                                    : `Yangi yetkazuvchi qo\`shish`
+                                stickyForm ? `Saqlash` : `Yangi agent qo\`shish`
                             }
                             onClick={stickyForm ? handleEdit : addNewClients}
                         />
@@ -327,35 +322,30 @@ const ClientsPage = () => {
                     />
                 )}
             </div>
-            <SearchForm 
-                filterBy={["total", "delivererName", "clientName"]}
+            <SearchForm
+                filterBy={['total', 'delivererName', 'clientName']}
                 filterByTotal={filterByTotal}
-                filterByClientNameWhenPressEnter={
-                    filterByNameWhenPressEnter
-                }
-                searchByClientName = {searchByName}
-                filterByClientName = {filterByClientName}
+                filterByClientNameWhenPressEnter={filterByNameWhenPressEnter}
+                searchByClientName={searchByName}
+                filterByClientName={filterByClientName}
             />
 
             <div className='tableContainerPadding'>
-                {
-                    loading ? (
-                        <Spinner/>
-                    ) : data.length === 0 ? (
-                        <NotFind text={'Mijozlar mavjud emas'} />
-                    ) : (
-                        <Table
-                            data={searchedData.length > 0 ? searchedData : data}
-                            page={'client'}
-                            currentPage={currentPage}
-                            countPage={showByTotal}
-                            headers={headers}
-                            Edit={handleEditClients}
-                            Delete={handleDeleteClient}
-                        />
-                    )
-                }
-                
+                {loading ? (
+                    <Spinner />
+                ) : data.length === 0 ? (
+                    <NotFind text={'Mijozlar mavjud emas'} />
+                ) : (
+                    <Table
+                        data={searchedData.length > 0 ? searchedData : data}
+                        page={'client'}
+                        currentPage={currentPage}
+                        countPage={showByTotal}
+                        headers={headers}
+                        Edit={handleEditClients}
+                        Delete={handleDeleteClient}
+                    />
+                )}
             </div>
         </section>
     )

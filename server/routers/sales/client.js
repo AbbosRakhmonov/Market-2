@@ -1,6 +1,6 @@
-const { Client, validateClient } = require('../../models/Sales/Client.js');
-const { Market } = require('../../models/MarketAndBranch/Market');
-const { Packman } = require('../../models/Sales/Packman.js');
+const { Client, validateClient } = require("../../models/Sales/Client.js");
+const { Market } = require("../../models/MarketAndBranch/Market");
+const { Packman } = require("../../models/Sales/Packman.js");
 
 module.exports.register = async (req, res) => {
   try {
@@ -34,24 +34,32 @@ module.exports.register = async (req, res) => {
       market,
     });
     await newClient.save();
-    if(packman.length > 0){
-    const checkpackman = await Packman.findById(packman);
-    if (checkpackman) {
-      newClient.packman = checkpackman._id;
-      await Packman.findByIdAndUpdate(checkpackman._id, {
-        $push: {
-          clients: newClient,
-        },
-      });
-      await newClient.save();
-    }}
-    const clientname = new RegExp('.*' + search ? search.client : '' + '.*', 'i');
-    const clientpackman = new RegExp('.*' + search ? search.packman : '' + '.*', 'i');
+
+    if (packman) {
+      const checkpackman = await Packman.findById(packman);
+      if (checkpackman) {
+        newClient.packman = checkpackman._id;
+        await Packman.findByIdAndUpdate(checkpackman._id, {
+          $push: {
+            clients: newClient,
+          },
+        });
+        await newClient.save();
+      }
+    }
+    const clientname = new RegExp(
+      ".*" + search ? search.client : "" + ".*",
+      "i"
+    );
+    const clientpackman = new RegExp(
+      ".*" + search ? search.packman : "" + ".*",
+      "i"
+    );
 
     const clientsCount = await Client.find({ market, name: clientname })
       .sort({ _id: -1 })
-      .select('name market packman')
-      .populate({ path: 'packman', match: { name: clientpackman } });
+      .select("name market packman")
+      .populate({ path: "packman", match: { name: clientpackman } });
 
     const filterCount = clientsCount.filter((item) => {
       return item.packman !== null;
@@ -59,9 +67,9 @@ module.exports.register = async (req, res) => {
 
     const clients = await Client.find({ market, name: clientname })
       .sort({ _id: -1 })
-      .select('name market packman')
-      .populate({ path: 'packman', match: { name: clientpackman } })
-      .populate('packman', 'name')
+      .select("name market packman")
+      .populate({ path: "packman", match: { name: clientpackman } })
+      .populate("packman", "name")
       .skip(currentPage * countPage)
       .limit(countPage);
 
@@ -71,7 +79,8 @@ module.exports.register = async (req, res) => {
 
     res.status(201).json({ clients: filter, count: filterCount.length });
   } catch (error) {
-    res.status(400).json({ error: 'Serverda xatolik yuz berdi...' });
+    console.log(error);
+    res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -86,18 +95,19 @@ module.exports.getAll = async (req, res) => {
     }
 
     const client = await Client.find({ market })
-      .select('name')
-      .populate('packman', 'name');
+      .select("name")
+      .populate("packman", "name");
 
     res.status(201).send(client);
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
 module.exports.updateClient = async (req, res) => {
   try {
-    const { _id, market, name, packman, search, currentPage, countPage } = req.body;
+    const { _id, market, name, packman, search, currentPage, countPage } =
+      req.body;
     const marke = await Market.findById(market);
     if (!marke) {
       return res
@@ -140,13 +150,19 @@ module.exports.updateClient = async (req, res) => {
       ...updatedClient,
     });
 
-    const clientname = new RegExp('.*' + search ? search.client : '' + '.*', 'i');
-    const clientpackman = new RegExp('.*' + search ? search.packman : '' + '.*', 'i');
+    const clientname = new RegExp(
+      ".*" + search ? search.client : "" + ".*",
+      "i"
+    );
+    const clientpackman = new RegExp(
+      ".*" + search ? search.packman : "" + ".*",
+      "i"
+    );
 
     const clientsCount = await Client.find({ market, name: clientname })
       .sort({ _id: -1 })
-      .select('name market packman')
-      .populate({ path: 'packman', match: { name: clientpackman } });
+      .select("name market packman")
+      .populate({ path: "packman", match: { name: clientpackman } });
 
     const filterCount = clientsCount.filter((item) => {
       return item.packman !== null;
@@ -154,9 +170,9 @@ module.exports.updateClient = async (req, res) => {
 
     const clients = await Client.find({ market, name: clientname })
       .sort({ _id: -1 })
-      .select('name market packman')
-      .populate({ path: 'packman', match: { name: clientpackman } })
-      .populate('packman', 'name')
+      .select("name market packman")
+      .populate({ path: "packman", match: { name: clientpackman } })
+      .populate("packman", "name")
       .skip(currentPage * countPage)
       .limit(countPage);
 
@@ -166,13 +182,14 @@ module.exports.updateClient = async (req, res) => {
 
     res.status(201).json({ clients: filter, count: filterCount.length });
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
 module.exports.deleteClient = async (req, res) => {
   try {
-    const { _id, market, name, packman, search, currentPage, countPage } = req.body;
+    const { _id, market, name, packman, search, currentPage, countPage } =
+      req.body;
 
     const marke = await Market.findById(market);
     if (!marke) {
@@ -187,25 +204,32 @@ module.exports.deleteClient = async (req, res) => {
         .json({ message: `Diqqat! ${name} mijoz avval yaratilmagan!` });
     }
 
-    if(packman){
-    const packMan = await Packman.findById(packman);
+    if (packman) {
+      const packMan = await Packman.findById(packman);
 
-    if (packMan) {
-      await Packman.findByIdAndUpdate(packman, {
-        $pull: {
-          clients: client._id,
-        },
-      });
-    }}
+      if (packMan) {
+        await Packman.findByIdAndUpdate(packman, {
+          $pull: {
+            clients: client._id,
+          },
+        });
+      }
+    }
     await Client.findByIdAndDelete(_id);
 
-    const clientname = new RegExp('.*' + search ? search.client : '' + '.*', 'i');
-    const clientpackman = new RegExp('.*' + search ? search.packman : '' + '.*', 'i');
+    const clientname = new RegExp(
+      ".*" + search ? search.client : "" + ".*",
+      "i"
+    );
+    const clientpackman = new RegExp(
+      ".*" + search ? search.packman : "" + ".*",
+      "i"
+    );
 
     const clientsCount = await Client.find({ market, name: clientname })
       .sort({ _id: -1 })
-      .select('name market packman')
-      .populate({ path: 'packman', match: { name: clientpackman } });
+      .select("name market packman")
+      .populate({ path: "packman", match: { name: clientpackman } });
 
     const filterCount = clientsCount.filter((item) => {
       return item.packman !== null;
@@ -213,9 +237,9 @@ module.exports.deleteClient = async (req, res) => {
 
     const clients = await Client.find({ market, name: clientname })
       .sort({ _id: -1 })
-      .select('name market packman')
-      .populate({ path: 'packman', match: { name: clientpackman } })
-      .populate('packman', 'name')
+      .select("name market packman")
+      .populate({ path: "packman", match: { name: clientpackman } })
+      .populate("packman", "name")
       .skip(currentPage * countPage)
       .limit(countPage);
 
@@ -225,7 +249,7 @@ module.exports.deleteClient = async (req, res) => {
 
     res.status(201).json({ clients: filter, count: filterCount.length });
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -239,13 +263,13 @@ module.exports.getClients = async (req, res) => {
         .json({ message: "Diqqat! Do'kon malumotlari topilmadi." });
     }
 
-    const name = new RegExp('.*' + search ? search.client : '' + '.*', 'i');
-    const packman = new RegExp('.*' + search ? search.packman : '' + '.*', 'i');
+    const name = new RegExp(".*" + search ? search.client : "" + ".*", "i");
+    const packman = new RegExp(".*" + search ? search.packman : "" + ".*", "i");
 
     const clientsCount = await Client.find({ market, name: name })
       .sort({ _id: -1 })
-      .select('name market packman')
-      .populate({ path: 'packman', match: { name: packman } });
+      .select("name market packman")
+      .populate({ path: "packman", match: { name: packman } });
 
     const filterCount = clientsCount.filter((item) => {
       return item.packman !== null;
@@ -253,9 +277,9 @@ module.exports.getClients = async (req, res) => {
 
     const clients = await Client.find({ market, name: name })
       .sort({ _id: -1 })
-      .select('name market packman')
-      .populate({ path: 'packman', match: { name: packman } })
-      .populate('packman', 'name')
+      .select("name market packman")
+      .populate({ path: "packman", match: { name: packman } })
+      .populate("packman", "name")
       .skip(currentPage * countPage)
       .limit(countPage);
 
@@ -265,6 +289,6 @@ module.exports.getClients = async (req, res) => {
 
     res.status(201).json({ clients: filter, count: filterCount.length });
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };

@@ -1,23 +1,33 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import Api from "../../Config/Api";
-import {getPackmans} from './../Packman/packmanSlice'
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
+import Api from '../../Config/Api'
 
 export const getClients = createAsyncThunk(
     'clients/getClients',
-    async (body , {rejectWithValue}) => {
+    async (body, {rejectWithValue}) => {
         try {
-          const {data} = await Api.post('/sales/client/getclients' , body)
-       //   
-          return data;
-        } catch (error){
-         return rejectWithValue(error)
+            const {data} = await Api.post('/sales/client/getclients', body)
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
+export const getAllPackmans = createAsyncThunk(
+    'packmans/getAllPackmans',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post('/sales/packman/getall', body)
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
         }
     }
 )
 
 export const addClients = createAsyncThunk(
     'clients/addClients',
-    async (body , {rejectWithValue}) => {
+    async (body, {rejectWithValue}) => {
         try {
             const {data} = await Api.post('/sales/client/register', body)
             return data
@@ -29,23 +39,22 @@ export const addClients = createAsyncThunk(
 
 export const updateClients = createAsyncThunk(
     'clients/updateClients',
-    async (body , {rejectWithValue}) => {
+    async (body, {rejectWithValue}) => {
         try {
-          const {data} = await Api.put('/sales/client/update', body)
-          return data
-        }
-        catch (error){
-          return rejectWithValue(error)
+            const {data} = await Api.put('/sales/client/update', body)
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
         }
     }
 )
 
 export const deleteClients = createAsyncThunk(
     'clients/deleteClients',
-     async (body , {rejectWithValue}) => {
+    async (body, {rejectWithValue}) => {
         try {
             const {data} = await Api.delete('/sales/client/delete', {
-                data : body
+                data: body,
             })
             return data
         } catch (error) {
@@ -56,9 +65,9 @@ export const deleteClients = createAsyncThunk(
 
 export const getClientsByFilter = createAsyncThunk(
     'clients/getClientsByFilter',
-    async (body , {rejectWithValue}) => {
+    async (body, {rejectWithValue}) => {
         try {
-            const {data} = await Api.post('/sales/client/getclients',body)
+            const {data} = await Api.post('/sales/client/getclients', body)
             return data
         } catch (error) {
             return rejectWithValue(error)
@@ -67,110 +76,129 @@ export const getClientsByFilter = createAsyncThunk(
 )
 
 const clientsSlice = createSlice({
-    name : "clients",
-    initialState : {
-      options:[],  
-      clients : [],
-      total : 0,
-      searchedClients : [],
-      totalSearched : 0,
-      loading : false,
-      errorClients : null,
-      successAddClients : false,
-      successUpdateClients : false,
-      successDeleteClients : false
+    name: 'clients',
+    initialState: {
+        packmans: [],
+        clients: [],
+        total: 0,
+        searchedClients: [],
+        totalSearched: 0,
+        loading: false,
+        errorClients: null,
+        successAddClients: false,
+        successUpdateClients: false,
+        successDeleteClients: false,
     },
-    reducers : {
+    reducers: {
         clearErrorClients: (state) => {
             state.errorClients = null
         },
-        clearSuccessAddClients : (state) => {
+        clearSuccessAddClients: (state) => {
             state.successAddClients = false
         },
-        clearSuccessUpdateClients : (state) => {
+        clearSuccessUpdateClients: (state) => {
             state.successUpdateClients = false
         },
-        clearSuccessDeleteClients : (state) => {
+        clearSuccessDeleteClients: (state) => {
             state.successDeleteClients = false
         },
-        clearSearchedClients : (state) => {
+        clearSearchedClients: (state) => {
             state.searchedClients = []
-            state.totalSearched = 0;
-        }
+            state.totalSearched = 0
+        },
     },
-    extraReducers : {
-        [getClients.pending] : (state) => {
+    extraReducers: {
+        [getClients.pending]: (state) => {
             state.loading = true
         },
-        [getClients.fulfilled] : (state, {payload : {clients, count}}) => {
+        [getClients.fulfilled]: (state, {payload: {clients, count}}) => {
             state.loading = false
-            state.total = count
-            state.clients = clients
+            state.searchedClients.length
+                ? (state.searchedClients = clients)
+                : (state.clients = clients)
+            state.searchedClients.length
+                ? (state.totalSearcheds = count)
+                : (state.total = count)
         },
-        [getPackmans.pending] : (state) => {
+        [getAllPackmans.pending]: (state) => {
             state.loading = true
         },
-        [getPackmans.fulfilled] : (state, {payload: {packmans, count}}) => {
+        [getAllPackmans.fulfilled]: (state, {payload}) => {
             state.loading = false
-            state.options = packmans
+            state.packmans = payload
         },
-        [getPackmans.rejected] : (state, {payload}) => {
+        [getAllPackmans.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorClients = payload
         },
-        [getClients.rejected] : (state, {payload}) => {
+        [getClients.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorClients = payload
         },
-        [getClientsByFilter.pending] : (state) => {
+        [getClientsByFilter.pending]: (state) => {
             state.loading = true
         },
-        [getClientsByFilter.fulfilled] : (state, {payload : {clients, count}}) => {
+        [getClientsByFilter.fulfilled]: (
+            state,
+            {payload: {clients, count}}
+        ) => {
             state.loading = false
             state.searchedClients = clients
             state.totalSearched = count
         },
-        [getClientsByFilter.rejected] : (state, {payload}) => {
+        [getClientsByFilter.rejected]: (state, {payload}) => {
             state.loading = false
-            state.errorClients= payload
+            state.errorClients = payload
         },
-        [addClients.pending] : (state) => {
+        [addClients.pending]: (state) => {
             state.loading = true
         },
-        [addClients.fulfilled] : (state, {payload : {clients, count}}) => {
+        [addClients.fulfilled]: (state, {payload: {clients, count}}) => {
             state.loading = false
             state.successAddClients = true
-            state.clients = clients
-            state.total = count
-        }, 
-        [addClients.rejected] : (state , {payload}) => {
+            state.searchedClients.length
+                ? (state.searchedClients = clients)
+                : (state.clients = clients)
+            state.searchedClients.length
+                ? (state.totalSearcheds = count)
+                : (state.total = count)
+        },
+        [addClients.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorClients = payload
         },
-        [updateClients.pending] : (state) => {
+        [updateClients.pending]: (state) => {
             state.loading = true
         },
-        [updateClients.fulfilled] : (state, {payload : {clients, count}}) => {
+        [updateClients.fulfilled]: (state, {payload: {clients, count}}) => {
             state.loading = false
-            state.total = count
-            state.clients = clients
+            state.searchedClients.length
+                ? (state.searchedClients = clients)
+                : (state.clients = clients)
+            state.searchedClients.length
+                ? (state.totalSearcheds = count)
+                : (state.total = count)
             state.successUpdateClients = true
         },
-        [updateClients.rejected] : (state, {payload}) => {
+        [updateClients.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorClients = payload
         },
-        [deleteClients.pending] : (state) => {
+        [deleteClients.pending]: (state) => {
             state.loading = true
         },
-        [deleteClients.fulfilled] : (state, {payload : {clients, count}}) => {
+        [deleteClients.fulfilled]: (state, {payload: {clients, count}}) => {
             state.loading = false
             state.successDeleteClients = true
-            state.total = count
-            state.clients = clients
+            state.searchedClients.length
+                ? (state.searchedClients = clients)
+                : (state.clients = clients)
+            state.searchedClients.length
+                ? (state.totalSearcheds = count)
+                : (state.total = count)
         },
-        [deleteClients.rejected] : (state , {payload}) => {
-            state.loading =false
+        [deleteClients.rejected]: (state, {payload}) => {
+            state.loading = false
             state.errorClients = payload
         },
     },
@@ -182,5 +210,5 @@ export const {
     clearSuccessDeleteClients,
     clearSuccessUpdateClients,
     clearSearchedClients,
-} = clientsSlice.actions;
+} = clientsSlice.actions
 export default clientsSlice.reducer
