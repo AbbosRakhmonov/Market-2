@@ -11,15 +11,15 @@ export const ExchangenerateTableRow = ({
     return (
         <>
             {data.map((exchange, index) => (
-                <tr className='tr'>
+                <tr className='tr' key={exchange._id}>
                     <td className='text-left td'>
                         {currentPage * countPage + 1 + index}
                     </td>
                     <td className='text-left td'>
-                        {exchange.createdAt.toLocaleDateString()}
+                        {new Date (exchange.createdAt).toLocaleDateString()}
                     </td>
                     <td className='text-left td'>
-                        1 USD - {exchange.exchangenerate} UZS
+                        1 USD - {exchange.exchangerate} UZS
                     </td>
                     <td className='border-r-0 td py-[0.375rem]'>
                         <div className='flex items-center justify-center gap-[0.625rem]'>

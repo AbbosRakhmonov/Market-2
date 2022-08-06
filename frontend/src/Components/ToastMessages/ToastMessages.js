@@ -1,4 +1,4 @@
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
 
 // Long toast message with header and body
 const toastWithHeader = (header, message) => (
@@ -37,6 +37,15 @@ export const successUpdateSupplierMessage = () =>
 export const successDeleteSupplierMessage = () =>
     toast.success("Yertkazib beruvchi muvaffaqiyatli o'chirildi!")
 
+// Exchange rate massages
+export const successAddExchangeMessage = () =>
+    toast.success('Valyuta kursi muvaffaqiyatli yaratildi !')
+export const successUpdateExchangeMessage = () =>
+    toast.success("Valyuta kursi muvaffaqiyatli o'zgartirildi !")
+export const successDeleteExchangeMessage = () =>
+    toast.success("Valyuta kursi muvaffaqiyatli o'chirildi !")
+
+
 export const successUpdateInventoryMessage = () =>
     toast.success('Inventarizatsiya muvaffaqqiyatli saqlandi!')
 export const successCompleteInventoryMessage = () =>
@@ -64,6 +73,7 @@ export const warningCurrencyRate = () =>
 export const warningCategory = () => {
     toast.warn('Kategoriyalar mavjud emas!')
 }
+
 
 // Error Messages
 export const errorNetwork = () =>

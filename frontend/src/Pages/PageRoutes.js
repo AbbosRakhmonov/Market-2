@@ -1,5 +1,5 @@
-import {lazy, Suspense, useEffect} from 'react'
-import {Route, Routes} from 'react-router-dom'
+import { lazy, Suspense, useEffect } from 'react'
+import { Route, Routes } from 'react-router-dom'
 import Navbar from '../Components/Navbar/Navbar'
 import Incoming from './Incomings/Incoming'
 import RegisterIncoming from './Incomings/Routes/RegisterIncoming'
@@ -21,10 +21,10 @@ import SavedSellings from './Sale/Routes/SavedSellings.js'
 import Sellings from './Sale/Routes/Sellings.js'
 import Packman from './Packman/Packman'
 import ClientsPage from './Clients/Clients'
-import Exchangerate from './Exchangerate/Exchangerate.js'
-import {universalToast, warningCurrencyRate} from '../Components/ToastMessages/ToastMessages.js'
+import { universalToast, warningCurrencyRate } from '../Components/ToastMessages/ToastMessages.js'
 import Shops from './ShopsPage/Shops'
 import Checkout from './Checkout/Checkout'
+import Exchangerate from './Exchangerate/Exchangerate'
 
 //pages
 const MainPage = lazy(() => import('./MainPage/MainPage'))
@@ -32,11 +32,11 @@ const Products = lazy(() => import('./Products/Create/Products'))
 
 const PageRoutes = () => {
     const dispatch = useDispatch()
-    const {currency, currencyType, currencyError, currencyLoading} =
+    const { currency, currencyType, currencyError, currencyLoading } =
         useSelector((state) => state.currency)
     const changeCurrency = () => {
         const prevCurrencyType = currencyType === 'USD' ? 'UZS' : 'USD'
-        dispatch(changeCurrencyType({currency: prevCurrencyType}))
+        dispatch(changeCurrencyType({ currency: prevCurrencyType }))
     }
     useEffect(() => {
         dispatch(getCurrency())
