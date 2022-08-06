@@ -96,6 +96,8 @@ const Exchangerate = () => {
     const clearForm = (e) => {
         e && e.preventDefault()
         setExchangeName('')
+        setCurrentExchange(null)
+        setStickyForm(false)
     }
 
     const handleKeyUp = (e) => {
