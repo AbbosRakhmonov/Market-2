@@ -6,9 +6,9 @@ import RegisterIncoming from './Incomings/Routes/RegisterIncoming'
 import Incomings from './Incomings/Routes/Incomings'
 import SavedIncoming from './Incomings/Routes/SavedIncomings'
 import IncomingsList from './Incomings/Routes/IncomingsList'
-import CategoryPage from './CategoryPage/CategoryPage'
-import { useDispatch, useSelector } from 'react-redux'
-import { changeCurrencyType, clearError, getCurrency, getCurrencyType } from './Currency/currencySlice'
+import Category from './Category/Category.js'
+import {useDispatch, useSelector} from 'react-redux'
+import {changeCurrencyType, clearError, getCurrency, getCurrencyType} from './Currency/currencySlice'
 import Supplier from './SupplierPage/SupplierPage'
 import ProductReport from './ProductReport/ProductReport'
 import Inventory from './Inventory/Inventory'
@@ -83,7 +83,7 @@ const PageRoutes = () => {
                         </Route>
                         <Route
                             path='/maxsulotlar/yaratish/kategoriyalar'
-                            element={<CategoryPage />}
+                            element={<Category />}
                         />
                         <Route
                             path='/maxsulotlar/yaratish/yetkazuvchilar'
@@ -114,10 +114,7 @@ const PageRoutes = () => {
                             <Route path='ruyxat' element={<Sellings />} />
                         </Route>
 
-                        <Route
-                            path='/sotuv/agentlar'
-                            element={<Packman />}
-                        />
+                        <Route path='/sotuv/agentlar' element={<Packman />} />
 
                         <Route
                             path='/sotuv/mijozlar'
@@ -126,10 +123,7 @@ const PageRoutes = () => {
 
                         <Route path='/valyuta' element={<Exchangerate />} />
                         <Route path='/kassa' element={<Checkout />} />
-                        <Route
-                            path='/kassa'
-                            element={<Checkout />}
-                        />
+                        <Route path='/kassa' element={<Checkout />} />
 
                         <Route path='/dukonlar/' element={<Shops />}>
                             <Route path=':tablename/:_id' element={<Shops />} />

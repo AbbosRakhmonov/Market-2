@@ -35,9 +35,9 @@ import {regexForTypeNumber} from '../../../Components/RegularExpressions/Regular
 import UniversalModal from '../../../Components/Modal/UniversalModal'
 import CreateProductForm from '../../../Components/CreateProductForm/CreateProductForm'
 import {
-    clearErrorGetCategories,
-    getCategories,
-} from '../../CategoryPage/categorySlice'
+    clearErrorGetAllCategories,
+    getAllCategories,
+} from '../../Category/categorySlice'
 import {
     checkEmptyString,
     universalSort,
@@ -53,7 +53,7 @@ function Products() {
         market: {_id},
     } = useSelector((state) => state.login)
     const {errorUnits, units} = useSelector((state) => state.units)
-    const {categories, errorGetCategories} = useSelector(
+    const {allcategories, errorGetCategories} = useSelector(
         (state) => state.category
     )
     const {currency, currencyType, currencyError, currencyLoading} =
@@ -590,7 +590,7 @@ function Products() {
         }
         if (errorGetCategories) {
             warningCategory()
-            dispatch(clearErrorGetCategories())
+            dispatch(clearErrorGetAllCategories())
         }
         if (currencyError) {
             universalToast(currencyError, 'error')
@@ -623,7 +623,7 @@ function Products() {
 
     useEffect(() => {
         dispatch(getUnits())
-        dispatch(getCategories())
+        dispatch(getAllCategories())
     }, [dispatch])
 
     useEffect(() => {
@@ -676,14 +676,14 @@ function Products() {
     }, [units])
     useEffect(() => {
         setCategoryOptions(
-            categories.map((category) => ({
+            allcategories.map((category) => ({
                 value: category._id,
                 label:
                     category.code +
                     `${category.name ? ` - ${category.name}` : ''}`,
             }))
         )
-    }, [categories])
+    }, [allcategories])
     useEffect(() => {
         if (lastProductCode) {
             setCodeOfProduct(lastProductCode)

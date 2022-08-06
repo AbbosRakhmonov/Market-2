@@ -24,7 +24,7 @@ router.put("/category/update", auth, (req, res) => {
   require("./category").update(req, res);
 });
 
-router.delete("/category/delete", auth, (req, res) => {
+router.post("/category/delete", auth, (req, res) => {
   require("./category").delete(req, res);
 });
 
