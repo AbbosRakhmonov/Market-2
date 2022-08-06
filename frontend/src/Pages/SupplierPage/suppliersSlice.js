@@ -98,8 +98,12 @@ const suppliersSlice = createSlice({
         },
         [getSuppliers.fulfilled]: (state, {payload: {suppliers, count}}) => {
             state.loading = false
-            state.suppliers = suppliers
-            state.total = count
+            state.searchedSuppliers.length
+                ? (state.searchedSuppliers = suppliers)
+                : (state.suppliers = suppliers)
+            state.searchedSuppliers.length
+                ? (state.totalSearched = count)
+                : (state.total = count)
         },
         [getSuppliers.rejected]: (state, {payload}) => {
             state.loading = false
@@ -126,8 +130,12 @@ const suppliersSlice = createSlice({
         [addSupplier.fulfilled]: (state, {payload: {suppliers, count}}) => {
             state.loading = false
             state.successAddSupplier = true
-            state.suppliers = suppliers
-            state.total = count
+            state.searchedSuppliers.length
+                ? (state.searchedSuppliers = suppliers)
+                : (state.suppliers = suppliers)
+            state.searchedSuppliers.length
+                ? (state.totalSearched = count)
+                : (state.total = count)
         },
         [addSupplier.rejected]: (state, {payload}) => {
             state.loading = false
@@ -137,8 +145,12 @@ const suppliersSlice = createSlice({
             state.loading = true
         },
         [updateSupplier.fulfilled]: (state, {payload: {suppliers, count}}) => {
-            state.suppliers = suppliers
-            state.total = count
+            state.searchedSuppliers.length
+                ? (state.searchedSuppliers = suppliers)
+                : (state.suppliers = suppliers)
+            state.searchedSuppliers.length
+                ? (state.totalSearched = count)
+                : (state.total = count)
             state.loading = false
             state.successUpdateSupplier = true
         },
@@ -150,8 +162,12 @@ const suppliersSlice = createSlice({
             state.loading = true
         },
         [deleteSupplier.fulfilled]: (state, {payload: {suppliers, count}}) => {
-            state.suppliers = suppliers
-            state.total = count
+            state.searchedSuppliers.length
+                ? (state.searchedSuppliers = suppliers)
+                : (state.suppliers = suppliers)
+            state.searchedSuppliers.length
+                ? (state.totalSearched = count)
+                : (state.total = count)
             state.loading = false
             state.successDeleteSupplier = true
         },

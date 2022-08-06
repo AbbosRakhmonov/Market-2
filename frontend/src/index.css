@@ -144,7 +144,7 @@
     .tradeIn {
         @apply flex items-center w-full gap-[1.875rem] justify-between;
     }
-    
+
     .parcentageWidth {
         @apply w-full w-[3.75rem] h-[3.75rem]
     }
@@ -155,7 +155,7 @@
     .checkoutName {
         @apply w-full text-white-800 flex justify-between pb-[1.25rem] border-b border-solid border-white-200 font-normal;
     }
-    
+
     .checkName {
         @apply w-[100%] w-full text-white-800 flex justify-between pb-[1.25rem] border-b border-solid border-white-200 font-normal;
     }

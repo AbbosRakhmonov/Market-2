@@ -349,6 +349,12 @@ function Products() {
         setStickyForm(false)
     }
     const handleEdit = (e) => {
+        console.log(codeOfProduct)
+        console.log(nameOfProduct)
+        console.log(unitOfProduct)
+        console.log(categoryOfProduct)
+        console.log(priceOfProduct)
+        console.log(sellingPriceOfProduct)
         e.preventDefault()
         const filter = checkEmptyString([
             codeOfProduct,
@@ -432,6 +438,7 @@ function Products() {
 
     // table edit and delete
     const handleEditProduct = (product) => {
+        console.log(product)
         setCurrentProduct(product)
         setStickyForm(true)
     }
@@ -620,12 +627,10 @@ function Products() {
         }
         dispatch(getProducts(body))
     }, [currentPage, showByTotal, dispatch])
-
     useEffect(() => {
         dispatch(getUnits())
         dispatch(getAllCategories())
     }, [dispatch])
-
     useEffect(() => {
         setData(products)
     }, [products])
@@ -657,13 +662,10 @@ function Products() {
                 value: category._id,
                 label: `${category.code} - ${category.name}`,
             })
-            if (currencyType === 'UZS') {
-                setPriceOfProduct(incomingpriceuzs)
-                setSellingPriceOfProduct(sellingpriceuzs)
-            } else {
-                setPriceOfProductsUsd(incomingprice)
-                setSellingPriceOfProductUsd(sellingprice)
-            }
+            setPriceOfProduct(incomingpriceuzs)
+            setSellingPriceOfProduct(sellingpriceuzs)
+            setPriceOfProductsUsd(incomingprice)
+            setSellingPriceOfProductUsd(sellingprice)
         }
     }, [currentProduct, currencyType])
     useEffect(() => {
@@ -795,6 +797,7 @@ function Products() {
                     <NotFind text={'Maxsulot mavjud emas'} />
                 ) : (
                     <Table
+                        currencyType={currencyType}
                         headers={headers}
                         Edit={handleEditProduct}
                         Delete={handleDeleteProduct}

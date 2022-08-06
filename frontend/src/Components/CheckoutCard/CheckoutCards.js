@@ -8,7 +8,7 @@ const CheckoutCards = ({type, onClick, percentage, name, cost, active}) => {
         type === 'plastic' ||
         type === 'transfers'
             ? 'tradeCard'
-            : type === 'expenses' || type == 'debts'
+            : type === 'expenses' || type === 'debts'
             ? 'debts'
             : type === 'returned'
             ? 'returnedCard'
@@ -21,15 +21,20 @@ const CheckoutCards = ({type, onClick, percentage, name, cost, active}) => {
         <button onClick={onClick}>
             <span className={chooseCardName}>
                 <span className='tradeIn'>
-                    <span className={type === 'profit' ? 'hidden' : 'parcentageWidth'}>
                     <span
                         className={
-                            type === 'profit' ? 'hidden' : 'percentageCircle'
+                            type === 'profit' ? 'hidden' : 'parcentageWidth'
                         }
                     >
-                        <span> {percentage} </span>
-                    </span>
-
+                        <span
+                            className={
+                                type === 'profit'
+                                    ? 'hidden'
+                                    : 'percentageCircle'
+                            }
+                        >
+                            <span> {percentage} </span>
+                        </span>
                     </span>
                     <span className='w-full'>
                         <span

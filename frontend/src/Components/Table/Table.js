@@ -41,17 +41,20 @@ function Table({
     ReturnPayment,
     Save,
     onKeyUp,
+    currencyType,
 }) {
     const checkRows = () => {
         switch (page) {
             case 'product':
                 return (
                     <ProductTableRow
+                        currencyType={currencyType}
                         data={data}
                         currentPage={currentPage}
                         countPage={countPage}
                         Edit={Edit}
                         Delete={Delete}
+                        currency={currency}
                     />
                 )
             case 'category':

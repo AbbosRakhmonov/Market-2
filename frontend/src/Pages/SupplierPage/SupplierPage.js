@@ -23,9 +23,11 @@ import {
     successDeleteSupplierMessage,
     successUpdateSupplierMessage,
     universalToast,
+    warningEmptyInput,
 } from '../../Components/ToastMessages/ToastMessages.js'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
 import SearchForm from '../../Components/SearchForm/SearchForm.js'
+import {checkEmptyString} from '../../App/globalFunctions.js'
 
 const Supplier = () => {
     const dispatch = useDispatch()
@@ -98,34 +100,47 @@ const Supplier = () => {
     // handle submit of inputs
     const addNewSupplier = (e) => {
         e.preventDefault()
-        const body = {
-            name: supplierName,
-            currentPage,
-            countPage: showByTotal,
-            search: {
-                name: searchByName,
-            },
+        const filter = checkEmptyString([supplierName])
+        if (filter) {
+            warningEmptyInput()
+        } else {
+            const body = {
+                name: supplierName,
+                currentPage,
+                countPage: showByTotal,
+                search: {
+                    name: searchByName,
+                },
+            }
+            dispatch(addSupplier(body))
         }
-        dispatch(addSupplier(body))
     }
 
     const handleEdit = (e) => {
         e.preventDefault()
-        const body = {
-            name: supplierName,
-            _id: currentSupplier._id,
-            currentPage,
-            countPage: showByTotal,
-            search: {
-                name: searchByName,
-            },
+        const filter = checkEmptyString([supplierName])
+        if (filter) {
+            warningEmptyInput()
+        } else {
+            const body = {
+                name: supplierName,
+                _id: currentSupplier._id,
+                currentPage,
+                countPage: showByTotal,
+                search: {
+                    name: searchByName,
+                },
+            }
+            dispatch(updateSupplier(body))
         }
-        dispatch(updateSupplier(body))
     }
 
     const clearForm = (e) => {
         e && e.preventDefault()
         setSupplierName('')
+        setCurrentSupplier(null)
+        setStickyForm(false)
+        setDeletedSupplier(null)
     }
 
     // filter by total
@@ -218,7 +233,6 @@ const Supplier = () => {
     useEffect(() => {
         setSearchedData(searchedSuppliers)
     }, [searchedSuppliers])
-
     return (
         <section>
             <UniversalModal
@@ -285,7 +299,7 @@ const Supplier = () => {
             <div className='tableContainerPadding'>
                 {loading ? (
                     <Spinner />
-                ) : data.length === 0 ? (
+                ) : data.length === 0 && searchedData.length === 0 ? (
                     <NotFind text={'Yetkazib beruvchilar mavjud emas'} />
                 ) : (
                     <Table

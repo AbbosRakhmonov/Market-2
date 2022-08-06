@@ -153,7 +153,9 @@ const productSlice = createSlice({
             state.searchedProducts.length
                 ? (state.searchedProducts = products)
                 : (state.products = products)
-            state.total = count
+            state.searchedProducts.length
+                ? (state.totalSearcheds = count)
+                : (state.total = count)
         },
         [getProducts.rejected]: (state, {payload}) => {
             state.loading = false
@@ -179,8 +181,12 @@ const productSlice = createSlice({
         },
         [addProduct.fulfilled]: (state, {payload: {products, count}}) => {
             state.loading = false
-            state.products = products
-            state.total = count
+            state.searchedProducts.length
+                ? (state.searchedProducts = products)
+                : (state.products = products)
+            state.searchedProducts.length
+                ? (state.totalSearcheds = count)
+                : (state.total = count)
             state.successAddProduct = true
         },
         [addProduct.rejected]: (state, {payload}) => {
@@ -192,8 +198,12 @@ const productSlice = createSlice({
         },
         [updateProduct.fulfilled]: (state, {payload: {products, count}}) => {
             state.loading = false
-            state.products = products
-            state.total = count
+            state.searchedProducts.length
+                ? (state.searchedProducts = products)
+                : (state.products = products)
+            state.searchedProducts.length
+                ? (state.totalSearcheds = count)
+                : (state.total = count)
             state.successUpdateProduct = true
         },
         [updateProduct.rejected]: (state, {payload}) => {
@@ -205,8 +215,12 @@ const productSlice = createSlice({
         },
         [deleteProduct.fulfilled]: (state, {payload: {products, count}}) => {
             state.loading = false
-            state.products = products
-            state.total = count
+            state.searchedProducts.length
+                ? (state.searchedProducts = products)
+                : (state.products = products)
+            state.searchedProducts.length
+                ? (state.totalSearcheds = count)
+                : (state.total = count)
             state.successDeleteProduct = true
         },
         [deleteProduct.rejected]: (state, {payload}) => {

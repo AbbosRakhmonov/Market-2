@@ -8,6 +8,7 @@ import {
     successDeleteUnitMessage,
     successUpdateUnitMessage,
     universalToast,
+    warningEmptyInput,
 } from '../../Components/ToastMessages/ToastMessages.js'
 import {
     addUnit,
@@ -22,6 +23,7 @@ import {
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
 import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
+import {checkEmptyString} from '../../App/globalFunctions.js'
 
 function Unit() {
     const dispatch = useDispatch()
@@ -82,22 +84,35 @@ function Unit() {
     // handle submit of inputs
     const addNewUnit = (e) => {
         e.preventDefault()
-        const body = {name: unitName}
-        dispatch(addUnit(body))
+        const filter = checkEmptyString([unitName])
+        if (filter) {
+            warningEmptyInput()
+        } else {
+            const body = {name: unitName}
+            dispatch(addUnit(body))
+        }
     }
 
     const handleEdit = (e) => {
         e.preventDefault()
-        const body = {
-            name: unitName,
-            _id: currentUnit._id,
+        const filter = checkEmptyString([unitName])
+        if (filter) {
+            warningEmptyInput()
+        } else {
+            const body = {
+                name: unitName,
+                _id: currentUnit._id,
+            }
+            dispatch(updateUnit(body))
         }
-        dispatch(updateUnit(body))
     }
 
     const clearForm = (e) => {
         e && e.preventDefault()
         setUnitName('')
+        setCurrentUnit(null)
+        setDeletedUnit(null)
+        setStickyForm(false)
     }
 
     // useEffects
@@ -161,7 +176,7 @@ function Unit() {
                     maxWidth={'w-[43.75rem]'}
                 />
 
-                <div className={'flex gap-[1.25rem] grow items-end'}>
+                <div className={'flex gap-[1.25rem] grow '}>
                     <Button
                         add={!stickyForm}
                         edit={stickyForm}

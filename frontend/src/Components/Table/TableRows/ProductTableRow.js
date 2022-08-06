@@ -7,6 +7,8 @@ export const ProductTableRow = ({
     data,
     Edit,
     Delete,
+    currency,
+    currencyType,
 }) => {
     return (
         <>
@@ -28,17 +30,25 @@ export const ProductTableRow = ({
                     </td>
                     <td className='td text-right'>
                         {product.price &&
-                            product.price.incomingprice.toLocaleString(
-                                'ru-RU'
-                            )}{' '}
-                        USD
+                            (currency === 'UZS'
+                                ? product.price.incomingpriceuzs.toLocaleString(
+                                      'ru-RU'
+                                  )
+                                : product.price.incomingprice.toLocaleString(
+                                      'ru-RU'
+                                  ))}{' '}
+                        {currencyType}
                     </td>
                     <td className='td text-right'>
                         {product.price &&
-                            product.price.sellingprice.toLocaleString(
-                                'ru-RU'
-                            )}{' '}
-                        USD
+                            (currency === 'UZS'
+                                ? product.price.sellingpriceuzs.toLocaleString(
+                                      'ru-RU'
+                                  )
+                                : product.price.sellingprice.toLocaleString(
+                                      'ru-RU'
+                                  ))}{' '}
+                        {currencyType}
                     </td>
                     <td className='td py-[0.375rem] border-r-0'>
                         <div className='flex items-center justify-center'>
