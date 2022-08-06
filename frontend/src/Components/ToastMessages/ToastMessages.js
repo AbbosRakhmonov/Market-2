@@ -13,29 +13,29 @@ export const successLoggedIn = () =>
     toast.success(
         toastWithHeader(
             'Xush kelibsiz',
-            'Kirish muvaffaqiyatli amalga oshirildi !'
+            'Kirish muvaffaqiyatli amalga oshirildi!'
         )
     )
 export const successAddProductMessage = () =>
-    toast.success('Maxsulot muvaffaqiyatli yaratildi !')
+    toast.success('Maxsulot muvaffaqiyatli yaratildi!')
 export const successUpdateProductMessage = () =>
     toast.success("Maxsulot muvaffaqiyatli o'zgartirildi!")
 export const successDeleteProductMessage = () =>
     toast.success("Maxsulot muvaffaqiyatli o'chirildi!")
 
 export const successAddUnitMessage = () =>
-    toast.success("O'lchov birligi muvaffaqiyatli yaratildi !")
+    toast.success("O'lchov birligi muvaffaqiyatli yaratildi!")
 export const successUpdateUnitMessage = () =>
-    toast.success("O'lchov birligi muvaffaqiyatli o'zgartirildi !")
+    toast.success("O'lchov birligi muvaffaqiyatli o'zgartirildi!")
 export const successDeleteUnitMessage = () =>
-    toast.success("O'lchov birligi muvaffaqiyatli o'chirildi !")
+    toast.success("O'lchov birligi muvaffaqiyatli o'chirildi!")
 
 export const successAddSupplierMessage = () =>
-    toast.success('Yertkazib beruvchi muvaffaqiyatli yaratildi !')
+    toast.success('Yertkazib beruvchi muvaffaqiyatli yaratildi!')
 export const successUpdateSupplierMessage = () =>
-    toast.success("Yertkazib beruvchi muvaffaqiyatli o'zgartirildi !")
+    toast.success("Yertkazib beruvchi muvaffaqiyatli o'zgartirildi!")
 export const successDeleteSupplierMessage = () =>
-    toast.success("Yertkazib beruvchi muvaffaqiyatli o'chirildi !")
+    toast.success("Yertkazib beruvchi muvaffaqiyatli o'chirildi!")
 
 export const successUpdateInventoryMessage = () =>
     toast.success('Inventarizatsiya muvaffaqqiyatli saqlandi!')
@@ -43,19 +43,26 @@ export const successCompleteInventoryMessage = () =>
     toast.success('Inventarizatsiya muvaffaqqiyatli yakunlandi!')
 
 export const successAddPackmanMessage = () =>
-    toast.success('Agent muvaffaqiyatli yaratildi !')
+    toast.success('Agent muvaffaqiyatli yaratildi!')
 export const successUpdatePackmanMessage = () =>
-    toast.success("Agent muvaffaqiyatli o'zgartirildi !")
+    toast.success("Agent muvaffaqiyatli o'zgartirildi!")
 export const successDeletePackmanMessage = () =>
-    toast.success("Agent muvaffaqiyatli o'chirildi !")
+    toast.success("Agent muvaffaqiyatli o'chirildi!")
+
+export const successAddCategoryMessage = () =>
+    toast.success('Kategoriya muvaffaqiyatli yaratildi!')
+export const successUpdateCategoryMessage = () =>
+    toast.success("Kategoriya muvaffaqiyatli o'zgartirildi!")
+export const successDeleteCategoryMessage = () =>
+    toast.success("Kategoriya muvaffaqiyatli o'chirildi!")
 
 // Warning Messages
 export const warningEmptyInput = () =>
-    toast.warn("Ma'lumotlar to'liq kiritilmagan !")
+    toast.warn("Ma'lumotlar to'liq kiritilmagan!")
 export const warningCurrencyRate = () =>
-    toast.warn('Valyuta kursi kiritilmagan !')
+    toast.warn('Valyuta kursi kiritilmagan!')
 export const warningCategory = () => {
-    toast.warn('Kategoriyalar mavjud emas !')
+    toast.warn('Kategoriyalar mavjud emas!')
 }
 
 // Error Messages
@@ -63,7 +70,7 @@ export const errorNetwork = () =>
     toast.error(
         toastWithHeader(
             'Xatolik',
-            "Internet bilan bog'lanishda xatolik yuz berdi !"
+            "Internet bilan bog'lanishda xatolik yuz berdi!"
         )
     )
 

@@ -261,15 +261,6 @@ const Supplier = () => {
                     </div>
                 </div>
             </form>
-            <SearchForm
-                filterByTotal={filterByTotal}
-                filterBy={['total', 'name']}
-                filterByName={filterByName}
-                searchByName={searchByName}
-                filterByCodeAndNameAndCategoryWhenPressEnter={
-                    filterByNameWhenPressEnter
-                }
-            />
             <div className='pagination-supplier mainPadding'>
                 <p className='supplier-title'>Yetkazuvchilar</p>
                 {(filteredDataTotal !== 0 || totalSearched !== 0) && (
@@ -281,6 +272,15 @@ const Supplier = () => {
                     />
                 )}
             </div>
+            <SearchForm
+                filterByTotal={filterByTotal}
+                filterBy={['total', 'name']}
+                filterByName={filterByName}
+                searchByName={searchByName}
+                filterByCodeAndNameAndCategoryWhenPressEnter={
+                    filterByNameWhenPressEnter
+                }
+            />
 
             <div className='tableContainerPadding'>
                 {loading ? (
