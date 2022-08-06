@@ -126,7 +126,7 @@
     }
 
     .tradeCard {
-        @apply bg-success-500 hover:bg-success-600;
+        @apply bg-success-500 hover:bg-success-600 w-full;
     }
 
     .debts {
@@ -142,25 +142,26 @@
     }
 
     .tradeIn {
-        @apply flex items-center;
+        @apply flex items-center w-full gap-[1.875rem] justify-between;
     }
-
+    
+    .parcentageWidth {
+        @apply w-full w-[3.75rem] h-[3.75rem]
+    }
     .percentageCircle {
-        @apply w-[3.75rem] h-[3.75rem] bg-white-900 rounded-full flex justify-center items-center text-[1.25rem] leading-[1.875rem] text-black-700 mr-[1.875rem] border-[.125rem] border-black-200;
+        @apply w-[3.75rem] h-[3.75rem] bg-white-900 rounded-full flex justify-center items-center text-[1.25rem] leading-[1.875rem] text-black-700 border-[.125rem] border-solid border-black-200
     }
 
     .checkoutName {
-        @apply w-[11rem] text-white-800 flex justify-between pb-[1.25rem] border-b border-solid border-white-200 font-normal;
+        @apply w-full text-white-800 flex justify-between pb-[1.25rem] border-b border-solid border-white-200 font-normal;
     }
-
+    
     .checkName {
-        @apply w-[16rem] text-white-800 flex justify-between pb-[1.25rem] border-b border-solid border-white-200 font-normal;
+        @apply w-[100%] w-full text-white-800 flex justify-between pb-[1.25rem] border-b border-solid border-white-200 font-normal;
     }
-
     .costCard {
-        @apply text-[2rem] leading-[1.875rem] mt-[1.25rem] text-white-900;
+        @apply text-[2rem] w-full leading-[1.875rem] mt-[1.25rem] text-white-900 w-full text-right inline-block;
     }
-
     .activeCard {
         @apply bg-black-700 hover:bg-black-700 shadow-[0px_25px_25px_rgba(0,0,0,0.25)];
     }
