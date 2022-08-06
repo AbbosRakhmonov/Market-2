@@ -12,7 +12,7 @@ const CardLink = ({
     state,
 }) => {
     return (
-        <Link to={path} className='grow max-w-[240px]' state={state}>
+        <Link to={path} className='flex-[0_0_23.5%]' state={state}>
             <div className='w-full cardStyle'>
                 <h1 className='headerStyle'>
                     {(currencyType === 'USD'

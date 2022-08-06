@@ -19,6 +19,7 @@ function UniversalModal({
     title,
     product,
     changeProduct,
+    currency,
 }) {
     const customStyles = {
         content: {
@@ -65,6 +66,7 @@ function UniversalModal({
                         product={product}
                         changeProduct={changeProduct}
                         approveFunction={approveFunction}
+                        currency={currency}
                     />
                 )
             default:

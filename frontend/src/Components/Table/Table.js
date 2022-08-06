@@ -165,8 +165,6 @@ function Table({
                 return (
                     <TemporaryIncomingsTableRow
                         data={data}
-                        currentPage={currentPage}
-                        countPage={countPage}
                         Edit={Edit}
                         Delete={Delete}
                         Print={Print}

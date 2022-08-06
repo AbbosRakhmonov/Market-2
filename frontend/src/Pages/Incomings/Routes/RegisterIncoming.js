@@ -5,6 +5,10 @@ import Table from '../../../Components/Table/Table'
 import {
     addIncoming,
     addTemporary,
+    clearSuccessAdd,
+    clearSuccessTemporary,
+    clearTemporary,
+    deleteTemporary,
     getProducts,
     getSuppliers,
 } from '../incomingSlice'
@@ -12,6 +16,7 @@ import {getCurrency, getCurrencyType} from '../../Currency/currencySlice'
 import {ConfirmBtn, SaveBtn} from '../../../Components/Buttons/SaveConfirmBtn'
 import {CheckIncoming} from '../Functions/CheckIncoming'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
+import {UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
 
 const RegisterIncoming = () => {
     const dispatch = useDispatch()
@@ -20,7 +25,8 @@ const RegisterIncoming = () => {
         user,
     } = useSelector((state) => state.login)
     const {currency, currencyType} = useSelector((state) => state.currency)
-    const {suppliers, products} = useSelector((state) => state.incoming)
+    const {suppliers, products, successAdd, successTemporary, temporary} =
+        useSelector((state) => state.incoming)
 
     // states
     const [suppliersData, setSuppliersData] = useState([])
@@ -29,6 +35,7 @@ const RegisterIncoming = () => {
     const [incomings, setIncomings] = useState([])
     const [incomingModal, setIncomingModal] = useState({})
     const [modal, setModal] = useState(false)
+    const [temporaryIncomings, setTemporaryIncomings] = useState([])
 
     // functions for onchange of select
     const selectSupplier = (e) => {
@@ -83,42 +90,6 @@ const RegisterIncoming = () => {
         })
         setModal(true)
     }
-    // change product in modalincoming. function
-    const changeModalIncoming = (e, property) => {
-        let target = Number(e.target.value)
-        const check = (key) => key === property
-        const changepieces = () => {
-            const obj = {
-                ...incomingModal,
-                pieces: target,
-                totalprice: target * incomingModal.unitprice,
-                totalpriceuzs: target * incomingModal.unitprice * currency,
-            }
-            setIncomingModal(obj)
-        }
-        const changeunitprice = () => {
-            const obj = {
-                ...incomingModal,
-                unitprice: target,
-                unitpriceuzs: target * currency,
-                totalprice: target * incomingModal.pieces,
-                totalpriceuzs: target * incomingModal.pieces * currency,
-            }
-            setIncomingModal(obj)
-        }
-        const changesellingprice = () => {
-            const obj = {
-                ...incomingModal,
-                sellingprice: target,
-                sellingpriceuzs: target * currency,
-            }
-            setIncomingModal(obj)
-        }
-
-        check('pieces') && changepieces()
-        check('unitprice') && changeunitprice()
-        check('sellingprice') && changesellingprice()
-    }
 
     // add modalincoming to incomings
     const addProductToIncomings = () => {
@@ -130,14 +101,15 @@ const RegisterIncoming = () => {
     const changeIncomings = (e, key, id) => {
         const target = Number(e.target.value)
         const check = (property) => key === property
-        let currentUsd =
-            currencyType === 'USD'
-                ? target
-                : ((target / currency) * 1000) / 1000
-        let currentUzs =
-            currencyType === 'USD'
-                ? target * currency
-                : ((target / currency) * 1000) / 1000
+
+        const product = (!id && {
+            ...incomingModal,
+        }) || {...incomings.filter((incoming) => incoming._id === id)[0]}
+
+        const countUsd =
+            currencyType === 'USD' ? target : UzsToUsd(target, currency)
+        const countUzs =
+            currencyType === 'UZS' ? target : UsdToUzs(target, currency)
 
         const changepieces = (obj) => {
             obj.pieces = target
@@ -146,27 +118,33 @@ const RegisterIncoming = () => {
         }
 
         const changeunitprice = (obj) => {
-            obj.unitprice = currentUsd
-            obj.unitpriceuzs = currentUzs
-            obj.totalprice = currentUsd * obj.pieces
-            obj.totalpriceuzs = currentUzs * obj.pieces
+            obj.unitprice = countUsd
+            obj.unitpriceuzs = countUzs
+            obj.totalprice = countUsd * obj.pieces
+            obj.totalpriceuzs = countUzs * obj.pieces
         }
 
         const changesellingprice = (obj) => {
-            obj.sellingprice = currentUsd
-            obj.sellingpriceuzs = currentUzs
+            obj.sellingprice = countUsd
+            obj.sellingpriceuzs = countUzs
         }
 
-        let products = incomings.map((incoming) => {
-            if (incoming._id === id) {
-                check('pieces') && changepieces(incoming)
-                check('unitprice') && changeunitprice(incoming)
-                check('sellingprice') && changesellingprice(incoming)
-                return incoming
-            }
-            return incoming
-        })
-        setIncomings(products)
+        check('pieces') && changepieces(product)
+        check('unitprice') && changeunitprice(product)
+        check('sellingprice') && changesellingprice(product)
+
+        if (id) {
+            setIncomings([
+                ...incomings.map((incoming) => {
+                    if (incoming._id === id) {
+                        return product
+                    }
+                    return incoming
+                }),
+            ])
+        } else {
+            setIncomingModal(product)
+        }
     }
 
     // change datas for react-select //
@@ -195,13 +173,21 @@ const RegisterIncoming = () => {
             (incoming) => incoming._id !== product._id
         )
         setIncomings(filter)
+        const temps = temporaryIncomings.filter(
+            (temp) => temp._id !== product._id
+        )
+        setTemporaryIncomings(temporary)
+        if (temps.length === 0) {
+            dispatch(clearTemporary())
+        }
     }
 
     // request functions
     const createIncoming = () => {
         const postincoming = incomings.map((incoming) => {
-            delete incoming._id
-            return incoming
+            let obj = {...incoming}
+            delete obj._id
+            return obj
         })
         if (!CheckIncoming(postincoming)) {
             dispatch(
@@ -210,7 +196,22 @@ const RegisterIncoming = () => {
                     user: user._id,
                 })
             )
-            setIncomings([])
+            removeTemporary()
+        }
+    }
+
+    const removeTemporary = () => {
+        if (
+            temporary.incomings &&
+            temporary.incomings.length > 0 &&
+            temporaryIncomings.length > 0
+        ) {
+            dispatch(
+                deleteTemporary({
+                    _id: temporary._id,
+                })
+            )
+            dispatch(clearTemporary())
         }
     }
 
@@ -224,7 +225,6 @@ const RegisterIncoming = () => {
                 },
             })
         )
-        setIncomings([])
     }
 
     // Tableheader
@@ -281,6 +281,32 @@ const RegisterIncoming = () => {
         dispatch(getCurrencyType)
     }, [dispatch])
 
+    useEffect(() => {
+        if (successAdd) {
+            setIncomings([])
+            dispatch(clearSuccessAdd())
+        }
+    }, [dispatch, successAdd])
+
+    useEffect(() => {
+        if (successTemporary) {
+            setIncomings([])
+            dispatch(clearSuccessTemporary())
+        }
+    }, [dispatch, successTemporary])
+
+    useEffect(() => {
+        if (Object.keys(temporary).length > 0) {
+            setSupplier(temporary.supplier)
+            setIncomings(temporary.incomings)
+            setTemporaryIncomings(temporary.incomings)
+        }
+    }, [temporary])
+
+    // useEffect(() => {
+    //     temporaryIncomings.length === 0 && dispatch(clearTemporary())
+    // }, [dispatch, temporaryIncomings])
+
     return (
         <section>
             <div className='flex items-center mainPadding'>
@@ -299,7 +325,7 @@ const RegisterIncoming = () => {
                 </div>
             </div>
             <p className='text-[1.25rem] text-blue-900 mainPadding'>
-                Yetkazib beruvchi :
+                Yetkazib beruvchi: {supplier.name}
             </p>
             <div
                 className={`${incomings.length > 0 ? 'mainPadding' : 'hidden'}`}
@@ -332,8 +358,9 @@ const RegisterIncoming = () => {
                 body={'registerincomingbody'}
                 product={incomingModal}
                 closeModal={() => setModal(false)}
-                changeProduct={changeModalIncoming}
+                changeProduct={changeIncomings}
                 approveFunction={addProductToIncomings}
+                currency={currencyType}
             />
         </section>
     )

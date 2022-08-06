@@ -41,6 +41,18 @@ export const addIncoming = createAsyncThunk(
     }
 )
 
+export const getTemporary = createAsyncThunk(
+    'incoming/getTemporary',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post('/products/temporary/get', {body})
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
 export const addTemporary = createAsyncThunk(
     'incoming/temporary',
     async (body, {rejectWithValue}) => {
@@ -80,6 +92,47 @@ export const getIncomings = createAsyncThunk(
     }
 )
 
+export const deleteIncoming = createAsyncThunk(
+    'incoming/deleteIncoming',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.delete('/products/incoming/delete', {
+                data: body,
+            })
+            return {data, body}
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
+export const updateIncoming = createAsyncThunk(
+    'incoming/updateIncoming',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.put('/products/incoming/update', body)
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
+export const deleteTemporary = createAsyncThunk(
+    'incoming/deleteTemporary',
+    async (body, {rejectWithValue}) => {
+        try {
+            console.log(body)
+            const {data} = await Api.delete('/products/temporary/delete', {
+                data: body,
+            })
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
 const incomingSlice = createSlice({
     name: 'incoming',
     initialState: {
@@ -90,10 +143,41 @@ const incomingSlice = createSlice({
         incomingconnectors: [],
         incomings: [],
         incomingscount: 0,
+        successUpdate: false,
+        successAdd: false,
+        successTemporary: false,
+        successDelete: false,
+        temporaries: [],
+        temporary: {},
     },
     reducers: {
         clearError: (state) => {
             state.error = null
+        },
+        clearSuccessUpdate: (state) => {
+            state.successUpdate = false
+        },
+        clearSuccessAdd: (state) => {
+            state.successAdd = false
+        },
+        clearSuccessTemporary: (state) => {
+            state.successTemporary = false
+        },
+        setTemporaryRegister: (
+            state,
+            {payload: {_id, incomings, supplier}}
+        ) => {
+            state.temporary = {
+                _id,
+                incomings,
+                supplier,
+            }
+        },
+        clearTemporary: (state) => {
+            state.temporary = {}
+        },
+        clearSuccesDelete: (state) => {
+            state.successDelete = false
         },
     },
     extraReducers: {
@@ -123,6 +207,7 @@ const incomingSlice = createSlice({
         },
         [addIncoming.fulfilled]: (state) => {
             state.loading = false
+            state.successAdd = true
             universalToast('Mahsulotlar qabul qilindi!', 'success')
         },
         [addIncoming.rejected]: (state, {payload}) => {
@@ -135,11 +220,34 @@ const incomingSlice = createSlice({
         },
         [addTemporary.fulfilled]: (state) => {
             state.loading = false
+            state.successTemporary = true
             universalToast('Mahsulotlar saqlandi!', 'success')
         },
         [addTemporary.rejected]: (state, {payload}) => {
             state.loading = false
             state.error = payload
+            universalToast(`${payload}`, 'error')
+        },
+        [getTemporary.pending]: (state) => {
+            state.loading = true
+        },
+        [getTemporary.fulfilled]: (state, {payload}) => {
+            state.loading = false
+            state.temporaries = payload
+        },
+        [getTemporary.rejected]: (state, {payload}) => {
+            state.loading = false
+            universalToast(`${payload}`, 'error')
+        },
+        [deleteTemporary.pending]: (state) => {
+            state.loading = true
+        },
+        [deleteTemporary.fulfilled]: (state, {payload}) => {
+            state.loading = false
+            state.temporaries = payload
+        },
+        [deleteTemporary.rejected]: (state, {payload}) => {
+            state.loading = false
             universalToast(`${payload}`, 'error')
         },
         [getIncomingConnectors.pending]: (state) => {
@@ -165,8 +273,40 @@ const incomingSlice = createSlice({
             state.loading = false
             universalToast(`${payload}`, 'error')
         },
+        [deleteIncoming.pending]: (state) => {
+            state.loading = true
+        },
+        [deleteIncoming.fulfilled]: (state) => {
+            state.loading = false
+            state.successDelete = true
+            universalToast("Mahsulot o'chirildi!", 'success')
+        },
+        [deleteIncoming.rejected]: (state, {payload}) => {
+            state.loading = false
+            universalToast(`${payload}`, 'error')
+        },
+        [updateIncoming.pending]: (state) => {
+            state.loading = true
+        },
+        [updateIncoming.fulfilled]: (state) => {
+            state.loading = false
+            state.successUpdate = true
+            universalToast('Qabul mahsuloti yangilandi', 'success')
+        },
+        [updateIncoming.rejected]: (state, {payload}) => {
+            state.loading = false
+            universalToast(`${payload}`, 'error')
+        },
     },
 })
 
-export const {clearError} = incomingSlice.actions
+export const {
+    clearError,
+    clearSuccessUpdate,
+    clearSuccessAdd,
+    clearSuccessTemporary,
+    setTemporaryRegister,
+    clearTemporary,
+    clearSuccesDelete,
+} = incomingSlice.actions
 export default incomingSlice.reducer

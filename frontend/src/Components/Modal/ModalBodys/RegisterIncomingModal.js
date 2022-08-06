@@ -1,7 +1,13 @@
 import React from 'react'
 import TableInput from '../../Inputs/TableInput'
 
-const RegisterproductModal = ({product, changeProduct, approveFunction}) => {
+const RegisterproductModal = ({
+    product,
+    changeProduct,
+    approveFunction,
+    currency,
+}) => {
+    const current = (usd, uzs) => (currency === 'USD' ? usd : uzs)
     return (
         <div className='pt-[1.25rem] text-center'>
             <div className='text-center'>
@@ -48,14 +54,22 @@ const RegisterproductModal = ({product, changeProduct, approveFunction}) => {
                                         changeProduct(e, 'unitprice')
                                     }
                                     type={'number'}
-                                    value={product.unitprice}
+                                    value={current(
+                                        product.unitprice,
+                                        product.unitpricezs
+                                    )}
                                 />
                             </td>
                             <td className='py-0 td text-error-500 text-right'>
-                                {product.oldprice} USD
+                                {current(product.oldprice, product.oldpriceuzs)}{' '}
+                                {currency}
                             </td>
                             <td className='py-0 td text-right'>
-                                {product.totalprice} USD
+                                {current(
+                                    product.totalprice,
+                                    product.totalpriceuzs
+                                )}{' '}
+                                {currency}
                             </td>
                             <td className='py-1 td'>
                                 <TableInput
@@ -63,7 +77,10 @@ const RegisterproductModal = ({product, changeProduct, approveFunction}) => {
                                         changeProduct(e, 'sellingprice')
                                     }
                                     type={'number'}
-                                    value={product.sellingprice}
+                                    value={current(
+                                        product.sellingprice,
+                                        product.sellingpriceuzs
+                                    )}
                                 />
                             </td>
                         </tr>

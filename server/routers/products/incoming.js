@@ -416,6 +416,14 @@ module.exports.get = async (req, res) => {
           select: 'name code',
         },
       })
+      .populate({
+        path: 'product',
+        select: 'price',
+        populate: {
+          path: 'price',
+          select: 'sellingprice sellingpriceuzs',
+        },
+      })
       .populate('unit', 'name');
 
     let filter = incomings.filter((incoming) => {

@@ -13,6 +13,8 @@ export const IncomingsTableRow = ({
     countPage,
     data,
 }) => {
+    const current = (usd, uzs) => (currency === 'USD' ? usd : uzs || 0)
+
     return (
         <>
             {data.map((incoming, index) => (
@@ -20,53 +22,71 @@ export const IncomingsTableRow = ({
                     <td className='text-left td'>
                         {currentPage * countPage + 1 + index}
                     </td>
-                    <td className='td text-left'>{incoming.brand.name}</td>
+                    <td className='td text-left'>{incoming.supplier.name}</td>
                     <td className='td text-right'>
-                        {incoming.productdata.code}
+                        {incoming.product.productdata.code}
                     </td>
                     <td className='td text-left'>
-                        {incoming.productdata.name}
+                        {incoming.product.productdata.name}
                     </td>
-                    <td className='td text-right'>
+                    <td className='td text-right font-bold'>
                         {(editedIncoming._id === incoming._id && (
                             <TableInput
-                                value={editedIncoming.total}
-                                onChange={(e) => changeHandler(e, 'total')}
+                                value={editedIncoming.pieces}
+                                onChange={(e) => changeHandler(e, 'pieces')}
                             />
                         )) || (
                             <span>
-                                {incoming.total}{' '}
-                                <span className='text-warning-500'>
+                                {incoming.pieces}{' '}
+                                <span className='text-warning-500 font-medium'>
                                     {incoming.unit.name}
                                 </span>
                             </span>
                         )}
                     </td>
-                    <td className='td text-right'>
+                    <td className='td text-right font-bold'>
                         {(editedIncoming._id === incoming._id && (
                             <TableInput
-                                value={editedIncoming.price.incomingprice}
-                                onChange={(e) =>
-                                    changeHandler(e, 'incomingprice')
-                                }
+                                value={current(
+                                    editedIncoming.unitprice,
+                                    editedIncoming.unitpriceuzs
+                                )}
+                                onChange={(e) => changeHandler(e, 'unitprice')}
                                 type={'number'}
                             />
                         )) || (
                             <span>
-                                {incoming.price.incomingprice}{' '}
-                                <span className='text-primary-800'>
+                                {current(
+                                    incoming.unitprice,
+                                    incoming.unitpriceuzs
+                                )}{' '}
+                                <span className='text-primary-800 font-medium'>
                                     {currency}
                                 </span>
                             </span>
                         )}
                     </td>
-                    <td className='text-success-500 td text-right'>
-                        {incoming.totalprice} {currency}
+                    <td className='td text-right font-bold'>
+                        {editedIncoming._id === incoming._id
+                            ? current(
+                                  editedIncoming.totalprice,
+                                  editedIncoming.totalpriceuzs
+                              )
+                            : current(
+                                  incoming.totalprice,
+                                  incoming.totalpriceuzs
+                              )}{' '}
+                        <span className='text-success-500 font-medium'>
+                            {currency}
+                        </span>
                     </td>
-                    <td className='td text-right'>
+                    <td className='td text-right font-bold'>
                         {(editedIncoming._id === incoming._id && (
                             <TableInput
-                                value={editedIncoming.price.sellingprice}
+                                value={current(
+                                    editedIncoming.sellingprice,
+                                    editedIncoming.sellingpriceuzs
+                                )}
                                 onChange={(e) =>
                                     changeHandler(e, 'sellingprice')
                                 }
@@ -74,8 +94,11 @@ export const IncomingsTableRow = ({
                             />
                         )) || (
                             <span>
-                                {incoming.price.sellingprice}{' '}
-                                <span className='text-primary-800'>
+                                {current(
+                                    incoming.sellingprice,
+                                    incoming.sellingpriceuzs
+                                )}{' '}
+                                <span className='text-primary-800 font-medium'>
                                     {currency}
                                 </span>
                             </span>

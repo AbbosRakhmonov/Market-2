@@ -1,14 +1,18 @@
 import React from 'react'
 
 const ResultIncomings = ({connectors, styles, currencyType}) => {
-    const price =
-        currencyType === 'USD'
-            ? connectors
-                  .reduce((prev, item) => prev + item.totalprice, 0)
-                  .toLocaleString('ru-RU')
-            : connectors
-                  .reduce((prev, item) => prev + item.totalpriceuzs, 0)
-                  .toLocaleString('ru-RU')
+    const price = () => {
+        if (connectors.length > 0) {
+            return currencyType === 'USD'
+                ? connectors
+                      .reduce((prev, item) => prev + item.totalprice, 0)
+                      .toLocaleString('ru-RU')
+                : connectors
+                      .reduce((prev, item) => prev + item.totalpriceuzs, 0)
+                      .toLocaleString('ru-RU')
+        }
+        return 0
+    }
 
     return (
         <div className={`productTypeBlock ${styles}`}>
@@ -23,7 +27,7 @@ const ResultIncomings = ({connectors, styles, currencyType}) => {
             <div className='productSumAll'>
                 Jami :{' '}
                 <span className='ml-[0.5rem] font-[400] text-black-900'>
-                    {price} {currencyType}
+                    {price()} {currencyType}
                 </span>
             </div>
         </div>

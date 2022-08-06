@@ -75,21 +75,19 @@ function Incomings() {
                 return prev
             }, 0)
         }
-
         const sumTotal = (arr) => {
             return arr.reduce((prev, total) => prev + total, 0)
         }
-        setCardConnectors(
-            groups.map((income) => {
-                return {
-                    createdAt: income.createdAt,
-                    products: income.incoming.length,
-                    suppliers: sumSupplier(income.supplier),
-                    totalprice: sumTotal(income.total),
-                    totalpriceuzs: sumTotal(income.totaluzs),
-                }
-            })
-        )
+        const data = groups.map((income) => {
+            return {
+                createdAt: income.createdAt,
+                products: income.incoming.length,
+                suppliers: sumSupplier(income.supplier),
+                totalprice: sumTotal(income.total),
+                totalpriceuzs: sumTotal(income.totaluzs),
+            }
+        })
+        setCardConnectors(data)
     }
 
     const currentGroup = (exist, el) => {
@@ -111,6 +109,7 @@ function Incomings() {
     }
     //change connectors data END
 
+    ////
     const selectSuppliers = (e) => {
         let target = e.value
         if (target === 'all') {
@@ -193,7 +192,7 @@ function Incomings() {
                 connectors={cardConnectors}
                 styles={'mainPadding'}
             />
-            <div className='flex items-center gap-[1.25rem] mainPadding'>
+            <div className='flex flex-wrap gap-[1.25rem] mainPadding'>
                 {cardConnectors.map((item) => {
                     return (
                         <CardLink

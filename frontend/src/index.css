@@ -51,7 +51,7 @@
     }
 
     .cardStyle {
-        @apply p-[1.15rem] bg-primary-800 text-white-900 inline-block rounded-[.5rem] transition ease-in-out hover:bg-black-700;
+        @apply p-[1.15rem] bg-primary-800 text-white-900 rounded-[.5rem] transition ease-in-out hover:bg-black-700;
     }
 
     .headerStyle {
