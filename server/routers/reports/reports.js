@@ -99,8 +99,8 @@ module.exports.getReport = async (req, res) => {
     let backproductuzs = 0;
     let backproductcount = 0;
 
-    const roundUzs = (price) => Math.round(price * 1) / 1;
-    const roundUsd = (price) => Math.round(price * 1000) / 1000;
+    const roundUzs = (price) => Math.round(Number(price) * 1) / 1;
+    const roundUsd = (price) => Math.round(Number(price) * 1000) / 1000;
 
     sales.map((sale) => {
       reports.sale.sale += roundUsd(sale.payment.totalprice);
@@ -128,32 +128,36 @@ module.exports.getReport = async (req, res) => {
         (sale.discount && sale.discount.discount) || 0
       );
       reports.discounts.discountsuzs += roundUzs(
-        (sale.discountuzs && sale.discount.discountuzs) || 0
+        (sale.discount && sale.discount.discountuzs) || 0
       );
       reports.discounts.discounts > 0 && reports.discounts.discountscount++;
       sale.payment.totalprice - sale.payment.payment > 0.1 &&
         reports.debts.debtscount++;
     });
     reports.income.income = roundUsd(
-      reports.sale.sale - incomingprice - reports.discounts.discounts
+      Number(reports.sale.sale) -
+        Number(incomingprice) -
+        Number(reports.discounts.discounts)
     );
     reports.income.incomeuzs = roundUzs(
-      reports.sale.saleuzs - incomingpriceuzs - reports.discounts.discountsuzs
+      Number(reports.sale.saleuzs) -
+        Number(incomingpriceuzs) -
+        Number(reports.discounts.discountsuzs)
     );
     reports.debts.debts = roundUsd(
-      reports.sale.sale -
-        reports.discounts.discounts -
-        reports.cash.cash -
-        reports.card.card -
-        reports.transfer.transfer
+      Number(reports.sale.sale) -
+        Number(reports.discounts.discounts) -
+        Number(reports.cash.cash) -
+        Number(reports.card.card) -
+        Number(reports.transfer.transfer)
     );
 
     reports.debts.debtsuzs = roundUzs(
-      reports.sale.saleuzs -
-        reports.discounts.discountsuzs -
-        reports.cash.cashuzs -
-        reports.card.carduzs -
-        reports.transfer.transferuzs
+      Number(reports.sale.saleuzs) -
+        Number(reports.discounts.discountsuzs) -
+        Number(reports.cash.cashuzs) -
+        Number(reports.card.carduzs) -
+        Number(reports.transfer.transferuzs)
     );
 
     reports.backproducts.backproducts = backproduct;
@@ -162,7 +166,6 @@ module.exports.getReport = async (req, res) => {
 
     res.status(201).send(reports);
   } catch (error) {
-    console.log(error);
     res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
