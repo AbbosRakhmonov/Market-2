@@ -85,7 +85,9 @@ const inventorySlice = createSlice({
             state.searchedInventories.length
                 ? (state.searchedInventories = products)
                 : (state.inventories = products)
-            state.total = count
+            state.searchedInventories.length
+                ? (state.totalSearched = count)
+                : (state.total = count)
         },
         [getInventories.rejected]: (state, {payload}) => {
             state.loading = false
@@ -112,8 +114,12 @@ const inventorySlice = createSlice({
         },
         [updateInventory.fulfilled]: (state, {payload: {products, count}}) => {
             state.loading = false
-            state.inventories = products
-            state.total = count
+            state.searchedInventories.length
+                ? (state.searchedInventories = products)
+                : (state.inventories = products)
+            state.searchedInventories.length
+                ? (state.totalSearched = count)
+                : (state.total = count)
             state.successUpdateInventory = true
         },
         [updateInventory.rejected]: (state, {payload}) => {

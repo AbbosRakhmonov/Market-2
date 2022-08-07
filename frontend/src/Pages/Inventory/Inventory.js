@@ -282,9 +282,9 @@ function Inventory() {
             currentPage,
             countPage: showByTotal,
             search: {
-                name: '',
-                code: '',
-                category: '',
+                name: searchByName.replace(/\s+/g, ' ').trim(),
+                code: searchByCode.replace(/\s+/g, ' ').trim(),
+                category: searchByCategory.replace(/\s+/g, ' ').trim(),
             },
         }
         dispatch(getInventories(body))
