@@ -7,35 +7,35 @@ import {ConfirmBtn} from '../Buttons/SaveConfirmBtn.js'
 import Dates from '../Dates/Dates.js'
 
 function SearchForm({
-    filterByTotal,
-    searchByCode,
-    searchById,
-    searchByDelivererName,
-    filterByDelivererName,
-    filterByDelivererNameWhenPressEnter,
-    searchByClientName,
-    filterByClientName,
-    filterByClientNameWhenPressEnter,
-    filterById,
-    filterByIdWhenPressEnter,
-    filterByCode,
-    filterByCodeAndNameAndCategoryWhenPressEnter,
-    searchByName,
-    filterByName,
-    filterBy,
-    searchByCategory,
-    filterByCategory,
-    numberOfChecks,
-    setNumberOfChecks,
-    clickPrintBtn,
-    startDate,
-    endDate,
-    setStartDate,
-    setEndDate,
-    date,
-    setDate,
-    clickConfirmBtn,
-}) {
+                        filterByTotal,
+                        searchByCode,
+                        searchById,
+                        searchByDelivererName,
+                        filterByDelivererName,
+                        filterByDelivererNameWhenPressEnter,
+                        searchByClientName,
+                        filterByClientName,
+                        filterByClientNameWhenPressEnter,
+                        filterById,
+                        filterByIdWhenPressEnter,
+                        filterByCode,
+                        filterByCodeAndNameAndCategoryWhenPressEnter,
+                        searchByName,
+                        filterByName,
+                        filterBy,
+                        searchByCategory,
+                        filterByCategory,
+                        numberOfChecks,
+                        setNumberOfChecks,
+                        clickPrintBtn,
+                        startDate,
+                        endDate,
+                        setStartDate,
+                        setEndDate,
+                        date,
+                        setDate,
+                        clickConfirmBtn
+                    }) {
     const chooseComponent = (key) => {
         switch (key) {
             case 'total':
@@ -51,6 +51,7 @@ function SearchForm({
                                 type={'text'}
                                 value={searchByCategory}
                                 onChange={filterByCategory}
+                                maxWidth={'w-[6.8125rem]'}
                                 onKeyUp={
                                     filterByCodeAndNameAndCategoryWhenPressEnter
                                 }
@@ -121,7 +122,7 @@ function SearchForm({
                     <SearchInput
                         key={'mijoz_ismi_1'}
                         placeholder={'mijoz ismi...'}
-                        someClasses={'grow'}
+                        someClasses={'grow basis-1/6'}
                         value={searchByClientName}
                         onChange={filterByClientName}
                         onKeyUp={filterByClientNameWhenPressEnter}
@@ -149,13 +150,13 @@ function SearchForm({
                 return (
                     <FilterButtons
                         key={'start_date_1'}
-                        label={"Boshlang'ich sana"}
+                        label={'Boshlang\'ich sana'}
                         element={
                             <Dates
                                 value={startDate}
                                 onChange={setStartDate}
-                                placeholder={'misol: 01.01.2021'}
-                                maxWidth={'w-[9.6875rem]'}
+                                placeholder={'01.01.2021'}
+                                maxWidth={'w-[6.625rem]'}
                             />
                         }
                     />
@@ -169,8 +170,8 @@ function SearchForm({
                             <Dates
                                 value={endDate}
                                 onChange={setEndDate}
-                                placeholder={'misol: 05.06.2022'}
-                                maxWidth={'w-[9.6875rem]'}
+                                placeholder={'05.06.2022'}
+                                maxWidth={'w-[6.625rem]'}
                             />
                         }
                     />

@@ -157,7 +157,7 @@ const productSlice = createSlice({
                 ? (state.searchedProducts = products)
                 : (state.products = products)
             state.searchedProducts.length
-                ? (state.totalSearcheds = count)
+                ? (state.totalSearched = count)
                 : (state.total = count)
         },
         [getProducts.rejected]: (state, {payload}) => {

@@ -1,10 +1,6 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
+import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import Api from '../../../Config/Api.js'
-import {
-    successSavedTemporary,
-    universalToast,
-} from '../../../Components/ToastMessages/ToastMessages.js'
-import {deleteError} from '../../../App/globalFunctions.js'
+import {successSavedTemporary, universalToast} from '../../../Components/ToastMessages/ToastMessages.js'
 
 export const getAllProducts = createAsyncThunk(
     'registerSelling/getAllProducts',
@@ -15,8 +11,7 @@ export const getAllProducts = createAsyncThunk(
         } catch (error) {
             return rejectWithValue(error)
         }
-    }
-)
+    })
 
 export const getClients = createAsyncThunk(
     'registerSelling/getClients',
@@ -27,8 +22,7 @@ export const getClients = createAsyncThunk(
         } catch (error) {
             return rejectWithValue(error)
         }
-    }
-)
+    })
 
 export const makePayment = createAsyncThunk(
     'registerSelling/makePayment',
@@ -67,7 +61,7 @@ const registerSellingSlice = createSlice({
         errorGetAllProducts: null,
         errorGetUsers: null,
         errorMakePayment: null,
-        errorSavePayment: null,
+        errorSavePayment: null
     },
     reducers: {},
     extraReducers: {
@@ -79,10 +73,10 @@ const registerSellingSlice = createSlice({
             state.allProducts = payload
         },
         [getAllProducts.rejected]: (state, {payload}) => {
+            universalToast(payload, 'error')
             state.loadingGetAllProducts = false
             state.errorGetAllProducts = payload
-            universalToast(payload, 'error')
-            deleteError(state, 'errorGetAllProducts')
+            state.errorGetAllProducts = null
         },
         [getClients.pending]: (state) => {
             state.loadingGetClients = true
@@ -92,10 +86,10 @@ const registerSellingSlice = createSlice({
             state.clients = payload
         },
         [getClients.rejected]: (state, {payload}) => {
+            universalToast(payload, 'error')
             state.loadingGetClients = false
             state.errorGetUsers = payload
-            universalToast(payload, 'error')
-            deleteError(state, 'errorGetUsers')
+            state.errorGetUsers = null
         },
         [makePayment.pending]: (state) => {
             state.loadingMakePayment = true
@@ -105,10 +99,10 @@ const registerSellingSlice = createSlice({
             state.lastPayments.unshift(payload)
         },
         [makePayment.rejected]: (state, {payload}) => {
+            universalToast(payload, 'error')
             state.loadingMakePayment = false
             state.errorMakePayment = payload
-            universalToast(payload, 'error')
-            deleteError(state, 'errorMakePayment')
+            state.errorMakePayment = null
         },
         [savePayment.pending]: (state) => {
             state.loadingSavePayment = true
@@ -118,12 +112,12 @@ const registerSellingSlice = createSlice({
             successSavedTemporary()
         },
         [savePayment.rejected]: (state, {payload}) => {
+            universalToast(payload, 'error')
             state.loadingSavePayment = false
             state.errorSavePayment = payload
-            universalToast(payload, 'error')
-            deleteError(state, 'errorSavePayment')
-        },
-    },
+            state.errorSavePayment = null
+        }
+    }
 })
 
 export default registerSellingSlice.reducer
