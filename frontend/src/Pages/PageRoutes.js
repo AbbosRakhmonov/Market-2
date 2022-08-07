@@ -18,7 +18,7 @@ import Packman from './Packman/Packman'
 import ClientsPage from './Clients/Clients'
 import {universalToast, warningCurrencyRate} from '../Components/ToastMessages/ToastMessages.js'
 import Shops from './ShopsPage/Shops'
-import Checkout from './Checkout/Checkout'
+import Reports from './Reports/Reports.js'
 import Exchangerate from './Exchangerate/Exchangerate' //pages
 
 //pages
@@ -131,8 +131,8 @@ const PageRoutes = () => {
                         />
 
                         <Route path='/valyuta' element={<Exchangerate />} />
-                        <Route path='/kassa' element={<Checkout />} />
-                        <Route path='/kassa' element={<Checkout />} />
+                        <Route path='/kassa' element={<Reports />} />
+                        <Route path='/kassa' element={<Reports />} />
 
                         <Route path='/dukonlar/' element={<Shops />}>
                             <Route path=':tablename/:_id' element={<Shops />} />

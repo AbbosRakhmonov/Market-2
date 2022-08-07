@@ -3,72 +3,53 @@ import CheckoutCards from '../../Components/CheckoutCard/CheckoutCards'
 import SearchForm from '../../Components/SearchForm/SearchForm.js'
 import {useDispatch, useSelector} from 'react-redux'
 import {universalToast} from '../../Components/ToastMessages/ToastMessages.js'
-import {getConnectors} from '../Inventories/inventorieSlice.js'
 import {uniqueId} from 'lodash'
+import {clearErrorReports, getReports} from './reportsSlice.js'
 
-const Checkout = () => {
+const Reports = () => {
     const card = [
         {
             name: 'Savdo',
-            type: 'trade',
+            type: 'sale',
             percentage: 99,
-            cost: 123456789,
         },
         {
             name: 'Sof foyda',
-            type: 'profit',
-            percentage: 99,
-            cost: 123456789,
+            type: 'income',
         },
         {
             name: 'Xarajatlar',
-            type: 'debts',
-            percentage: 99,
-            cost: 123456789,
+            type: 'expenses',
         },
         {
             name: 'Naqd',
             type: 'cash',
-            percentage: 99,
-            cost: 123456789,
         },
         {
             name: 'Plastik',
-            type: 'plastic',
-            percentage: 99,
-            cost: 123456789,
+            type: 'card',
         },
         {
             name: 'O`tkazmalar',
-            type: 'transfers',
-            percentage: 99,
-            cost: 123456789,
+            type: 'transfer',
         },
         {
             name: 'Qaytarilgan',
-            type: 'returned',
-            percentage: 99,
-            cost: 123456789,
+            type: 'backproducts',
         },
         {
             name: 'Chegirmalar',
-            type: 'discount',
-            percentage: 99,
-            cost: 123456789,
+            type: 'discounts',
         },
         {
             name: 'Qarzlar',
             type: 'debts',
-            percentage: 99,
-            cost: 123456789,
         },
     ]
     const dispatch = useDispatch()
-    const {reports, clearErrorrReports, loading, errorReports} = useSelector(
+    const {reports, clearErrorrReports, errorReports} = useSelector(
         (state) => state.reports
     )
-    const [data, setData] = useState(reports)
-
     const [startDate, setStartDate] = useState(
         new Date(
             new Date().getFullYear(),
@@ -77,6 +58,7 @@ const Checkout = () => {
         )
     )
     const [endDate, setEndDate] = useState(new Date())
+    const {currencyType} = useSelector((state) => state.currency)
 
     useEffect(() => {
         const body = {
@@ -87,13 +69,12 @@ const Checkout = () => {
             ).toISOString(),
             endDate: endDate.toISOString(),
         }
-        dispatch(getConnectors(body))
+        dispatch(getReports(body))
     }, [dispatch, startDate, endDate])
-
     useEffect(() => {
         if (errorReports) {
             universalToast(errorReports, 'error')
-            dispatch(clearErrorrReports())
+            dispatch(clearErrorReports())
         }
     }, [dispatch, clearErrorrReports, errorReports])
 
@@ -103,20 +84,25 @@ const Checkout = () => {
                 filterBy={['startDate', 'endDate', 'printBtn']}
                 startDate={startDate}
                 endDate={endDate}
+                setStartDate={setStartDate}
+                setEndDate={setEndDate}
             />
             <div className='checkout-card mainPadding'>
-                {card.map((i) => (
-                    <CheckoutCards
-                        key={uniqueId('card')}
-                        name={i.name}
-                        type={i.type}
-                        percentage={i.percentage}
-                        cost={i.cost}
-                    />
-                ))}
+                {reports &&
+                    card.map((i) => (
+                        <CheckoutCards
+                            key={uniqueId('card')}
+                            name={i.name}
+                            type={i.type}
+                            percentage={i.percentage}
+                            cost={i.cost}
+                            currency={currencyType}
+                            report={reports && reports[i.type]}
+                        />
+                    ))}
             </div>
         </section>
     )
 }
 
-export default Checkout
+export default Reports

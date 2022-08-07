@@ -13,7 +13,7 @@ import ExchangerateSlice from '../Pages/Exchangerate/ExchangerateSlice'
 import registerSellingReducer from '../Pages/Sale/Slices/registerSellingSlice.js'
 import savedSellingsReducer from '../Pages/Sale/Slices/savedSellingsSlice.js'
 import clientsReducer from '../Pages/Clients/clientsSlice'
-import reportsReducer from '../Pages/Checkout/checkoutSlice.js'
+import reportsReducer from '../Pages/Reports/reportsSlice.js'
 
 export default configureStore({
     devTools: process.env.NODE_ENV === 'development',

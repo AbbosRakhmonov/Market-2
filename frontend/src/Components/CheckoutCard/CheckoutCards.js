@@ -1,18 +1,27 @@
 import React from 'react'
 
-const CheckoutCards = ({type, onClick, percentage, name, cost, active}) => {
+const CheckoutCards = ({
+    type,
+    onClick,
+    percentage,
+    name,
+    cost,
+    active,
+    currency,
+    report,
+}) => {
     const chooseCardName = `cardContainer ${
-        type === 'trade' ||
-        type === 'profit' ||
+        type === 'sale' ||
+        type === 'income' ||
         type === 'cash' ||
-        type === 'plastic' ||
-        type === 'transfers'
+        type === 'card' ||
+        type === 'transfer'
             ? 'tradeCard'
             : type === 'expenses' || type === 'debts'
             ? 'debts'
-            : type === 'returned'
+            : type === 'backproducts'
             ? 'returnedCard'
-            : type === 'discount'
+            : type === 'discounts'
             ? 'discountCard'
             : ''
     } ${active ? 'activeCard' : ''}`
@@ -23,31 +32,35 @@ const CheckoutCards = ({type, onClick, percentage, name, cost, active}) => {
                 <span className='tradeIn'>
                     <span
                         className={
-                            type === 'profit' ? 'hidden' : 'parcentageWidth'
+                            type === 'income' ? 'hidden' : 'parcentageWidth'
                         }
                     >
                         <span
                             className={
-                                type === 'profit'
+                                type === 'income'
                                     ? 'hidden'
                                     : 'percentageCircle'
                             }
                         >
-                            <span> {percentage} </span>
+                            <span> {report[type + 'count']} </span>
                         </span>
                     </span>
                     <span className='w-full'>
                         <span
                             className={
-                                type === 'profit' ? 'checkName' : 'checkoutName'
+                                type === 'income' ? 'checkName' : 'checkoutName'
                             }
                         >
                             <p className='text-[1.5rem]'>{name}</p>
-                            <p className='text-[1.25rem] '>$</p>
+                            <p className='text-[1.25rem] '>{currency}</p>
                         </span>
                         <div>
                             <p className='costCard float-right'>
-                                {cost.toLocaleString('ru-Ru')}
+                                {currency === 'UZS'
+                                    ? report[type + 'uzs'].toLocaleString(
+                                          'ru-Ru'
+                                      )
+                                    : report[type].toLocaleString('ru-Ru')}
                             </p>
                         </div>
                     </span>

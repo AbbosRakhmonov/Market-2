@@ -89,9 +89,11 @@
     .inputClass {
         @apply w-full py-[0.625rem] px-[0.58rem]  rounded-[0.25rem] border-[1px] border-blue-200 text-sm placeholder-blue-200 outline-transparent outline outline-0 focus:outline-blue-100 hover:bg-inputHover focus:outline-4 focus:bg-white-900 transition-all ease-in-out duration-100;
     }
+
     .search-input {
         @apply leading-[1.125rem] placeholder-blue-200 transition-all ease-in-out duration-100 px-[8px] py-[0.625rem] w-full bg-transparent outline-none;
     }
+
     .disabled-class {
         @apply rounded-[0.25rem]  border-0 text-black-200 placeholder-black-200 outline-transparent outline outline-0 bg-black-200 hover:bg-black-200 focus-within:outline-0 focus-within:bg-black-200 focus-within:hover:bg-black-200 transition-all ease-in-out duration-100 shadow-[0_10px_10px_rgba(0,0,0,0.05)] flex items-center;
     }
@@ -146,10 +148,11 @@
     }
 
     .parcentageWidth {
-        @apply w-full w-[3.75rem] h-[3.75rem]
+        @apply w-full w-[3.75rem] h-[3.75rem];
     }
+
     .percentageCircle {
-        @apply w-[3.75rem] h-[3.75rem] bg-white-900 rounded-full flex justify-center items-center text-[1.25rem] leading-[1.875rem] text-black-700 border-[.125rem] border-solid border-black-200
+        @apply w-[3.75rem] h-[3.75rem] bg-white-900 rounded-full flex justify-center items-center text-[1.25rem] leading-[1.875rem] text-black-700 border-[.125rem] border-solid border-black-200;
     }
 
     .checkoutName {
@@ -159,9 +162,11 @@
     .checkName {
         @apply w-[100%] w-full text-white-800 flex justify-between pb-[1.25rem] border-b border-solid border-white-200 font-normal;
     }
+
     .costCard {
         @apply text-[2rem] w-full leading-[1.875rem] mt-[1.25rem] text-white-900 w-full text-right inline-block;
     }
+
     .activeCard {
         @apply bg-black-700 hover:bg-black-700 shadow-[0px_25px_25px_rgba(0,0,0,0.25)];
     }
@@ -361,9 +366,11 @@
     .shopButton {
         @apply w-[2.125rem] h-[2.125rem] rounded-full flex items-center justify-center shadow-[0px_5px_10px_rgba(0,0,0,0.1)] hover:bg-black-700 duration-200 p-[5px];
     }
+
     .filial-active {
         @apply bg-black-700;
     }
+
     .shopIcons {
         @apply text-[1.5rem] text-white-900;
     }
@@ -488,30 +495,36 @@
         @apply flex flex-wrap w-full gap-[1.25rem_0.625rem];
     }
 
-    /* This is Checkout Pages styled start */
+    /* This is Reports Pages styled start */
     .checkout-card {
         @apply flex justify-center items-center text-center gap-[1.6rem] w-full grid sm:grid-cols-1 xl:grid-cols-3 md:grid-cols-2;
     }
 
     .check-ul-li {
-        @apply flex justify-between items-center py-1 text-[0.875rem] font-bold 
+        @apply flex justify-between items-center py-1 text-[0.875rem] font-bold;
     }
+
     .check-ul-li-span {
-        @apply text-[0.875rem] text-black-700
+        @apply text-[0.875rem] text-black-700;
     }
+
     .check-text-style {
-        @apply text-[1.5rem] font-bold
+        @apply text-[1.5rem] font-bold;
     }
+
     .check-ul-li-foot {
-        @apply text-[0.875rem] text-black-700 font-bold flex justify-between py-[0.675rem] border-t-[0.8px] border-black-700 
+        @apply text-[0.875rem] text-black-700 font-bold flex justify-between py-[0.675rem] border-t-[0.8px] border-black-700;
     }
+
     .check-table-rtr {
-        @apply border text-center text-[0.875rem] font-bold p-1
+        @apply border text-center text-[0.875rem] font-bold p-1;
     }
-    .check-table-body{
-        @apply p-1 border text-end text-[0.875rem] font-bold
+
+    .check-table-body {
+        @apply p-1 border text-end text-[0.875rem] font-bold;
     }
-    /* This is Checkout Pages styled end */
+
+    /* This is Reports Pages styled end */
     .checkbox {
         @apply flex items-center justify-center;
     }
@@ -565,7 +578,7 @@
     }
 
     .category-card:not(.active-category):hover {
-        @apply bg-black-100 border-[#D4D4D4]
+        @apply bg-black-100 border-[#D4D4D4];
     }
 
     .category-card:hover ~ .category-card-checkmark {
@@ -589,16 +602,16 @@
     }
 
     .category-card-checkmark .check-icon {
-        @apply absolute left-[0.875rem] bottom-[0.875rem]
+        @apply absolute left-[0.875rem] bottom-[0.875rem];
     }
 
-    .check-inventory-head{
-        @apply flex justify-between items-center border-b-[0.8px] border-black-700 mb-3 pb-1
+    .check-inventory-head {
+        @apply flex justify-between items-center border-b-[0.8px] border-black-700 mb-3 pb-1;
     }
-  
+
     .check-saved-head {
-        @apply flex justify-between items-center border-b-[0.8px] border-black-700 mb-4
-    } 
+        @apply flex justify-between items-center border-b-[0.8px] border-black-700 mb-4;
+    }
 }
 
 html,

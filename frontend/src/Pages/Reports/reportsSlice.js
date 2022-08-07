@@ -5,7 +5,7 @@ export const getReports = createAsyncThunk(
     'reports/getReports',
     async (body, {rejectWithValue}) => {
         try {
-            const {data} = await Api.post('/inventory/connectors', body)
+            const {data} = await Api.post('/reports/getreports', body)
             return data
         } catch (error) {
             return rejectWithValue(error)
@@ -16,7 +16,7 @@ export const getReports = createAsyncThunk(
 const reportSlice = createSlice({
     name: 'cash',
     initialState: {
-        reports: {},
+        reports: null,
         loading: false,
         errorReports: null,
     },
