@@ -2,7 +2,7 @@ import {IoPrint} from 'react-icons/io5'
 
 function PrintBtn({onClick}) {
     return (
-        <button className='group print-btn-style' onClick={onClick}>
+        <button className='group print-btn-style ml-auto' onClick={onClick}>
             <span className='print-text-style'>Chop etish</span>
             <span className='print-icon-style'>
                 <IoPrint

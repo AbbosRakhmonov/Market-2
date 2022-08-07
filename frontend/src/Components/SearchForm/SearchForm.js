@@ -6,46 +6,40 @@ import PrintBtn from '../Buttons/PrintBtn.js'
 import {ConfirmBtn} from '../Buttons/SaveConfirmBtn.js'
 import Dates from '../Dates/Dates.js'
 
-function SearchForm(
-    {
-        filterByTotal,
-        searchByCode,
-        searchById,
-        searchByDelivererName,
-        filterByDelivererName,
-        filterByDelivererNameWhenPressEnter,
-        searchByClientName,
-        filterByClientName,
-        filterByClientNameWhenPressEnter,
-        filterById,
-        filterByIdWhenPressEnter,
-        filterByCode,
-        filterByCodeAndNameAndCategoryWhenPressEnter,
-        searchByName,
-        filterByName,
-        filterBy,
-        searchByCategory,
-        filterByCategory,
-        numberOfChecks,
-        setNumberOfChecks,
-        clickPrintBtn,
-        startDate,
-        endDate,
-        setStartDate,
-        setEndDate,
-        date,
-        setDate,
-        clickConfirmBtn
-    }) {
+function SearchForm({
+    filterByTotal,
+    searchByCode,
+    searchById,
+    searchByDelivererName,
+    filterByDelivererName,
+    filterByDelivererNameWhenPressEnter,
+    searchByClientName,
+    filterByClientName,
+    filterByClientNameWhenPressEnter,
+    filterById,
+    filterByIdWhenPressEnter,
+    filterByCode,
+    filterByCodeAndNameAndCategoryWhenPressEnter,
+    searchByName,
+    filterByName,
+    filterBy,
+    searchByCategory,
+    filterByCategory,
+    numberOfChecks,
+    setNumberOfChecks,
+    clickPrintBtn,
+    startDate,
+    endDate,
+    setStartDate,
+    setEndDate,
+    date,
+    setDate,
+    clickConfirmBtn,
+}) {
     const chooseComponent = (key) => {
         switch (key) {
             case 'total':
-                return (
-                    <SelectForm
-                        key={'total_1'}
-                        onSelect={filterByTotal}
-                    />
-                )
+                return <SelectForm key={'total_1'} onSelect={filterByTotal} />
             case 'category':
                 return (
                     <FilterButtons
@@ -150,17 +144,12 @@ function SearchForm(
                     />
                 )
             case 'printBtn':
-                return (
-                    <PrintBtn
-                        key={'print_btn_1'}
-                        onClick={clickPrintBtn}
-                    />
-                )
+                return <PrintBtn key={'print_btn_1'} onClick={clickPrintBtn} />
             case 'startDate':
                 return (
                     <FilterButtons
                         key={'start_date_1'}
-                        label={'Boshlang\'ich sana'}
+                        label={"Boshlang'ich sana"}
                         element={
                             <Dates
                                 value={startDate}

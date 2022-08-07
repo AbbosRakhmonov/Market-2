@@ -143,6 +143,9 @@ const productSlice = createSlice({
         clearSuccessDeleteProduct: (state) => {
             state.successDeleteProduct = false
         },
+        clearUploadExcel: (state) => {
+            state.allProducts = []
+        },
     },
     extraReducers: {
         [getProducts.pending]: (state) => {
@@ -274,5 +277,6 @@ export const {
     clearSuccessUpdateProduct,
     clearSearchedProducts,
     clearSuccessDeleteProduct,
+    clearUploadExcel,
 } = productSlice.actions
 export default productSlice.reducer
