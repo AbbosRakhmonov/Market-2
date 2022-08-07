@@ -100,8 +100,12 @@ const packmansSlice = createSlice({
         },
         [getPackmans.fulfilled]: (state, {payload: {packmans, count}}) => {
             state.loading = false
-            state.packmans = packmans
-            state.total = count
+            state.searchedPackmans.length
+                ? (state.searchedPackmans = packmans)
+                : (state.packmans = packmans)
+            state.searchedPackmans.length
+                ? (state.totalSearched = count)
+                : (state.total = count)
         },
         [getPackmans.rejected]: (state, {payload}) => {
             state.loading = false
@@ -110,10 +114,13 @@ const packmansSlice = createSlice({
         [getPackmansByFilter.pending]: (state) => {
             state.loading = true
         },
-        [getPackmansByFilter.fulfilled]: (state, {payload}) => {
+        [getPackmansByFilter.fulfilled]: (
+            state,
+            {payload: {packmans, count}}
+        ) => {
             state.loading = false
-            state.searchedPackmans = payload
-            state.totalSearched = payload.length
+            state.searchedPackmans = packmans
+            state.totalSearched = count
         },
         [getPackmansByFilter.rejected]: (state, {payload}) => {
             state.loading = false
@@ -125,8 +132,12 @@ const packmansSlice = createSlice({
         [addPackman.fulfilled]: (state, {payload: {packmans, count}}) => {
             state.loading = false
             state.successAddPackman = true
-            state.total = count
-            state.packmans = packmans
+            state.searchedPackmans.length
+                ? (state.searchedPackmans = packmans)
+                : (state.packmans = packmans)
+            state.searchedPackmans.length
+                ? (state.totalSearched = count)
+                : (state.total = count)
         },
         [addPackman.rejected]: (state, {payload}) => {
             state.loading = false
@@ -135,14 +146,13 @@ const packmansSlice = createSlice({
         [updatePackman.pending]: (state) => {
             state.loading = true
         },
-        [updatePackman.fulfilled]: (state, {payload}) => {
-            state.packmans = state.packmans.map((item) => {
-                if (item._id === payload._id) {
-                    return payload
-                }
-                return item
-            })
-            state.total = state.packmans.length
+        [updatePackman.fulfilled]: (state, {payload: {packmans, count}}) => {
+            state.searchedPackmans.length
+                ? (state.searchedPackmans = packmans)
+                : (state.packmans = packmans)
+            state.searchedPackmans.length
+                ? (state.totalSearched = count)
+                : (state.total = count)
             state.loading = false
             state.successUpdatePackman = true
         },
@@ -153,12 +163,14 @@ const packmansSlice = createSlice({
         [deletePackman.pending]: (state) => {
             state.loading = true
         },
-        [deletePackman.fulfilled]: (state, {payload}) => {
-            state.packmans = state.packmans.filter(
-                (item) => item._id !== payload._id
-            )
+        [deletePackman.fulfilled]: (state, {payload: {packmans, count}}) => {
+            state.searchedPackmans.length
+                ? (state.searchedPackmans = packmans)
+                : (state.packmans = packmans)
+            state.searchedPackmans.length
+                ? (state.totalSearched = count)
+                : (state.total = count)
             state.loading = false
-            state.total = state.packmans.length
             state.successDeletePackman = true
         },
         [deletePackman.rejected]: (state, {payload}) => {

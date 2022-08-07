@@ -86,7 +86,7 @@ const Supplier = () => {
             currentPage,
             countPage: showByTotal,
             search: {
-                name: searchByName,
+                name: searchByName.replace(/\s+/g, ' ').trim(),
             },
         }
         dispatch(deleteSupplier(body))
@@ -109,7 +109,7 @@ const Supplier = () => {
                 currentPage,
                 countPage: showByTotal,
                 search: {
-                    name: searchByName,
+                    name: searchByName.replace(/\s+/g, ' ').trim(),
                 },
             }
             dispatch(addSupplier(body))
@@ -128,7 +128,7 @@ const Supplier = () => {
                 currentPage,
                 countPage: showByTotal,
                 search: {
-                    name: searchByName,
+                    name: searchByName.replace(/\s+/g, ' ').trim(),
                 },
             }
             dispatch(updateSupplier(body))
@@ -173,7 +173,7 @@ const Supplier = () => {
                 currentPage,
                 countPage: showByTotal,
                 search: {
-                    name: searchByName,
+                    name: searchByName.replace(/\s+/g, ' ').trim(),
                 },
             }
             dispatch(getSuppliersByFilter(body))
@@ -216,7 +216,7 @@ const Supplier = () => {
             currentPage,
             countPage: showByTotal,
             search: {
-                name: '',
+                name: searchByName.replace(/\s+/g, ' ').trim(),
             },
         }
         dispatch(getSuppliers(body))

@@ -1,34 +1,35 @@
-import React, {useEffect, useState} from 'react';
-import Button from '../../Components/Buttons/BtnAddRemove';
-import Table from '../../Components/Table/Table';
-import FieldContainer from '../../Components/FieldContainer/FieldContainer';
-import Pagination from '../../Components/Pagination/Pagination';
-import SearchForm from '../../Components/SearchForm/SearchForm';
-import {useDispatch, useSelector} from "react-redux";
-import UniversalModal from '../../Components/Modal/UniversalModal';
-import Spinner from "../../Components/Spinner/SmallLoader";
-import NotFind from '../../Components/NotFind/NotFind';
+import React, {useEffect, useState} from 'react'
+import Button from '../../Components/Buttons/BtnAddRemove'
+import Table from '../../Components/Table/Table'
+import FieldContainer from '../../Components/FieldContainer/FieldContainer'
+import Pagination from '../../Components/Pagination/Pagination'
+import SearchForm from '../../Components/SearchForm/SearchForm'
+import {useDispatch, useSelector} from 'react-redux'
+import UniversalModal from '../../Components/Modal/UniversalModal'
+import Spinner from '../../Components/Spinner/SmallLoader'
+import NotFind from '../../Components/NotFind/NotFind'
 import {
-       successDeletePackmanMessage,
-       successAddPackmanMessage,
-       successUpdatePackmanMessage,
-       universalToast
-      } from "../../Components/ToastMessages/ToastMessages";
+    successAddPackmanMessage,
+    successDeletePackmanMessage,
+    successUpdatePackmanMessage,
+    universalToast,
+    warningEmptyInput,
+} from '../../Components/ToastMessages/ToastMessages'
 import {
-   addPackman,
-   clearErrorPackmans,
-   clearSearchedPackmans,
-   clearSuccessAddPackmans,
-   clearSuccessDeletePackmans,
-   clearSuccessUpdatePackmans,
-   deletePackman,
-   getPackmans,
-   getPackmansByFilter,
-   updatePackman
-} from "./packmanSlice";
+    addPackman,
+    clearErrorPackmans,
+    clearSearchedPackmans,
+    clearSuccessAddPackmans,
+    clearSuccessDeletePackmans,
+    clearSuccessUpdatePackmans,
+    deletePackman,
+    getPackmans,
+    getPackmansByFilter,
+    updatePackman,
+} from './packmanSlice'
+import {checkEmptyString} from '../../App/globalFunctions.js'
 
 function Packman() {
-
     const dispatch = useDispatch()
     const {
         errorPackmans,
@@ -39,7 +40,7 @@ function Packman() {
         loading,
         searchedPackmans,
         total,
-        totalSearched
+        totalSearched,
     } = useSelector((state) => state.packmans)
 
     const headers = [
@@ -48,11 +49,10 @@ function Packman() {
         {styles: 'w-[10%]', filter: '', title: ' '},
     ]
 
-
     //states
     const [data, setData] = useState([])
     const [searchedData, setSearchedData] = useState('')
-    const [packmanName, setPackmanName] = useState('');
+    const [packmanName, setPackmanName] = useState('')
     const [currentPackman, setCurrentPackman] = useState('')
     const [deletedPackman, setDeletedPackman] = useState(null)
     const [modalVisible, setModalVisible] = useState(false)
@@ -69,69 +69,83 @@ function Packman() {
     const handleChangePackmanName = (e) => {
         setPackmanName(e.target.value)
     }
-     
+
     // table edit and delete
     const handleEditPackman = (packman) => {
-       setCurrentPackman(packman)
-       setPackmanName(packman.name)
-       setStickyForm(true)
+        setCurrentPackman(packman)
+        setPackmanName(packman.name)
+        setStickyForm(true)
     }
     const handleDeletePackman = (packman) => {
         setDeletedPackman(packman)
         toggleModal()
     }
 
-    const handleClickApproveToDelete = () =>{
+    const handleClickApproveToDelete = () => {
         const body = {
-            _id: deletedPackman._id, 
+            _id: deletedPackman._id,
             currentPage,
             countPage: showByTotal,
             search: {
-                name: searchByName,
+                name: searchByName.replace(/\s+/g, ' ').trim(),
             },
         }
         dispatch(deletePackman(body))
         handleClickCancelToDelete()
     }
-    
+
     const handleClickCancelToDelete = () => {
         setModalVisible(false)
         setDeletedPackman(null)
     }
 
-    // handle change of inputs 
-     
+    // handle change of inputs
+
     const addNewPackman = (e) => {
         e.preventDefault()
-        const body = {
-            name: packmanName,
-             currentPage,
-             countPage: showByTotal,
-             search: {
-                name: searchByName,
-            },
+        const filter = checkEmptyString([packmanName])
+        if (filter) {
+            warningEmptyInput()
+        } else {
+            const body = {
+                name: packmanName,
+                currentPage,
+                countPage: showByTotal,
+                search: {
+                    name: searchByName.replace(/\s+/g, ' ').trim(),
+                },
+            }
+            dispatch(addPackman(body))
+            setPackmanName('')
         }
-        dispatch(addPackman(body))
-        setPackmanName('')
     }
 
     const handleEdit = (e) => {
         e.preventDefault()
-        const body = {
-            name : packmanName,
-            _id : currentPackman._id,
-            currentPage,
-            search: {
-                name: searchByName,
-            },
-            market : currentPackman.market
+        const filter = checkEmptyString([packmanName])
+        if (filter) {
+            warningEmptyInput()
+        } else {
+            const body = {
+                name: packmanName,
+                _id: currentPackman._id,
+                currentPage,
+                countPage: showByTotal,
+                search: {
+                    name: searchByName.replace(/\s+/g, ' ').trim(),
+                },
+                market: currentPackman.market,
+            }
+            dispatch(updatePackman(body))
         }
-         dispatch(updatePackman(body))
     }
 
     const clearForm = (e) => {
         e && e.preventDefault()
         setPackmanName('')
+        setStickyForm(false)
+        setDeletedPackman(null)
+        setCurrentPackman(null)
     }
 
     //filter by total
@@ -142,55 +156,55 @@ function Packman() {
 
     // handle change of search inputs
     const filterByName = (e) => {
-       let val = e.target.value;
-       setSearchByName(val)
-       let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim();
-       (searchedData.length > 0 || totalSearched > 0 ) && 
-       dispatch(clearSearchedPackmans())
-       if(valForSearch === '') {
-         setData(packmans)
-         setFilteredDataTotal(total)
-       } else {
-         const filteredPackmans = packmans.filter((packman) => {
-            return packman.name.toLowerCase().includes(valForSearch)
-         })
-        setData(filteredPackmans)
-       setFilteredDataTotal(filteredPackmans.length)
-       }
+        let val = e.target.value
+        setSearchByName(val)
+        let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
+        ;(searchedData.length > 0 || totalSearched > 0) &&
+            dispatch(clearSearchedPackmans())
+        if (valForSearch === '') {
+            setData(packmans)
+            setFilteredDataTotal(total)
+        } else {
+            const filteredPackmans = packmans.filter((packman) => {
+                return packman.name.toLowerCase().includes(valForSearch)
+            })
+            setData(filteredPackmans)
+            setFilteredDataTotal(filteredPackmans.length)
+        }
     }
 
     const filterByNameWhenPressEnter = (e) => {
-       if(e.key === 'Enter'){
-        const body = {
-             currentPage,
-                 countPage: showByTotal,
+        if (e.key === 'Enter') {
+            const body = {
+                currentPage,
+                countPage: showByTotal,
                 search: {
-                    name: searchByName,
-            },
+                    name: searchByName.replace(/\s+/g, ' ').trim(),
+                },
+            }
+            dispatch(getPackmansByFilter(body))
         }
-        dispatch(getPackmansByFilter(body))
-       }
     }
 
-    // useEffects 
+    // useEffects
     useEffect(() => {
-        if(errorPackmans){
+        if (errorPackmans) {
             universalToast(errorPackmans, 'error')
             dispatch(clearErrorPackmans())
         }
-        if(successAddPackman){
+        if (successAddPackman) {
             successAddPackmanMessage()
             dispatch(clearSuccessAddPackmans())
-             clearForm()
+            clearForm()
         }
-        if(successUpdatePackman){
+        if (successUpdatePackman) {
             successUpdatePackmanMessage()
             dispatch(clearSuccessUpdatePackmans())
             setCurrentPackman('')
             setStickyForm(false)
             clearForm()
         }
-        if(successDeletePackman){ 
+        if (successDeletePackman) {
             successDeletePackmanMessage()
             dispatch(clearSuccessDeletePackmans())
             clearForm()
@@ -200,7 +214,7 @@ function Packman() {
         errorPackmans,
         successAddPackman,
         successUpdatePackman,
-        successDeletePackman
+        successDeletePackman,
     ])
 
     useEffect(() => {
@@ -208,7 +222,7 @@ function Packman() {
             currentPage,
             countPage: showByTotal,
             search: {
-                name: '',
+                name: searchByName.replace(/\s+/g, ' ').trim(),
             },
         }
         dispatch(getPackmans(body))
@@ -229,13 +243,15 @@ function Packman() {
     return (
         <section>
             <UniversalModal
-             headerText={`${deletedPackman && deletedPackman.name} ismli agentni o'chirishni tasdiqlaysizmi?`}
-             title="O'chirilgan agentni tiklashning imkoni mavjud emas!"
-             toggleModal={toggleModal}
-             body={'approve'}
-             approveFunction={handleClickApproveToDelete}
-             closeModal={handleClickCancelToDelete}
-             isOpen={modalVisible}
+                headerText={`${
+                    deletedPackman && deletedPackman.name
+                } ismli agentni o'chirishni tasdiqlaysizmi?`}
+                title="O'chirilgan agentni tiklashning imkoni mavjud emas!"
+                toggleModal={toggleModal}
+                body={'approve'}
+                approveFunction={handleClickApproveToDelete}
+                closeModal={handleClickCancelToDelete}
+                isOpen={modalVisible}
             />
             <form className={`sale-deliver-form ${stickyForm && 'stickyForm'}`}>
                 <FieldContainer
@@ -248,61 +264,55 @@ function Packman() {
                 />
                 <div className={'flex gap-[1.25rem] grow items-end'}>
                     <Button
-                      add={!stickyForm} 
-                      edit={stickyForm}
-                      text={stickyForm ?  `Saqlash` : "Yangi agent qo'shish"}
-                      onClick={stickyForm ? handleEdit : addNewPackman}
-                     
-                      />
-                    <Button text={'Tozalash'} onClick={clearForm}/>
+                        add={!stickyForm}
+                        edit={stickyForm}
+                        text={stickyForm ? `Saqlash` : "Yangi agent qo'shish"}
+                        onClick={stickyForm ? handleEdit : addNewPackman}
+                    />
+                    <Button text={'Tozalash'} onClick={clearForm} />
                 </div>
             </form>
             <div className='inverterizationHead mainPadding'>
                 <div className='inverterizationText'>Agentlar</div>
                 <div>
-                    {(filteredDataTotal !==0 || totalSearched !==0 ) && (
+                    {(filteredDataTotal !== 0 || totalSearched !== 0) && (
                         <Pagination
-                        countPage={Number(showByTotal)}
-                        totalDatas={totalSearched || filteredDataTotal}
-                        setCurrentPage={setCurrentPage}
-                        currentPage={currentPage}
-                         />
+                            countPage={Number(showByTotal)}
+                            totalDatas={totalSearched || filteredDataTotal}
+                            setCurrentPage={setCurrentPage}
+                            currentPage={currentPage}
+                        />
                     )}
-                    
                 </div>
             </div>
-            
-            <SearchForm 
-             filterBy={['total', 'name']}
-             filterByTotal={filterByTotal} 
-             filterByName={filterByName}
-             searchByName={searchByName}
-             filterByCodeAndNameAndCategoryWhenPressEnter={
-                filterByNameWhenPressEnter
-             }
-            />
-          
-            <div className='tableContainerPadding'>
-                {
-                    loading ? (
-                        <Spinner/>
-                    ) : data.length === 0 ? (
-                        <NotFind text={'Agentlar mavjud emas'} />
-                    ):(
-                        <Table
-                            page='packman'
-                            currentPage={currentPage}
-                            countPage={showByTotal}
-                            data={searchedData.length > 0 ? searchedData : data}
-                            headers={headers}
-                            Delete={handleDeletePackman}
-                            Edit = {handleEditPackman}
-                        />
-                    )
+
+            <SearchForm
+                filterBy={['total', 'name']}
+                filterByTotal={filterByTotal}
+                filterByName={filterByName}
+                searchByName={searchByName}
+                filterByCodeAndNameAndCategoryWhenPressEnter={
+                    filterByNameWhenPressEnter
                 }
-               
+            />
+
+            <div className='tableContainerPadding'>
+                {loading ? (
+                    <Spinner />
+                ) : data.length === 0 ? (
+                    <NotFind text={'Agentlar mavjud emas'} />
+                ) : (
+                    <Table
+                        page='packman'
+                        currentPage={currentPage}
+                        countPage={showByTotal}
+                        data={searchedData.length > 0 ? searchedData : data}
+                        headers={headers}
+                        Delete={handleDeletePackman}
+                        Edit={handleEditPackman}
+                    />
+                )}
             </div>
-           
         </section>
     )
 }
