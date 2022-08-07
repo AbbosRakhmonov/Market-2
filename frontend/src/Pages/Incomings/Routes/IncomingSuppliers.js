@@ -65,11 +65,11 @@ const IncomingSuppliers = () => {
         (data) => {
             let groups = []
             let pieces = (arr) => arr.reduce((prev, el) => prev + el.pieces, 0)
-            const currentGroup = (ind, incoming) => {
-                groups[ind].products += incoming.incoming.length
-                groups[ind].pieces += pieces(incoming.incoming)
-                groups[ind].totalprice += incoming.total
-                groups[ind].totalpriceuzs += incoming.totaluzs
+            const currentGroup = (arr, incoming) => {
+                arr[0].products += incoming.incoming.length
+                arr[0].pieces += pieces(incoming.incoming)
+                arr[0].totalprice += incoming.total
+                arr[0].totalpriceuzs += incoming.totaluzs
             }
             const newGroup = (incoming) => {
                 let obj = {
@@ -84,29 +84,33 @@ const IncomingSuppliers = () => {
                 }
                 groups.push(obj)
             }
-            const findindex = (incoming) => {
-                if (supplier) {
-                    return groups.findIndex(
-                        (group) =>
-                            group.supplier && group.supplier.name === supplier
-                    )
+            const existSupplier = (element) => {
+                if (element.supplier.name === supplier) {
+                    if (groups.length > 0) {
+                        currentGroup(groups, element)
+                    } else {
+                        newGroup(element)
+                    }
+                }
+            }
+            const notExistSupplier = (element) => {
+                const arr = groups.filter(
+                    (group) => group.supplier._id === element.supplier._id
+                )
+                if (arr.length > 0) {
+                    currentGroup(arr, element)
                 } else {
-                    return groups.findIndex(
-                        (group) =>
-                            group.supplier &&
-                            group.supplier._id === incoming.supplier._id
-                    )
+                    newGroup(element)
                 }
             }
 
-            data.forEach((incoming) => {
-                let ind = findindex(incoming)
-                if (ind >= 0) {
-                    currentGroup(ind, incoming)
+            for (let incoming of data) {
+                if (supplier) {
+                    existSupplier(incoming)
                 } else {
-                    newGroup(incoming)
+                    notExistSupplier(incoming)
                 }
-            })
+            }
             setIncomingCard(groups)
         },
         [supplier]
@@ -215,7 +219,7 @@ const IncomingSuppliers = () => {
         let target = e.target.value.toLowerCase()
         setCurrentData([
             ...currentDataStorage.filter(({product}) =>
-                product.name.toLowerCase().includes(target)
+                product.productdata.name.toLowerCase().includes(target)
             ),
         ])
         setLocalSearch({
@@ -229,7 +233,7 @@ const IncomingSuppliers = () => {
         let target = e.target.value.toLowerCase()
         setCurrentData([
             ...currentDataStorage.filter(({product}) =>
-                product.code.includes(target)
+                product.productdata.code.includes(target)
             ),
         ])
         setLocalSearch({

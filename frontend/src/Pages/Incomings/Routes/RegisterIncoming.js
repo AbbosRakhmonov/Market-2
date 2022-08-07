@@ -12,14 +12,15 @@ import {
     getProducts,
     getSuppliers,
 } from '../incomingSlice'
-import {getCurrency, getCurrencyType} from '../../Currency/currencySlice'
 import {ConfirmBtn, SaveBtn} from '../../../Components/Buttons/SaveConfirmBtn'
 import {CheckIncoming} from '../Functions/CheckIncoming'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
 import {UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
+import {useNavigate} from 'react-router-dom'
 
 const RegisterIncoming = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const {
         market: {_id},
         user,
@@ -86,6 +87,7 @@ const RegisterIncoming = () => {
             unit: product.unit,
             sellingprice: product.price.sellingprice,
             sellingpriceuzs: product.price.sellingpriceuzs,
+            procient: 0,
             supplier: {...supplier},
         })
         setModal(true)
@@ -111,6 +113,9 @@ const RegisterIncoming = () => {
         const countUzs =
             currencyType === 'UZS' ? target : UsdToUzs(target, currency)
 
+        const countProcient = (price) =>
+            Math.round(price / 100) * target + price
+
         const changepieces = (obj) => {
             obj.pieces = target
             obj.totalprice = target * obj.unitprice
@@ -127,11 +132,19 @@ const RegisterIncoming = () => {
         const changesellingprice = (obj) => {
             obj.sellingprice = countUsd
             obj.sellingpriceuzs = countUzs
+            obj.procient = 0
+        }
+
+        const changeProcient = (obj) => {
+            obj.procient = target
+            obj.sellingprice = countProcient(obj.unitprice)
+            obj.sellingpriceuzs = countProcient(obj.unitpriceuzs)
         }
 
         check('pieces') && changepieces(product)
         check('unitprice') && changeunitprice(product)
         check('sellingprice') && changesellingprice(product)
+        check('procient') && changeProcient(product)
 
         if (id) {
             setIncomings([
@@ -187,6 +200,7 @@ const RegisterIncoming = () => {
         const postincoming = incomings.map((incoming) => {
             let obj = {...incoming}
             delete obj._id
+            delete obj.procient
             return obj
         })
         if (!CheckIncoming(postincoming)) {
@@ -195,7 +209,7 @@ const RegisterIncoming = () => {
                     products: [...postincoming],
                     user: user._id,
                 })
-            )
+            ).then(() => navigate('/maxsulotlar/qabul/qabullar'))
             removeTemporary()
         }
     }
@@ -277,11 +291,6 @@ const RegisterIncoming = () => {
     }, [dispatch, _id, products])
 
     useEffect(() => {
-        dispatch(getCurrency)
-        dispatch(getCurrencyType)
-    }, [dispatch])
-
-    useEffect(() => {
         if (successAdd) {
             setIncomings([])
             dispatch(clearSuccessAdd())
@@ -301,11 +310,16 @@ const RegisterIncoming = () => {
             setIncomings(temporary.incomings)
             setTemporaryIncomings(temporary.incomings)
         }
-    }, [temporary])
+    }, [temporary, dispatch])
 
-    // useEffect(() => {
-    //     temporaryIncomings.length === 0 && dispatch(clearTemporary())
-    // }, [dispatch, temporaryIncomings])
+    useEffect(() => {
+        return () => {
+            dispatch(clearTemporary())
+            setIncomings([])
+            setTemporaryIncomings([])
+            setSupplier({})
+        }
+    }, [dispatch])
 
     return (
         <section>
@@ -320,7 +334,7 @@ const RegisterIncoming = () => {
                     <SelectInput
                         options={productsData}
                         onSelect={selectProduct}
-                        disabled={supplier._id ? false : true}
+                        isDisabled={supplier._id ? false : true}
                     />
                 </div>
             </div>

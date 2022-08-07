@@ -8,6 +8,12 @@ export const CheckIncoming = (products) => {
         if (product.unitprice < 1) {
             return universalToast('Mahsulot qabul narxini kirirting!', 'error')
         }
+        if (product.sellingprice < product.unitprice) {
+            return universalToast(
+                "Sotish narxi olish dan kam bo'lmasin",
+                'error'
+            )
+        }
     }
     return false
 }
