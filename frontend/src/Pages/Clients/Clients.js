@@ -242,20 +242,17 @@ const ClientsPage = () => {
             },
         }
         dispatch(getClients(body))
+        //    eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, showByTotal, currentPage])
-
     useEffect(() => {
         setData(clients)
     }, [clients])
-
     useEffect(() => {
         setFilteredDataTotal(total)
     }, [total])
-
     useEffect(() => {
         setSearchedData(searchedClients)
     }, [searchedClients])
-
     useEffect(() => {
         const options = packmans.map((packman) => {
             return {label: packman.name, value: packman._id}

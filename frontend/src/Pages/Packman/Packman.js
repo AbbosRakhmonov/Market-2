@@ -226,6 +226,7 @@ function Packman() {
             },
         }
         dispatch(getPackmans(body))
+        //    eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, showByTotal, currentPage])
 
     useEffect(() => {

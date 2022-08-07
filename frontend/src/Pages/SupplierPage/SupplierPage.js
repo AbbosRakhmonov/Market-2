@@ -220,6 +220,7 @@ const Supplier = () => {
             },
         }
         dispatch(getSuppliers(body))
+        //    eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, showByTotal, currentPage])
 
     useEffect(() => {

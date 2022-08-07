@@ -626,6 +626,7 @@ function Products() {
             },
         }
         dispatch(getProducts(body))
+        //    eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage, showByTotal, dispatch])
     useEffect(() => {
         dispatch(getUnits())

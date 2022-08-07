@@ -361,6 +361,7 @@ const Category = () => {
             },
         }
         dispatch(getCategories(body))
+        //    eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage, showByTotal, dispatch])
     useEffect(() => {
         setData(categories)
