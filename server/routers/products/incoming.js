@@ -41,6 +41,8 @@ module.exports.registerAll = async (req, res) => {
         totalprice,
         unitpriceuzs,
         totalpriceuzs,
+        sellingprice,
+        sellingpriceuzs,
       } = newproduct;
 
       const marke = await Market.findById(market);
@@ -82,6 +84,20 @@ module.exports.registerAll = async (req, res) => {
       });
 
       all.push(newProduct);
+
+      const newProductPrice = new ProductPrice({
+        product: product._id,
+        incomingprice: Math.round(unitprice * 10000) / 10000,
+        incomingpriceuzs: Math.round(unitprice * 10000) / 10000,
+        sellingprice: Math.round(sellingprice * 10000) / 10000,
+        sellingpriceuzs: Math.round(sellingpriceuzs * 10000) / 10000,
+        market,
+      });
+
+      await newProductPrice.save();
+
+      produc.price = newProductPrice._id;
+      await produc.save();
     }
 
     let p = [];
@@ -106,20 +122,8 @@ module.exports.registerAll = async (req, res) => {
         product: produc._id,
       });
 
-      const newProductPrice = new ProductPrice({
-        product: product.product,
-        incomingprice: Math.round(product.unitprice * 10000) / 10000,
-        incomingpriceuzs: Math.round(product.unitpriceuzs * 10000) / 10000,
-        sellingprice: productprice.sellingprice,
-        sellingpriceuzs: productprice.sellingpriceuzs,
-        market,
-      });
-
-      await newProductPrice.save();
       product.incomingconnector = newIncomingConnector._id;
       await product.save();
-      produc.price = newProductPrice._id;
-      await produc.save();
       p.push(product._id);
       t += Math.round(product.totalprice * 10000) / 10000;
       tuzs += Math.round(product.totalpriceuzs * 10000) / 10000;
