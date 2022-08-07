@@ -236,6 +236,7 @@ const ProductReport = () => {
             },
         }
         dispatch(getProducts(body))
+        //    eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage, showByTotal, dispatch])
     useEffect(() => {
         setData(products)

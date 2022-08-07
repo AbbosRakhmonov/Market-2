@@ -288,6 +288,7 @@ function Inventory() {
             },
         }
         dispatch(getInventories(body))
+        //    eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage, showByTotal, dispatch])
     useEffect(() => {
         setData(inventories)
