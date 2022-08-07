@@ -1,23 +1,11 @@
 import React from 'react'
+import PaymentSelect from '../Payment/PaymentSelect/PaymentSelect.js'
 
-export const DiscountInput = ({value, onChange, currency}) => {
+export const DiscountInput = ({value, onChange, option, onSelect}) => {
     return (
-        <div className='flex justify-between w-full items-center'>
-            <div className='text-black-700 text-[0.875rem]'>Chegirma:</div>
-            <div className='flex w-[11.75rem]'>
-                <input
-                    placeholder='misol: 100 000 000'
-                    value={value}
-                    onChange={onChange}
-                    className='discountinput w-full'
-                />
-
-                <select className='discountselect'>
-                    <option value={currency}>UZS</option>
-                    {/* UZS ning o'rniga "currency" chaqirib olinadi */}
-                    <option value={'%'}>%</option>
-                </select>
-            </div>
+        <div className='flex justify-between w-full items-center mb-[1rem]'>
+            <div className='text-black-700 text-[0.875rem]'>Chegirma :</div>
+            <PaymentSelect onChange={onChange} onSelect={onSelect} value={value} option={option} />
         </div>
     )
 }

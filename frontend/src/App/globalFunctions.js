@@ -32,3 +32,10 @@ export const UzsToUsd = (val, currency) => {
 export const checkEmptyString = (values) => {
     return values.some((value) => regexForEmptyString.test(value))
 }
+
+// delete slice errors
+export const deleteError = (state, key) => {
+    setTimeout(() => {
+        state[key] = null
+    }, 500)
+}

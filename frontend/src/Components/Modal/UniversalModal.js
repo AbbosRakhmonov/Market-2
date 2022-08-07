@@ -2,6 +2,7 @@ import Modal from 'react-modal'
 import ModalHeader from './ModalHeader'
 import Approve from './ModalBodys/Approve'
 import UploadExcel from './ModalBodys/UploadExcel'
+import Sell from './ModalBodys/Sell.js'
 import Complate from './ModalBodys/Complate.js'
 import RegisterIncomingModal from './ModalBodys/RegisterIncomingModal'
 
@@ -26,8 +27,8 @@ function UniversalModal({
             width: '90%',
             height: '85%',
             padding: '1.25rem',
-            transform: 'auto',
-        },
+            transform: 'auto'
+        }
     }
     const switchBody = () => {
         switch (body) {
@@ -67,6 +68,13 @@ function UniversalModal({
                         changeProduct={changeProduct}
                         approveFunction={approveFunction}
                         currency={currency}
+            case 'sell':
+                return (
+                    <Sell
+                        toggleModal={toggleModal}
+                        product={product}
+                        approveFunction={approveFunction}
+                        changeProduct={changeProduct}
                     />
                 )
             default:
@@ -76,7 +84,7 @@ function UniversalModal({
     return (
         <Modal
             isOpen={isOpen}
-            style={body !== 'approve' ? {...customStyles} : {}}
+            style={(body === 'import' || body === 'sell') && body !== 'approve' ? {...customStyles} : {}}
             onRequestClose={closeModal || toggleModal}
             closeTimeoutMS={200}
             contentLabel='Example Modal'

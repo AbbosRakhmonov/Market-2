@@ -19,9 +19,9 @@ export const successLoggedIn = () =>
 export const successAddProductMessage = () =>
     toast.success('Maxsulot muvaffaqiyatli yaratildi!')
 export const successUpdateProductMessage = () =>
-    toast.success("Maxsulot muvaffaqiyatli o'zgartirildi!")
+    toast.success('Maxsulot muvaffaqiyatli o\'zgartirildi!')
 export const successDeleteProductMessage = () =>
-    toast.success("Maxsulot muvaffaqiyatli o'chirildi!")
+    toast.success('Maxsulot muvaffaqiyatli o\'chirildi!')
 
 export const successAddUnitMessage = () =>
     toast.success("O'lchov birligi muvaffaqiyatli yaratildi!")
@@ -31,11 +31,11 @@ export const successDeleteUnitMessage = () =>
     toast.success("O'lchov birligi muvaffaqiyatli o'chirildi!")
 
 export const successAddSupplierMessage = () =>
-    toast.success('Yertkazib beruvchi muvaffaqiyatli yaratildi!')
+    toast.success('Yetkazib beruvchi muvaffaqiyatli yaratildi!')
 export const successUpdateSupplierMessage = () =>
-    toast.success("Yertkazib beruvchi muvaffaqiyatli o'zgartirildi!")
+    toast.success("Yetkazib beruvchi muvaffaqiyatli o'zgartirildi!")
 export const successDeleteSupplierMessage = () =>
-    toast.success("Yertkazib beruvchi muvaffaqiyatli o'chirildi!")
+    toast.success("Yetkazib beruvchi muvaffaqiyatli o'chirildi!")
 
 // Exchange rate massages
 export const successAddExchangeMessage = () =>
@@ -65,6 +65,9 @@ export const successUpdateCategoryMessage = () =>
 export const successDeleteCategoryMessage = () =>
     toast.success("Kategoriya muvaffaqiyatli o'chirildi!")
 
+export const successDeleteTemporary = () => toast.success('Saqlangan sotuv muvaffaqiyatli o\'chirildi!')
+export const successSavedTemporary = () => toast.success('Sotuv muvaffaqiyatli saqlandi!')
+
 // Warning Messages
 export const warningEmptyInput = () =>
     toast.warn("Ma'lumotlar to'liq kiritilmagan!")
@@ -73,7 +76,10 @@ export const warningCurrencyRate = () =>
 export const warningCategory = () => {
     toast.warn('Kategoriyalar mavjud emas!')
 }
-
+export const warningSaleProductsEmpty = () => toast.warn('Maxsulot mavjud emas !')
+export const warningMorePayment = () => toast.warn('To\'lov summasidan ortiq summa kiritib bo\'lmaydi')
+export const warningMoreDiscount = (val) => toast.warn(`${val} dan ortiq chegirma kiritib bo'lmaydi`)
+export const warningLessSellPayment = () => toast.warn('Sotish narxi kelish narxidan past bo\'lmasligi kerak')
 
 // Error Messages
 export const errorNetwork = () =>

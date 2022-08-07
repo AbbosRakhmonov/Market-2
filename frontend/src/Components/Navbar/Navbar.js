@@ -139,7 +139,7 @@ function Navbar() {
                 </div>
             </nav>
             <button
-                className={`w-[40px] h-[40px] flex items-center justify-center z-20 rounded-full bg-white-900 text-black-700 shadow-[0_10px_20px_rgba(0,0,0,0.1)] absolute backdrop-blur-[10px] top-[5.3rem] right-[-20px] transition-all ease-linear duration-300 hover:bg-black-100 ${
+                className={`w-[40px] h-[40px] flex items-center justify-center z-[30] rounded-full bg-white-900 text-black-700 shadow-[0_10px_20px_rgba(0,0,0,0.1)] absolute backdrop-blur-[10px] top-[5.3rem] right-[-20px] transition-all ease-linear duration-300 hover:bg-black-100 ${
                     navbarExpended ? 'rotate-180' : ''
                 }`}
                 onClick={handleClickNavbarExpand}

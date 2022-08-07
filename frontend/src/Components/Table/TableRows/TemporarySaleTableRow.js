@@ -2,54 +2,49 @@ import {uniqueId} from 'lodash'
 import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
 
-export const TemporarySaleTableRow = ({
-    data,
-    currentPage,
-    countPage,
-    Edit,
-    Delete,
-    currency,
-}) => {
+export const TemporarySaleTableRow = (
+    {
+        data,
+        currentPage,
+        countPage,
+        Edit,
+        Delete,
+        currency
+    }) => {
     return (
         <>
-            {data.map((sale, index) => (
+            {data.map(({_id, temporary, createdAt}, index) => (
                 <tr className='tr' key={uniqueId('sale')}>
                     <td className='td'>
                         {currentPage * countPage + 1 + index}
                     </td>
                     <td className='td text-left'>
-                        {sale.client.name || sale.client.id}
+                        {temporary.userValue || temporary.clientValue.label || temporary.packmanValue.label || 'Mijoz ismi kiritilmagan'}
                     </td>
                     <td className='td text-right'>
-                        {sale.sales.reduce(
-                            (prev, product) => prev + product.pieces,
-                            0
-                        )}
+                        {temporary.tableProducts.length}
                     </td>
                     <td className='text-success-500 td text-right'>
-                        {sale.sales.reduce(
-                            (prev, product) => prev + product.totalprice,
-                            0
-                        )}{' '}
+                        {currency === 'USD' ? temporary.totalPrice : temporary.totalPriceUzs}
                         {currency}
                     </td>
                     <td className='td text-right'>
-                        {sale.createdAt.toLocaleDateString()}
+                        {new Date(createdAt).toLocaleDateString()}
                     </td>
                     <td className='td text-right'>
-                        {sale.createdAt.toLocaleTimeString()} PM
+                        {new Date(createdAt).toLocaleTimeString()}
                     </td>
                     <td className='td py-[6px] border-r-0'>
                         <div className='flex items-center justify-center gap-[0.625rem]'>
                             <TableBtn
                                 type={'edit'}
                                 bgcolor={'bg-warning-500'}
-                                onClick={() => Edit(sale)}
+                                onClick={() => Edit(_id)}
                             />
                             <TableBtn
                                 type={'delete'}
                                 bgcolor={'bg-error-500'}
-                                onClick={() => Delete(sale)}
+                                onClick={() => Delete(_id)}
                             />
                         </div>
                     </td>

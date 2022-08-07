@@ -12,15 +12,15 @@ export const RouteLink = ({path, title, iconType}) => {
         isActive ? `activelink linkstyles` : `linkstyles`
 
     const iconTypes = {
-        bag: <IoBagCheck size={24} color='#12B76A' />,
-        cloud: <IoCloudDone size={24} color='#F04438' />,
-        clip: <IoAttach size={24} color='#F79009' />,
-        text: <IoDocumentText size={24} color='#00B4CC' />,
+        bag: <IoBagCheck size={'1.5rem'} color='#12B76A' />,
+        cloud: <IoCloudDone size={'1.5rem'} color='#F04438' />,
+        clip: <IoAttach size={'1.5rem'} color='#F79009' />,
+        text: <IoDocumentText size={'1.5rem'} color='#00B4CC' />,
     }
     return (
         <NavLink to={path} className={setActive}>
             {iconTypes[iconType]}
-            <span className='text-base text-black-700'>{title}</span>
+            <span className='text-base text-black-700 leading-[1.875rem]'>{title}</span>
         </NavLink>
     )
 }
