@@ -2,7 +2,10 @@ import React, {useEffect} from 'react'
 import Excel from '../../Images/Excel.svg'
 import * as XLSX from 'xlsx'
 import {useDispatch, useSelector} from 'react-redux'
-import {getProductsAll} from '../../Pages/Products/Create/productSlice'
+import {
+    clearUploadExcel,
+    getProductsAll,
+} from '../../Pages/Products/Create/productSlice'
 
 function ExportBtn({headers, fileName}) {
     const dispatch = useDispatch()
@@ -28,6 +31,7 @@ function ExportBtn({headers, fileName}) {
             wb,
             `${fileName}-${new Date().toLocaleDateString()}.xlsx`
         )
+        dispatch(clearUploadExcel())
     }
     const handleClick = () => {
         dispatch(getProductsAll())
@@ -48,7 +52,6 @@ function ExportBtn({headers, fileName}) {
             }))
             continueHandleClick(newData)
         }
-        //    eslint-disable-next-line react-hooks/exhaustive-deps
     }, [allProducts])
     return (
         <button className={'exportButton'} onClick={handleClick}>
