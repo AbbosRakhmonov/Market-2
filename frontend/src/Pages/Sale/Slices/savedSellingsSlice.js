@@ -1,6 +1,5 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import Api from '../../../Config/Api.js'
-import {deleteError} from '../../../App/globalFunctions.js'
 import {successDeleteTemporary, universalToast} from '../../../Components/ToastMessages/ToastMessages.js'
 
 export const getSavedPayments = createAsyncThunk(
@@ -43,10 +42,10 @@ const savedSellingsSlice = createSlice({
             state.savedPayments = payload
         },
         [getSavedPayments.rejected]: (state, {payload}) => {
+            universalToast(payload, 'error')
             state.getLoading = false
             state.getError = payload
-            universalToast(payload, 'error')
-            deleteError(state, 'getError')
+            state.getError = null
         },
         [deleteSavedPayment.pending]: (state) => {
             state.deleteLoading = true
@@ -57,10 +56,10 @@ const savedSellingsSlice = createSlice({
             successDeleteTemporary()
         },
         [deleteSavedPayment.rejected]: (state, {payload}) => {
+            universalToast(payload, 'error')
             state.deleteLoading = false
             state.deleteError = payload
-            universalToast(payload, 'error')
-            deleteError(state, 'deleteError')
+            state.deleteError = null
         }
     }
 })

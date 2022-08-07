@@ -49,32 +49,15 @@ const SavedSellings = () => {
 
     return (
         <div className='tableContainerPadding pt-[1.25rem]'>
-            <UniversalModal
-                isOpen={modalVisible}
-                body={'approve'}
-                approveFunction={deletePayment}
-                toggleModal={toggleModal}
-                headerText={"Saqlangan to'lovni o'chirishni tasdiqlaysizmi ?"}
-                title={"Agar to'lov o'chsa uni tiklab bo'lmaydi !"}
-            />
-            {!getLoading ? (
-                savedPayments.length > 0 ? (
-                    <Table
-                        Edit={editSavedPayment}
-                        Delete={handleGetId}
-                        page='temporarysale'
-                        data={savedPayments}
-                        headers={headers}
-                        currency={currencyType}
-                    />
-                ) : (
-                    <NotFind
-                        text={'Saqlanganlar maxsulotlar hozircha mavjud emas'}
-                    />
-                )
-            ) : (
-                <SmallLoader />
-            )}
+            <UniversalModal isOpen={modalVisible} body={'approve'} approveFunction={deletePayment}
+                            toggleModal={toggleModal} headerText={'Saqlangan to\'lovni o\'chirishni tasdiqlaysizmi ?'}
+                            title={'Agar to\'lov o\'chsa uni tiklab bo\'lmaydi !'} />
+            {!getLoading ? savedPayments.length > 0 ?
+                    <Table Edit={editSavedPayment} Delete={handleGetId} page='temporarysale' currentPage={3} countPage={3}
+                           data={savedPayments} headers={headers}
+                           currency={currencyType} /> : <NotFind text={'Saqlanganlar to\'lovlar hozircha mavjud emas'} />
+                : <SmallLoader />
+            }
         </div>
     )
 }
