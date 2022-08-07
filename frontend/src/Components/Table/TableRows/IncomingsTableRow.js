@@ -59,7 +59,7 @@ export const IncomingsTableRow = ({
                                 {current(
                                     incoming.unitprice,
                                     incoming.unitpriceuzs
-                                )}{' '}
+                                ).toLocaleString('ru-RU')}{' '}
                                 <span className='text-primary-800 font-medium'>
                                     {currency}
                                 </span>
@@ -71,11 +71,11 @@ export const IncomingsTableRow = ({
                             ? current(
                                   editedIncoming.totalprice,
                                   editedIncoming.totalpriceuzs
-                              )
+                              ).toLocaleString('ru-RU')
                             : current(
                                   incoming.totalprice,
                                   incoming.totalpriceuzs
-                              )}{' '}
+                              ).toLocaleString('ru-RU')}{' '}
                         <span className='text-success-500 font-medium'>
                             {currency}
                         </span>
@@ -97,7 +97,7 @@ export const IncomingsTableRow = ({
                                 {current(
                                     incoming.sellingprice,
                                     incoming.sellingpriceuzs
-                                )}{' '}
+                                ).toLocaleString('ru-RU')}{' '}
                                 <span className='text-primary-800 font-medium'>
                                     {currency}
                                 </span>

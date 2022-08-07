@@ -19,9 +19,10 @@ export const TemporaryIncomingsTableRow = ({
                         {temporary.incomings.pieces}
                     </td>
                     <td className='text-success-500 td text-right'>
-                        {currency === 'USD'
+                        {(currency === 'USD'
                             ? temporary.incomings.totalprice
-                            : temporary.incomings.totalpriceuzs}{' '}
+                            : temporary.incomings.totalpriceuzs
+                        ).toLocaleString('ru-RU')}{' '}
                         {currency}
                     </td>
                     <td className='td text-right'>

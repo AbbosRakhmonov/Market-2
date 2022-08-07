@@ -5,7 +5,7 @@ export const CheckIncoming = (products) => {
         if (product.pieces < 1) {
             return universalToast('Mahsulot sonini kirirting!', 'error')
         }
-        if (product.unitprice < 1) {
+        if (product.unitprice < 0.01) {
             return universalToast('Mahsulot qabul narxini kirirting!', 'error')
         }
         if (product.sellingprice < product.unitprice) {

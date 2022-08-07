@@ -95,6 +95,7 @@ function Incomings() {
         exist[0].supplier.push(el.supplier)
         exist[0].total.push(el.total)
         exist[0].totaluzs.push(el.totaluzs)
+        exist[0]._id = el._id
     }
 
     const newGroup = (group, el) => {
@@ -104,6 +105,7 @@ function Incomings() {
             total: [el.total],
             totaluzs: [el.totaluzs],
             supplier: [el.supplier],
+            _id: el._id,
         }
         group.push(newgroup)
     }

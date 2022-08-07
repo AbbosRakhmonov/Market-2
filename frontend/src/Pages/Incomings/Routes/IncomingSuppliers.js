@@ -15,7 +15,7 @@ import {
     updateIncoming,
 } from '../incomingSlice'
 import Table from '../../../Components/Table/Table'
-import {UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
+import {universalSort, UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
 import {uniqueId} from 'lodash'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
@@ -52,6 +52,11 @@ const IncomingSuppliers = () => {
         name: '',
         code: '',
         supplier: supplier,
+    })
+    const [sorItem, setSorItem] = useState({
+        filter: '',
+        sort: '',
+        count: 0,
     })
 
     const [incomingCard, setIncomingCard] = useState([])
@@ -274,6 +279,68 @@ const IncomingSuppliers = () => {
         setModal(false)
     }
 
+    // Sort
+    const filterData = (filterKey) => {
+        if (filterKey === sorItem.filter) {
+            switch (sorItem.count) {
+                case 1:
+                    setSorItem({
+                        filter: filterKey,
+                        sort: '1',
+                        count: 2,
+                    })
+                    universalSort(
+                        currentDataStorage,
+                        setCurrentData,
+                        filterKey,
+                        1,
+                        currentDataStorage
+                    )
+                    break
+                case 2:
+                    setSorItem({
+                        filter: filterKey,
+                        sort: '',
+                        count: 0,
+                    })
+                    universalSort(
+                        currentDataStorage,
+                        setCurrentData,
+                        filterKey,
+                        '',
+                        currentDataStorage
+                    )
+                    break
+                default:
+                    setSorItem({
+                        filter: filterKey,
+                        sort: '-1',
+                        count: 1,
+                    })
+                    universalSort(
+                        currentDataStorage,
+                        setCurrentData,
+                        filterKey,
+                        -1,
+                        currentDataStorage
+                    )
+            }
+        } else {
+            setSorItem({
+                filter: filterKey,
+                sort: '-1',
+                count: 1,
+            })
+            universalSort(
+                currentDataStorage,
+                setCurrentData,
+                filterKey,
+                -1,
+                currentDataStorage
+            )
+        }
+    }
+
     useEffect(() => {
         getIncomingsData()
     }, [getIncomingsData])
@@ -321,12 +388,12 @@ const IncomingSuppliers = () => {
         },
         {
             title: 'Kodi',
-            filter: 'product code',
+            filter: 'product.code',
             styles: 'w-[7%]',
         },
         {
             title: 'Nomi',
-            filter: 'product name',
+            filter: 'product.name',
         },
         {
             title: 'Soni',
@@ -345,7 +412,7 @@ const IncomingSuppliers = () => {
         },
         {
             title: 'Sotish',
-            filter: 'price sellingprice',
+            filter: 'sellingprice',
             styles: 'w-[10%]',
         },
         {
@@ -410,6 +477,7 @@ const IncomingSuppliers = () => {
                     changeHandler={changeEditedIncoming}
                     saveEditIncoming={updateEditedIncoming}
                     Delete={(incoming) => openDeleteModal(incoming)}
+                    Sort={filterData}
                 />
             </div>
             <UniversalModal
