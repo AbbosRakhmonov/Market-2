@@ -349,12 +349,6 @@ function Products() {
         setStickyForm(false)
     }
     const handleEdit = (e) => {
-        console.log(codeOfProduct)
-        console.log(nameOfProduct)
-        console.log(unitOfProduct)
-        console.log(categoryOfProduct)
-        console.log(priceOfProduct)
-        console.log(sellingPriceOfProduct)
         e.preventDefault()
         const filter = checkEmptyString([
             codeOfProduct,
@@ -438,7 +432,6 @@ function Products() {
 
     // table edit and delete
     const handleEditProduct = (product) => {
-        console.log(product)
         setCurrentProduct(product)
         setStickyForm(true)
     }
@@ -761,8 +754,10 @@ function Products() {
             <div className={'flex justify-between items-center mainPadding'}>
                 <div className={'flex gap-[1.5rem]'}>
                     <ExportBtn
+                        datas ={data}
                         headers={exportHeader}
                         fileName={'Maxsulotlar'}
+                        pagesName="Products"
                     />
                     <ImportBtn readExcel={readExcel} />
                 </div>
