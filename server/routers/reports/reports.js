@@ -124,8 +124,12 @@ module.exports.getReport = async (req, res) => {
       reports.transfer.transfer += roundUsd(sale.payment.transfer);
       reports.transfer.transferuzs += roundUzs(sale.payment.transferuzs);
       reports.transfer.transfer > 0 && reports.transfer.transfercount++;
-      reports.discounts.discounts += roundUsd(sale.discount.discount);
-      reports.discounts.discountsuzs += roundUzs(sale.discount.discountuzs);
+      reports.discounts.discounts += roundUsd(
+        (sale.discount && sale.discount.discount) || 0
+      );
+      reports.discounts.discountsuzs += roundUzs(
+        (sale.discountuzs && sale.discount.discountuzs) || 0
+      );
       reports.discounts.discounts > 0 && reports.discounts.discountscount++;
       sale.payment.totalprice - sale.payment.payment > 0.1 &&
         reports.debts.debtscount++;
@@ -158,6 +162,7 @@ module.exports.getReport = async (req, res) => {
 
     res.status(201).send(reports);
   } catch (error) {
+    console.log(error);
     res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };

@@ -46,6 +46,7 @@ const Reports = () => {
             type: 'debts',
         },
     ]
+
     const dispatch = useDispatch()
     const {reports, clearErrorrReports, errorReports} = useSelector(
         (state) => state.reports
