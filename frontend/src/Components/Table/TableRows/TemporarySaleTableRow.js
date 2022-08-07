@@ -1,31 +1,38 @@
 import {uniqueId} from 'lodash'
 import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
+import {useNavigate} from 'react-router-dom'
 
-export const TemporarySaleTableRow = (
-    {
-        data,
-        currentPage,
-        countPage,
-        Edit,
-        Delete,
-        currency
-    }) => {
+export const TemporarySaleTableRow = ({
+    data,
+    currentPage,
+    countPage,
+    Edit,
+    Delete,
+    currency,
+}) => {
+    const navigate = useNavigate()
+    const linkToSale = (temporary) => {
+        navigate('/sotuv/sotish/sotuv', {state: {...temporary}})
+    }
     return (
         <>
             {data.map(({_id, temporary, createdAt}, index) => (
                 <tr className='tr' key={uniqueId('sale')}>
-                    <td className='td'>
-                        {currentPage * countPage + 1 + index}
-                    </td>
+                    <td className='td'>{1 + index}</td>
                     <td className='td text-left'>
-                        {temporary.userValue || temporary.clientValue.label || temporary.packmanValue.label || 'Mijoz ismi kiritilmagan'}
+                        {temporary.userValue ||
+                            temporary.clientValue.label ||
+                            temporary.packmanValue.label ||
+                            'Mijoz ismi kiritilmagan'}
                     </td>
                     <td className='td text-right'>
                         {temporary.tableProducts.length}
                     </td>
                     <td className='text-success-500 td text-right'>
-                        {currency === 'USD' ? temporary.totalPrice : temporary.totalPriceUzs}
+                        {currency === 'USD'
+                            ? temporary.totalPrice
+                            : temporary.totalPriceUzs}
                         {currency}
                     </td>
                     <td className='td text-right'>
@@ -39,7 +46,7 @@ export const TemporarySaleTableRow = (
                             <TableBtn
                                 type={'edit'}
                                 bgcolor={'bg-warning-500'}
-                                onClick={() => Edit(_id)}
+                                onClick={() => linkToSale({...temporary, _id})}
                             />
                             <TableBtn
                                 type={'delete'}
