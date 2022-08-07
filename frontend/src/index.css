@@ -23,7 +23,7 @@
     }
 
     .tableInput {
-        @apply w-full placeholder-blue-200 pt-[0.3125rem] pb-[0.3125rem] pr-[.625rem] pl-[0.625rem] rounded-[0.25rem] border-[1px] border-blue-100 outline-0 font-roboto text-sm text-right;
+        @apply w-full placeholder-blue-200 pt-[0.3125rem] pb-[0.3125rem] pr-[.625rem] pl-[0.625rem] rounded-[0.25rem] border-[1px] border-blue-100 outline-transparent outline outline-0 focus:outline-blue-100 focus:outline-4 font-roboto text-sm text-right transition-all ease-in-out duration-200;
     }
 
     .iconClass {
@@ -292,27 +292,27 @@
 
     /* SaleBtns Style start */
     .paymentsstyle {
-        @apply inline-block mx-2 w-[22px] h-[18-px];
+        @apply inline-block mr-[0.625rem];
     }
 
     .salestyle {
-        @apply bg-[#E9ECEB] px-[10px] py-[10px] text-[#5A5B5B] active:bg-[#00B4CC] active:text-white-900 rounded-lg font-roboto outline-none;
+        @apply w-full flex-[42%] px-[10px] py-[10px] text-[#5A5B5B] rounded-[0.5rem] outline-none w-full hover:bg-primary-700 hover:text-white-900 shadow-[0_15px_6px_rgba(0,0,0,0.01),0_9px_5px_rgba(0,0,0,0.03),0_4px_4px_rgba(0,0,0,0.04),0_1px_2px_rgba(0,0,0,0.05),0_0_0_rgba(0,0,0,0.05)] active:scale-95 active:shadow-none transition-all ease-in-out duration-200;
     }
 
     .discountstyle {
-        @apply bg-[#F79009] px-[15px] py-[10px] text-white-900 rounded-lg outline-none;
+        @apply bg-warning-500 hover:bg-warning-600 transition-all active:scale-95 py-[10px] text-white-900 rounded-[0.5rem] outline-none shadow-[0_15px_6px_rgba(0,0,0,0.01),0_9px_5px_rgba(0,0,0,0.03),0_4px_4px_rgba(0,0,0,0.04),0_1px_2px_rgba(0,0,0,0.05),0_0_0_rgba(0,0,0,0.05)];
     }
 
     .discstyle {
-        @apply inline-block mx-1 w-[21px] h-[21px];
+        @apply inline-block mr-[0.625rem];
     }
 
     .paymentstyle {
-        @apply bg-[#12B76A] px-[4rem] py-[1rem] text-white-900 rounded-lg outline-none duration-200 shadow-lg;
+        @apply bg-success-500 hover:bg-success-600 transition-all active:scale-95 py-[1.375rem] text-white-900 rounded-[0.5rem] outline-none duration-200 shadow-[0_15px_6px_rgba(0,0,0,0.01),0_9px_5px_rgba(0,0,0,0.03),0_4px_4px_rgba(0,0,0,0.04),0_1px_2px_rgba(0,0,0,0.05),0_0_0_rgba(0,0,0,0.05)];
     }
 
     .paystyle {
-        @apply inline-block mr-1 w-[21px] h-[21px];
+        @apply inline-block mr-1;
     }
 
     .payclipstyle {
@@ -333,11 +333,11 @@
     }
 
     .linkstyles {
-        @apply bg-inputHover w-[180px] py-[0.3rem] rounded-full flex items-center justify-center gap-[0.625rem];
+        @apply bg-inputHover transition-all duration-200 w-[180px] py-[0.3125rem] rounded-full flex items-center justify-center gap-[0.625rem];
     }
 
     .activelink {
-        @apply bg-white-900 shadow-[0px_10px_10px] shadow-black-100;
+        @apply bg-white-900 shadow-[0px_10px_10px_rgba(0,0,0,0.05)];
     }
 
     .modalUniversal {
@@ -353,12 +353,8 @@
         @apply px-[10px] py-[5px] rounded-l outline-none border-y border-l border-blue-100 focus:border focus:border-warning-500 placeholder:text-blue-200 placeholder:text-[0.875rem] placeholder:text-right text-right;
     }
 
-    .discountselect {
-        @apply py-[5px] px-[10px] outline-none bg-warning-500 text-white-900 rounded-r cursor-pointer;
-    }
-
     .exitbtn {
-        @apply bg-error-400 py-[4px] px-[5px] text-white-900 rounded hover:bg-error-500;
+        @apply bg-error-400 py-[4px] px-[5px] text-white-900 rounded-[4px] hover:bg-error-500 active:scale-95 duration-200;
     }
 
     /* DiscountInput and ExitBtn style end */
@@ -473,15 +469,11 @@
     }
 
     .customerPay-head-style {
-        @apply p-[1.25rem] bg-white-400 rounded-[0.25rem] flex items-center flex-col w-[20.25rem];
+        @apply p-[1.25rem] bg-white-800 backdrop-blur-[3.125rem] rounded-[0.25rem] flex items-center flex-col w-[20.25rem] flex flex-col justify-between;
     }
 
     .customer-head-icon {
         @apply flex justify-between items-center w-full py-[0.5rem] mb-[1.25rem];
-    }
-
-    .custom-payment-ul {
-        @apply w-full border-b-2 border-black-200 pb-6 mb-[1.25rem];
     }
 
     .custom-payment-ul-li {
@@ -493,15 +485,94 @@
     }
 
     .custom-paymet-btn {
-        @apply flex justify-between w-full mb-[1.25rem] gap-[0.625rem];
+        @apply flex flex-wrap w-full gap-[1.25rem_0.625rem];
     }
-    /* This is Checkout Pages styled start */
 
+    /* This is Checkout Pages styled start */
     .checkout-card {
         @apply flex justify-center items-center text-center gap-[1.6rem] w-full grid sm:grid-cols-1 xl:grid-cols-3 md:grid-cols-2;
     }
 
     /* This is Checkout Pages styled end */
+    .checkbox {
+        @apply flex items-center justify-center;
+    }
+
+    .checkbox label {
+        @apply transition-all duration-100 block w-[1.1rem] h-[1.1rem] rounded-[0.25rem] bg-white-900 border border-black-200 cursor-pointer relative;
+    }
+
+    .checkbox label .checkbox-icon {
+        @apply transition-all ease-linear duration-100 opacity-0 text-blue-500;
+    }
+
+    .checkbox input:not(:checked) ~ label:hover {
+        @apply bg-blue-100;
+    }
+
+    .checkbox input:not(:checked) ~ label:hover .checkbox-icon {
+        @apply opacity-50;
+    }
+
+    .checkbox input:checked ~ label {
+        @apply bg-blue-400;
+    }
+
+    .checkbox input:checked ~ .checkbox-label {
+        @apply text-black-700;
+    }
+
+    .checkbox input:checked ~ label .checkbox-icon {
+        @apply opacity-100 text-white-900;
+    }
+
+    .checkbox .checkbox-label {
+        @apply transition-all duration-100 grow text-base text-black-200 leading-[1.125rem] ml-[0.625rem];
+    }
+
+    .register-selling-right {
+        @apply w-[20.25rem] p-[1.25rem];
+    }
+
+    .register-selling-right-accept-btn {
+        @apply grow bg-success-500 text-center py-[0.875rem] hover:bg-success-600 transition-all duration-100 rounded-[0.5rem] text-white-900 text-sm leading-[1rem];
+    }
+
+    .register-selling-right-deny-btn {
+        @apply bg-warning-500 text-center py-[0.625rem] px-[0.9375rem] hover:bg-warning-600 transition-all duration-100 rounded-[0.5rem] text-white-900 text-sm leading-[1rem];
+    }
+
+    .category-card {
+        @apply flex flex-col gap-[0.625rem] p-[0.625rem] mb-[1.25rem] cursor-pointer rounded-[0.25rem] transition-all duration-200 bg-[#EFF4F2] border-t-2 border-[#EAEAEA] relative overflow-hidden;
+    }
+
+    .category-card:not(.active-category):hover {
+        @apply bg-black-100 border-[#D4D4D4]
+    }
+
+    .category-card:hover ~ .category-card-checkmark {
+        @apply bg-[#D4D4D4];
+    }
+
+    .active-category {
+        @apply bg-white-900 border-[#A9C0EF] shadow-[0_10px_10px_rgba(0,0,0,0.05)];
+    }
+
+    .footer-text {
+        @apply font-light text-black-700 text-xs;
+    }
+
+    .category-card-checkmark {
+        @apply bg-[#EAEAEA] rounded-full absolute -top-[1.9375rem] -right-[1.9375rem] w-[4.25rem] h-[4.25rem] transition-all duration-200 text-[#9E9E9E];
+    }
+
+    .active-category .category-card-checkmark {
+        @apply bg-[#A9C0EF] text-white-900;
+    }
+
+    .category-card-checkmark .check-icon {
+        @apply absolute left-[0.875rem] bottom-[0.875rem]
+    }
 }
 
 html,

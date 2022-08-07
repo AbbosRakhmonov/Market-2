@@ -12,13 +12,13 @@ const SelectInput = ({
 }) => {
     return (
         <div>
-            <label
+            {label && <label
                 className={
                     'text-blue-700 block leading-[1.125rem] mb-[.625rem]'
                 }
             >
                 {label}
-            </label>
+            </label>}
             <Select
                 onChange={onSelect}
                 styles={CustomStyle}
@@ -29,7 +29,7 @@ const SelectInput = ({
                 placeholder={placeholder}
                 components={{
                     IndicatorSeparator: () => null,
-                    DropdownIndicator: DropdownIcon,
+                    DropdownIndicator: DropdownIcon
                 }}
             />
         </div>

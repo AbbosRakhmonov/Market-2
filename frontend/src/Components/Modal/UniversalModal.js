@@ -2,28 +2,32 @@ import Modal from 'react-modal'
 import ModalHeader from './ModalHeader'
 import Approve from './ModalBodys/Approve'
 import UploadExcel from './ModalBodys/UploadExcel'
+import Sell from './ModalBodys/Sell.js'
 import Complate from './ModalBodys/Complate.js'
 
-function UniversalModal({
-    isOpen,
-    toggleModal,
-    body,
-    approveFunction,
-    closeModal,
-    excelData,
-    headers,
-    setCreatedData,
-    createdData,
-    headerText,
-    title,
-}) {
+function UniversalModal(
+    {
+        isOpen,
+        toggleModal,
+        body,
+        approveFunction,
+        closeModal,
+        excelData,
+        headers,
+        setCreatedData,
+        createdData,
+        headerText,
+        title,
+        product,
+        changeProduct
+    }) {
     const customStyles = {
         content: {
             width: '90%',
             height: '85%',
             padding: '1.25rem',
-            transform: 'auto',
-        },
+            transform: 'auto'
+        }
     }
     const switchBody = () => {
         switch (body) {
@@ -56,6 +60,15 @@ function UniversalModal({
                         toggleModal={toggleModal}
                     />
                 )
+            case 'sell':
+                return (
+                    <Sell
+                        toggleModal={toggleModal}
+                        product={product}
+                        approveFunction={approveFunction}
+                        changeProduct={changeProduct}
+                    />
+                )
             default:
                 return 'Bunday jadval topilmadi'
         }
@@ -63,7 +76,7 @@ function UniversalModal({
     return (
         <Modal
             isOpen={isOpen}
-            style={body === 'import' ? {...customStyles} : {}}
+            style={body === 'import' || body === 'sell' ? {...customStyles} : {}}
             onRequestClose={closeModal || toggleModal}
             closeTimeoutMS={200}
             contentLabel='Example Modal'

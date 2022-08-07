@@ -8,7 +8,7 @@ function TableInput({
     onKeyUp,
 }) {
     return (
-        <div>
+        <div className={'w-full'}>
             <label>
                 {label}
                 <input
