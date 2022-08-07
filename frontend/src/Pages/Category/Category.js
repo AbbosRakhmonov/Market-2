@@ -356,8 +356,8 @@ const Category = () => {
             currentPage,
             countPage: showByTotal,
             search: {
-                code: '',
-                name: '',
+                name: searchByName.replace(/\s+/g, ' ').trim(),
+                code: searchByCode.replace(/\s+/g, ' ').trim(),
             },
         }
         dispatch(getCategories(body))

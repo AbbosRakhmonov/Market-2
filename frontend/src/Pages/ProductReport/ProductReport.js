@@ -231,9 +231,8 @@ const ProductReport = () => {
             currentPage,
             countPage: showByTotal,
             search: {
-                code: '',
-                name: '',
-                category: '',
+                name: searchByName.replace(/\s+/g, ' ').trim(),
+                code: searchByCode.replace(/\s+/g, ' ').trim(),
             },
         }
         dispatch(getProducts(body))

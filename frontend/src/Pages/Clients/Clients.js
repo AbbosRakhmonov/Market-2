@@ -67,7 +67,7 @@ const ClientsPage = () => {
     const [currentPage, setCurrentPage] = useState(0)
     const [filteredDataTotal, setFilteredDataTotal] = useState(total)
     const [searchByName, setSearchByName] = useState('')
-    const [getOptions, setGetOptions] = useState('')
+
     // modal toggle
     const toggleModal = () => setModalViseble(!modalVisible)
 
@@ -98,7 +98,7 @@ const ClientsPage = () => {
             currentPage,
             countPage: showByTotal,
             search: {
-                name: searchByName,
+                client: searchByName.replace(/\s+/g, ' ').trim(),
             },
         }
         dispatch(deleteClients(body))
@@ -122,7 +122,7 @@ const ClientsPage = () => {
                 currentPage,
                 countPage: showByTotal,
                 search: {
-                    name: searchByName,
+                    client: searchByName.replace(/\s+/g, ' ').trim(),
                 },
             }
             dispatch(addClients(body))
@@ -131,23 +131,27 @@ const ClientsPage = () => {
 
     const handleEdit = (e) => {
         e.preventDefault()
-        const body = {
-            name: clientName,
-            _id: currentClient._id,
-            packman: (packman && packman.value) || null,
-            currentPage,
-            countPage: showByTotal,
-            search: {
-                name: searchByName,
-            },
+        const filter = checkEmptyString([clientName])
+        if (filter) {
+            warningEmptyInput()
+        } else {
+            const body = {
+                name: clientName,
+                _id: currentClient._id,
+                packman: (packman && packman.value) || null,
+                currentPage,
+                countPage: showByTotal,
+                search: {
+                    name: searchByName.replace(/\s+/g, ' ').trim(),
+                },
+            }
+            dispatch(updateClients(body))
         }
-        dispatch(updateClients(body))
     }
 
     const clearForm = (e) => {
         e && e.preventDefault()
         setClientName('')
-        setGetOptions('')
         setPackman(null)
         setStickyForm(false)
     }
@@ -183,7 +187,7 @@ const ClientsPage = () => {
                 currentPage,
                 countPage: showByTotal,
                 search: {
-                    client: searchByName,
+                    client: searchByName.replace(/\s+/g, ' ').trim(),
                 },
             }
             dispatch(getClientsByFilter(body))
@@ -234,7 +238,7 @@ const ClientsPage = () => {
             currentPage,
             countPage: showByTotal,
             search: {
-                name: '',
+                client: searchByName.replace(/\s+/g, ' ').trim(),
             },
         }
         dispatch(getClients(body))
