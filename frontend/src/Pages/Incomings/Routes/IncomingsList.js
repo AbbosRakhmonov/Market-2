@@ -73,6 +73,7 @@ const IncomingsList = () => {
 
     // add product to edit
     const addToEditedIncoming = (product) => {
+        console.log(product)
         setEditedIncoming(product)
     }
 

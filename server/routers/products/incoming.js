@@ -209,6 +209,7 @@ module.exports.register = async (req, res) => {
 module.exports.update = async (req, res) => {
   try {
     const { market, startDate, endDate, product } = req.body;
+
     const marke = await Market.findById(market);
     if (!marke) {
       return res.status(400).json({
