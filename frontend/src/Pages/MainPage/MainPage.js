@@ -4,5 +4,4 @@ function MainPage() {
        Bosh sahifa
     </div>
 }
-
 export default MainPage

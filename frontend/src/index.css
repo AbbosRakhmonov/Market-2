@@ -591,6 +591,14 @@
     .category-card-checkmark .check-icon {
         @apply absolute left-[0.875rem] bottom-[0.875rem]
     }
+
+    .check-inventory-head{
+        @apply flex justify-between items-center border-b-[0.8px] border-black-700 mb-3 pb-1
+    }
+  
+    .check-saved-head {
+        @apply flex justify-between items-center border-b-[0.8px] border-black-700 mb-4
+    } 
 }
 
 html,
