@@ -1,8 +1,8 @@
 import {IoPrint} from 'react-icons/io5'
 
-function PrintBtn({onClick}) {
+function PrintBtn({onClick, isDisabled}) {
     return (
-        <button className='group print-btn-style ml-auto' onClick={onClick}>
+        <button className={`group print-btn-style ${isDisabled ? 'pointer-events-none' : 'pointer-events-auto'}`} onClick={onClick} disabled={isDisabled}>
             <span className='print-text-style'>Chop etish</span>
             <span className='print-icon-style'>
                 <IoPrint

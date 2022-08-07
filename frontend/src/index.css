@@ -738,10 +738,9 @@ input[type='number'] {
 
 .ReactModal__Overlay {
     opacity: 0;
-    transition: opacity 0.2s ease-in-out;
+    transition: opacity 0.1s ease-in-out;
     z-index: 50;
     overflow: auto;
-    perspective: 100px;
 }
 
 .ReactModal__Overlay--after-open {
@@ -763,6 +762,7 @@ input[type='number'] {
     top: 50% !important;
     padding: 3rem !important;
     transform: translate(-50%, -50%) !important;
+    filter: none;
 }
 
 .modalIcon path {

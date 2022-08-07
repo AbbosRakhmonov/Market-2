@@ -22,7 +22,7 @@ function Complate({toggleModal, approveFunction, headerText, title}) {
                     className={'approveBtn bg-black-500 hover:bg-black-700'}
                     onClick={toggleModal}
                 >
-                    Tasdiqlash
+                    Bekor qilish
                 </button>
                 <button
                     className={'approveBtn bg-primary-800 hover:bg-primary-900'}

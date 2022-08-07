@@ -5,28 +5,37 @@ import UploadExcel from './ModalBodys/UploadExcel'
 import Sell from './ModalBodys/Sell.js'
 import Complate from './ModalBodys/Complate.js'
 import RegisterIncomingModal from './ModalBodys/RegisterIncomingModal'
+import Check from './ModalBodys/Check.js'
 
 function UniversalModal({
-    isOpen,
-    toggleModal,
-    body,
-    approveFunction,
-    closeModal,
-    excelData,
-    headers,
-    setCreatedData,
-    createdData,
-    headerText,
-    title,
-    product,
-    changeProduct,
-    currency,
-}) {
+                            isOpen,
+                            toggleModal,
+                            body,
+                            approveFunction,
+                            closeModal,
+                            excelData,
+                            headers,
+                            setCreatedData,
+                            createdData,
+                            headerText,
+                            title,
+                            product,
+                            changeProduct,
+                            currency
+                        }) {
     const customStyles = {
         content: {
             width: '90%',
             height: '85%',
             padding: '1.25rem',
+            transform: 'auto'
+        }
+    }
+    const modalFull = {
+        content: {
+            width: '100%',
+            height: '100%',
+            padding: '1rem',
             transform: 'auto'
         }
     }
@@ -67,7 +76,7 @@ function UniversalModal({
                         product={product}
                         changeProduct={changeProduct}
                         approveFunction={approveFunction}
-                        currency={currency}/>)
+                        currency={currency} />)
             case 'sell':
                 return (
                     <Sell
@@ -77,6 +86,12 @@ function UniversalModal({
                         changeProduct={changeProduct}
                     />
                 )
+            case 'checkSell':
+                return (
+                    <Check
+                        product={product}
+                    />
+                )
             default:
                 return 'Bunday jadval topilmadi'
         }
@@ -84,9 +99,9 @@ function UniversalModal({
     return (
         <Modal
             isOpen={isOpen}
-            style={(body === 'import' || body === 'sell') && body !== 'approve' ? {...customStyles} : {}}
+            style={body === 'checkSell' ? {...modalFull} : (body === 'approve' || body === 'complete') ? {} : {...customStyles}}
             onRequestClose={closeModal || toggleModal}
-            closeTimeoutMS={200}
+            closeTimeoutMS={100}
             contentLabel='Example Modal'
             appElement={document.getElementById('root') || undefined}
         >
