@@ -147,7 +147,7 @@ function Navbar() {
                 <IoChevronBack size={'20px'} />
             </button>
             {isAvatarMenuOpen && (
-                <div className='avatar-config-menu absolute z-20 w-max left-[17rem] top-[1.375rem] bg-white-700 backdrop-blur-[8px] py-[10px] rounded-[8px]'>
+                <div className='avatar-config-menu absolute z-[90] w-max left-[17rem] top-[1.375rem] bg-white-700 backdrop-blur-[8px] py-[10px] rounded-[8px]'>
                     {profileList.map((item, index) =>
                         item.path ? (
                             <ProfileMenuLink

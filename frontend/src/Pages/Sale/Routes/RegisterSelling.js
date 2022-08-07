@@ -20,6 +20,7 @@ import {
 } from '../../../Components/ToastMessages/ToastMessages.js'
 import CustomerPayment from '../../../Components/Payment/CustomerPayment.js'
 import {useNavigate} from 'react-router-dom'
+import SmallLoader from '../../../Components/Spinner/SmallLoader.js'
 
 const RegisterSelling = () => {
     const dispatch = useDispatch()
@@ -27,7 +28,7 @@ const RegisterSelling = () => {
     const {user} = useSelector(state => state.login)
     const {currencyType, currency} = useSelector(state => state.currency)
     const {allcategories, loading} = useSelector(state => state.category)
-    const {allProducts, clients} = useSelector(state => state.registerSelling)
+    const {allProducts, clients, loadingMakePayment} = useSelector(state => state.registerSelling)
     const {packmans} = useSelector(state => state.clients)
     const [filteredProducts, setFilteredProducts] = useState([])
     const [selectedProduct, setSelectedProduct] = useState('')
@@ -62,6 +63,8 @@ const RegisterSelling = () => {
     const [allPaymentUzs, setAllPaymentUzs] = useState(0)
     const [paid, setPaid] = useState(0)
     const [paidUzs, setPaidUzs] = useState(0)
+    const [modalBody, setModalBody] = useState('')
+    const [modalData, setModalData] = useState(null)
     const headers = [
         {title: '№'},
         {title: 'Kodi'},
@@ -72,6 +75,7 @@ const RegisterSelling = () => {
         {title: ''}
     ]
     const toggleModal = () => {
+        setModalBody('')
         setModalVisible(!modalVisible)
         setSelectedProduct('')
         setTimeout(() => {
@@ -89,7 +93,12 @@ const RegisterSelling = () => {
         setPaymentDiscountPercent('')
         setPaymentDebt(0)
         setPaymentDebtUzs(0)
-        setDiscountSelectOption({label: currencyType, value: currencyType})
+        setDiscountSelectOption({label: '%', value: '%'})
+    }
+    const toggleCheckModal = () => {
+        setModalVisible(!modalVisible)
+        setModalBody('')
+        setModalData(null)
     }
     const convertToUsd = (value) => Math.round(value * 1000) / 1000
     const convertToUzs = (value) => Math.round(value)
@@ -369,6 +378,20 @@ const RegisterSelling = () => {
         setTableProducts([])
         setClientValue('')
         setPackmanValue('')
+        setOptionPackman([{
+            label: 'Tanlang',
+            value: ''
+        }, ...packmans.map((pack) => ({
+            value: pack._id,
+            label: pack.name
+        }))])
+        setOptionClient([{
+            label: 'Barchasi',
+            value: ''
+        }, ...clients.map(client => ({
+            value: client._id,
+            label: client.name
+        }))])
         setUserValue('')
         setChecked(false)
         setActiveCategory(null)
@@ -377,6 +400,17 @@ const RegisterSelling = () => {
         togglePaymentModal(bool)
     }
     const handleClickPay = () => {
+        setModalBody('complete')
+        setModalVisible(true)
+    }
+    const handleClosePay = () => {
+        setModalVisible(false)
+        setTimeout(() => {
+            setModalBody('')
+        }, 500)
+    }
+    const handleApprovePay = () => {
+        handleClosePay()
         const body = {
             saleproducts: tableProducts,
             client: {
@@ -414,8 +448,13 @@ const RegisterSelling = () => {
             },
             user: user._id
         }
-        dispatch(makePayment(body)).then(() => {
-            clearAll()
+        dispatch(makePayment(body)).then(({payload}) => {
+            setModalData(payload)
+            setTimeout(() => {
+                setModalBody('checkSell')
+                setModalVisible(true)
+                clearAll()
+            }, 500)
         })
     }
     const handleClickSave = () => {
@@ -438,6 +477,8 @@ const RegisterSelling = () => {
                 navigate('/sotuv/sotish/saqlanganlar')
             })
         }
+    }
+    const handleClickPrint = () => {
     }
     // bu yerda boshqa funksiyalar
     const handleChange = (id, value, key) => {
@@ -503,6 +544,7 @@ const RegisterSelling = () => {
                 unitpriceuzs: product.price.sellingpriceuzs
             })
             setModalVisible(true)
+            setModalBody('sell')
         } else {
             universalToast('Maxsulot ro\'yxatda mavjud !', 'error')
         }
@@ -648,6 +690,11 @@ const RegisterSelling = () => {
         }))])
     }, [clients])
     return <div className={'flex grow relative overflow-auto'}>
+        {loadingMakePayment &&
+            <div
+                className='fixed backdrop-blur-[2px] z-[100] left-0 top-0 right-0 bottom-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
+                <SmallLoader />
+            </div>}
         <CustomerPayment
             type={paymentType}
             active={paymentModalVisible}
@@ -670,12 +717,14 @@ const RegisterSelling = () => {
             handleClickPay={handleClickPay}
         />
         <UniversalModal
-            body={'sell'}
-            toggleModal={toggleModal}
-            approveFunction={handleAddProduct}
+            body={modalBody}
+            toggleModal={modalBody === 'sell' ? toggleModal : modalBody === 'complete' ? handleClosePay : toggleCheckModal}
+            approveFunction={modalBody === 'sell' ? handleAddProduct : modalBody === 'complete' ? handleApprovePay : handleClickPrint}
             isOpen={modalVisible}
-            product={currentProduct}
+            product={modalBody === 'sell' ? currentProduct : modalData}
             headers={headers}
+            headerText={modalBody === 'complete' && 'To\'lovni amalga oshirishni tasdiqlaysizmi ?'}
+            title={modalBody === 'complete' && 'To\'lovni amalga oshirgach bu ma`lumotlarni o`zgaritirb bo`lmaydi !'}
             changeProduct={handleChangeProduct}
         />
         <div className='flex flex-col grow mainPadding gap-[1.25rem] overflow-auto'>
