@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useCallback, useEffect} from 'react'
 import Excel from '../../Images/Excel.svg'
 import * as XLSX from 'xlsx'
 import {useDispatch, useSelector} from 'react-redux'
@@ -19,20 +19,27 @@ function ExportBtn({headers, fileName}) {
             wch: maxLength,
         }))
     }
-    const continueHandleClick = (data) => {
-        const wscols = autoFillColumnWidth(data)
-        const wb = XLSX.utils.book_new()
-        const ws = XLSX.utils.json_to_sheet([])
-        ws['!cols'] = wscols
-        XLSX.utils.sheet_add_aoa(ws, [headers])
-        XLSX.utils.sheet_add_json(ws, data, {origin: 'A2', skipHeader: true})
-        XLSX.utils.book_append_sheet(wb, ws, 'Maxsulotlar')
-        XLSX.writeFile(
-            wb,
-            `${fileName}-${new Date().toLocaleDateString()}.xlsx`
-        )
-        dispatch(clearUploadExcel())
-    }
+    const continueHandleClick = useCallback(
+        (data) => {
+            const wscols = autoFillColumnWidth(data)
+            const wb = XLSX.utils.book_new()
+            const ws = XLSX.utils.json_to_sheet([])
+            ws['!cols'] = wscols
+            XLSX.utils.sheet_add_aoa(ws, [headers])
+            XLSX.utils.sheet_add_json(ws, data, {
+                origin: 'A2',
+                skipHeader: true,
+            })
+            XLSX.utils.book_append_sheet(wb, ws, 'Maxsulotlar')
+            XLSX.writeFile(
+                wb,
+                `${fileName}-${new Date().toLocaleDateString()}.xlsx`
+            )
+            dispatch(clearUploadExcel())
+        },
+        [dispatch, fileName, headers]
+    )
+
     const handleClick = () => {
         dispatch(getProductsAll())
     }
@@ -50,9 +57,9 @@ function ExportBtn({headers, fileName}) {
                 sellingprice: item.price.sellingprice,
                 sellingpriceuzs: item.price.sellingpriceuzs,
             }))
-            continueHandleClick(newData)
+            !errorProducts && continueHandleClick(newData)
         }
-    }, [allProducts])
+    }, [allProducts, continueHandleClick, errorProducts])
     return (
         <button className={'exportButton'} onClick={handleClick}>
             Eksport
