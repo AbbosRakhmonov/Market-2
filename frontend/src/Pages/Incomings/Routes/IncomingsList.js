@@ -173,7 +173,7 @@ const IncomingsList = () => {
     const searchSupplier = (e) => {
         let target = e.target.value.toLowerCase()
         setCurrentIncoming([
-            ...storageCurrentIncoming.filter(({product}) =>
+            ...storageCurrentIncoming.filter((product) =>
                 product.supplier.name.toLowerCase().includes(target)
             ),
         ])

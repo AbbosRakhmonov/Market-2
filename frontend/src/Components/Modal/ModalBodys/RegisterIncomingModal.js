@@ -37,6 +37,9 @@ const RegisterproductModal = ({
                             <th scope='col' className='th w-[15%]'>
                                 <span>Sotish</span>
                             </th>
+                            <th scope='col' className='th w-[15%]'>
+                                <span>Sotish %</span>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -81,6 +84,15 @@ const RegisterproductModal = ({
                                         product.sellingprice,
                                         product.sellingpriceuzs
                                     )}
+                                />
+                            </td>
+                            <td className='py-1 td'>
+                                <TableInput
+                                    onChange={(e) =>
+                                        changeProduct(e, 'procient')
+                                    }
+                                    type={'number'}
+                                    value={product.procient}
                                 />
                             </td>
                         </tr>
