@@ -1,6 +1,9 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import Api from '../../../Config/Api.js'
-import {successSavedTemporary, universalToast} from '../../../Components/ToastMessages/ToastMessages.js'
+import {
+    successSavedTemporary,
+    universalToast,
+} from '../../../Components/ToastMessages/ToastMessages.js'
 import {deleteError} from '../../../App/globalFunctions.js'
 
 export const getAllProducts = createAsyncThunk(
@@ -12,7 +15,8 @@ export const getAllProducts = createAsyncThunk(
         } catch (error) {
             return rejectWithValue(error)
         }
-    })
+    }
+)
 
 export const getClients = createAsyncThunk(
     'registerSelling/getClients',
@@ -23,7 +27,8 @@ export const getClients = createAsyncThunk(
         } catch (error) {
             return rejectWithValue(error)
         }
-    })
+    }
+)
 
 export const makePayment = createAsyncThunk(
     'registerSelling/makePayment',
@@ -62,7 +67,7 @@ const registerSellingSlice = createSlice({
         errorGetAllProducts: null,
         errorGetUsers: null,
         errorMakePayment: null,
-        errorSavePayment: null
+        errorSavePayment: null,
     },
     reducers: {},
     extraReducers: {
@@ -117,8 +122,8 @@ const registerSellingSlice = createSlice({
             state.errorSavePayment = payload
             universalToast(payload, 'error')
             deleteError(state, 'errorSavePayment')
-        }
-    }
+        },
+    },
 })
 
 export default registerSellingSlice.reducer
