@@ -114,7 +114,9 @@ const RegisterIncoming = () => {
             currencyType === 'UZS' ? target : UsdToUzs(target, currency)
 
         const countProcient = (price) =>
-            Math.round(price / 100) * target + price
+            currencyType === 'UZS'
+                ? Math.round((price / 100) * target) / 1 + price
+                : Math.round((price / 100) * target * 1000) / 1000 + price
 
         const changepieces = (obj) => {
             obj.pieces = target
@@ -203,6 +205,8 @@ const RegisterIncoming = () => {
             delete obj.procient
             return obj
         })
+
+        console.log(postincoming)
         if (!CheckIncoming(postincoming)) {
             dispatch(
                 addIncoming({
