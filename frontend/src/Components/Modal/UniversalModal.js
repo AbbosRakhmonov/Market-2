@@ -4,23 +4,24 @@ import Approve from './ModalBodys/Approve'
 import UploadExcel from './ModalBodys/UploadExcel'
 import Sell from './ModalBodys/Sell.js'
 import Complate from './ModalBodys/Complate.js'
+import RegisterIncomingModal from './ModalBodys/RegisterIncomingModal'
 
-function UniversalModal(
-    {
-        isOpen,
-        toggleModal,
-        body,
-        approveFunction,
-        closeModal,
-        excelData,
-        headers,
-        setCreatedData,
-        createdData,
-        headerText,
-        title,
-        product,
-        changeProduct
-    }) {
+function UniversalModal({
+    isOpen,
+    toggleModal,
+    body,
+    approveFunction,
+    closeModal,
+    excelData,
+    headers,
+    setCreatedData,
+    createdData,
+    headerText,
+    title,
+    product,
+    changeProduct,
+    currency,
+}) {
     const customStyles = {
         content: {
             width: '90%',
@@ -60,6 +61,13 @@ function UniversalModal(
                         toggleModal={toggleModal}
                     />
                 )
+            case 'registerincomingbody':
+                return (
+                    <RegisterIncomingModal
+                        product={product}
+                        changeProduct={changeProduct}
+                        approveFunction={approveFunction}
+                        currency={currency}
             case 'sell':
                 return (
                     <Sell
@@ -76,7 +84,7 @@ function UniversalModal(
     return (
         <Modal
             isOpen={isOpen}
-            style={body === 'import' || body === 'sell' ? {...customStyles} : {}}
+            style={(body === 'import' || body === 'sell') && body !== 'approve' ? {...customStyles} : {}}
             onRequestClose={closeModal || toggleModal}
             closeTimeoutMS={200}
             contentLabel='Example Modal'

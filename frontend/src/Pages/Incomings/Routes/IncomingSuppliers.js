@@ -1,63 +1,128 @@
 import React, {useCallback, useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
-import {universalSort, UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
+import {useLocation} from 'react-router-dom'
 import ExportBtn from '../../../Components/Buttons/ExportBtn'
-import Dates from '../../../Components/Dates/Dates'
-import UniversalModal from '../../../Components/Modal/UniversalModal'
+import CardBtn from '../../../Components/Card/CardBtn'
+import LinkToBack from '../../../Components/LinkToBack/LinkToBack'
 import Pagination from '../../../Components/Pagination/Pagination'
-import SearchForm from '../../../Components/SearchForm/SearchForm'
-import Table from '../../../Components/Table/Table'
+import ResultIncomings from '../Components/ResultIncomings'
 import {
     clearSuccesDelete,
     clearSuccessUpdate,
     deleteIncoming,
+    getIncomingConnectors,
     getIncomings,
     updateIncoming,
 } from '../incomingSlice'
+import Table from '../../../Components/Table/Table'
+import {UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
+import SearchForm from '../../../Components/SearchForm/SearchForm'
+import {uniqueId} from 'lodash'
+import UniversalModal from '../../../Components/Modal/UniversalModal'
 
-const IncomingsList = () => {
+const IncomingSuppliers = () => {
     const dispatch = useDispatch()
-
     const {
         market: {_id},
     } = useSelector((state) => state.login)
-    const {incomings, incomingscount, successUpdate, successDelete} =
-        useSelector((state) => state.incoming)
+    const {
+        incomings,
+        incomingscount,
+        incomingconnectors,
+        successUpdate,
+        successDelete,
+    } = useSelector((state) => state.incoming)
     const {currencyType, currency} = useSelector((state) => state.currency)
 
-    const [beginDay, setBeginDay] = useState(
-        new Date(
-            new Date().getFullYear(),
-            new Date().getMonth(),
-            1
-        ).toISOString()
-    )
-    const [endDay, setEndDay] = useState(
-        new Date(new Date().setHours(23, 59, 59, 0)).toISOString()
-    )
+    const {
+        state: {date, supplier},
+    } = useLocation()
+
+    let beginDay = new Date(new Date(date).setHours(3, 0, 0, 0)).toISOString()
+    let endDay = new Date(new Date(date).setHours(26, 59, 59, 59)).toISOString()
+
+    const [currentPage, setCurrentPage] = useState(0)
+    const [countPage, setCountPage] = useState(10)
     const [sendingSearch, setSendingSearch] = useState({
         name: '',
         code: '',
-        supplier: '',
+        supplier: supplier,
     })
     const [localSearch, setLocalSearch] = useState({
         name: '',
         code: '',
-        supplier: '',
-    })
-    const [currentPage, setCurrentPage] = useState(0)
-    const [countPage, setCountPage] = useState(10)
-    const [modal, setModal] = useState(false)
-    const [sorItem, setSorItem] = useState({
-        filter: '',
-        sort: '',
-        count: 0,
+        supplier: supplier,
     })
 
+    const [incomingCard, setIncomingCard] = useState([])
+    const [currentData, setCurrentData] = useState([])
+    const [currentDataStorage, setCurrentDataStorage] = useState([])
     const [editedIncoming, setEditedIncoming] = useState({})
-    const [deletedIncoming, setDeletedIncoming] = useState({})
-    const [currentIncoming, setCurrentIncoming] = useState([])
-    const [storageCurrentIncoming, setStorageCurrentIncoming] = useState([])
+    const [deletedIncoming, setDeletedIncoming] = useState('')
+    const [modal, setModal] = useState(false)
+
+    const changeCardData = useCallback(
+        (data) => {
+            let groups = []
+            let pieces = (arr) => arr.reduce((prev, el) => prev + el.pieces, 0)
+            const currentGroup = (ind, incoming) => {
+                groups[ind].products += incoming.incoming.length
+                groups[ind].pieces += pieces(incoming.incoming)
+                groups[ind].totalprice += incoming.total
+                groups[ind].totalpriceuzs += incoming.totaluzs
+            }
+            const newGroup = (incoming) => {
+                let obj = {
+                    createdAt: new Date(
+                        incoming.createdAt
+                    ).toLocaleDateString(),
+                    supplier: {...incoming.supplier},
+                    products: incoming.incoming.length,
+                    pieces: pieces(incoming.incoming),
+                    totalprice: incoming.total,
+                    totalpriceuzs: incoming.totaluzs,
+                }
+                groups.push(obj)
+            }
+            const findindex = (incoming) => {
+                if (supplier) {
+                    return groups.findIndex(
+                        (group) =>
+                            group.supplier && group.supplier.name === supplier
+                    )
+                } else {
+                    return groups.findIndex(
+                        (group) =>
+                            group.supplier &&
+                            group.supplier._id === incoming.supplier._id
+                    )
+                }
+            }
+
+            data.forEach((incoming) => {
+                let ind = findindex(incoming)
+                if (ind >= 0) {
+                    currentGroup(ind, incoming)
+                } else {
+                    newGroup(incoming)
+                }
+            })
+            setIncomingCard(groups)
+        },
+        [supplier]
+    )
+
+    // click supplier card and show the table
+    const changeCurrentData = (value) => {
+        setSendingSearch({
+            ...sendingSearch,
+            supplier: value,
+        })
+        setLocalSearch({
+            ...localSearch,
+            supplier: value,
+        })
+    }
 
     const getCurrentData = (data) => {
         let current = data.map((incoming) => {
@@ -67,8 +132,8 @@ const IncomingsList = () => {
                 sellingpriceuzs: incoming.product.price.sellingpriceuzs,
             }
         })
-        setCurrentIncoming(current)
-        setStorageCurrentIncoming(current)
+        setCurrentData(current)
+        setCurrentDataStorage(current)
     }
 
     // add product to edit
@@ -114,7 +179,7 @@ const IncomingsList = () => {
     }
 
     const updateEditedIncoming = () => {
-        let isChanged = currentIncoming.some((product) => {
+        let isChanged = currentData.some((product) => {
             return (
                 product.pieces === editedIncoming.pieces &&
                 product.unitprice === editedIncoming.unitprice &&
@@ -135,18 +200,22 @@ const IncomingsList = () => {
         }
     }
 
-    // change date func
-    const changeDate = (value, name) => {
-        name === 'beginDay' && setBeginDay(new Date(value).toISOString())
-        name === 'endDay' && setEndDay(new Date(value).toISOString())
+    const openDeleteModal = (incoming) => {
+        setDeletedIncoming(incoming)
+        setModal(true)
+    }
+
+    const closeModal = () => {
+        setDeletedIncoming({})
+        setModal(false)
     }
 
     // search by name
     const searchName = (e) => {
         let target = e.target.value.toLowerCase()
-        setCurrentIncoming([
-            ...storageCurrentIncoming.filter(({product}) =>
-                product.productdata.name.toLowerCase().includes(target)
+        setCurrentData([
+            ...currentDataStorage.filter(({product}) =>
+                product.name.toLowerCase().includes(target)
             ),
         ])
         setLocalSearch({
@@ -158,9 +227,9 @@ const IncomingsList = () => {
     // search by code
     const searchCode = (e) => {
         let target = e.target.value.toLowerCase()
-        setCurrentIncoming([
-            ...storageCurrentIncoming.filter(({product}) =>
-                product.productdata.code.includes(target)
+        setCurrentData([
+            ...currentDataStorage.filter(({product}) =>
+                product.code.includes(target)
             ),
         ])
         setLocalSearch({
@@ -169,109 +238,11 @@ const IncomingsList = () => {
         })
     }
 
-    // search supplier
-    const searchSupplier = (e) => {
-        let target = e.target.value.toLowerCase()
-        setCurrentIncoming([
-            ...storageCurrentIncoming.filter(({product}) =>
-                product.supplier.name.toLowerCase().includes(target)
-            ),
-        ])
-        setLocalSearch({
-            ...localSearch,
-            supplier: target,
-        })
-    }
-
-    // sort
-    const filterData = (filterKey) => {
-        if (filterKey === sorItem.filter) {
-            switch (sorItem.count) {
-                case 1:
-                    setSorItem({
-                        filter: filterKey,
-                        sort: '1',
-                        count: 2,
-                    })
-                    universalSort(
-                        storageCurrentIncoming,
-                        setCurrentIncoming,
-                        filterKey,
-                        1,
-                        storageCurrentIncoming
-                    )
-                    break
-                case 2:
-                    setSorItem({
-                        filter: filterKey,
-                        sort: '',
-                        count: 0,
-                    })
-                    universalSort(
-                        storageCurrentIncoming,
-                        setCurrentIncoming,
-                        filterKey,
-                        '',
-                        storageCurrentIncoming
-                    )
-                    break
-                default:
-                    setSorItem({
-                        filter: filterKey,
-                        sort: '-1',
-                        count: 1,
-                    })
-                    universalSort(
-                        storageCurrentIncoming,
-                        setCurrentIncoming,
-                        filterKey,
-                        -1,
-                        storageCurrentIncoming
-                    )
-            }
-        } else {
-            setSorItem({
-                filter: filterKey,
-                sort: '-1',
-                count: 1,
-            })
-            universalSort(
-                storageCurrentIncoming,
-                setCurrentIncoming,
-                filterKey,
-                -1,
-                storageCurrentIncoming
-            )
-        }
-    }
-
     // search when key press
     const searchOnKeyUp = (e) => {
         if (e.key === 'Enter') {
             setSendingSearch(localSearch)
         }
-    }
-
-    const openDeleteModal = (incoming) => {
-        setDeletedIncoming(incoming)
-        setModal(true)
-    }
-
-    const closeModal = () => {
-        setDeletedIncoming({})
-        setModal(false)
-    }
-
-    const removeIncoming = () => {
-        dispatch(
-            deleteIncoming({
-                market: _id,
-                beginDay,
-                endDay,
-                product: {...deletedIncoming},
-            })
-        )
-        setModal(false)
     }
 
     const getIncomingsData = useCallback(() => {
@@ -287,20 +258,21 @@ const IncomingsList = () => {
         )
     }, [dispatch, _id, beginDay, endDay, currentPage, countPage, sendingSearch])
 
-    useEffect(() => {
-        getCurrentData(incomings)
-    }, [incomings])
+    const removeIncoming = () => {
+        dispatch(
+            deleteIncoming({
+                market: _id,
+                beginDay,
+                endDay,
+                product: {...deletedIncoming},
+            })
+        )
+        setModal(false)
+    }
 
     useEffect(() => {
         getIncomingsData()
-    }, [
-        getIncomingsData,
-        beginDay,
-        endDay,
-        currentPage,
-        countPage,
-        sendingSearch,
-    ])
+    }, [getIncomingsData])
 
     useEffect(() => {
         if (successUpdate) {
@@ -313,10 +285,27 @@ const IncomingsList = () => {
     useEffect(() => {
         if (successDelete) {
             getIncomingsData()
-            setEditedIncoming({})
             dispatch(clearSuccesDelete())
         }
     }, [dispatch, getIncomingsData, successDelete])
+
+    useEffect(() => {
+        dispatch(
+            getIncomingConnectors({
+                market: _id,
+                beginDay,
+                endDay,
+            })
+        )
+    }, [dispatch, _id, beginDay, endDay])
+
+    useEffect(() => {
+        changeCardData(incomingconnectors)
+    }, [incomingconnectors, changeCardData])
+
+    useEffect(() => {
+        getCurrentData(incomings)
+    }, [incomings])
 
     const headers = [
         {
@@ -328,12 +317,12 @@ const IncomingsList = () => {
         },
         {
             title: 'Kodi',
-            filter: 'product.code',
+            filter: 'product code',
             styles: 'w-[7%]',
         },
         {
             title: 'Nomi',
-            filter: 'product.name',
+            filter: 'product name',
         },
         {
             title: 'Soni',
@@ -352,7 +341,7 @@ const IncomingsList = () => {
         },
         {
             title: 'Sotish',
-            filter: 'price.sellingprice',
+            filter: 'price sellingprice',
             styles: 'w-[10%]',
         },
         {
@@ -363,25 +352,31 @@ const IncomingsList = () => {
 
     return (
         <div className=''>
-            <div className='mainPadding text-center'>
-                <p>Ro'yxat</p>
+            <div className='flex items-center justify-between mainPadding'>
+                <LinkToBack link={'/maxsulotlar/qabul/qabullar'} />
+                <ResultIncomings
+                    connectors={incomingCard}
+                    currencyType={currencyType}
+                />
+            </div>
+            <div className='flex flex-wrap gap-[1%] mainPadding'>
+                {incomingCard.length > 0 &&
+                    incomingCard.map((incoming) => (
+                        <CardBtn
+                            date={incoming.createdAt}
+                            deliver={incoming.supplier.name}
+                            products={incoming.products}
+                            pieces={incoming.pieces}
+                            onClick={() =>
+                                changeCurrentData(incoming.supplier.name)
+                            }
+                            key={uniqueId('card')}
+                        />
+                    ))}
             </div>
             <div className='mainPadding flex items-center justify-between'>
                 <ExportBtn />
-                <div className='flex gap-[10px]'>
-                    <Dates
-                        label={'dan'}
-                        value={new Date(beginDay)}
-                        onChange={(value) => changeDate(value, 'beginDay')}
-                        maxWidth={'max-w-[9.6875rem]'}
-                    />
-                    <Dates
-                        label={'gacha'}
-                        value={new Date(endDay)}
-                        onChange={(value) => changeDate(value, 'endDay')}
-                        maxWidth={'max-w-[9.6875rem]'}
-                    />
-                </div>
+                <span>Ro`yxat</span>
                 <Pagination
                     currentPage={currentPage}
                     setCurrentPage={setCurrentPage}
@@ -391,19 +386,18 @@ const IncomingsList = () => {
             </div>
             <div>
                 <SearchForm
-                    filterBy={['total', 'code', 'delivererName', 'name']}
+                    filterBy={['total', 'code', 'name']}
                     filterByName={searchName}
                     filterByTotal={(e) => setCountPage(e.value)}
                     filterByCode={searchCode}
                     filterByCodeAndNameAndCategoryWhenPressEnter={searchOnKeyUp}
-                    filterByDelivererName={searchSupplier}
                 />
             </div>
             <div className='mainPadding'>
                 <Table
                     page={'incomings'}
                     headers={headers}
-                    data={currentIncoming}
+                    data={currentData}
                     currentPage={currentPage}
                     countPage={countPage}
                     currency={currencyType}
@@ -412,7 +406,6 @@ const IncomingsList = () => {
                     changeHandler={changeEditedIncoming}
                     saveEditIncoming={updateEditedIncoming}
                     Delete={(incoming) => openDeleteModal(incoming)}
-                    Sort={filterData}
                 />
             </div>
             <UniversalModal
@@ -428,4 +421,4 @@ const IncomingsList = () => {
     )
 }
 
-export default IncomingsList
+export default IncomingSuppliers

@@ -223,7 +223,7 @@ router.post("/temporary/get", (req, res) => {
   require("./temporaryincoming").getAll(req, res);
 });
 
-router.post("/temporary/delete", (req, res) => {
+router.delete("/temporary/delete", (req, res) => {
   require("./temporaryincoming").deleteTemporaryIncoming(req, res);
 });
 

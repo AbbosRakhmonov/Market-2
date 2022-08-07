@@ -53,7 +53,6 @@ module.exports.getAll = async (req, res) => {
 module.exports.deleteTemporaryIncoming = async (req, res) => {
   try {
     const { _id, market } = req.body;
-
     const marke = await Market.findById(market);
     if (!marke) {
       return res

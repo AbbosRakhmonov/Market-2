@@ -4,8 +4,6 @@ import TableBtn from '../../Buttons/TableBtn'
 
 export const TemporaryIncomingsTableRow = ({
     data,
-    currentPage,
-    countPage,
     Print,
     Edit,
     Delete,
@@ -15,30 +13,22 @@ export const TemporaryIncomingsTableRow = ({
         <>
             {data.map((temporary, index) => (
                 <tr className='tr' key={uniqueId('temporary')}>
-                    <td className='td'>
-                        {currentPage * countPage + 1 + index}
-                    </td>
-                    <td className='td text-left'>
-                        {temporary.temporaryincoming.supplier.name}
-                    </td>
+                    <td className='td'>{1 + index}</td>
+                    <td className='td text-left'>{temporary.supplier.name}</td>
                     <td className='td text-right'>
-                        {temporary.temporaryincoming.incomings.reduce(
-                            (prev, product) => prev + product.pieces,
-                            0
-                        )}
+                        {temporary.incomings.pieces}
                     </td>
                     <td className='text-success-500 td text-right'>
-                        {temporary.temporaryincoming.incomings.reduce(
-                            (prev, product) => prev + product.totalprice,
-                            0
-                        )}{' '}
+                        {currency === 'USD'
+                            ? temporary.incomings.totalprice
+                            : temporary.incomings.totalpriceuzs}{' '}
                         {currency}
                     </td>
                     <td className='td text-right'>
-                        {temporary.createdAt.toLocaleDateString()}
+                        {new Date(temporary.createdAt).toLocaleDateString()}
                     </td>
                     <td className='td text-right'>
-                        {temporary.createdAt.toLocaleTimeString()} PM
+                        {new Date(temporary.createdAt).toLocaleTimeString()} PM
                     </td>
                     <td className='td py-[6px] border-r-0'>
                         <div className='flex items-center justify-center gap-[0.625rem]'>
