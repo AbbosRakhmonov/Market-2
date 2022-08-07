@@ -67,7 +67,7 @@ function UniversalModal({
                         product={product}
                         changeProduct={changeProduct}
                         approveFunction={approveFunction}
-                        currency={currency}
+                        currency={currency}/>)
             case 'sell':
                 return (
                     <Sell
