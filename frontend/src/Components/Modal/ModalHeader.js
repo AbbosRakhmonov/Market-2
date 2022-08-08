@@ -11,7 +11,7 @@ function ModalHeader({toggleModal}) {
                 }
                 onClick={toggleModal}
             >
-                <IoClose size={'1.8rem'} />
+                <IoClose size={'1.8rem'} className={'pointer-events-none'} />
             </button>
         </div>
     )

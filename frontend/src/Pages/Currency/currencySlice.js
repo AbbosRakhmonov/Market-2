@@ -49,6 +49,7 @@ const currencySlice = createSlice({
         currency: null,
         currencies: [],
         currencyType: '',
+        getCurrencyLoading: true,
         currencyLoading: true,
         currencyError: null,
     },
@@ -59,10 +60,10 @@ const currencySlice = createSlice({
     },
     extraReducers: {
         [getCurrency.pending]: (state) => {
-            state.currencyLoading = true
+            state.getCurrencyLoading = true
         },
         [getCurrency.fulfilled]: (state, action) => {
-            state.currencyLoading = false
+            state.getCurrencyLoading = false
             state.currency = action.payload
         },
         [getCurrency.rejected]: (state, action) => {

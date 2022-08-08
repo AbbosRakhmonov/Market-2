@@ -122,7 +122,6 @@ export const deleteTemporary = createAsyncThunk(
     'incoming/deleteTemporary',
     async (body, {rejectWithValue}) => {
         try {
-            console.log(body)
             const {data} = await Api.delete('/products/temporary/delete', {
                 data: body,
             })
