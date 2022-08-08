@@ -220,7 +220,6 @@ function Table({
                         currentPage={currentPage}
                         countPage={countPage}
                         Edit={Edit}
-                        Delete={Delete}
                     />
                 )
             case 'exchange':

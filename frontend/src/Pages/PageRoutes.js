@@ -20,7 +20,7 @@ import {universalToast, warningCurrencyRate} from '../Components/ToastMessages/T
 import Shops from './ShopsPage/Shops'
 import Reports from './Reports/Reports.js'
 import Exchangerate from './Exchangerate/Exchangerate' //pages
-
+import Sellers from './Seller/Sellers'
 //pages
 const MainPage = lazy(() => import('./MainPage/MainPage'))
 const Products = lazy(() => import('./Products/Create/Products'))
@@ -128,6 +128,10 @@ const PageRoutes = () => {
                         <Route
                             path='/sotuv/mijozlar'
                             element={<ClientsPage />}
+                        />
+                         <Route
+                            path='/sotuv/sotuvchilar'
+                            element={<Sellers />}
                         />
 
                         <Route path='/valyuta' element={<Exchangerate />} />
