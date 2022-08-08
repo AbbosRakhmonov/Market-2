@@ -262,6 +262,11 @@ module.exports.update = async (req, res) => {
       });
     }
 
+    await ProductPrice.findByIdAndUpdate(product.product.price._id, {
+      sellingprice: product.sellingprice,
+      sellingpriceuzs: product.sellingpriceuzs,
+    });
+
     const produc = await Product.findById(product.product._id);
 
     produc.total -= old.pieces;

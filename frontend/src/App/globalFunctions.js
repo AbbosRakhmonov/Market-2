@@ -9,14 +9,27 @@ export const universalSort = (data, setData, key, sort, prevData) => {
                       if (sort === -1) return a[keys[0]] > b[keys[0]] ? 1 : -1
                       else return a[keys[0]] < b[keys[0]] ? 1 : -1
                   } else {
-                      if (sort === -1)
-                          return a[keys[0]][keys[1]] > b[keys[0]][keys[1]]
-                              ? 1
-                              : -1
-                      else
-                          return a[keys[0]][keys[1]] < b[keys[0]][keys[1]]
-                              ? 1
-                              : -1
+                      if (keys.length === 2) {
+                          if (sort === -1)
+                              return a[keys[0]][keys[1]] > b[keys[0]][keys[1]]
+                                  ? 1
+                                  : -1
+                          else
+                              return a[keys[0]][keys[1]] < b[keys[0]][keys[1]]
+                                  ? 1
+                                  : -1
+                      } else {
+                          if (sort === -1)
+                              return a[keys[0]][keys[1]][keys[2]] >
+                                  b[keys[0]][keys[1]][keys[2]]
+                                  ? 1
+                                  : -1
+                          else
+                              return a[keys[0]][keys[1]][keys[2]] <
+                                  b[keys[0]][keys[1]][keys[2]]
+                                  ? 1
+                                  : -1
+                      }
                   }
               })
             : prevData

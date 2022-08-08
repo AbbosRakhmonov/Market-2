@@ -53,7 +53,7 @@ const IncomingSuppliers = () => {
         code: '',
         supplier: supplier,
     })
-    const [sorItem, setSorItem] = useState({
+    const [sortItem, setSortItem] = useState({
         filter: '',
         sort: '',
         count: 0,
@@ -209,6 +209,12 @@ const IncomingSuppliers = () => {
         }
     }
 
+    const onKeyUpdate = (e) => {
+        if (e.key === 'Enter') {
+            updateEditedIncoming()
+        }
+    }
+
     const openDeleteModal = (incoming) => {
         setDeletedIncoming(incoming)
         setModal(true)
@@ -281,16 +287,16 @@ const IncomingSuppliers = () => {
 
     // Sort
     const filterData = (filterKey) => {
-        if (filterKey === sorItem.filter) {
-            switch (sorItem.count) {
+        if (filterKey === sortItem.filter) {
+            switch (sortItem.count) {
                 case 1:
-                    setSorItem({
+                    setSortItem({
                         filter: filterKey,
                         sort: '1',
                         count: 2,
                     })
                     universalSort(
-                        currentDataStorage,
+                        currentData,
                         setCurrentData,
                         filterKey,
                         1,
@@ -298,13 +304,13 @@ const IncomingSuppliers = () => {
                     )
                     break
                 case 2:
-                    setSorItem({
+                    setSortItem({
                         filter: filterKey,
                         sort: '',
                         count: 0,
                     })
                     universalSort(
-                        currentDataStorage,
+                        currentData,
                         setCurrentData,
                         filterKey,
                         '',
@@ -312,13 +318,13 @@ const IncomingSuppliers = () => {
                     )
                     break
                 default:
-                    setSorItem({
+                    setSortItem({
                         filter: filterKey,
                         sort: '-1',
                         count: 1,
                     })
                     universalSort(
-                        currentDataStorage,
+                        currentData,
                         setCurrentData,
                         filterKey,
                         -1,
@@ -326,13 +332,13 @@ const IncomingSuppliers = () => {
                     )
             }
         } else {
-            setSorItem({
+            setSortItem({
                 filter: filterKey,
                 sort: '-1',
                 count: 1,
             })
             universalSort(
-                currentDataStorage,
+                currentData,
                 setCurrentData,
                 filterKey,
                 -1,
@@ -388,31 +394,27 @@ const IncomingSuppliers = () => {
         },
         {
             title: 'Kodi',
-            filter: 'product.code',
+            filter: 'product.productdata.code',
             styles: 'w-[7%]',
         },
         {
             title: 'Nomi',
-            filter: 'product.name',
+            filter: 'product.productdata.name',
         },
         {
             title: 'Soni',
-            filter: 'pieces',
             styles: 'w-[10%]',
         },
         {
             title: 'Kelish',
-            filter: 'unitprice',
             styles: 'w-[10%]',
         },
         {
             title: 'Jami',
-            filter: 'totalprice',
             styles: 'w-[15%]',
         },
         {
             title: 'Sotish',
-            filter: 'sellingprice',
             styles: 'w-[10%]',
         },
         {
@@ -478,6 +480,8 @@ const IncomingSuppliers = () => {
                     saveEditIncoming={updateEditedIncoming}
                     Delete={(incoming) => openDeleteModal(incoming)}
                     Sort={filterData}
+                    onKeyUp={onKeyUpdate}
+                    sortItem={sortItem}
                 />
             </div>
             <UniversalModal
