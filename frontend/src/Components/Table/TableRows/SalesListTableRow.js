@@ -30,14 +30,14 @@ export const SalesListTableRow = ({
                     </td>
                     <td className='text-left td'>{saleconnector.id}</td>
                     <td className='text-left td'>
-                        {saleconnector.client && saleconnector.client.name}
+                        {saleconnector?.client?.name || saleconnector?.packman?.name}
                     </td>
                     <td className='text-success-500 text-right td'>
                         {reduceEl(
                             saleconnector.products,
                             'totalprice',
                             'totalpriceuzs'
-                        )}{' '}
+                        ).toLocaleString('ru-Ru')}{' '}
                         {currency}
                     </td>
                     <td className='text-warning-500 text-right td'>
@@ -45,15 +45,15 @@ export const SalesListTableRow = ({
                             saleconnector.discounts,
                             'discount',
                             'discountuzs'
-                        )}{' '}
+                        ).toLocaleString('ru-Ru')}{' '}
                         {currency}
                     </td>
                     <td className='text-error-500 text-right td'>
-                        {reduceEl(
-                            saleconnector.products,
-                            'totalprice',
-                            'totalpriceuzs'
-                        ) -
+                        {(reduceEl(
+                                saleconnector.products,
+                                'totalprice',
+                                'totalpriceuzs'
+                            ) -
                             reduceEl(
                                 saleconnector.payments,
                                 'payment',
@@ -63,7 +63,7 @@ export const SalesListTableRow = ({
                                 saleconnector.discounts,
                                 'discount',
                                 'discountuzs'
-                            )}{' '}
+                            )).toLocaleString('ru-Ru')}{' '}
                         {currency}
                     </td>
                     <td className='text-left td'>

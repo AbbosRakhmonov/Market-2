@@ -14,6 +14,7 @@ import registerSellingReducer from '../Pages/Sale/Slices/registerSellingSlice.js
 import savedSellingsReducer from '../Pages/Sale/Slices/savedSellingsSlice.js'
 import clientsReducer from '../Pages/Clients/clientsSlice'
 import reportsReducer from '../Pages/Reports/reportsSlice.js'
+import sellingsReducer from '../Pages/Sale/Slices/sellingsSlice.js'
 
 export default configureStore({
     devTools: process.env.NODE_ENV === 'development',
@@ -33,5 +34,6 @@ export default configureStore({
         registerSelling: registerSellingReducer,
         savedSellings: savedSellingsReducer,
         reports: reportsReducer,
+        sellings: sellingsReducer
     },
 })
