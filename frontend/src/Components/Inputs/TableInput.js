@@ -20,6 +20,7 @@ function TableInput({
                     onChange={onChange}
                     onKeyUp={onKeyUp}
                     onWheel={(e) => e.target.blur()}
+                    min={0}
                 />
             </label>
         </div>

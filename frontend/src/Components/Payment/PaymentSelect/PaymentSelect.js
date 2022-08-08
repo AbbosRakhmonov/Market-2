@@ -20,8 +20,9 @@ function PaymentSelect({value, onChange, option, onSelect}) {
                 onChange={(e) => {
                     onChange(e.target.value)
                 }}
+                onWheel={(e) => e.target.blur()}
+                min={0}
             />
-            onWheel={(e) => e.target.blur()}
             />
             <Select
                 onChange={onSelect}
