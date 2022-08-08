@@ -148,6 +148,7 @@ function Table({
                         currency={currency}
                         currentPage={currentPage}
                         countPage={countPage}
+                        onKeyUp={onKeyUp}
                     />
                 )
             case 'registersale':

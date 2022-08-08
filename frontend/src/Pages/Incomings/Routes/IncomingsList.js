@@ -48,7 +48,7 @@ const IncomingsList = () => {
     const [currentPage, setCurrentPage] = useState(0)
     const [countPage, setCountPage] = useState(10)
     const [modal, setModal] = useState(false)
-    const [sorItem, setSorItem] = useState({
+    const [sortItem, setSortItem] = useState({
         filter: '',
         sort: '',
         count: 0,
@@ -73,7 +73,6 @@ const IncomingsList = () => {
 
     // add product to edit
     const addToEditedIncoming = (product) => {
-        console.log(product)
         setEditedIncoming(product)
     }
 
@@ -136,6 +135,13 @@ const IncomingsList = () => {
         }
     }
 
+    // onkeyup when update
+    const onKeyUpdate = (e) => {
+        if (e.key === 'Enter') {
+            updateEditedIncoming()
+        }
+    }
+
     // change date func
     const changeDate = (value, name) => {
         name === 'beginDay' && setBeginDay(new Date(value).toISOString())
@@ -186,16 +192,16 @@ const IncomingsList = () => {
 
     // sort
     const filterData = (filterKey) => {
-        if (filterKey === sorItem.filter) {
-            switch (sorItem.count) {
+        if (filterKey === sortItem.filter) {
+            switch (sortItem.count) {
                 case 1:
-                    setSorItem({
+                    setSortItem({
                         filter: filterKey,
                         sort: '1',
                         count: 2,
                     })
                     universalSort(
-                        storageCurrentIncoming,
+                        currentIncoming,
                         setCurrentIncoming,
                         filterKey,
                         1,
@@ -203,13 +209,13 @@ const IncomingsList = () => {
                     )
                     break
                 case 2:
-                    setSorItem({
+                    setSortItem({
                         filter: filterKey,
                         sort: '',
                         count: 0,
                     })
                     universalSort(
-                        storageCurrentIncoming,
+                        currentIncoming,
                         setCurrentIncoming,
                         filterKey,
                         '',
@@ -217,13 +223,13 @@ const IncomingsList = () => {
                     )
                     break
                 default:
-                    setSorItem({
+                    setSortItem({
                         filter: filterKey,
                         sort: '-1',
                         count: 1,
                     })
                     universalSort(
-                        storageCurrentIncoming,
+                        currentIncoming,
                         setCurrentIncoming,
                         filterKey,
                         -1,
@@ -231,13 +237,13 @@ const IncomingsList = () => {
                     )
             }
         } else {
-            setSorItem({
+            setSortItem({
                 filter: filterKey,
                 sort: '-1',
                 count: 1,
             })
             universalSort(
-                storageCurrentIncoming,
+                currentIncoming,
                 setCurrentIncoming,
                 filterKey,
                 -1,
@@ -325,35 +331,32 @@ const IncomingsList = () => {
         },
         {
             title: 'Yetkazuvchi',
+            filter: 'supplier.name',
             styles: 'w-[10%]',
         },
         {
             title: 'Kodi',
-            filter: 'product.code',
+            filter: 'product.productdata.code',
             styles: 'w-[7%]',
         },
         {
             title: 'Nomi',
-            filter: 'product.name',
+            filter: 'product.productdata.name',
         },
         {
             title: 'Soni',
-            filter: 'pieces',
             styles: 'w-[10%]',
         },
         {
             title: 'Kelish',
-            filter: 'unitprice',
             styles: 'w-[10%]',
         },
         {
             title: 'Jami',
-            filter: 'totalprice',
             styles: 'w-[15%]',
         },
         {
             title: 'Sotish',
-            filter: 'price.sellingprice',
             styles: 'w-[10%]',
         },
         {
@@ -414,6 +417,8 @@ const IncomingsList = () => {
                     saveEditIncoming={updateEditedIncoming}
                     Delete={(incoming) => openDeleteModal(incoming)}
                     Sort={filterData}
+                    onKeyUp={onKeyUpdate}
+                    sortItem={sortItem}
                 />
             </div>
             <UniversalModal

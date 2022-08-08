@@ -37,9 +37,17 @@ const RegisterIncoming = () => {
     const [incomingModal, setIncomingModal] = useState({})
     const [modal, setModal] = useState(false)
     const [temporaryIncomings, setTemporaryIncomings] = useState([])
+    const [selectSupplierValue, setSelectSupplierValue] = useState({
+        label: 'Yetkazib beruvchi',
+        value: '',
+    })
 
     // functions for onchange of select
     const selectSupplier = (e) => {
+        setSelectSupplierValue({
+            label: e.label,
+            value: e.value,
+        })
         setSupplier(...suppliers.filter((supplier) => supplier._id === e.value))
         if (incomings.length > 0) {
             setIncomings([
@@ -313,6 +321,10 @@ const RegisterIncoming = () => {
             setSupplier(temporary.supplier)
             setIncomings(temporary.incomings)
             setTemporaryIncomings(temporary.incomings)
+            setSelectSupplierValue({
+                label: temporary.supplier.name,
+                value: temporary.supplier._id,
+            })
         }
     }, [temporary, dispatch])
 
@@ -332,6 +344,7 @@ const RegisterIncoming = () => {
                     <SelectInput
                         options={suppliersData}
                         onSelect={selectSupplier}
+                        value={selectSupplierValue}
                     />
                 </div>
                 <div className='w-full pl-[1.25rem]'>

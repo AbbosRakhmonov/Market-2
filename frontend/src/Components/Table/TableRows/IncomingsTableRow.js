@@ -12,6 +12,7 @@ export const IncomingsTableRow = ({
     currentPage,
     countPage,
     data,
+    onKeyUp,
 }) => {
     const current = (usd, uzs) => (currency === 'USD' ? usd : uzs || 0)
 
@@ -34,6 +35,7 @@ export const IncomingsTableRow = ({
                             <TableInput
                                 value={editedIncoming.pieces}
                                 onChange={(e) => changeHandler(e, 'pieces')}
+                                onKeyUp={onKeyUp}
                             />
                         )) || (
                             <span>
@@ -53,6 +55,7 @@ export const IncomingsTableRow = ({
                                 )}
                                 onChange={(e) => changeHandler(e, 'unitprice')}
                                 type={'number'}
+                                onKeyUp={onKeyUp}
                             />
                         )) || (
                             <span>
@@ -91,6 +94,7 @@ export const IncomingsTableRow = ({
                                     changeHandler(e, 'sellingprice')
                                 }
                                 type={'number'}
+                                onKeyUp={onKeyUp}
                             />
                         )) || (
                             <span>
