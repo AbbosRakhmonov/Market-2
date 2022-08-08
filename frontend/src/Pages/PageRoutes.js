@@ -37,7 +37,7 @@ const IncomingSuppliers = lazy(() =>
 
 const PageRoutes = () => {
     const dispatch = useDispatch()
-    const {currency, currencyType, currencyError, currencyLoading} =
+    const {currency, currencyType, currencyError, getCurrencyLoading} =
         useSelector((state) => state.currency)
     const changeCurrency = () => {
         const prevCurrencyType = currencyType === 'USD' ? 'UZS' : 'USD'
@@ -48,10 +48,10 @@ const PageRoutes = () => {
         dispatch(getCurrencyType())
     }, [dispatch])
     useEffect(() => {
-        if (!currency && !currencyLoading) {
+        if (!currency && !getCurrencyLoading) {
             warningCurrencyRate()
         }
-    }, [currency, currencyLoading])
+    }, [currency, getCurrencyLoading])
     useEffect(() => {
         if (currencyError) {
             universalToast(currencyError, 'error')

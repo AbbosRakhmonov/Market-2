@@ -6,6 +6,7 @@ import Sell from './ModalBodys/Sell.js'
 import Complate from './ModalBodys/Complate.js'
 import RegisterIncomingModal from './ModalBodys/RegisterIncomingModal'
 import Check from './ModalBodys/Check.js'
+import AllChecks from './ModalBodys/AllChecks.js'
 
 function UniversalModal({
                             isOpen,
@@ -21,7 +22,8 @@ function UniversalModal({
                             title,
                             product,
                             changeProduct,
-                            currency
+                            currency,
+                            printedSelling
                         }) {
     const customStyles = {
         content: {
@@ -92,6 +94,12 @@ function UniversalModal({
                         product={product}
                     />
                 )
+            case 'allChecks':
+                return (
+                    <AllChecks
+                        product={printedSelling}
+                    />
+                )
             default:
                 return 'Bunday jadval topilmadi'
         }
@@ -99,7 +107,7 @@ function UniversalModal({
     return (
         <Modal
             isOpen={isOpen}
-            style={body === 'checkSell' ? {...modalFull} : (body === 'approve' || body === 'complete') ? {} : {...customStyles}}
+            style={body === 'checkSell' || body === 'allChecks' ? {...modalFull} : (body === 'approve' || body === 'complete') ? {} : {...customStyles}}
             onRequestClose={closeModal || toggleModal}
             closeTimeoutMS={100}
             contentLabel='Example Modal'

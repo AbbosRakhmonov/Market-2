@@ -39,7 +39,7 @@ function Check({product}) {
         <section className='w-[27cm] mt-4 mx-auto'>
             {loadContent &&
                 <div
-                    className='fixed backdrop-blur-[2px] left-0 top-0 right-0 bottom-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
+                    className='fixed backdrop-blur-[2px] left-0 top-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
                     <SmallLoader />
                 </div>}
             <SaleCheck product={product} ref={saleCheckRef} />

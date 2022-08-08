@@ -13,6 +13,7 @@ import {
     getSellingsByFilter,
 } from '../Slices/sellingsSlice.js'
 import {regexForTypeNumber} from '../../../Components/RegularExpressions/RegularExpressions.js'
+import UniversalModal from '../../../Components/Modal/UniversalModal.js'
 
 const Sellings = () => {
     const headers = [
@@ -70,6 +71,7 @@ const Sellings = () => {
     )
     const [endDate, setEndDate] = useState(new Date())
     const [printedSelling, setPrintedSelling] = useState(null)
+    const [modalVisible, setModalVisible] = useState(false)
 
     // filter by total
     const filterByTotal = ({value}) => {
@@ -131,8 +133,10 @@ const Sellings = () => {
         }
     }
 
-    // print
-    const handleClickPrint = (e) => {}
+    const toggleModal = () => {
+        setModalVisible(!modalVisible)
+        setPrintedSelling(null)
+    }
 
     const sellingHeaders = [
         '№',
@@ -142,6 +146,10 @@ const Sellings = () => {
         "Chegirma",
         "Qarz",
     ]
+    const handleClickPrint = (selling) => {
+        setPrintedSelling(selling)
+        setModalVisible(true)
+    }
 
     // effects
     useEffect(() => {
@@ -178,6 +186,13 @@ const Sellings = () => {
             }}
             transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
         >
+            <UniversalModal
+                printedSelling={printedSelling}
+                currency={currencyType}
+                body={'allChecks'}
+                isOpen={modalVisible}
+                toggleModal={toggleModal}
+            />
             <div className='pagination mainPadding'>
                 <ExportBtn
                     headers={sellingHeaders}
