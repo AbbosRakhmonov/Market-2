@@ -17,6 +17,12 @@ import {SalesListTableRow} from './TableRows/SalesListTableRow'
 import {ClientTableRow} from './TableRows/ClientTableRow'
 import {ExchangenerateTableRow} from './TableRows/ExchangenerateTableRow'
 import {SaleReturnTableRow} from './TableRows/SaleReturnTableRow'
+import {CashierSaleTableRow} from './TableRows/CashierSaleTableRow'
+import {PaymentsTableRow} from './TableRows/PaymentsTableRow'
+import {IncomeTableRow} from './TableRows/IncomeTableRow'
+import {DebtsTableRow} from './TableRows/DebtsTableRow'
+import {DiscountTableRow} from './TableRows/DiscountTableRow'
+import {ExpensesTableRow} from './TableRows/ExpensesTableRow'
 
 function Table({
     page,
@@ -42,6 +48,8 @@ function Table({
     Save,
     onKeyUp,
     currencyType,
+    type,
+    Pay,
 }) {
     const checkRows = () => {
         switch (page) {
@@ -241,6 +249,62 @@ function Table({
                         inputValue={inputValue}
                         currency={currency}
                         data={data}
+                    />
+                )
+            case 'sale':
+                return (
+                    <CashierSaleTableRow
+                        currency={currency}
+                        currentPage={currentPage}
+                        countPage={countPage}
+                        data={data}
+                    />
+                )
+            case 'payments':
+                return (
+                    <PaymentsTableRow
+                        currentPage={currentPage}
+                        countPage={countPage}
+                        currency={currency}
+                        data={data}
+                        type={type}
+                    />
+                )
+            case 'income':
+                return (
+                    <IncomeTableRow
+                        currentPage={currentPage}
+                        countPage={countPage}
+                        currency={currency}
+                        data={data}
+                    />
+                )
+            case 'debts':
+                return (
+                    <DebtsTableRow
+                        data={data}
+                        currency={currency}
+                        currentPage={currentPage}
+                        countPage={countPage}
+                        Pay={Pay}
+                    />
+                )
+            case 'discounts':
+                return (
+                    <DiscountTableRow
+                        data={data}
+                        currency={currency}
+                        currentPage={currentPage}
+                        countPage={countPage}
+                    />
+                )
+            case 'expenses':
+                return (
+                    <ExpensesTableRow
+                        data={data}
+                        currency={currency}
+                        currentPage={currentPage}
+                        countPage={countPage}
                     />
                 )
             default:
