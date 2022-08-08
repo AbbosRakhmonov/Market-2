@@ -23,6 +23,7 @@ function SearchInput({
                 onChange={onChange}
                 onKeyUp={onKeyUp}
                 disabled={disabled}
+                onWheel={(e) => e.target.blur()}
             />
         </div>
     )

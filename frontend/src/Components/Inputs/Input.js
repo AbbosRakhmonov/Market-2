@@ -34,6 +34,7 @@ function Input({
                     className={`${
                         disabled ? 'disabled-class' : ''
                     } inputClass shadow-[0_10px_10px_rgba(0,0,0,0.05)] leading-[1.125rem]`}
+                    onWheel={(e) => e.target.blur()}
                 />
                 {password && (
                     <button
