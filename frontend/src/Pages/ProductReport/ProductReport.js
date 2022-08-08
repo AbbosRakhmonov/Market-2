@@ -226,6 +226,21 @@ const ProductReport = () => {
         }
     }
 
+    const exportProductHead = [
+        '№',
+        'Mahsulot kodi',
+        'Mahsulot nomi',
+        'Soni',
+        'Olish narxi USD',
+        'Olish narxi UZS',
+        'Olish narxi jami USD',
+        'Olish narxi jami UZS',
+        'Sotish narxi USD',
+        'Sotish narxi UZS',
+        'Sotish narxi jami UZS',
+        'Sotish narxi jami USD',
+    ]
+
     useEffect(() => {
         const body = {
             currentPage,
@@ -263,7 +278,12 @@ const ProductReport = () => {
             transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
         >
             <div className='pagination mainPadding'>
-                <ExportBtn data={[]} headers={[]} />
+                <ExportBtn
+                   datas={data}
+                   headers={exportProductHead} 
+                   fileName={'Maxsulotlar hisoboti'}
+                   pagesName="ProductReport"
+                   />
                 <p className='product_name'>Maxsulot hisoboti</p>
                 {(filteredDataTotal !== 0 || totalSearched !== 0) && (
                     <Pagination

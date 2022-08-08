@@ -1,15 +1,11 @@
 import React, {useCallback, useEffect} from 'react'
 import Excel from '../../Images/Excel.svg'
+import { universalToast } from '../ToastMessages/ToastMessages'
 import * as XLSX from 'xlsx'
-import {useDispatch, useSelector} from 'react-redux'
-import {
-    clearUploadExcel,
-    getProductsAll,
-} from '../../Pages/Products/Create/productSlice'
 
-function ExportBtn({headers, fileName}) {
-    const dispatch = useDispatch()
-    const {allProducts, errorProducts} = useSelector((state) => state.products)
+function ExportBtn({headers, fileName, datas, pagesName }) {
+
+
     const autoFillColumnWidth = (json) => {
         const cols = Object.keys(json[0])
         const maxLength = cols.reduce((acc, curr) => {
@@ -35,31 +31,53 @@ function ExportBtn({headers, fileName}) {
                 wb,
                 `${fileName}-${new Date().toLocaleDateString()}.xlsx`
             )
-            dispatch(clearUploadExcel())
         },
-        [dispatch, fileName, headers]
+        [fileName, headers]
     )
 
     const handleClick = () => {
-        dispatch(getProductsAll())
-    }
-    useEffect(() => {
-        if (!errorProducts && allProducts.length > 0) {
-            const newData = allProducts.map((item, index) => ({
-                nth: index + 1,
-                category: item.category.code,
-                code: item.productdata.code,
-                name: item.productdata.name,
-                total: item.total,
-                unit: item.unit.name,
-                incomingprice: item.price.incomingprice,
-                incomingpriceuzs: item.price.incomingpriceuzs,
-                sellingprice: item.price.sellingprice,
-                sellingpriceuzs: item.price.sellingpriceuzs,
-            }))
-            !errorProducts && continueHandleClick(newData)
+        if (datas.length > 0) {
+            switch(pagesName){
+               case "Products" : 
+                const newData = datas.map((item, index) => ({
+                    nth: index + 1,
+                    category: item.category.code,
+                    code: item.productdata.code,
+                    name: item.productdata.name,
+                    total: item.total,
+                    unit: item.unit.name,
+                    incomingprice: item.price.incomingprice,
+                    incomingpriceuzs: item.price.incomingpriceuzs,
+                    sellingprice: item.price.sellingprice,
+                    sellingpriceuzs: item.price.sellingpriceuzs,
+                }))
+                 continueHandleClick(newData)
+                 break;
+
+                 case "ProductReport" : 
+                 const ReportData = datas.map((item, index) =>( {
+                    nth: index + 1,
+                    code: item.productdata.code,
+                    name: item.productdata.name,
+                    total: item.total + item.unit.name,
+                    incomingprice: item.price.incomingprice,
+                    incomingpriceuzs: item.price.incomingpriceuzs,
+                    incomingpricealluzs :item.price.incomingpriceuzs * item.total,
+                    incomingpriceallusd :item.price.incomingprice * item.total,
+                    sellingprice: item.price.sellingprice,
+                    sellingpriceuzs: item.price.sellingpriceuzs,
+                    sellingalluzs : item.price.sellingpriceuzs * item.total,
+                    sellingallusd : item.price.sellingpriceuzs * item.total
+                 }))
+                 continueHandleClick(ReportData)
+                 break;
+            }
+          
+        } else {
+            universalToast("Jadvalda ma'lumot yoq", 'error')
         }
-    }, [allProducts, continueHandleClick, errorProducts])
+    }
+   
     return (
         <button className={'exportButton'} onClick={handleClick}>
             Eksport
@@ -68,6 +86,6 @@ function ExportBtn({headers, fileName}) {
             </span>
         </button>
     )
-}
+}  
 
 export default ExportBtn
