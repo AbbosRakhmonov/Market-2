@@ -37,7 +37,6 @@ function Table({
     editedIncoming,
     saveEditIncoming,
     sortItem,
-    AddPayment,
     ReturnPayment,
     Save,
     onKeyUp,
@@ -191,7 +190,6 @@ function Table({
                         currentPage={currentPage}
                         countPage={countPage}
                         Print={Print}
-                        AddPayment={AddPayment}
                         ReturnPayment={ReturnPayment}
                     />
                 )

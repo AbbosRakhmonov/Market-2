@@ -7,41 +7,51 @@ import SearchForm from '../../../Components/SearchForm/SearchForm.js'
 import {useDispatch, useSelector} from 'react-redux'
 import Spinner from '../../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../../Components/NotFind/NotFind.js'
-import {clearSearchedSellings, getSellings, getSellingsByFilter} from '../Slices/sellingsSlice.js'
+import {
+    clearSearchedSellings,
+    getSellings,
+    getSellingsByFilter,
+} from '../Slices/sellingsSlice.js'
 import {regexForTypeNumber} from '../../../Components/RegularExpressions/RegularExpressions.js'
 
 const Sellings = () => {
     const headers = [
         {
-            title: '№'
+            title: '№',
         },
         {
             title: 'ID',
-            filter: 'id'
+            filter: 'id',
         },
         {
-            title: 'Mijoz'
+            title: 'Mijoz',
         },
         {
-            title: 'Jami'
+            title: 'Jami',
         },
         {
-            title: 'Chegirma'
+            title: 'Chegirma',
         },
         {
-            title: 'Qarz'
+            title: 'Qarz',
         },
         {
-            title: 'Izoh'
+            title: 'Izoh',
         },
         {
             title: '',
-            styles: 'w-[7rem]'
-        }
+            styles: 'w-[7rem]',
+        },
     ]
     const dispatch = useDispatch()
-    const {currencyType} = useSelector(state => state.currency)
-    const {sellings, searchedSellings, getSellingsLoading, total, totalSearched} = useSelector(state => state.sellings)
+    const {currencyType} = useSelector((state) => state.currency)
+    const {
+        sellings,
+        searchedSellings,
+        getSellingsLoading,
+        total,
+        totalSearched,
+    } = useSelector((state) => state.sellings)
     const [data, setData] = useState(sellings)
     const [filteredDataTotal, setFilteredDataTotal] = useState(total)
     const [searchedData, setSearchedData] = useState(searchedSellings)
@@ -49,7 +59,7 @@ const Sellings = () => {
     const [currentPage, setCurrentPage] = useState(0)
     const [search, setSearch] = useState({
         id: '',
-        client: ''
+        client: '',
     })
     const [startDate, setStartDate] = useState(
         new Date(
@@ -71,8 +81,9 @@ const Sellings = () => {
     const handleChangeId = (e) => {
         const val = e.target.value
         const valForSearch = val.replace(/\s+/g, ' ').trim()
-        regexForTypeNumber.test(val) && setSearch({...search, id: val});
-        (searchedData.length > 0 || totalSearched > 0) && dispatch(clearSearchedSellings())
+        regexForTypeNumber.test(val) && setSearch({...search, id: val})
+        ;(searchedData.length > 0 || totalSearched > 0) &&
+            dispatch(clearSearchedSellings())
         if (valForSearch === '') {
             setData(sellings)
             setFilteredDataTotal(total)
@@ -87,14 +98,20 @@ const Sellings = () => {
     const handleChangeClient = (e) => {
         const val = e.target.value
         const valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
-        setSearch({...search, client: val});
-        (searchedData.length > 0 || totalSearched > 0) && dispatch(clearSearchedSellings())
+        setSearch({...search, client: val})
+        ;(searchedData.length > 0 || totalSearched > 0) &&
+            dispatch(clearSearchedSellings())
         if (valForSearch === '') {
             setData(sellings)
             setFilteredDataTotal(total)
         } else {
             const filteredProducts = sellings.filter((selling) => {
-                return selling?.client?.name.toLowerCase().includes(valForSearch) || selling?.packman?.name.toLowerCase().includes(valForSearch)
+                return (
+                    selling?.client?.name
+                        .toLowerCase()
+                        .includes(valForSearch) ||
+                    selling?.packman?.name.toLowerCase().includes(valForSearch)
+                )
             })
             setData(filteredProducts)
             setFilteredDataTotal(filteredProducts.length)
@@ -108,15 +125,14 @@ const Sellings = () => {
                 countPage: showByTotal,
                 startDate: startDate.toISOString(),
                 endDate: endDate.toISOString(),
-                search: search
+                search: search,
             }
             dispatch(getSellingsByFilter(body))
         }
     }
 
     // print
-    const handleClickPrint = (e) => {
-    }
+    const handleClickPrint = (e) => {}
 
     // effects
     useEffect(() => {
@@ -136,8 +152,8 @@ const Sellings = () => {
             endDate: endDate.toISOString(),
             search: {
                 id: '',
-                client: ''
-            }
+                client: '',
+            },
         }
         dispatch(getSellings(body))
     }, [currentPage, showByTotal, startDate, endDate, dispatch])
@@ -149,7 +165,7 @@ const Sellings = () => {
             exit='collapsed'
             variants={{
                 open: {opacity: 1, height: 'auto'},
-                collapsed: {opacity: 0, height: 0}
+                collapsed: {opacity: 0, height: 0},
             }}
             transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
         >
@@ -179,14 +195,16 @@ const Sellings = () => {
                 searchByClientName={search.client}
                 filterByClientName={handleChangeClient}
                 filterById={handleChangeId}
-                filterByClientNameWhenPressEnter={handleChangeIdAndClientWhenPressEnter}
+                filterByClientNameWhenPressEnter={
+                    handleChangeIdAndClientWhenPressEnter
+                }
                 filterByIdWhenPressEnter={handleChangeIdAndClientWhenPressEnter}
             />
             <div className='tableContainerPadding'>
                 {getSellingsLoading ? (
                     <Spinner />
                 ) : data.length === 0 && searchedData.length === 0 ? (
-                    <NotFind text={'Ro\'yxat mavjud emas...'} />
+                    <NotFind text={"Ro'yxat mavjud emas..."} />
                 ) : (
                     <Table
                         data={data}

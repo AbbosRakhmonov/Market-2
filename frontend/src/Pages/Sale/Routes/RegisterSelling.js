@@ -10,6 +10,7 @@ import {getAllCategories} from '../../Category/categorySlice.js'
 import Spinner from '../../../Components/Spinner/SmallLoader.js'
 import SmallLoader from '../../../Components/Spinner/SmallLoader.js'
 import {
+    addPayment,
     getAllProducts,
     getClients,
     makePayment,
@@ -80,6 +81,7 @@ const RegisterSelling = () => {
     const [modalBody, setModalBody] = useState('')
     const [modalData, setModalData] = useState(null)
     const [temporary, setTemporary] = useState(null)
+    const [saleConnectorId, setSaleConnectorId] = useState(null)
     const headers = [
         {title: '№'},
         {title: 'Kodi'},
@@ -465,6 +467,7 @@ const RegisterSelling = () => {
         setActiveCategory(null)
         setCurrentProduct(null)
         setSearchCategory('')
+        setSaleConnectorId(null)
         togglePaymentModal(bool)
     }
     const handleClickPay = () => {
@@ -517,15 +520,18 @@ const RegisterSelling = () => {
                 comment: '',
             },
             user: user._id,
+            saleconnectorid: saleConnectorId,
         }
-        dispatch(makePayment(body)).then(({payload}) => {
-            setModalData(payload)
-            setTimeout(() => {
-                setModalBody('checkSell')
-                setModalVisible(true)
-                clearAll()
-            }, 500)
-        })
+        dispatch(saleConnectorId ? addPayment(body) : makePayment(body)).then(
+            ({payload}) => {
+                setModalData(payload)
+                setTimeout(() => {
+                    setModalBody('checkSell')
+                    setModalVisible(true)
+                    clearAll()
+                }, 500)
+            }
+        )
         if (temporary) {
             dispatch(deleteSavedPayment({_id: temporary._id}))
             setTemporary(null)
@@ -848,12 +854,26 @@ const RegisterSelling = () => {
 
     useEffect(() => {
         const data = location.state
-        if (data) {
-            setTemporary(data)
-            setTableProducts(data.tableProducts)
-            setClientValue(data.clientValue)
-            setPackmanValue(data.packmanValue)
-            setUserValue(data.userValue)
+        if (data && data.temporary) {
+            setTemporary(data.temporary)
+            setTableProducts(data.temporary.tableProducts)
+            setClientValue(data.temporary.clientValue)
+            setPackmanValue(data.temporary.packmanValue)
+            setUserValue(data.temporary.userValue)
+        }
+        if (data && data.saleconnector) {
+            const connector = data.saleconnector
+            data.saleconnector.client &&
+                setClientValue({
+                    label: connector.client.name,
+                    value: connector.client._id,
+                })
+            data.saleconnector.packman &&
+                setPackmanValue({
+                    label: connector.packman.name,
+                    value: connector.packman._id,
+                })
+            setSaleConnectorId(connector._id)
         }
     }, [location.state])
 
@@ -975,14 +995,18 @@ const RegisterSelling = () => {
                         options={filteredProducts}
                     />
                 </form>
-                <Table
-                    page={'registersale'}
-                    data={tableProducts}
-                    headers={headers}
-                    currency={currencyType}
-                    Delete={handleDelete}
-                    changeHandler={handleChange}
-                />
+                {tableProducts.length === 0 ? (
+                    <NotFind text={"Sotuvda mahsulotlar qo'shilmagan!"} />
+                ) : (
+                    <Table
+                        page={'registersale'}
+                        data={tableProducts}
+                        headers={headers}
+                        currency={currencyType}
+                        Delete={handleDelete}
+                        changeHandler={handleChange}
+                    />
+                )}
             </div>
             <div className='register-selling-right min-w-[20.25rem] bg-white-400 backdrop-blur-[3.125rem] rounded-[0.25rem] flex flex-col gap-[1.25rem]'>
                 <div className='flex flex-col grow gap-[1.25rem]'>

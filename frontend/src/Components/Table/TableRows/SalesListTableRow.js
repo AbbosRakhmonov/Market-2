@@ -1,6 +1,7 @@
 import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
 import {uniqueId} from 'lodash'
+import {useNavigate} from 'react-router-dom'
 
 export const SalesListTableRow = ({
     data,
@@ -8,7 +9,6 @@ export const SalesListTableRow = ({
     countPage,
     currency,
     Print,
-    AddPayment,
     ReturnPayment,
 }) => {
     const result = (prev, usd, uzs) => {
@@ -21,6 +21,12 @@ export const SalesListTableRow = ({
         }, 0)
     }
 
+    const navigate = useNavigate()
+    const linkToSale = (saleconnector) => {
+        navigate('/sotuv/sotish/sotuv', {
+            state: {saleconnector},
+        })
+    }
     return (
         <>
             {data.map((saleconnector, index) => (
@@ -30,7 +36,8 @@ export const SalesListTableRow = ({
                     </td>
                     <td className='text-left td'>{saleconnector.id}</td>
                     <td className='text-left td'>
-                        {saleconnector?.client?.name || saleconnector?.packman?.name}
+                        {saleconnector?.client?.name ||
+                            saleconnector?.packman?.name}
                     </td>
                     <td className='text-success-500 text-right td'>
                         {reduceEl(
@@ -49,7 +56,8 @@ export const SalesListTableRow = ({
                         {currency}
                     </td>
                     <td className='text-error-500 text-right td'>
-                        {(reduceEl(
+                        {(
+                            reduceEl(
                                 saleconnector.products,
                                 'totalprice',
                                 'totalpriceuzs'
@@ -63,7 +71,8 @@ export const SalesListTableRow = ({
                                 saleconnector.discounts,
                                 'discount',
                                 'discountuzs'
-                            )).toLocaleString('ru-Ru')}{' '}
+                            )
+                        ).toLocaleString('ru-Ru')}{' '}
                         {currency}
                     </td>
                     <td className='text-left td'>
@@ -84,7 +93,7 @@ export const SalesListTableRow = ({
                             <TableBtn
                                 type={'add'}
                                 bgcolor={'bg-success-500'}
-                                onClick={() => AddPayment(saleconnector)}
+                                onClick={() => linkToSale(saleconnector)}
                             />
                             <TableBtn
                                 type={'return'}
