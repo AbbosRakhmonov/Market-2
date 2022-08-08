@@ -16,6 +16,7 @@ import {TemporarySaleTableRow} from './TableRows/TemporarySaleTableRow'
 import {SalesListTableRow} from './TableRows/SalesListTableRow'
 import {ClientTableRow} from './TableRows/ClientTableRow'
 import {ExchangenerateTableRow} from './TableRows/ExchangenerateTableRow'
+import {SaleReturnTableRow} from './TableRows/SaleReturnTableRow'
 
 function Table({
     page,
@@ -230,6 +231,16 @@ function Table({
                         countPage={countPage}
                         Edit={Edit}
                         Delete={Delete}
+                    />
+                )
+            case 'salereturn':
+                return (
+                    <SaleReturnTableRow
+                        onKeyUp={onKeyUp}
+                        changeHandler={changeHandler}
+                        inputValue={inputValue}
+                        currency={currency}
+                        data={data}
                     />
                 )
             default:
