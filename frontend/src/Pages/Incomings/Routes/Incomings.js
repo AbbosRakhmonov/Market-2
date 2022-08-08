@@ -2,15 +2,12 @@ import React, {useCallback, useEffect, useState} from 'react'
 import CardLink from '../../../Components/Card/CardLink'
 import {useDispatch, useSelector} from 'react-redux'
 import {uniqueId} from 'lodash'
-import {
-    getIncomingConnectors,
-    getSuppliers,
-    // setSupplierSearch,
-} from '../incomingSlice'
+import {getIncomingConnectors, getSuppliers} from '../incomingSlice'
 import Dates from '../../../Components/Dates/Dates'
 import SelectInput from '../../../Components/SelectInput/SelectInput'
 import FilterButtons from '../../../Components/FilterButtons/FilterButtons'
 import ResultIncomings from '../Components/ResultIncomings'
+
 function Incomings() {
     const dispatch = useDispatch()
     const {
@@ -111,7 +108,6 @@ function Incomings() {
     }
     //change connectors data END
 
-    ////
     const selectSuppliers = (e) => {
         let target = e.value
         if (target === 'all') {
