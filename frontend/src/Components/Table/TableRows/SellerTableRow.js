@@ -1,17 +1,16 @@
 import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
-
+import {uniqueId} from "lodash"
 export const SellerTableRow = ({
     data,
     currentPage,
     countPage,
     Edit,
-    Delete,
 }) => {
     return (
         <>
             {data.map((seller, index) => (
-                <tr className='tr'>
+                <tr className='tr'  key={uniqueId('filial')}>
                     <td className='text-left td'>
                         {currentPage * countPage + index + 1}
                     </td>
@@ -25,11 +24,6 @@ export const SellerTableRow = ({
                                 type={'edit'}
                                 bgcolor={'bg-warning-500'}
                                 onClick={() => Edit(seller)}
-                            />
-                            <TableBtn
-                                type={'delete'}
-                                bgcolor={'bg-error-500'}
-                                onClick={() => Delete(seller)}
                             />
                         </div>
                     </td>

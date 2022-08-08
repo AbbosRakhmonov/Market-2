@@ -37,6 +37,11 @@ export const successUpdateSupplierMessage = () =>
 export const successDeleteSupplierMessage = () =>
     toast.success("Yetkazib beruvchi muvaffaqiyatli o'chirildi!")
 
+export const successAddSellerMessage = () =>
+    toast.success('Sotuvchi muvaffaqiyatli yaratildi!')
+export const successUpdateSellerMessage = () =>
+    toast.success("Sotuvchi muvaffaqiyatli o'zgartirildi!")
+
 // Exchange rate massages
 export const successAddExchangeMessage = () =>
     toast.success('Valyuta kursi muvaffaqiyatli yaratildi !')
