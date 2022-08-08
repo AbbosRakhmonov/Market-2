@@ -15,6 +15,7 @@ function ExportBtn({headers, fileName, datas, pagesName }) {
             wch: maxLength,
         }))
     }
+
     const continueHandleClick = useCallback(
         (data) => {
             const wscols = autoFillColumnWidth(data)
@@ -34,7 +35,6 @@ function ExportBtn({headers, fileName, datas, pagesName }) {
         },
         [fileName, headers]
     )
-
     const handleClick = () => {
         if (datas.length > 0) {
             switch(pagesName){
@@ -71,6 +71,23 @@ function ExportBtn({headers, fileName, datas, pagesName }) {
                  }))
                  continueHandleClick(ReportData)
                  break;
+                 case "Sellings" : {
+                   
+                    const SellingData = datas.map((item, index) =>( {
+                        nth: index + 1,
+                        id: item.id,
+                        client: item?.client?.name ||item?.packman?.name,
+                        all: item.products[0].totalpriceuzs + " UZS",
+                        discount:item.discounts.length > 0 ? item.discounts.map((discount) => {
+                            return discount 
+                        }) : 0 + " UZS",
+                        debd: (item.products[0].totalprice + item.products[0].totalpriceuzs - item.payments[0].payment - item.payments[0].paymentuzs - item.discounts.length > 0 ? item.discounts.map((discount) => {
+                            return discount.discount 
+                        }) : 0)  + " UZS",
+                    }))
+                    continueHandleClick(SellingData)
+                    break;
+                 }
             }
           
         } else {

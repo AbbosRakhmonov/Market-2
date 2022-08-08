@@ -134,6 +134,15 @@ const Sellings = () => {
     // print
     const handleClickPrint = (e) => {}
 
+    const sellingHeaders = [
+        '№',
+        "ID",
+        "Mijoz",
+        "Jami",
+        "Chegirma",
+        "Qarz",
+    ]
+
     // effects
     useEffect(() => {
         setData(sellings)
@@ -171,8 +180,10 @@ const Sellings = () => {
         >
             <div className='pagination mainPadding'>
                 <ExportBtn
-                    data={[]}
+                    headers={sellingHeaders}
+                    datas={data}
                     fileName={`Sotuvlar-${new Date().toLocaleDateString()}`}
+                    pagesName="Sellings"
                 />
                 <p className='flex items-center'>Sotuvlar</p>
                 {(filteredDataTotal !== 0 || totalSearched !== 0) && (
