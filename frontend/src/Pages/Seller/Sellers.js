@@ -86,7 +86,6 @@ function Sellers() {
     }
 
     const clearForm = (e) => {
-      e.preventDefault()
       setSellerName('')
       setSellerSurname('')
       setSellerNumber('')
