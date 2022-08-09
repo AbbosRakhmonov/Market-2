@@ -23,7 +23,7 @@ export const SalesListTableRow = ({
 
     const navigate = useNavigate()
     const linkToSale = (saleconnector) => {
-        navigate('/sotuv/sotish/sotuv', {
+        navigate('/sotuv/sotish', {
             state: {saleconnector},
         })
     }

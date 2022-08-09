@@ -561,7 +561,7 @@ const RegisterSelling = () => {
             }
             dispatch(savePayment(body)).then(() => {
                 clearAll(false)
-                navigate('/sotuv/sotish/saqlanganlar')
+                navigate('/sotuv/saqlanganlar')
             })
             if (temporary) {
                 dispatch(deleteSavedPayment({ _id: temporary._id }))
