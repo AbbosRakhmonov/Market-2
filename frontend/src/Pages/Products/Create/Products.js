@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react'
+import {useEffect, useState} from 'react'
 import ExportBtn from '../../../Components/Buttons/ExportBtn'
 import ImportBtn from '../../../Components/Buttons/ImportBtn'
 import * as XLSX from 'xlsx'
 import Pagination from '../../../Components/Pagination/Pagination'
 import Table from '../../../Components/Table/Table'
-import { useDispatch, useSelector } from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import Spinner from '../../../Components/Spinner/SmallLoader'
 import NotFind from '../../../Components/NotFind/NotFind'
-import { motion } from 'framer-motion'
+import {motion} from 'framer-motion'
 import {
     addProduct,
     addProductsFromExcel,
@@ -20,9 +20,9 @@ import {
     getCodeOfCategory,
     getProducts,
     getProductsByFilter,
-    updateProduct
+    updateProduct,
 } from './productSlice'
-import { clearErrorUnits, getUnits } from '../../Units/unitsSlice'
+import {clearErrorUnits, getUnits} from '../../Units/unitsSlice'
 import {
     successAddProductMessage,
     successDeleteProductMessage,
@@ -30,33 +30,34 @@ import {
     universalToast,
     warningCategory,
     warningCurrencyRate,
-    warningEmptyInput
+    warningEmptyInput,
 } from '../../../Components/ToastMessages/ToastMessages'
-import { regexForTypeNumber } from '../../../Components/RegularExpressions/RegularExpressions'
+import {regexForTypeNumber} from '../../../Components/RegularExpressions/RegularExpressions'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
 import CreateProductForm from '../../../Components/CreateProductForm/CreateProductForm'
 import {
     clearErrorGetAllCategories,
-    getAllCategories
+    getAllCategories,
 } from '../../Category/categorySlice'
 import {
     checkEmptyString,
     universalSort,
     UsdToUzs,
-    UzsToUsd
+    UzsToUsd,
 } from '../../../App/globalFunctions'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
+import BarcodeReader from 'react-barcode-reader'
 
 function Products() {
     const dispatch = useDispatch()
     const {
-        market: { _id }
+        market: {_id},
     } = useSelector((state) => state.login)
-    const { errorUnits, units } = useSelector((state) => state.units)
-    const { allcategories, errorGetCategories } = useSelector(
+    const {errorUnits, units} = useSelector((state) => state.units)
+    const {allcategories, errorGetCategories} = useSelector(
         (state) => state.category
     )
-    const { currency, currencyType, currencyError, getCurrencyLoading } =
+    const {currency, currencyType, currencyError, getCurrencyLoading} =
         useSelector((state) => state.currency)
     const {
         products,
@@ -68,7 +69,7 @@ function Products() {
         lastProductCode,
         searchedProducts,
         totalSearched,
-        successDeleteProduct
+        successDeleteProduct,
     } = useSelector((state) => state.products)
     const [data, setData] = useState(products)
     const [searchedData, setSearchedData] = useState(searchedProducts)
@@ -100,7 +101,7 @@ function Products() {
     const [sorItem, setSorItem] = useState({
         filter: '',
         sort: '',
-        count: 0
+        count: 0,
     })
 
     // modal toggle
@@ -108,32 +109,32 @@ function Products() {
 
     // table headers
     const headers = [
-        { title: '№' },
+        {title: '№'},
         {
             title: 'Kategoriyasi',
-            filter: 'category.code'
+            filter: 'category.code',
         },
-        { title: 'Kodi', filter: 'productdata.code' },
-        { title: 'Nomi', filter: 'productdata.name' },
+        {title: 'Kodi', filter: 'productdata.code'},
+        {title: 'Nomi', filter: 'productdata.name'},
         {
             title: 'Soni',
-            filter: 'total'
+            filter: 'total',
         },
         {
             title: 'Olish',
             filter:
                 currencyType === 'UZS'
                     ? 'price.incomingpriceuzs'
-                    : 'price.incomingprice'
+                    : 'price.incomingprice',
         },
         {
             title: 'Sotish',
             filter:
                 currencyType === 'UZS'
                     ? 'price.sellingpriceuzs'
-                    : 'price.sellingprice'
+                    : 'price.sellingprice',
         },
-        { title: '' }
+        {title: ''},
     ]
     const exportHeader = [
         '№',
@@ -141,22 +142,22 @@ function Products() {
         'Mahsulot kodi',
         'Mahsulot nomi',
         'Soni',
-        'O\'lchov birligi',
+        "O'lchov birligi",
         'Kelish narxi USD',
         'Kelish narxi UZS',
         'Sotish narxi USD',
-        'Sotish narxi UZS'
+        'Sotish narxi UZS',
     ]
     const importHeaders = [
-        { name: 'Kategoriyasi', value: 'category' },
-        { name: 'Kodi', value: 'code' },
-        { name: 'Nomi', value: 'name' },
-        { name: 'O\'lchov birligi', value: 'unit' },
-        { name: 'Soni', value: 'total' },
-        { name: 'Kelish narxi USD', value: 'incomingprice' },
-        { name: 'Kelish narxi UZS', value: 'incomingpriceuzs' },
-        { name: 'Sotish narxi USD', value: 'sellingprice' },
-        { name: 'Sotish narxi UZS', value: 'sellingpriceuzs' }
+        {name: 'Kategoriyasi', value: 'category'},
+        {name: 'Kodi', value: 'code'},
+        {name: 'Nomi', value: 'name'},
+        {name: "O'lchov birligi", value: 'unit'},
+        {name: 'Soni', value: 'total'},
+        {name: 'Kelish narxi USD', value: 'incomingprice'},
+        {name: 'Kelish narxi UZS', value: 'incomingpriceuzs'},
+        {name: 'Sotish narxi USD', value: 'sellingprice'},
+        {name: 'Sotish narxi UZS', value: 'sellingpriceuzs'},
     ]
 
     // handle change of inputs
@@ -211,7 +212,7 @@ function Products() {
     const handleChangeCategoryOfProduct = (option) => {
         setCategoryOfProduct(option)
         const body = {
-            categoryId: option.value
+            categoryId: option.value,
         }
         dispatch(getCodeOfCategory(body))
     }
@@ -221,8 +222,8 @@ function Products() {
         let val = e.target.value
         let valForSearch = val.replace(/\s+/g, ' ').trim()
         setSearchByCode(val)
-            ; (searchedData.length > 0 || totalSearched > 0) &&
-                dispatch(clearSearchedProducts())
+        ;(searchedData.length > 0 || totalSearched > 0) &&
+            dispatch(clearSearchedProducts())
         if (valForSearch === '') {
             setData(products)
             setFilteredDataTotal(total)
@@ -238,8 +239,8 @@ function Products() {
         let val = e.target.value
         let valForSearch = val.replace(/\s+/g, ' ').trim()
         setSearchByCategory(val)
-            ; (searchedData.length > 0 || totalSearched > 0) &&
-                dispatch(clearSearchedProducts())
+        ;(searchedData.length > 0 || totalSearched > 0) &&
+            dispatch(clearSearchedProducts())
         if (valForSearch === '') {
             setData(products)
             setFilteredDataTotal(total)
@@ -255,8 +256,8 @@ function Products() {
         let val = e.target.value
         let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
         setSearchByName(val)
-            ; (searchedData.length > 0 || totalSearched > 0) &&
-                dispatch(clearSearchedProducts())
+        ;(searchedData.length > 0 || totalSearched > 0) &&
+            dispatch(clearSearchedProducts())
         if (valForSearch === '') {
             setData(products)
             setFilteredDataTotal(total)
@@ -279,26 +280,32 @@ function Products() {
                 search: {
                     name: searchByName.replace(/\s+/g, ' ').trim(),
                     code: searchByCode.replace(/\s+/g, ' ').trim(),
-                    category: searchByCategory.replace(/\s+/g, ' ').trim()
+                    category: searchByCategory.replace(/\s+/g, ' ').trim(),
                 },
                 product: {
                     code: codeOfProduct,
                     name: nameOfProduct.replace(/\s+/g, ' ').trim(),
                     unit: unitOfProduct.value,
-                    market: _id
-                }
+                    market: _id,
+                },
             }
             dispatch(getProductsByFilter(body))
         }
     }
 
     // filter by total
-    const filterByTotal = ({ value }) => {
+    const filterByTotal = ({value}) => {
         setShowByTotal(value)
         setCurrentPage(0)
     }
 
     // handle submit of inputs
+    const searchBarcode = (e) => {
+        if (e.key === 'Enter') {
+            console.log('salom')
+        }
+    }
+
     const addNewProduct = (e) => {
         e.preventDefault()
         if (currency) {
@@ -309,7 +316,7 @@ function Products() {
                 categoryOfProduct,
                 priceOfProduct,
                 sellingPriceOfProduct,
-                checkOfProduct
+                checkOfProduct,
             ])
             if (filter) {
                 warningEmptyInput()
@@ -321,7 +328,7 @@ function Products() {
                     search: {
                         name: searchByName.replace(/\s+/g, ' ').trim(),
                         code: searchByCode.replace(/\s+/g, ' ').trim(),
-                        category: searchByCategory.replace(/\s+/g, ' ').trim()
+                        category: searchByCategory.replace(/\s+/g, ' ').trim(),
                     },
                     product: {
                         code: codeOfProduct,
@@ -333,8 +340,8 @@ function Products() {
                         incomingprice: priceOfProductUsd,
                         sellingprice: sellingPriceOfProductUsd,
                         incomingpriceuzs: priceOfProduct,
-                        sellingpriceuzs: sellingPriceOfProduct
-                    }
+                        sellingpriceuzs: sellingPriceOfProduct,
+                    },
                 }
                 dispatch(addProduct(body))
             }
@@ -365,7 +372,7 @@ function Products() {
             unitOfProduct,
             categoryOfProduct,
             priceOfProduct,
-            sellingPriceOfProduct
+            sellingPriceOfProduct,
         ])
         if (filter) {
             warningEmptyInput()
@@ -383,15 +390,15 @@ function Products() {
                     sellingprice: sellingPriceOfProductUsd,
                     incomingpriceuzs: priceOfProduct,
                     sellingpriceuzs: sellingPriceOfProduct,
-                    total: numberOfProduct
+                    total: numberOfProduct,
                 },
                 currentPage,
                 countPage: showByTotal,
                 search: {
                     name: searchByName.replace(/\s+/g, ' ').trim(),
                     code: searchByCode.replace(/\s+/g, ' ').trim(),
-                    category: searchByCategory.replace(/\s+/g, ' ').trim()
-                }
+                    category: searchByCategory.replace(/\s+/g, ' ').trim(),
+                },
             }
             dispatch(updateProduct(body))
         }
@@ -409,7 +416,7 @@ function Products() {
                     const bufferArray = e.target.result
 
                     const wb = XLSX.read(bufferArray, {
-                        type: 'buffer'
+                        type: 'buffer',
                     })
 
                     const wsname = wb.SheetNames[0]
@@ -435,7 +442,7 @@ function Products() {
                 }
             })
         } else {
-            universalToast('Fayl formati noto\'g\'ri', 'error')
+            universalToast("Fayl formati noto'g'ri", 'error')
         }
     }
 
@@ -452,10 +459,10 @@ function Products() {
             search: {
                 name: searchByName.replace(/\s+/g, ' ').trim(),
                 code: searchByCode.replace(/\s+/g, ' ').trim(),
-                category: searchByCategory.replace(/\s+/g, ' ').trim()
+                category: searchByCategory.replace(/\s+/g, ' ').trim(),
             },
             name: nameOfProduct.replace(/\s+/g, ' ').trim(),
-            productdata: product.productdata._id
+            productdata: product.productdata._id,
         }
         setDeletedProduct(body)
         setModalBody('approve')
@@ -493,8 +500,8 @@ function Products() {
             search: {
                 name: searchByName.replace(/\s+/g, ' ').trim(),
                 code: searchByCode.replace(/\s+/g, ' ').trim(),
-                category: searchByCategory.replace(/\s+/g, ' ').trim()
-            }
+                category: searchByCategory.replace(/\s+/g, ' ').trim(),
+            },
         }
         dispatch(addProductsFromExcel(body))
     }
@@ -511,7 +518,7 @@ function Products() {
                     setSorItem({
                         filter: filterKey,
                         sort: '1',
-                        count: 2
+                        count: 2,
                     })
                     universalSort(
                         searchedData.length > 0 ? searchedData : data,
@@ -525,7 +532,7 @@ function Products() {
                     setSorItem({
                         filter: filterKey,
                         sort: '',
-                        count: 0
+                        count: 0,
                     })
                     universalSort(
                         searchedData.length > 0 ? searchedData : data,
@@ -539,7 +546,7 @@ function Products() {
                     setSorItem({
                         filter: filterKey,
                         sort: '-1',
-                        count: 1
+                        count: 1,
                     })
                     universalSort(
                         searchedData.length > 0 ? searchedData : data,
@@ -553,7 +560,7 @@ function Products() {
             setSorItem({
                 filter: filterKey,
                 sort: '-1',
-                count: 1
+                count: 1,
             })
             universalSort(
                 searchedData.length > 0 ? searchedData : data,
@@ -564,6 +571,13 @@ function Products() {
                 searchedData.length > 0
             )
         }
+    }
+
+    const handleError = (err) => {
+        universalToast("Mahsulot kodi o'qilmadi!", 'warning')
+    }
+    const handleScan = (data) => {
+        setCheckOfProduct(data)
     }
 
     useEffect(() => {
@@ -611,7 +625,7 @@ function Products() {
         errorGetCategories,
         currencyError,
         getCurrencyLoading,
-        currency
+        currency,
     ])
     useEffect(() => {
         const body = {
@@ -620,8 +634,8 @@ function Products() {
             search: {
                 name: searchByName.replace(/\s+/g, ' ').trim(),
                 code: searchByCode.replace(/\s+/g, ' ').trim(),
-                category: searchByCategory.replace(/\s+/g, ' ').trim()
-            }
+                category: searchByCategory.replace(/\s+/g, ' ').trim(),
+            },
         }
         dispatch(getProducts(body))
         //    eslint-disable-next-line react-hooks/exhaustive-deps
@@ -639,7 +653,7 @@ function Products() {
     useEffect(() => {
         if (currentProduct) {
             const {
-                productdata: { name, code },
+                productdata: {name, code},
                 unit,
                 total,
                 category,
@@ -647,19 +661,19 @@ function Products() {
                     sellingprice,
                     incomingprice,
                     sellingpriceuzs,
-                    incomingpriceuzs
-                }
+                    incomingpriceuzs,
+                },
             } = currentProduct
             setCodeOfProduct(code)
             setNameOfProduct(name)
             setNumberOfProduct(total)
             setUnitOfProduct({
                 value: unit._id,
-                label: unit.name
+                label: unit.name,
             })
             setCategoryOfProduct({
                 value: category._id,
-                label: `${category.code} - ${category.name}`
+                label: `${category.code} - ${category.name}`,
             })
             setPriceOfProduct(incomingpriceuzs)
             setSellingPriceOfProduct(sellingpriceuzs)
@@ -671,7 +685,7 @@ function Products() {
         setUnitOptions(
             units.map((unit) => ({
                 value: unit._id,
-                label: unit.name
+                label: unit.name,
             }))
         )
     }, [units])
@@ -681,7 +695,7 @@ function Products() {
                 value: category._id,
                 label:
                     category.code +
-                    `${category.name ? ` - ${category.name}` : ''}`
+                    `${category.name ? ` - ${category.name}` : ''}`,
             }))
         )
     }, [allcategories])
@@ -693,6 +707,7 @@ function Products() {
     useEffect(() => {
         setSearchedData(searchedProducts)
     }, [searchedProducts])
+
     return (
         <motion.section
             key='content'
@@ -700,21 +715,22 @@ function Products() {
             animate='open'
             exit='collapsed'
             variants={{
-                open: { opacity: 1, height: 'auto' },
-                collapsed: { opacity: 0, height: 0 },
+                open: {opacity: 1, height: 'auto'},
+                collapsed: {opacity: 0, height: 0},
             }}
-            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>
+            transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
+        >
             {/* Modal */}
             <UniversalModal
                 toggleModal={toggleModal}
                 body={modalBody}
                 headerText={
                     modalBody === 'approve' &&
-                    'Mahsulotni o\'chirishni tasdiqlaysizmi?'
+                    "Mahsulotni o'chirishni tasdiqlaysizmi?"
                 }
                 title={
                     modalBody === 'approve' &&
-                    'O\'chirilgan mahsulotni tiklashning imkoni mavjud emas!'
+                    "O'chirilgan mahsulotni tiklashning imkoni mavjud emas!"
                 }
                 approveFunction={
                     modalBody === 'approve'
@@ -766,6 +782,7 @@ function Products() {
                 pageName={'products'}
                 unitOptions={unitOptions}
                 categoryOptions={categoryOptions}
+                searchBarcode={searchBarcode}
             />
             <div className={'flex justify-between items-center mainPadding'}>
                 <div className={'flex gap-[1.5rem]'}>
@@ -823,6 +840,7 @@ function Products() {
                     />
                 )}
             </div>
+            <BarcodeReader onError={handleError} onScan={handleScan} />
         </motion.section>
     )
 }
