@@ -9,7 +9,7 @@ import {
 } from 'react-icons/io5'
 import {SiMicrosoftexcel} from 'react-icons/si'
 
-const TableBtn = ({type, onClick, bgcolor}) => {
+    const TableBtn = ({type, onClick, bgcolor,isDisabled}) => {
     const chooseIcon = () => {
         switch (type) {
             case 'delete':
@@ -35,6 +35,7 @@ const TableBtn = ({type, onClick, bgcolor}) => {
         <button
             className={`w-[24px] h-[24px] flex justify-center items-center rounded-full ${bgcolor}`}
             onClick={onClick}
+            disabled={isDisabled}
         >
             {chooseIcon()}
         </button>

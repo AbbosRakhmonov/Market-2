@@ -1,13 +1,13 @@
 import React from 'react'
 import {StatusIcon} from '../TableIcons/StatusIcon'
 import TableBtn from '../../Buttons/TableBtn'
-
 export const InventoriesTableRow = ({
     data,
     currentPage,
     countPage,
     Print,
     Excel,
+    isDisabled,
 }) => {
     return (
         <>
@@ -36,9 +36,10 @@ export const InventoriesTableRow = ({
                                 onClick={Print}
                             />
                             <TableBtn
+                                isDisabled={isDisabled}
                                 type={'excel'}
                                 bgcolor={'bg-success-500'}
-                                onClick={Excel}
+                                onClick={() => Excel(inventory)}
                             />
                         </div>
                     </td>

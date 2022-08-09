@@ -9,6 +9,7 @@ import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
 import { motion } from 'framer-motion'
 import {getConnectors, postInventoriesId} from './inventorieSlice.js'
+import SmallLoader from '../../Components/Spinner/SmallLoader.js'
 function Inventories() {
     const headers = [
         { styles: 'w-[10%] text-start', title: '№' },
@@ -21,8 +22,15 @@ function Inventories() {
 
     const dispatch = useDispatch()
 
-    const {connectors, errorConnectors, clearErrorConnectors, loading, total, dataId} =
-        useSelector((state) => state.inventoryConnectors)
+    const {
+        connectors,
+        errorConnectors,
+        clearErrorConnectors,
+        loading,
+        dataLoading,
+        total,
+        dataId,
+    } = useSelector((state) => state.inventoryConnectors)
     const [data, setData] = useState(connectors)
     const [showByTotal, setShowByTotal] = useState('10')
     const [currentPage, setCurrentPage] = useState(0)
@@ -38,22 +46,17 @@ function Inventories() {
         setCurrentPage(0)
     }
 
-   
-
-
-
     // excel function
-   const headersInventories = [
-      "№",
-      "Sana",
-      "Kodi",
-      "Maxsulot",
-      "Dastlabki",
-      "Sanoq",
-      "Farqi",
-      "FarqiUSD"
+    const headersInventories = [
+        '№',
+        'Sana',
+        'Kodi',
+        'Maxsulot',
+        'Dastlabki',
+        'Sanoq',
+        'Farqi',
+        'FarqiUSD',
     ]
-
 
     const autoFillColumnWidth = (json) => {
         const cols = Object.keys(json[0])
@@ -78,32 +81,34 @@ function Inventories() {
             XLSX.utils.book_append_sheet(wb, ws, 'Maxsulotlar')
             XLSX.writeFile(
                 wb,
-                `${"Invertarizatsiyalar"}-${new Date().toLocaleDateString()}.xlsx`
+                `${'Invertarizatsiyalar'}-${new Date().toLocaleDateString()}.xlsx`
             )
         },
-        [ headers]
+        [headers]
     )
 
-    const handleClick = (e) => {
+    const handleClick = (e, idx) => {
         const body = {
-            id : e._id
+            id: e._id,
         }
-        dispatch(postInventoriesId(body))
-        if (dataId.length > 0) {
-                const newData = dataId.map((item, index) => ({
+        dispatch(postInventoriesId(body)).then(({payload: {inventories}}) => {
+            if (inventories.length > 0) {
+                const newData = inventories.map((item, index) => ({
                     nth: index + 1,
                     data: item.createdAt,
                     code: item.productdata.code,
                     name: item.productdata.name,
                     initial: item.productcount,
-                    count:item.inventorycount,
-                    difference:item.inventorycount-item.productcount,
-                    differenceUSD : item.inventorycount*item.price.incomingprice - item.productcount*item.price.incomingprice
+                    count: item.inventorycount,
+                    difference: item.inventorycount - item.productcount,
+                    differenceUSD:
+                        item.inventorycount * item.price.incomingprice -
+                        item.productcount * item.price.incomingprice,
                 }))
-                 continueHandleClick(newData)  
-        } 
+                continueHandleClick(newData, idx)
+            }
+        })
     }
-
 
     // excel function
 
@@ -132,6 +137,7 @@ function Inventories() {
     useEffect(() => {
         setFilteredDataTotal(total)
     }, [total])
+    
     return (
         <motion.section
             key='content'
@@ -143,6 +149,13 @@ function Inventories() {
                 collapsed: { opacity: 0, height: 0 },
             }}
             transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>
+
+            {dataLoading && (
+                <div className='fixed z-[50] backdrop-blur-[2px] left-0 right-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
+                    <SmallLoader />
+                </div>
+            )}
+
             <div className='inventoriesHead mainPadding'>
                 <div className='font-[400] text-[1.25rem] text-blue-900'>
                     Invertarizatsiyalar
@@ -173,6 +186,7 @@ function Inventories() {
                     <NotFind text={'Invnentarizatsiyalar mavjud emas!'} />
                 ) : (
                     <Table
+                        isDisabled={dataLoading}
                         page='inventories'
                         currentPage={currentPage}
                         countPage={showByTotal}

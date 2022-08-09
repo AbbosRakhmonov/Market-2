@@ -430,9 +430,12 @@ const IncomingSuppliers = () => {
         "Kodi",
         "Nomi",
         "Soni",
-        "Kelish",
-        "Jami",
-        "Sotish"
+        "KelishUZS",
+        "KelishUSD",
+        "JamiUZS",
+        "JamiUSD",
+        "SotishUZS",
+        "SotishUSD"
     ]
 
     return (

@@ -67,7 +67,7 @@ function ExportBtn({headers, fileName, datas, pagesName }) {
                     sellingprice: item.price.sellingprice,
                     sellingpriceuzs: item.price.sellingpriceuzs,
                     sellingalluzs : item.price.sellingpriceuzs * item.total,
-                    sellingallusd : item.price.sellingpriceuzs * item.total
+                    sellingallusd : item.price.sellingprice * item.total
                  }))
                  continueHandleClick(ReportData)
                  break;
@@ -122,9 +122,12 @@ function ExportBtn({headers, fileName, datas, pagesName }) {
                     code:item.product.productdata.code,
                     name:item.product.productdata.name,
                     count:item.pieces + " " + item.unit.name,
-                    unit : item.unitpriceuzs + " UZS",
-                    all:item.totalpriceuzs + " UZS",
-                    sell : item.sellingpriceuzs + " UZS"
+                    unit : item.unitpriceuzs,
+                    unitusd : item.unitprice,
+                    all:item.totalpriceuzs,
+                    allusd:item.totalprice,
+                    sell : item.sellingpriceuzs,
+                    sellusd : item.sellingprice
                  }))
                  continueHandleClick(IncomingSupplierData)
                  break;

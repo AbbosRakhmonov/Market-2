@@ -50,6 +50,7 @@ function Table({
     currencyType,
     type,
     Pay,
+    isDisabled
 }) {
     const checkRows = () => {
         switch (page) {
@@ -137,6 +138,7 @@ function Table({
             case 'inventories':
                 return (
                     <InventoriesTableRow
+                        isDisabled={isDisabled}
                         data={data}
                         currentPage={currentPage}
                         countPage={countPage}
