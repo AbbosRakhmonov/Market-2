@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import Table from '../../../Components/Table/Table'
-import { motion } from 'framer-motion'
 import {
     deleteTemporary,
     getTemporary,
@@ -116,7 +115,7 @@ const SavedIncomings = () => {
     ]
 
     return (
-        <motion.div className='mainPadding'
+        <div className='mainPadding'
             key='content'
             initial='collapsed'
             animate='open'
@@ -138,7 +137,7 @@ const SavedIncomings = () => {
             ) : (
                 <div>Saqlangan qabullar mavjud emas</div>
             )}
-        </motion.div>
+        </div>
     )
 }
 

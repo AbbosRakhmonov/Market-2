@@ -1,10 +1,9 @@
 import React from 'react'
 import { RouteLink } from '../../Components/RouteLinks/RouteLink'
 import { Outlet } from 'react-router-dom'
-import { motion } from "framer-motion"
 const Sale = () => {
     return (
-        <motion.section className={'h-full flex flex-col'}
+        <section className={'h-full flex flex-col'}
             key='content'
             initial='collapsed'
             animate='open'
@@ -32,7 +31,7 @@ const Sale = () => {
                 />
             </div>
             <Outlet />
-        </motion.section>
+        </section>
     )
 }
 

@@ -7,7 +7,6 @@ import Dates from '../../../Components/Dates/Dates'
 import SelectInput from '../../../Components/SelectInput/SelectInput'
 import FilterButtons from '../../../Components/FilterButtons/FilterButtons'
 import ResultIncomings from '../Components/ResultIncomings'
-import { motion } from 'framer-motion';
 
 function Incomings() {
     const dispatch = useDispatch()
@@ -154,7 +153,7 @@ function Incomings() {
     }, [dispatch, _id])
 
     return (
-        <motion.section
+        <section
             key='content'
             initial='collapsed'
             animate='open'
@@ -222,7 +221,7 @@ function Incomings() {
                     )
                 })}
             </div>
-        </motion.section>
+        </section>
     )
 }
 

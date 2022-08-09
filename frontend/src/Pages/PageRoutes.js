@@ -148,7 +148,7 @@ const PageRoutes = () => {
                         <Route path='/kassa' element={<Reports />} />
                         <Route path='/kassa' element={<Reports />} />
 
-                        <Route path='/dukonlar/' element={<Shops />}>
+                        <Route path='/dukonlar' element={<Shops />}>
                             <Route path=':tablename/:_id' element={<Shops />} />
                         </Route>
                     </Routes>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import SelectInput from '../../../Components/SelectInput/SelectInput'
 import Table from '../../../Components/Table/Table'
-import { motion } from 'framer-motion'
 import {
     addIncoming,
     addTemporary,
@@ -339,7 +338,7 @@ const RegisterIncoming = () => {
     }, [dispatch])
 
     return (
-        <motion.section
+        <section
             key='content'
             initial='collapsed'
             animate='open'
@@ -403,7 +402,7 @@ const RegisterIncoming = () => {
                 approveFunction={addProductToIncomings}
                 currency={currencyType}
             />
-        </motion.section>
+        </section>
     )
 }
 

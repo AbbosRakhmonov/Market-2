@@ -9,7 +9,6 @@ import NotFind from '../../../Components/NotFind/NotFind.js'
 import SmallLoader from '../../../Components/Spinner/SmallLoader.js'
 import { universalToast } from '../../../Components/ToastMessages/ToastMessages.js'
 import UniversalModal from '../../../Components/Modal/UniversalModal.js'
-import { motion } from 'framer-motion';
 
 const SavedSellings = () => {
     const dispatch = useDispatch()
@@ -49,7 +48,7 @@ const SavedSellings = () => {
     }, [dispatch])
 
     return (
-        <motion.div className='tableContainerPadding pt-[1.25rem]'
+        <div className='tableContainerPadding pt-[1.25rem]'
             key='content'
             initial='collapsed'
             animate='open'
@@ -68,7 +67,7 @@ const SavedSellings = () => {
                     currency={currencyType} /> : <NotFind text={'Saqlanganlar to\'lovlar hozircha mavjud emas'} />
                 : <SmallLoader />
             }
-        </motion.div>
+        </div>
     )
 }
 

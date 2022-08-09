@@ -6,7 +6,6 @@ import CardBtn from '../../../Components/Card/CardBtn'
 import LinkToBack from '../../../Components/LinkToBack/LinkToBack'
 import Pagination from '../../../Components/Pagination/Pagination'
 import ResultIncomings from '../Components/ResultIncomings'
-import { motion } from "framer-motion"
 import {
     clearSuccesDelete,
     clearSuccessUpdate,
@@ -425,7 +424,7 @@ const IncomingSuppliers = () => {
     ]
 
     return (
-        <motion.div className=''
+        <div className=''
             key='content'
             initial='collapsed'
             animate='open'
@@ -503,7 +502,7 @@ const IncomingSuppliers = () => {
                 closeModal={closeModal}
                 toggleModal={closeModal}
             />
-        </motion.div>
+        </div>
     )
 }
 
