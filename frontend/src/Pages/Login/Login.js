@@ -5,7 +5,6 @@ import { clearError, signIn } from './loginSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import Timebar from '../../Components/TimeBar/Timebar'
 import { universalToast } from '../../Components/ToastMessages/ToastMessages'
-import { motion } from 'framer-motion';
 
 function Login() {
     const dispatch = useDispatch()
@@ -37,7 +36,7 @@ function Login() {
         }
     }, [error, dispatch])
     return (
-        <motion.section className={'loginPage flex items-center justify-center'}
+        <section className={'loginPage flex items-center justify-center'}
             key='content'
             initial='collapsed'
             animate='open'
@@ -97,7 +96,7 @@ function Login() {
                 </div>
                 <Timebar />
             </div>
-        </motion.section>
+        </section>
     )
 }
 

@@ -7,7 +7,7 @@ import UniversalModal from '../../../Components/Modal/UniversalModal'
 import Pagination from '../../../Components/Pagination/Pagination'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
 import Table from '../../../Components/Table/Table'
-import { motion } from 'framer-motion'
+
 import {
     clearSuccesDelete,
     clearSuccessUpdate,
@@ -367,7 +367,7 @@ const IncomingsList = () => {
     ]
 
     return (
-        <motion.div className=''
+        <div className=''
             key='content'
             initial='collapsed'
             animate='open'
@@ -440,7 +440,7 @@ const IncomingsList = () => {
                 closeModal={closeModal}
                 toggleModal={closeModal}
             />
-        </motion.div>
+        </div>
     )
 }
 

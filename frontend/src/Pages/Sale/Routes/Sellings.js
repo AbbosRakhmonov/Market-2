@@ -1,18 +1,18 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import ExportBtn from '../../../Components/Buttons/ExportBtn.js'
 import Pagination from '../../../Components/Pagination/Pagination.js'
 import Table from '../../../Components/Table/Table.js'
-import {motion} from 'framer-motion'
 import SearchForm from '../../../Components/SearchForm/SearchForm.js'
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Spinner from '../../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../../Components/NotFind/NotFind.js'
+import { motion } from "framer-motion"
 import {
     clearSearchedSellings,
     getSellings,
     getSellingsByFilter,
 } from '../Slices/sellingsSlice.js'
-import {regexForTypeNumber} from '../../../Components/RegularExpressions/RegularExpressions.js'
+import { regexForTypeNumber } from '../../../Components/RegularExpressions/RegularExpressions.js'
 import UniversalModal from '../../../Components/Modal/UniversalModal.js'
 
 const Sellings = () => {
@@ -45,7 +45,7 @@ const Sellings = () => {
         },
     ]
     const dispatch = useDispatch()
-    const {currencyType} = useSelector((state) => state.currency)
+    const { currencyType } = useSelector((state) => state.currency)
     const {
         sellings,
         searchedSellings,
@@ -74,7 +74,7 @@ const Sellings = () => {
     const [modalVisible, setModalVisible] = useState(false)
 
     // filter by total
-    const filterByTotal = ({value}) => {
+    const filterByTotal = ({ value }) => {
         setShowByTotal(value)
         setCurrentPage(0)
     }
@@ -83,9 +83,9 @@ const Sellings = () => {
     const handleChangeId = (e) => {
         const val = e.target.value
         const valForSearch = val.replace(/\s+/g, ' ').trim()
-        regexForTypeNumber.test(val) && setSearch({...search, id: val})
-        ;(searchedData.length > 0 || totalSearched > 0) &&
-            dispatch(clearSearchedSellings())
+        regexForTypeNumber.test(val) && setSearch({ ...search, id: val })
+            ; (searchedData.length > 0 || totalSearched > 0) &&
+                dispatch(clearSearchedSellings())
         if (valForSearch === '') {
             setData(sellings)
             setFilteredDataTotal(total)
@@ -100,9 +100,9 @@ const Sellings = () => {
     const handleChangeClient = (e) => {
         const val = e.target.value
         const valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
-        setSearch({...search, client: val})
-        ;(searchedData.length > 0 || totalSearched > 0) &&
-            dispatch(clearSearchedSellings())
+        setSearch({ ...search, client: val })
+            ; (searchedData.length > 0 || totalSearched > 0) &&
+                dispatch(clearSearchedSellings())
         if (valForSearch === '') {
             setData(sellings)
             setFilteredDataTotal(total)
@@ -181,10 +181,10 @@ const Sellings = () => {
             animate='open'
             exit='collapsed'
             variants={{
-                open: {opacity: 1, height: 'auto'},
-                collapsed: {opacity: 0, height: 0},
+                open: { opacity: 1, height: 'auto' },
+                collapsed: { opacity: 0, height: 0 },
             }}
-            transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
         >
             <UniversalModal
                 printedSelling={printedSelling}

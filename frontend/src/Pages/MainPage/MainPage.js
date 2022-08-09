@@ -1,7 +1,7 @@
 import React from 'react'
-import { motion } from 'framer-motion';
+
 function MainPage() {
-    return <motion.div
+    return <div
         key='content'
         initial='collapsed'
         animate='open'
@@ -10,6 +10,6 @@ function MainPage() {
             open: { opacity: 1, height: 'auto' },
             collapsed: { opacity: 0, height: 0 },
         }}
-        transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>Bosh sahifa</motion.div>
+        transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>Bosh sahifa</div>
 }
 export default MainPage

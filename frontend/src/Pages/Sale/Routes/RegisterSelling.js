@@ -9,7 +9,6 @@ import NotFind from '../../../Components/NotFind/NotFind.js'
 import { getAllCategories } from '../../Category/categorySlice.js'
 import Spinner from '../../../Components/Spinner/SmallLoader.js'
 import SmallLoader from '../../../Components/Spinner/SmallLoader.js'
-import { motion } from 'framer-motion'
 import {
     addPayment,
     getAllProducts,
@@ -879,7 +878,7 @@ const RegisterSelling = () => {
     }, [location.state])
 
     return (
-        <motion.div className={'flex grow relative overflow-auto'}
+        <div className={'flex grow relative overflow-auto'}
             key='content'
             initial='collapsed'
             animate='open'
@@ -1069,7 +1068,7 @@ const RegisterSelling = () => {
                     </button>
                 </div>
             </div>
-        </motion.div>
+        </div>
     )
 }
 
