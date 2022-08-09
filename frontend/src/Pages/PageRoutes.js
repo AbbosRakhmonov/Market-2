@@ -1,9 +1,9 @@
-import {lazy, Suspense, useEffect} from 'react'
-import {Route, Routes} from 'react-router-dom'
+import { lazy, Suspense, useEffect } from 'react'
+import { Route, Routes } from 'react-router-dom'
 import Navbar from '../Components/Navbar/Navbar'
 import Category from './Category/Category.js'
-import {useDispatch, useSelector} from 'react-redux'
-import {changeCurrencyType, clearError, getCurrency, getCurrencyType} from './Currency/currencySlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { changeCurrencyType, clearError, getCurrency, getCurrencyType } from './Currency/currencySlice'
 import Supplier from './SupplierPage/SupplierPage'
 import ProductReport from './ProductReport/ProductReport'
 import Inventory from './Inventory/Inventory'
@@ -16,11 +16,12 @@ import SavedSellings from './Sale/Routes/SavedSellings.js'
 import Sellings from './Sale/Routes/Sellings.js'
 import Packman from './Packman/Packman'
 import ClientsPage from './Clients/Clients'
-import {universalToast, warningCurrencyRate} from '../Components/ToastMessages/ToastMessages.js'
+import { universalToast, warningCurrencyRate } from '../Components/ToastMessages/ToastMessages.js'
 import Shops from './ShopsPage/Shops'
 import Reports from './Reports/Reports.js'
 import Exchangerate from './Exchangerate/Exchangerate' //pages
 import Sellers from './Seller/Sellers'
+import { motion } from 'framer-motion'
 //pages
 const MainPage = lazy(() => import('./MainPage/MainPage'))
 const Products = lazy(() => import('./Products/Create/Products'))
@@ -37,11 +38,11 @@ const IncomingSuppliers = lazy(() =>
 
 const PageRoutes = () => {
     const dispatch = useDispatch()
-    const {currency, currencyType, currencyError, getCurrencyLoading} =
+    const { currency, currencyType, currencyError, getCurrencyLoading } =
         useSelector((state) => state.currency)
     const changeCurrency = () => {
         const prevCurrencyType = currencyType === 'USD' ? 'UZS' : 'USD'
-        dispatch(changeCurrencyType({currency: prevCurrencyType}))
+        dispatch(changeCurrencyType({ currency: prevCurrencyType }))
     }
     useEffect(() => {
         dispatch(getCurrency())
@@ -60,7 +61,16 @@ const PageRoutes = () => {
     }, [currencyError, dispatch])
 
     return (
-        <section className={'flex bg-background relative overflow-x-hidden'}>
+        <motion.section className={'flex bg-background relative overflow-x-hidden'}
+            key='content'
+            initial='collapsed'
+            animate='open'
+            exit='collapsed'
+            variants={{
+                open: { opacity: 1, height: 'auto' },
+                collapsed: { opacity: 0, height: 0 },
+            }}
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>
             <Currency currency={currencyType} onClick={changeCurrency} />
             <Navbar />
             <div className={'grow h-screen overflow-y-auto'}>
@@ -129,7 +139,7 @@ const PageRoutes = () => {
                             path='/sotuv/mijozlar'
                             element={<ClientsPage />}
                         />
-                         <Route
+                        <Route
                             path='/sotuv/sotuvchilar'
                             element={<Sellers />}
                         />
@@ -144,7 +154,7 @@ const PageRoutes = () => {
                     </Routes>
                 </Suspense>
             </div>
-        </section>
+        </motion.section>
     )
 }
 

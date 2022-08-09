@@ -1,11 +1,12 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import FieldContainer from '../../Components/FieldContainer/FieldContainer'
 import Button from '../../Components/Buttons/BtnAddRemove'
 import Pagination from '../../Components/Pagination/Pagination'
 import Table from '../../Components/Table/Table'
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
+import { motion } from 'framer-motion'
 import {
     addSupplier,
     clearErrorSuppliers,
@@ -27,7 +28,7 @@ import {
 } from '../../Components/ToastMessages/ToastMessages.js'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
 import SearchForm from '../../Components/SearchForm/SearchForm.js'
-import {checkEmptyString} from '../../App/globalFunctions.js'
+import { checkEmptyString } from '../../App/globalFunctions.js'
 
 const Supplier = () => {
     const dispatch = useDispatch()
@@ -44,9 +45,9 @@ const Supplier = () => {
     } = useSelector((state) => state.suppliers)
 
     const headers = [
-        {title: '№', styles: 'w-[8%] text-left'},
-        {title: 'Yetkazuvchi', styles: 'w-[84%] text-left'},
-        {title: '', styles: 'w-[8%] text-left'},
+        { title: '№', styles: 'w-[8%] text-left' },
+        { title: 'Yetkazuvchi', styles: 'w-[84%] text-left' },
+        { title: '', styles: 'w-[8%] text-left' },
     ]
 
     // states
@@ -144,7 +145,7 @@ const Supplier = () => {
     }
 
     // filter by total
-    const filterByTotal = ({value}) => {
+    const filterByTotal = ({ value }) => {
         setShowByTotal(value)
         setCurrentPage(0)
     }
@@ -154,8 +155,8 @@ const Supplier = () => {
         let val = e.target.value
         let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
         setSearchByName(val)
-        ;(searchedData.length > 0 || totalSearched > 0) &&
-            dispatch(clearSearchedSuppliers())
+            ; (searchedData.length > 0 || totalSearched > 0) &&
+                dispatch(clearSearchedSuppliers())
         if (valForSearch === '') {
             setData(suppliers)
             setFilteredDataTotal(total)
@@ -235,11 +236,20 @@ const Supplier = () => {
         setSearchedData(searchedSuppliers)
     }, [searchedSuppliers])
     return (
-        <section>
+        <motion.section
+            key='content'
+            initial='collapsed'
+            animate='open'
+            exit='collapsed'
+            variants={{
+                open: { opacity: 1, height: 'auto' },
+                collapsed: { opacity: 0, height: 0 },
+            }}
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
+        >
             <UniversalModal
-                headerText={`${
-                    deletedSupplier && deletedSupplier.name
-                } yetkazib beruvchini o'chirishni tasdiqlaysizmi?`}
+                headerText={`${deletedSupplier && deletedSupplier.name
+                    } yetkazib beruvchini o'chirishni tasdiqlaysizmi?`}
                 title="O'chirilgan yetkazib beruvchini tiklashning imkoni mavjud emas!"
                 toggleModal={toggleModal}
                 body={'approve'}
@@ -248,9 +258,8 @@ const Supplier = () => {
                 isOpen={modalVisible}
             />
             <form
-                className={`flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200 ${
-                    stickyForm && 'stickyForm'
-                }`}
+                className={`flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200 ${stickyForm && 'stickyForm'
+                    }`}
             >
                 <div className='supplier-style'>
                     <FieldContainer
@@ -314,7 +323,7 @@ const Supplier = () => {
                     />
                 )}
             </div>
-        </section>
+        </motion.section>
     )
 }
 

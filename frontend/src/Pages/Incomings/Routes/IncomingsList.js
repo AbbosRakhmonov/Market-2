@@ -1,12 +1,13 @@
-import React, {useCallback, useEffect, useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
-import {universalSort, UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { universalSort, UsdToUzs, UzsToUsd } from '../../../App/globalFunctions'
 import ExportBtn from '../../../Components/Buttons/ExportBtn'
 import Dates from '../../../Components/Dates/Dates'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
 import Pagination from '../../../Components/Pagination/Pagination'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
 import Table from '../../../Components/Table/Table'
+import { motion } from 'framer-motion'
 import {
     clearSuccesDelete,
     clearSuccessUpdate,
@@ -19,11 +20,11 @@ const IncomingsList = () => {
     const dispatch = useDispatch()
 
     const {
-        market: {_id},
+        market: { _id },
     } = useSelector((state) => state.login)
-    const {incomings, incomingscount, successUpdate, successDelete} =
+    const { incomings, incomingscount, successUpdate, successDelete } =
         useSelector((state) => state.incoming)
-    const {currencyType, currency} = useSelector((state) => state.currency)
+    const { currencyType, currency } = useSelector((state) => state.currency)
 
     const [beginDay, setBeginDay] = useState(
         new Date(
@@ -127,7 +128,7 @@ const IncomingsList = () => {
                     market: _id,
                     startDate: beginDay,
                     endDate: endDay,
-                    product: {...editedIncoming},
+                    product: { ...editedIncoming },
                 })
             )
         } else {
@@ -152,7 +153,7 @@ const IncomingsList = () => {
     const searchName = (e) => {
         let target = e.target.value.toLowerCase()
         setCurrentIncoming([
-            ...storageCurrentIncoming.filter(({product}) =>
+            ...storageCurrentIncoming.filter(({ product }) =>
                 product.productdata.name.toLowerCase().includes(target)
             ),
         ])
@@ -166,7 +167,7 @@ const IncomingsList = () => {
     const searchCode = (e) => {
         let target = e.target.value.toLowerCase()
         setCurrentIncoming([
-            ...storageCurrentIncoming.filter(({product}) =>
+            ...storageCurrentIncoming.filter(({ product }) =>
                 product.productdata.code.includes(target)
             ),
         ])
@@ -275,7 +276,7 @@ const IncomingsList = () => {
                 market: _id,
                 beginDay,
                 endDay,
-                product: {...deletedIncoming},
+                product: { ...deletedIncoming },
             })
         )
         setModal(false)
@@ -366,7 +367,16 @@ const IncomingsList = () => {
     ]
 
     return (
-        <div className=''>
+        <motion.div className=''
+            key='content'
+            initial='collapsed'
+            animate='open'
+            exit='collapsed'
+            variants={{
+                open: { opacity: 1, height: 'auto' },
+                collapsed: { opacity: 0, height: 0 },
+            }}
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>
             <div className='mainPadding text-center'>
                 <p>Ro'yxat</p>
             </div>
@@ -430,7 +440,7 @@ const IncomingsList = () => {
                 closeModal={closeModal}
                 toggleModal={closeModal}
             />
-        </div>
+        </motion.div>
     )
 }
 

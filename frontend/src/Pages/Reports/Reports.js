@@ -6,6 +6,7 @@ import { universalToast } from '../../Components/ToastMessages/ToastMessages.js'
 import { uniqueId } from 'lodash'
 import { clearErrorReports, getReports } from './reportsSlice.js'
 import { useTranslation } from 'react-i18next'
+import { motion } from "framer-motion"
 
 const Reports = () => {
 
@@ -84,7 +85,16 @@ const Reports = () => {
     }, [dispatch, clearErrorrReports, errorReports])
 
     return (
-        <section>
+        <motion.section
+            key='content'
+            initial='collapsed'
+            animate='open'
+            exit='collapsed'
+            variants={{
+                open: { opacity: 1, height: 'auto' },
+                collapsed: { opacity: 0, height: 0 },
+            }}
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>
             <SearchForm
                 filterBy={['startDate', 'endDate', 'printBtn']}
                 startDate={startDate}
@@ -106,7 +116,7 @@ const Reports = () => {
                         />
                     ))}
             </div>
-        </section>
+        </motion.section>
     )
 }
 

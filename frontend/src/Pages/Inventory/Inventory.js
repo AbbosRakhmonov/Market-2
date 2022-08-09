@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import Table from '../../Components/Table/Table'
 import Pagination from '../../Components/Pagination/Pagination'
 import SearchForm from '../../Components/SearchForm/SearchForm.js'
+import { motion } from 'framer-motion'
 import {
     clearCompleteSuccessInventory,
     clearErrorInventories,
@@ -12,8 +13,8 @@ import {
     getInventoriesByFilter,
     updateInventory,
 } from './inventorySlice'
-import {universalSort} from '../../App/globalFunctions.js'
-import {useDispatch, useSelector} from 'react-redux'
+import { universalSort } from '../../App/globalFunctions.js'
+import { useDispatch, useSelector } from 'react-redux'
 import {
     successCompleteInventoryMessage,
     successUpdateInventoryMessage,
@@ -22,19 +23,19 @@ import {
 import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 function Inventory() {
     const headers = [
-        {styles: 'w-[10%]', filter: '', title: '№'},
-        {styles: 'w-[10%]', filter: 'category.code', title: 'Kategoriyasi'},
-        {styles: 'w-[10%]', filter: 'productdata.code', title: 'Kodi'},
-        {styles: 'w-[20%]', filter: 'productdata.name', title: 'Nomi'},
-        {styles: 'w-[10%] text-center', title: 'Dastlabki'},
-        {styles: 'w-[10%] text-center', filter: '', title: 'Sanoq'},
-        {styles: 'w-[10%] text-center', filter: '', title: 'Farq'},
-        {styles: '', filter: '', title: 'Izoh'},
-        {styles: '', filter: '', title: ' '},
+        { styles: 'w-[10%]', filter: '', title: '№' },
+        { styles: 'w-[10%]', filter: 'category.code', title: 'Kategoriyasi' },
+        { styles: 'w-[10%]', filter: 'productdata.code', title: 'Kodi' },
+        { styles: 'w-[20%]', filter: 'productdata.name', title: 'Nomi' },
+        { styles: 'w-[10%] text-center', title: 'Dastlabki' },
+        { styles: 'w-[10%] text-center', filter: '', title: 'Sanoq' },
+        { styles: 'w-[10%] text-center', filter: '', title: 'Farq' },
+        { styles: '', filter: '', title: 'Izoh' },
+        { styles: '', filter: '', title: ' ' },
     ]
 
     const dispatch = useDispatch()
@@ -72,8 +73,8 @@ function Inventory() {
         let val = e.target.value
         let valForSearch = val.replace(/\s+/g, ' ').trim()
         setSearchByCategory(val)
-        ;(searchedData.length > 0 || totalSearched > 0) &&
-            dispatch(clearSearchedInventories())
+            ; (searchedData.length > 0 || totalSearched > 0) &&
+                dispatch(clearSearchedInventories())
         if (valForSearch === '') {
             setData(inventories)
             setFilteredDataTotal(total)
@@ -89,8 +90,8 @@ function Inventory() {
         let val = e.target.value
         let valForSearch = val.replace(/\s+/g, ' ').trim()
         setSearchByCode(val)
-        ;(searchedData.length > 0 || totalSearched > 0) &&
-            dispatch(clearSearchedInventories())
+            ; (searchedData.length > 0 || totalSearched > 0) &&
+                dispatch(clearSearchedInventories())
         if (valForSearch === '') {
             setData(inventories)
             setFilteredDataTotal(total)
@@ -106,8 +107,8 @@ function Inventory() {
         let val = e.target.value
         let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
         setSearchByName(val)
-        ;(searchedData.length > 0 || totalSearched > 0) &&
-            dispatch(clearSearchedInventories())
+            ; (searchedData.length > 0 || totalSearched > 0) &&
+                dispatch(clearSearchedInventories())
         if (valForSearch === '') {
             setData(inventories)
             setFilteredDataTotal(total)
@@ -123,7 +124,7 @@ function Inventory() {
     }
 
     // filter by total
-    const filterByTotal = ({value}) => {
+    const filterByTotal = ({ value }) => {
         setShowByTotal(value)
         setCurrentPage(0)
     }
@@ -229,7 +230,7 @@ function Inventory() {
                 comment: val,
             }
         }
-        currentInventories[index] = {...inventory}
+        currentInventories[index] = { ...inventory }
         searchedData.length
             ? setSearchedData([...currentInventories])
             : setData([...currentInventories])
@@ -237,8 +238,8 @@ function Inventory() {
     const saveInventory = (index) => {
         const body = {
             inventory: searchedData.length
-                ? {...searchedData[index].inventory}
-                : {...data[index].inventory},
+                ? { ...searchedData[index].inventory }
+                : { ...data[index].inventory },
             currentPage: 0,
             countPage: showByTotal,
             search: {
@@ -301,7 +302,16 @@ function Inventory() {
     }, [searchedInventories])
 
     return (
-        <section>
+        <motion.section
+            key='content'
+            initial='collapsed'
+            animate='open'
+            exit='collapsed'
+            variants={{
+                open: { opacity: 1, height: 'auto' },
+                collapsed: { opacity: 0, height: 0 },
+            }}
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>
             <UniversalModal
                 body='complete'
                 toggleModal={toggleModal}
@@ -360,7 +370,7 @@ function Inventory() {
                     />
                 )}
             </div>
-        </section>
+        </motion.section>
     )
 }
 

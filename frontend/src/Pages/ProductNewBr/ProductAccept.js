@@ -1,6 +1,7 @@
 import React from 'react'
 import CardLink from '../../Components/Card/CardLink'
-import {uniqueId} from 'lodash'
+import { uniqueId } from 'lodash'
+import { motion } from 'framer-motion';
 
 function IncomingProduct() {
     const cardArr = [
@@ -35,7 +36,16 @@ function IncomingProduct() {
     ]
 
     return (
-        <section>
+        <motion.section
+            key='content'
+            initial='collapsed'
+            animate='open'
+            exit='collapsed'
+            variants={{
+                open: { opacity: 1, height: 'auto' },
+                collapsed: { opacity: 0, height: 0 },
+            }}
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>
             <div className='productTypeBlock mainPadding'>
                 <div className='productType'>
                     Maxsulot turlari :{' '}
@@ -65,7 +75,7 @@ function IncomingProduct() {
                     )
                 })}
             </div>
-        </section>
+        </motion.section>
     )
 }
 

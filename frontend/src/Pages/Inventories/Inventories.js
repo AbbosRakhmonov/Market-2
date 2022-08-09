@@ -1,25 +1,26 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import Table from '../../Components/Table/Table'
 import Pagination from '../../Components/Pagination/Pagination'
 import SearchForm from '../../Components/SearchForm/SearchForm.js'
-import {useDispatch, useSelector} from 'react-redux'
-import {universalToast} from '../../Components/ToastMessages/ToastMessages.js'
+import { useDispatch, useSelector } from 'react-redux'
+import { universalToast } from '../../Components/ToastMessages/ToastMessages.js'
 import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
-import {getConnectors} from './inventorieSlice.js'
+import { getConnectors } from './inventorieSlice.js'
+import { motion } from 'framer-motion'
 
 function Inventories() {
     const headers = [
-        {styles: 'w-[10%] text-start', title: '№'},
-        {styles: 'w-[10%] text-start', filter: 'createdAt', title: 'Sana'},
-        {styles: 'w-[10%] text-start', filter: 'id', title: 'ID'},
-        {styles: 'text-start', title: 'Maxsulotlar'},
-        {styles: 'w-[10%]', title: 'Holati'},
-        {styles: 'w-[10%]', title: ' '},
+        { styles: 'w-[10%] text-start', title: '№' },
+        { styles: 'w-[10%] text-start', filter: 'createdAt', title: 'Sana' },
+        { styles: 'w-[10%] text-start', filter: 'id', title: 'ID' },
+        { styles: 'text-start', title: 'Maxsulotlar' },
+        { styles: 'w-[10%]', title: 'Holati' },
+        { styles: 'w-[10%]', title: ' ' },
     ]
 
     const dispatch = useDispatch()
-    const {connectors, errorConnectors, clearErrorConnectors, loading, total} =
+    const { connectors, errorConnectors, clearErrorConnectors, loading, total } =
         useSelector((state) => state.inventoryConnectors)
     const [data, setData] = useState(connectors)
     const [showByTotal, setShowByTotal] = useState('10')
@@ -31,7 +32,7 @@ function Inventories() {
     const [endDate, setEndDate] = useState(new Date())
 
     // filter by total
-    const filterByTotal = ({value}) => {
+    const filterByTotal = ({ value }) => {
         setShowByTotal(value)
         setCurrentPage(0)
     }
@@ -62,7 +63,16 @@ function Inventories() {
         setFilteredDataTotal(total)
     }, [total])
     return (
-        <section>
+        <motion.section
+            key='content'
+            initial='collapsed'
+            animate='open'
+            exit='collapsed'
+            variants={{
+                open: { opacity: 1, height: 'auto' },
+                collapsed: { opacity: 0, height: 0 },
+            }}
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>
             <div className='inventoriesHead mainPadding'>
                 <div className='font-[400] text-[1.25rem] text-blue-900'>
                     Invertarizatsiyalar
@@ -101,7 +111,7 @@ function Inventories() {
                     />
                 )}
             </div>
-        </section>
+        </motion.section>
     )
 }
 

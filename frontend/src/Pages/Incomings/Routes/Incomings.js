@@ -1,20 +1,21 @@
-import React, {useCallback, useEffect, useState} from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import CardLink from '../../../Components/Card/CardLink'
-import {useDispatch, useSelector} from 'react-redux'
-import {uniqueId} from 'lodash'
-import {getIncomingConnectors, getSuppliers} from '../incomingSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { uniqueId } from 'lodash'
+import { getIncomingConnectors, getSuppliers } from '../incomingSlice'
 import Dates from '../../../Components/Dates/Dates'
 import SelectInput from '../../../Components/SelectInput/SelectInput'
 import FilterButtons from '../../../Components/FilterButtons/FilterButtons'
 import ResultIncomings from '../Components/ResultIncomings'
+import { motion } from 'framer-motion';
 
 function Incomings() {
     const dispatch = useDispatch()
     const {
-        market: {_id},
+        market: { _id },
     } = useSelector((state) => state.login)
-    const {currencyType} = useSelector((state) => state.currency)
-    const {incomingconnectors, suppliers} = useSelector(
+    const { currencyType } = useSelector((state) => state.currency)
+    const { incomingconnectors, suppliers } = useSelector(
         (state) => state.incoming
     )
 
@@ -64,7 +65,7 @@ function Incomings() {
     const addChnagedIncomings = (groups) => {
         const sumSupplier = (arr) => {
             let repeat = []
-            return arr.reduce((prev, {_id}) => {
+            return arr.reduce((prev, { _id }) => {
                 if (!repeat.includes(_id)) {
                     repeat.push(_id)
                     return prev + 1
@@ -115,7 +116,7 @@ function Incomings() {
             setSupplierSearch('')
         } else {
             const connectorsForSupplier = incomingconnectors.filter(
-                ({supplier}) => {
+                ({ supplier }) => {
                     return supplier._id === target
                 }
             )
@@ -149,11 +150,20 @@ function Incomings() {
     }, [dispatch, _id, beginDay, endDay])
 
     useEffect(() => {
-        dispatch(getSuppliers({_id}))
+        dispatch(getSuppliers({ _id }))
     }, [dispatch, _id])
 
     return (
-        <section>
+        <motion.section
+            key='content'
+            initial='collapsed'
+            animate='open'
+            exit='collapsed'
+            variants={{
+                open: { opacity: 1, height: 'auto' },
+                collapsed: { opacity: 0, height: 0 },
+            }}
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>
             <div className='flex items-center gap-[1.25rem] mainPadding'>
                 <Dates
                     label={'dan'}
@@ -212,7 +222,7 @@ function Incomings() {
                     )
                 })}
             </div>
-        </section>
+        </motion.section>
     )
 }
 

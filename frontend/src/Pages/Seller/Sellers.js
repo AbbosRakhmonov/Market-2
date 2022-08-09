@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react'
 import FieldContainer from './../../Components/FieldContainer/FieldContainer';
 import Button from './../../Components/Buttons/BtnAddRemove'
 import Table from './../../Components/Table/Table';
-import {useSelector, useDispatch} from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import Spinner from './../../Components/Spinner/SmallLoader'
 import NotFind from './../../Components/NotFind/NotFind'
-import {checkEmptyString} from '../../App/globalFunctions.js'
+import { checkEmptyString } from '../../App/globalFunctions.js'
+import { motion } from 'framer-motion'
 import {
     successAddSellerMessage,
     successUpdateSellerMessage,
@@ -28,7 +29,7 @@ function Sellers() {
     const {
         errorSellings,
         sellers,
-        loading ,
+        loading,
         successAddSelling,
         successUpdateSelling,
     } = useSelector((state) => state.sellers)
@@ -55,66 +56,66 @@ function Sellers() {
     const [sellerPassword, setSellerPassword] = useState('')
     const [sellerAgainPassword, setSellerAgainPassword] = useState('')
     const [currentSeller, setCurrentSeller] = useState('')
-   
+
     // handle Changed inputs 
     const addNewSeller = (e) => {
-    e && e.preventDefault()
-    const filter = checkEmptyString([sellerName,sellerSurname,sellerNumber,sellerLogin,sellerPassword,sellerAgainPassword])
-    if (filter) {
-        warningEmptyInput()
-    } 
-    if( sellerPassword !== sellerAgainPassword) {
-       universalToast("Sotuvchining paroli bilan tasdiqlash paroli mos kelmadi", "warning")
-    }  
-    if (!filter && sellerPassword === sellerAgainPassword){
-        const body = {
-            login : sellerLogin,
-            firstname : sellerName,
-            lastname : sellerSurname,
-            fathername : user.lastname,
-            phone : sellerNumber,
-            password : sellerPassword,
-            type: "Seller",
-            user : user._id,
-         }
-     dispatch(addSeller(body))
-    }
-        
-    
+        e && e.preventDefault()
+        const filter = checkEmptyString([sellerName, sellerSurname, sellerNumber, sellerLogin, sellerPassword, sellerAgainPassword])
+        if (filter) {
+            warningEmptyInput()
+        }
+        if (sellerPassword !== sellerAgainPassword) {
+            universalToast("Sotuvchining paroli bilan tasdiqlash paroli mos kelmadi", "warning")
+        }
+        if (!filter && sellerPassword === sellerAgainPassword) {
+            const body = {
+                login: sellerLogin,
+                firstname: sellerName,
+                lastname: sellerSurname,
+                fathername: user.lastname,
+                phone: sellerNumber,
+                password: sellerPassword,
+                type: "Seller",
+                user: user._id,
+            }
+            dispatch(addSeller(body))
+        }
+
+
     }
 
     const handleEdit = (e) => {
-    e && e.preventDefault()
-        const filter = checkEmptyString([sellerName,sellerSurname,sellerNumber,sellerLogin])
+        e && e.preventDefault()
+        const filter = checkEmptyString([sellerName, sellerSurname, sellerNumber, sellerLogin])
         if (filter) {
             warningEmptyInput()
-        } 
-        if( sellerPassword !== sellerAgainPassword) {
-           universalToast("Sotuvchining paroli bilan tasdiqlash paroli mos kelmadi", "warning")
-        }  
-        if (!filter && sellerPassword === sellerAgainPassword){
-             const body = {
-                _id : currentSeller._id,
-                login : sellerLogin,
-                firstname : sellerName,
-                lastname : sellerSurname,
-                fathername : user.lastname,
-                phone : sellerNumber,
-                type : "Seller",
-                user : user._id,
+        }
+        if (sellerPassword !== sellerAgainPassword) {
+            universalToast("Sotuvchining paroli bilan tasdiqlash paroli mos kelmadi", "warning")
+        }
+        if (!filter && sellerPassword === sellerAgainPassword) {
+            const body = {
+                _id: currentSeller._id,
+                login: sellerLogin,
+                firstname: sellerName,
+                lastname: sellerSurname,
+                fathername: user.lastname,
+                phone: sellerNumber,
+                type: "Seller",
+                user: user._id,
             }
-           dispatch(updateSeller(body))
-        } 
+            dispatch(updateSeller(body))
+        }
     }
 
     const clearForm = (e) => {
-      e && e.preventDefault()
-      setSellerName('')
-      setSellerSurname('')
-      setSellerNumber('')
-      setSellerLogin('')
-      setSellerPassword('');
-      setSellerAgainPassword('');
+        e && e.preventDefault()
+        setSellerName('')
+        setSellerSurname('')
+        setSellerNumber('')
+        setSellerLogin('')
+        setSellerPassword('');
+        setSellerAgainPassword('');
     }
 
     const handleEditSeller = (seller) => {
@@ -127,16 +128,16 @@ function Sellers() {
     }
 
     useEffect(() => {
-        if(errorSellings){
+        if (errorSellings) {
             universalToast(errorSellings, 'error')
             dispatch(clearErrorSellers())
         }
-        if(successAddSelling){
+        if (successAddSelling) {
             successAddSellerMessage()
             dispatch(clearSuccessAddSeller())
             clearForm()
         }
-        if(successUpdateSelling){
+        if (successUpdateSelling) {
             successUpdateSellerMessage()
             dispatch(clearSuccessUpdateSeller())
             setStickForm(false);
@@ -160,16 +161,25 @@ function Sellers() {
 
 
 
-    return(
-        <section> 
-              <form
+    return (
+        <motion.section
+            key='content'
+            initial='collapsed'
+            animate='open'
+            exit='collapsed'
+            variants={{
+                open: { opacity: 1, height: 'auto' },
+                collapsed: { opacity: 0, height: 0 },
+            }}
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>
+            <form
                 className={`unitFormStyle  ${stickyForm && 'stickyForm'
                     } flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200`}
-              >
+            >
                 <div className='exchangerate-style w-full'>
                     <FieldContainer
                         value={sellerName}
-                        onChange={(e) => {setSellerName(e.target.value)}}
+                        onChange={(e) => { setSellerName(e.target.value) }}
                         label={'Ismi'}
                         placeholder={'misol: Jasurbek'}
                         maxWidth={'w-[21.75rem]'}
@@ -179,7 +189,7 @@ function Sellers() {
                     />
                     <FieldContainer
                         value={sellerSurname}
-                        onChange={(e) => {setSellerSurname(e.target.value)}}
+                        onChange={(e) => { setSellerSurname(e.target.value) }}
                         label={'Familiyasi'}
                         placeholder={'Toshev'}
                         maxWidth={'w-[21.75rem]'}
@@ -189,7 +199,7 @@ function Sellers() {
                     />
                     <FieldContainer
                         value={sellerNumber}
-                        onChange={(e) => {setSellerNumber(e.target.value)}}
+                        onChange={(e) => { setSellerNumber(e.target.value) }}
                         label={'Telefon raqami'}
                         placeholder={'+998 99 123 45 67'}
                         type={'number'}
@@ -203,7 +213,7 @@ function Sellers() {
                 <div className='exchangerate-style mt-[1.25rem]'>
                     <FieldContainer
                         value={sellerLogin}
-                        onChange={(e) => {setSellerLogin(e.target.value)}}
+                        onChange={(e) => { setSellerLogin(e.target.value) }}
                         label={'Login'}
                         placeholder={'123456'}
                         maxWidth={'12.75rem'}
@@ -213,7 +223,7 @@ function Sellers() {
                     />
                     <FieldContainer
                         value={sellerPassword}
-                        onChange={(e) => {setSellerPassword(e.target.value)}}
+                        onChange={(e) => { setSellerPassword(e.target.value) }}
                         label={'Parol'}
                         placeholder={'123456'}
                         maxWidth={'12.75rem'}
@@ -223,7 +233,7 @@ function Sellers() {
                     />
                     <FieldContainer
                         value={sellerAgainPassword}
-                        onChange={(e) => {setSellerAgainPassword(e.target.value)}}
+                        onChange={(e) => { setSellerAgainPassword(e.target.value) }}
                         label={'Parolni tasdiqlash'}
                         placeholder={'123456'}
                         maxWidth={'12.75rem'}
@@ -235,7 +245,7 @@ function Sellers() {
                         className={'flex gap-[1.25rem] grow w-[19.5rem]'}
                     >
                         <Button
-                             onClick={stickyForm ? handleEdit : addNewSeller}
+                            onClick={stickyForm ? handleEdit : addNewSeller}
                             add={!stickyForm}
                             edit={stickyForm}
                             text={
@@ -269,7 +279,7 @@ function Sellers() {
                 )}
             </div>
 
-        </section>
+        </motion.section>
     )
 }
 

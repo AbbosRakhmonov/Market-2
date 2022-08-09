@@ -1,8 +1,10 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import FieldContainer from '../../Components/FieldContainer/FieldContainer'
 import Button from '../../Components/Buttons/BtnAddRemove'
 import Table from '../../Components/Table/Table'
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { motion } from "framer-motion"
+
 import {
     successAddExchangeMessage,
     successDeleteExchangeMessage,
@@ -35,14 +37,14 @@ const Exchangerate = () => {
     } = useSelector((state) => state.exchangerate)
 
     const {
-        market: {_id},
+        market: { _id },
     } = useSelector((state) => state.login)
 
     const headers = [
-        {title: '№', styles: 'w-[8%] text-left'},
-        {title: 'Sana', styles: 'w-[17%] text-center'},
-        {title: 'Kurs', styles: 'w-[67%] text-center'},
-        {title: '', styles: 'w-[8%] text-center'},
+        { title: '№', styles: 'w-[8%] text-left' },
+        { title: 'Sana', styles: 'w-[17%] text-center' },
+        { title: 'Kurs', styles: 'w-[67%] text-center' },
+        { title: '', styles: 'w-[8%] text-center' },
     ]
 
     const [data, setData] = useState(exchangerate)
@@ -68,7 +70,7 @@ const Exchangerate = () => {
         toggleModal()
     }
     const handleClickApproveToDelete = () => {
-        const body = {_id: deletedExchange._id}
+        const body = { _id: deletedExchange._id }
         dispatch(deleteExchangerate(body))
         handleClickCancelToDelete()
     }
@@ -79,9 +81,9 @@ const Exchangerate = () => {
 
     const addNewExchange = (e) => {
         e.preventDefault()
-        const body = {exchangerate: exchangeName, market: _id}
+        const body = { exchangerate: exchangeName, market: _id }
         if (exchangeName === "") {
-            return universalToast("Valyuta kursini kiriting!","error")
+            return universalToast("Valyuta kursini kiriting!", "error")
         }
         dispatch(addExchangerate(body))
 
@@ -150,11 +152,20 @@ const Exchangerate = () => {
     }, [exchangerate])
 
     return (
-        <section>
+        <motion.section
+            key='content'
+            initial='collapsed'
+            animate='open'
+            exit='collapsed'
+            variants={{
+                open: { opacity: 1, height: 'auto' },
+                collapsed: { opacity: 0, height: 0 },
+            }}
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
+        >
             <UniversalModal
-                headerText={`${
-                    deletedExchange && deletedExchange.exchangerate
-                } kurs narxini o'chirishni tasdiqlaysizmi?`}
+                headerText={`${deletedExchange && deletedExchange.exchangerate
+                    } kurs narxini o'chirishni tasdiqlaysizmi?`}
                 title="O'chirilgan kurs narxini tiklashning imkoni mavjud emas!"
                 toggleModal={toggleModal}
                 body={'approve'}
@@ -163,9 +174,8 @@ const Exchangerate = () => {
                 isOpen={modalVisible}
             />
             <form
-                className={`unitFormStyle ${
-                    stickyForm && 'stickyForm'
-                } flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200`}
+                className={`unitFormStyle ${stickyForm && 'stickyForm'
+                    } flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200`}
             >
                 <div className='exchangerate-style'>
                     <FieldContainer
@@ -213,7 +223,7 @@ const Exchangerate = () => {
                     />
                 )}
             </div>
-        </section>
+        </motion.section>
     )
 }
 

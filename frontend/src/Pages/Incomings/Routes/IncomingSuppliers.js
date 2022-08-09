@@ -1,11 +1,12 @@
-import React, {useCallback, useEffect, useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
-import {useLocation} from 'react-router-dom'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 import ExportBtn from '../../../Components/Buttons/ExportBtn'
 import CardBtn from '../../../Components/Card/CardBtn'
 import LinkToBack from '../../../Components/LinkToBack/LinkToBack'
 import Pagination from '../../../Components/Pagination/Pagination'
 import ResultIncomings from '../Components/ResultIncomings'
+import { motion } from "framer-motion"
 import {
     clearSuccesDelete,
     clearSuccessUpdate,
@@ -15,15 +16,15 @@ import {
     updateIncoming,
 } from '../incomingSlice'
 import Table from '../../../Components/Table/Table'
-import {universalSort, UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
+import { universalSort, UsdToUzs, UzsToUsd } from '../../../App/globalFunctions'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
-import {uniqueId} from 'lodash'
+import { uniqueId } from 'lodash'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
 
 const IncomingSuppliers = () => {
     const dispatch = useDispatch()
     const {
-        market: {_id},
+        market: { _id },
     } = useSelector((state) => state.login)
     const {
         incomings,
@@ -32,10 +33,10 @@ const IncomingSuppliers = () => {
         successUpdate,
         successDelete,
     } = useSelector((state) => state.incoming)
-    const {currencyType, currency} = useSelector((state) => state.currency)
+    const { currencyType, currency } = useSelector((state) => state.currency)
 
     const {
-        state: {date, supplier},
+        state: { date, supplier },
     } = useLocation()
 
     let beginDay = new Date(new Date(date).setHours(3, 0, 0, 0)).toISOString()
@@ -81,7 +82,7 @@ const IncomingSuppliers = () => {
                     createdAt: new Date(
                         incoming.createdAt
                     ).toLocaleDateString(),
-                    supplier: {...incoming.supplier},
+                    supplier: { ...incoming.supplier },
                     products: incoming.incoming.length,
                     pieces: pieces(incoming.incoming),
                     totalprice: incoming.total,
@@ -201,7 +202,7 @@ const IncomingSuppliers = () => {
                     market: _id,
                     startDate: beginDay,
                     endDate: endDay,
-                    product: {...editedIncoming},
+                    product: { ...editedIncoming },
                 })
             )
         } else {
@@ -229,7 +230,7 @@ const IncomingSuppliers = () => {
     const searchName = (e) => {
         let target = e.target.value.toLowerCase()
         setCurrentData([
-            ...currentDataStorage.filter(({product}) =>
+            ...currentDataStorage.filter(({ product }) =>
                 product.productdata.name.toLowerCase().includes(target)
             ),
         ])
@@ -243,7 +244,7 @@ const IncomingSuppliers = () => {
     const searchCode = (e) => {
         let target = e.target.value.toLowerCase()
         setCurrentData([
-            ...currentDataStorage.filter(({product}) =>
+            ...currentDataStorage.filter(({ product }) =>
                 product.productdata.code.includes(target)
             ),
         ])
@@ -279,7 +280,7 @@ const IncomingSuppliers = () => {
                 market: _id,
                 beginDay,
                 endDay,
-                product: {...deletedIncoming},
+                product: { ...deletedIncoming },
             })
         )
         setModal(false)
@@ -424,7 +425,16 @@ const IncomingSuppliers = () => {
     ]
 
     return (
-        <div className=''>
+        <motion.div className=''
+            key='content'
+            initial='collapsed'
+            animate='open'
+            exit='collapsed'
+            variants={{
+                open: { opacity: 1, height: 'auto' },
+                collapsed: { opacity: 0, height: 0 },
+            }}
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>
             <div className='flex items-center justify-between mainPadding'>
                 <LinkToBack link={'/maxsulotlar/qabul/qabullar'} />
                 <ResultIncomings
@@ -493,7 +503,7 @@ const IncomingSuppliers = () => {
                 closeModal={closeModal}
                 toggleModal={closeModal}
             />
-        </div>
+        </motion.div>
     )
 }
 
