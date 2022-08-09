@@ -1,14 +1,15 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import FieldContainer from '../../Components/FieldContainer/FieldContainer.js'
 import Button from '../../Components/Buttons/BtnAddRemove.js'
 import SearchForm from '../../Components/SearchForm/SearchForm.js'
 import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
 import Table from '../../Components/Table/Table.js'
-import {useDispatch, useSelector} from 'react-redux'
-import {regexForTypeNumber} from '../../Components/RegularExpressions/RegularExpressions.js'
-import {checkEmptyString, universalSort} from '../../App/globalFunctions.js'
+import { useDispatch, useSelector } from 'react-redux'
+import { regexForTypeNumber } from '../../Components/RegularExpressions/RegularExpressions.js'
+import { checkEmptyString, universalSort } from '../../App/globalFunctions.js'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
+import { motion } from 'framer-motion'
 import {
     successAddCategoryMessage,
     successDeleteCategoryMessage,
@@ -103,7 +104,7 @@ const Category = () => {
     }
 
     // filter by total
-    const filterByTotal = ({value}) => {
+    const filterByTotal = ({ value }) => {
         setShowByTotal(value)
         setCurrentPage(0)
     }
@@ -192,8 +193,8 @@ const Category = () => {
         let val = e.target.value
         let valForSearch = val.replace(/\s+/g, ' ').trim()
         setSearchByCode(val)
-        ;(searchedData.length > 0 || totalSearched > 0) &&
-            dispatch(clearSearchedCategories())
+            ; (searchedData.length > 0 || totalSearched > 0) &&
+                dispatch(clearSearchedCategories())
         if (valForSearch === '') {
             setData(categories)
             setFilteredDataTotal(total)
@@ -209,8 +210,8 @@ const Category = () => {
         let val = e.target.value
         let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
         setSearchByName(val)
-        ;(searchedData.length > 0 || totalSearched > 0) &&
-            dispatch(clearSearchedCategories())
+            ; (searchedData.length > 0 || totalSearched > 0) &&
+                dispatch(clearSearchedCategories())
         if (valForSearch === '') {
             setData(categories)
             setFilteredDataTotal(total)
@@ -374,13 +375,21 @@ const Category = () => {
     }, [searchedCategories])
 
     return (
-        <section>
+        <motion.section
+            key='content'
+            initial='collapsed'
+            animate='open'
+            exit='collapsed'
+            variants={{
+                open: { opacity: 1, height: 'auto' },
+                collapsed: { opacity: 0, height: 0 },
+            }}
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>
             <UniversalModal
                 body='approve'
                 toggleModal={toggleModal}
-                headerText={`${
-                    deletedCategory && deletedCategory.code
-                } - kategoriyani o'chirishni tasdiqlaysizmi?`}
+                headerText={`${deletedCategory && deletedCategory.code
+                    } - kategoriyani o'chirishni tasdiqlaysizmi?`}
                 title={
                     "O'chirilgan kategoriyalarni tiklashning imkoni mavjud emas!"
                 }
@@ -389,9 +398,8 @@ const Category = () => {
                 isOpen={modalVisible}
             />
             <form
-                className={`flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200 ${
-                    stickyForm ? 'stickyForm' : ''
-                }`}
+                className={`flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200 ${stickyForm ? 'stickyForm' : ''
+                    }`}
             >
                 <div className='supplier-style'>
                     <FieldContainer
@@ -466,7 +474,7 @@ const Category = () => {
                     />
                 )}
             </div>
-        </section>
+        </motion.section>
     )
 }
 

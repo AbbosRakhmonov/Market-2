@@ -1,13 +1,14 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '../../Components/Buttons/BtnAddRemove'
 import Table from '../../Components/Table/Table'
 import FieldContainer from '../../Components/FieldContainer/FieldContainer'
 import Pagination from '../../Components/Pagination/Pagination'
 import SearchForm from '../../Components/SearchForm/SearchForm'
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import UniversalModal from '../../Components/Modal/UniversalModal'
 import Spinner from '../../Components/Spinner/SmallLoader'
 import NotFind from '../../Components/NotFind/NotFind'
+import { motion } from 'framer-motion'
 import {
     successAddPackmanMessage,
     successDeletePackmanMessage,
@@ -27,7 +28,7 @@ import {
     getPackmansByFilter,
     updatePackman,
 } from './packmanSlice'
-import {checkEmptyString} from '../../App/globalFunctions.js'
+import { checkEmptyString } from '../../App/globalFunctions.js'
 
 function Packman() {
     const dispatch = useDispatch()
@@ -44,9 +45,9 @@ function Packman() {
     } = useSelector((state) => state.packmans)
 
     const headers = [
-        {styles: 'w-[10%] text-start', filter: '', title: '№'},
-        {styles: 'w-[80%] text-start', filter: '', title: 'Agentlar'},
-        {styles: 'w-[10%]', filter: '', title: ' '},
+        { styles: 'w-[10%] text-start', filter: '', title: '№' },
+        { styles: 'w-[80%] text-start', filter: '', title: 'Agentlar' },
+        { styles: 'w-[10%]', filter: '', title: ' ' },
     ]
 
     //states
@@ -149,7 +150,7 @@ function Packman() {
     }
 
     //filter by total
-    const filterByTotal = ({value}) => {
+    const filterByTotal = ({ value }) => {
         setShowByTotal(value)
         setCurrentPage(0)
     }
@@ -159,8 +160,8 @@ function Packman() {
         let val = e.target.value
         setSearchByName(val)
         let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
-        ;(searchedData.length > 0 || totalSearched > 0) &&
-            dispatch(clearSearchedPackmans())
+            ; (searchedData.length > 0 || totalSearched > 0) &&
+                dispatch(clearSearchedPackmans())
         if (valForSearch === '') {
             setData(packmans)
             setFilteredDataTotal(total)
@@ -242,11 +243,20 @@ function Packman() {
     }, [searchedPackmans])
 
     return (
-        <section>
+        <motion.section
+            key='content'
+            initial='collapsed'
+            animate='open'
+            exit='collapsed'
+            variants={{
+                open: { opacity: 1, height: 'auto' },
+                collapsed: { opacity: 0, height: 0 },
+            }}
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
+        >
             <UniversalModal
-                headerText={`${
-                    deletedPackman && deletedPackman.name
-                } ismli agentni o'chirishni tasdiqlaysizmi?`}
+                headerText={`${deletedPackman && deletedPackman.name
+                    } ismli agentni o'chirishni tasdiqlaysizmi?`}
                 title="O'chirilgan agentni tiklashning imkoni mavjud emas!"
                 toggleModal={toggleModal}
                 body={'approve'}
@@ -314,7 +324,7 @@ function Packman() {
                     />
                 )}
             </div>
-        </section>
+        </motion.section>
     )
 }
 

@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import SelectInput from '../../../Components/SelectInput/SelectInput'
 import Table from '../../../Components/Table/Table'
+import { motion } from 'framer-motion'
 import {
     addIncoming,
     addTemporary,
@@ -12,21 +13,21 @@ import {
     getProducts,
     getSuppliers,
 } from '../incomingSlice'
-import {ConfirmBtn, SaveBtn} from '../../../Components/Buttons/SaveConfirmBtn'
-import {CheckIncoming} from '../Functions/CheckIncoming'
+import { ConfirmBtn, SaveBtn } from '../../../Components/Buttons/SaveConfirmBtn'
+import { CheckIncoming } from '../Functions/CheckIncoming'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
-import {UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
-import {useNavigate} from 'react-router-dom'
+import { UsdToUzs, UzsToUsd } from '../../../App/globalFunctions'
+import { useNavigate } from 'react-router-dom'
 
 const RegisterIncoming = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const {
-        market: {_id},
+        market: { _id },
         user,
     } = useSelector((state) => state.login)
-    const {currency, currencyType} = useSelector((state) => state.currency)
-    const {suppliers, products, successAdd, successTemporary, temporary} =
+    const { currency, currencyType } = useSelector((state) => state.currency)
+    const { suppliers, products, successAdd, successTemporary, temporary } =
         useSelector((state) => state.incoming)
 
     // states
@@ -85,7 +86,7 @@ const RegisterIncoming = () => {
             _id: product._id,
             oldprice: product.price.incomingprice,
             oldpriceuzs: product.price.incomingpriceuzs,
-            product: {...product.productdata, _id: product._id},
+            product: { ...product.productdata, _id: product._id },
             pieces: 0,
             unitprice: 0,
             unitpriceuzs: 0,
@@ -96,7 +97,7 @@ const RegisterIncoming = () => {
             sellingprice: product.price.sellingprice,
             sellingpriceuzs: product.price.sellingpriceuzs,
             procient: 0,
-            supplier: {...supplier},
+            supplier: { ...supplier },
         })
         setModal(true)
     }
@@ -114,7 +115,7 @@ const RegisterIncoming = () => {
 
         const product = (!id && {
             ...incomingModal,
-        }) || {...incomings.filter((incoming) => incoming._id === id)[0]}
+        }) || { ...incomings.filter((incoming) => incoming._id === id)[0] }
 
         const countUsd =
             currencyType === 'USD' ? target : UzsToUsd(target, currency)
@@ -208,7 +209,7 @@ const RegisterIncoming = () => {
     // request functions
     const createIncoming = () => {
         const postincoming = incomings.map((incoming) => {
-            let obj = {...incoming}
+            let obj = { ...incoming }
             delete obj._id
             delete obj.procient
             return obj
@@ -298,7 +299,7 @@ const RegisterIncoming = () => {
     }, [dispatch, _id, suppliers])
 
     useEffect(() => {
-        products.length < 1 && dispatch(getProducts({market: _id}))
+        products.length < 1 && dispatch(getProducts({ market: _id }))
         products.length > 0 && changeProductsData(products)
     }, [dispatch, _id, products])
 
@@ -338,7 +339,16 @@ const RegisterIncoming = () => {
     }, [dispatch])
 
     return (
-        <section>
+        <motion.section
+            key='content'
+            initial='collapsed'
+            animate='open'
+            exit='collapsed'
+            variants={{
+                open: { opacity: 1, height: 'auto' },
+                collapsed: { opacity: 0, height: 0 },
+            }}
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>
             <div className='flex items-center mainPadding'>
                 <div className='w-full pr-[1.25rem] border-r border-blue-100'>
                     <SelectInput
@@ -393,7 +403,7 @@ const RegisterIncoming = () => {
                 approveFunction={addProductToIncomings}
                 currency={currencyType}
             />
-        </section>
+        </motion.section>
     )
 }
 

@@ -1,7 +1,8 @@
-import React, {useCallback, useEffect, useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
-import {useNavigate} from 'react-router-dom'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import Table from '../../../Components/Table/Table'
+import { motion } from 'framer-motion'
 import {
     deleteTemporary,
     getTemporary,
@@ -13,10 +14,10 @@ const SavedIncomings = () => {
     let navigate = useNavigate()
 
     const {
-        market: {_id},
+        market: { _id },
     } = useSelector((state) => state.login)
-    const {currencyType} = useSelector((state) => state.currency)
-    const {temporaries} = useSelector((state) => state.incoming)
+    const { currencyType } = useSelector((state) => state.currency)
+    const { temporaries } = useSelector((state) => state.incoming)
 
     const [currentTemporaryData, setCurrentTemporaryData] = useState([])
 
@@ -27,7 +28,7 @@ const SavedIncomings = () => {
             let {
                 _id,
                 createdAt,
-                temporaryincoming: {supplier, incomings},
+                temporaryincoming: { supplier, incomings },
             } = temp
             return {
                 _id,
@@ -115,7 +116,16 @@ const SavedIncomings = () => {
     ]
 
     return (
-        <div className='mainPadding'>
+        <motion.div className='mainPadding'
+            key='content'
+            initial='collapsed'
+            animate='open'
+            exit='collapsed'
+            variants={{
+                open: { opacity: 1, height: 'auto' },
+                collapsed: { opacity: 0, height: 0 },
+            }}
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>
             {currentTemporaryData.length > 0 ? (
                 <Table
                     page={'temporaryincoming'}
@@ -128,7 +138,7 @@ const SavedIncomings = () => {
             ) : (
                 <div>Saqlangan qabullar mavjud emas</div>
             )}
-        </div>
+        </motion.div>
     )
 }
 

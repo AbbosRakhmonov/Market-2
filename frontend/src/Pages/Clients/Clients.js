@@ -1,13 +1,14 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import FieldContainer from '../../Components/FieldContainer/FieldContainer'
 import Button from '../../Components/Buttons/BtnAddRemove'
 import Pagination from '../../Components/Pagination/Pagination'
 import Table from '../../Components/Table/Table'
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
 import SearchForm from '../../Components/SearchForm/SearchForm'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
+import { motion } from 'framer-motion'
 import {
     successAddSupplierMessage,
     successDeleteSupplierMessage,
@@ -28,7 +29,7 @@ import {
     getClientsByFilter,
     updateClients,
 } from './clientsSlice'
-import {checkEmptyString} from '../../App/globalFunctions.js'
+import { checkEmptyString } from '../../App/globalFunctions.js'
 
 const ClientsPage = () => {
     const dispatch = useDispatch()
@@ -47,10 +48,10 @@ const ClientsPage = () => {
     } = useSelector((state) => state.clients)
 
     const headers = [
-        {title: '№', styles: 'w-[8%] text-left'},
-        {title: 'Agent', styles: 'w-[41%] text-left'},
-        {title: 'Mijoz', styles: 'w-[41%] text-left'},
-        {title: '', styles: 'w-[8%] text-left'},
+        { title: '№', styles: 'w-[8%] text-left' },
+        { title: 'Agent', styles: 'w-[41%] text-left' },
+        { title: 'Mijoz', styles: 'w-[41%] text-left' },
+        { title: '', styles: 'w-[8%] text-left' },
     ]
 
     // states
@@ -80,7 +81,7 @@ const ClientsPage = () => {
     const handleEditClients = (client) => {
         setCurrentClient(client)
         client.packman &&
-            setPackman({label: client.packman.name, value: client.packman._id})
+            setPackman({ label: client.packman.name, value: client.packman._id })
         setClientName(client.name)
         setStickyForm(true)
     }
@@ -157,7 +158,7 @@ const ClientsPage = () => {
     }
 
     // filter by total
-    const filterByTotal = ({value}) => {
+    const filterByTotal = ({ value }) => {
         setShowByTotal(value)
         setCurrentPage(0)
     }
@@ -167,8 +168,8 @@ const ClientsPage = () => {
         let val = e.target.value
         let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
         setSearchByName(val)
-        ;(searchedData.length > 0 || totalSearched > 0) &&
-            dispatch(clearSearchedClients())
+            ; (searchedData.length > 0 || totalSearched > 0) &&
+                dispatch(clearSearchedClients())
         if (val === '') {
             setData(clients)
             setFilteredDataTotal(total)
@@ -255,17 +256,26 @@ const ClientsPage = () => {
     }, [searchedClients])
     useEffect(() => {
         const options = packmans.map((packman) => {
-            return {label: packman.name, value: packman._id}
+            return { label: packman.name, value: packman._id }
         })
         setPackmanOptions(options)
     }, [packmans])
 
     return (
-        <section>
+        <motion.section
+            key='content'
+            initial='collapsed'
+            animate='open'
+            exit='collapsed'
+            variants={{
+                open: { opacity: 1, height: 'auto' },
+                collapsed: { opacity: 0, height: 0 },
+            }}
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
+        >
             <UniversalModal
-                headerText={`${
-                    deletedCLients && deletedCLients.name
-                } ismli mijozni o'chirishni tasdiqlaysizmi?`}
+                headerText={`${deletedCLients && deletedCLients.name
+                    } ismli mijozni o'chirishni tasdiqlaysizmi?`}
                 title="O'chirilgan mijozni tiklashning imkoni mavjud emas!"
                 toggleModal={toggleModal}
                 body={'approve'}
@@ -274,9 +284,8 @@ const ClientsPage = () => {
                 isOpen={modalVisible}
             />
             <form
-                className={`flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200 ${
-                    stickyForm && 'stickyForm'
-                }`}
+                className={`flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200 ${stickyForm && 'stickyForm'
+                    }`}
             >
                 <div className='supplier-style'>
                     <FieldContainer
@@ -348,7 +357,7 @@ const ClientsPage = () => {
                     />
                 )}
             </div>
-        </section>
+        </motion.section>
     )
 }
 

@@ -1,14 +1,15 @@
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from 'react'
 import Logo from '../../Images/logo-lg.svg'
 import Input from '../../Components/Inputs/Input'
-import {clearError, signIn} from './loginSlice'
-import {useDispatch, useSelector} from 'react-redux'
+import { clearError, signIn } from './loginSlice'
+import { useDispatch, useSelector } from 'react-redux'
 import Timebar from '../../Components/TimeBar/Timebar'
-import {universalToast} from '../../Components/ToastMessages/ToastMessages'
+import { universalToast } from '../../Components/ToastMessages/ToastMessages'
+import { motion } from 'framer-motion';
 
 function Login() {
     const dispatch = useDispatch()
-    const {loading, error} = useSelector((state) => state.login)
+    const { loading, error } = useSelector((state) => state.login)
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
     const handleChangeLogin = (e) => {
@@ -36,7 +37,16 @@ function Login() {
         }
     }, [error, dispatch])
     return (
-        <section className={'loginPage flex items-center justify-center'}>
+        <motion.section className={'loginPage flex items-center justify-center'}
+            key='content'
+            initial='collapsed'
+            animate='open'
+            exit='collapsed'
+            variants={{
+                open: { opacity: 1, height: 'auto' },
+                collapsed: { opacity: 0, height: 0 },
+            }}
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>
             <div className='loginCircle relative flex items-center justify-center'>
                 <div className='bg-circle-1 w-full h-full rounded-full backdrop-blur-[10px] bg-white-400 absolute left-0 right-0 top-0 bottom-0'></div>
                 <div className='bg-circle-2 rounded-full bg-white-900 z-20 flex flex-col gap-[1.875rem] justify-center items-center'>
@@ -87,7 +97,7 @@ function Login() {
                 </div>
                 <Timebar />
             </div>
-        </section>
+        </motion.section>
     )
 }
 

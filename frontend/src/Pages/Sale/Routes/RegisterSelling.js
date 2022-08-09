@@ -1,14 +1,15 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import Checkbox from '../../../Components/Checkbox/Checkbox.js'
 import FieldContainer from '../../../Components/FieldContainer/FieldContainer.js'
 import Table from '../../../Components/Table/Table.js'
-import {useDispatch, useSelector} from 'react-redux'
-import {IoAttach} from 'react-icons/io5'
+import { useDispatch, useSelector } from 'react-redux'
+import { IoAttach } from 'react-icons/io5'
 import CategoryCard from '../../../Components/CategoryCard/CategoryCard.js'
 import NotFind from '../../../Components/NotFind/NotFind.js'
-import {getAllCategories} from '../../Category/categorySlice.js'
+import { getAllCategories } from '../../Category/categorySlice.js'
 import Spinner from '../../../Components/Spinner/SmallLoader.js'
 import SmallLoader from '../../../Components/Spinner/SmallLoader.js'
+import { motion } from 'framer-motion'
 import {
     addPayment,
     getAllProducts,
@@ -16,11 +17,11 @@ import {
     makePayment,
     savePayment,
 } from '../Slices/registerSellingSlice.js'
-import {deleteSavedPayment} from '../Slices/savedSellingsSlice.js'
-import {getAllPackmans} from '../../Clients/clientsSlice.js'
+import { deleteSavedPayment } from '../Slices/savedSellingsSlice.js'
+import { getAllPackmans } from '../../Clients/clientsSlice.js'
 import SearchInput from '../../../Components/Inputs/SearchInput.js'
 import UniversalModal from '../../../Components/Modal/UniversalModal.js'
-import {UsdToUzs, UzsToUsd} from '../../../App/globalFunctions.js'
+import { UsdToUzs, UzsToUsd } from '../../../App/globalFunctions.js'
 import {
     universalToast,
     warningLessSellPayment,
@@ -29,19 +30,19 @@ import {
     warningSaleProductsEmpty,
 } from '../../../Components/ToastMessages/ToastMessages.js'
 import CustomerPayment from '../../../Components/Payment/CustomerPayment.js'
-import {useLocation, useNavigate} from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const RegisterSelling = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const location = useLocation()
-    const {user} = useSelector((state) => state.login)
-    const {currencyType, currency} = useSelector((state) => state.currency)
-    const {allcategories, loading} = useSelector((state) => state.category)
-    const {allProducts, clients, loadingMakePayment} = useSelector(
+    const { user } = useSelector((state) => state.login)
+    const { currencyType, currency } = useSelector((state) => state.currency)
+    const { allcategories, loading } = useSelector((state) => state.category)
+    const { allProducts, clients, loadingMakePayment } = useSelector(
         (state) => state.registerSelling
     )
-    const {packmans} = useSelector((state) => state.clients)
+    const { packmans } = useSelector((state) => state.clients)
     const [filteredProducts, setFilteredProducts] = useState([])
     const [selectedProduct, setSelectedProduct] = useState('')
     const [checked, setChecked] = useState(false)
@@ -83,13 +84,13 @@ const RegisterSelling = () => {
     const [temporary, setTemporary] = useState(null)
     const [saleConnectorId, setSaleConnectorId] = useState(null)
     const headers = [
-        {title: '№'},
-        {title: 'Kodi'},
-        {title: 'Nomi'},
-        {title: 'Soni'},
-        {title: 'Narxi'},
-        {title: 'Jami', styles: 'w-[10rem]'},
-        {title: ''},
+        { title: '№' },
+        { title: 'Kodi' },
+        { title: 'Nomi' },
+        { title: 'Soni' },
+        { title: 'Narxi' },
+        { title: 'Jami', styles: 'w-[10rem]' },
+        { title: '' },
     ]
     const toggleModal = () => {
         setModalBody('')
@@ -112,7 +113,7 @@ const RegisterSelling = () => {
         setPaymentDiscountPercent('')
         setPaymentDebt(0)
         setPaymentDebtUzs(0)
-        setDiscountSelectOption({label: '%', value: '%'})
+        setDiscountSelectOption({ label: '%', value: '%' })
     }
     const toggleCheckModal = () => {
         setModalVisible(!modalVisible)
@@ -491,9 +492,9 @@ const RegisterSelling = () => {
             },
             packman: packmanValue
                 ? {
-                      _id: packmanValue.value,
-                      name: packmanValue.label,
-                  }
+                    _id: packmanValue.value,
+                    name: packmanValue.label,
+                }
                 : null,
             discount: {
                 discount: Number(paymentDiscount),
@@ -523,7 +524,7 @@ const RegisterSelling = () => {
             saleconnectorid: saleConnectorId,
         }
         dispatch(saleConnectorId ? addPayment(body) : makePayment(body)).then(
-            ({payload}) => {
+            ({ payload }) => {
                 setModalData(payload)
                 setTimeout(() => {
                     setModalBody('checkSell')
@@ -533,7 +534,7 @@ const RegisterSelling = () => {
             }
         )
         if (temporary) {
-            dispatch(deleteSavedPayment({_id: temporary._id}))
+            dispatch(deleteSavedPayment({ _id: temporary._id }))
             setTemporary(null)
         }
     }
@@ -564,12 +565,12 @@ const RegisterSelling = () => {
                 navigate('/sotuv/sotish/saqlanganlar')
             })
             if (temporary) {
-                dispatch(deleteSavedPayment({_id: temporary._id}))
+                dispatch(deleteSavedPayment({ _id: temporary._id }))
                 setTemporary(null)
             }
         }
     }
-    const handleClickPrint = () => {}
+    const handleClickPrint = () => { }
     // bu yerda boshqa funksiyalar
     const handleChange = (id, value, key) => {
         // get index of product in tableProducts
@@ -612,7 +613,7 @@ const RegisterSelling = () => {
         const filterData = allcategories.filter((obj) =>
             obj.name
                 ? obj.name.toLowerCase().includes(searchedStr) ||
-                  obj.code.includes(searchedStr)
+                obj.code.includes(searchedStr)
                 : obj.code.includes(searchedStr)
         )
         setFilteredCategories(str !== '' ? filterData : allcategories)
@@ -723,24 +724,24 @@ const RegisterSelling = () => {
         const newRelease = tableProducts.map((prevProduct) =>
             prevProduct.product._id === id
                 ? {
-                      ...prevProduct,
-                      unitprice:
-                          currencyType === 'USD'
-                              ? value
-                              : UzsToUsd(value, currency),
-                      unitpriceuzs:
-                          currencyType === 'UZS'
-                              ? value
-                              : UsdToUzs(value, currency),
-                      totalprice:
-                          currencyType === 'USD'
-                              ? value * prevProduct.pieces
-                              : UzsToUsd(value * prevProduct.pieces, currency),
-                      totalpriceuzs:
-                          currencyType === 'UZS'
-                              ? value * prevProduct.pieces
-                              : UsdToUzs(value * prevProduct.pieces, currency),
-                  }
+                    ...prevProduct,
+                    unitprice:
+                        currencyType === 'USD'
+                            ? value
+                            : UzsToUsd(value, currency),
+                    unitpriceuzs:
+                        currencyType === 'UZS'
+                            ? value
+                            : UsdToUzs(value, currency),
+                    totalprice:
+                        currencyType === 'USD'
+                            ? value * prevProduct.pieces
+                            : UzsToUsd(value * prevProduct.pieces, currency),
+                    totalpriceuzs:
+                        currencyType === 'UZS'
+                            ? value * prevProduct.pieces
+                            : UsdToUzs(value * prevProduct.pieces, currency),
+                }
                 : prevProduct
         )
         setTableProducts(newRelease)
@@ -749,23 +750,23 @@ const RegisterSelling = () => {
         const newRelease = tableProducts.map((prevProduct) =>
             prevProduct.product._id === id
                 ? {
-                      ...prevProduct,
-                      pieces: value,
-                      totalprice:
-                          currencyType === 'USD'
-                              ? value * prevProduct.unitprice
-                              : UzsToUsd(
-                                    value * prevProduct.unitpriceuzs,
-                                    currency
-                                ),
-                      totalpriceuzs:
-                          currencyType === 'UZS'
-                              ? value * prevProduct.unitpriceuzs
-                              : UsdToUzs(
-                                    value * prevProduct.unitprice,
-                                    currency
-                                ),
-                  }
+                    ...prevProduct,
+                    pieces: value,
+                    totalprice:
+                        currencyType === 'USD'
+                            ? value * prevProduct.unitprice
+                            : UzsToUsd(
+                                value * prevProduct.unitpriceuzs,
+                                currency
+                            ),
+                    totalpriceuzs:
+                        currencyType === 'UZS'
+                            ? value * prevProduct.unitpriceuzs
+                            : UsdToUzs(
+                                value * prevProduct.unitprice,
+                                currency
+                            ),
+                }
                 : prevProduct
         )
         setTableProducts(newRelease)
@@ -789,7 +790,7 @@ const RegisterSelling = () => {
                     currentProduct.incomingprice < currentProduct.unitprice) ||
                 (currencyType === 'UZS' &&
                     currentProduct.incomingpriceuzs <
-                        currentProduct.unitpriceuzs)
+                    currentProduct.unitpriceuzs)
             ) {
                 setTableProducts([...tableProducts, currentProduct])
                 toggleModal()
@@ -878,7 +879,16 @@ const RegisterSelling = () => {
     }, [location.state])
 
     return (
-        <div className={'flex grow relative overflow-auto'}>
+        <motion.div className={'flex grow relative overflow-auto'}
+            key='content'
+            initial='collapsed'
+            animate='open'
+            exit='collapsed'
+            variants={{
+                open: { opacity: 1, height: 'auto' },
+                collapsed: { opacity: 0, height: 0 },
+            }}
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>
             {loadingMakePayment && (
                 <div className='fixed backdrop-blur-[2px] z-[100] left-0 top-0 right-0 bottom-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
                     <SmallLoader />
@@ -901,8 +911,8 @@ const RegisterSelling = () => {
                             ? paymentDiscount
                             : paymentDiscountPercent
                         : discountSelectOption.value === 'UZS'
-                        ? paymentDiscountUzs
-                        : paymentDiscountPercent
+                            ? paymentDiscountUzs
+                            : paymentDiscountPercent
                 }
                 handleChangeDiscount={handleChangeDiscount}
                 hasDiscount={hasDiscount}
@@ -925,15 +935,15 @@ const RegisterSelling = () => {
                     modalBody === 'sell'
                         ? toggleModal
                         : modalBody === 'complete'
-                        ? handleClosePay
-                        : toggleCheckModal
+                            ? handleClosePay
+                            : toggleCheckModal
                 }
                 approveFunction={
                     modalBody === 'sell'
                         ? handleAddProduct
                         : modalBody === 'complete'
-                        ? handleApprovePay
-                        : handleClickPrint
+                            ? handleApprovePay
+                            : handleClickPrint
                 }
                 isOpen={modalVisible}
                 product={modalBody === 'sell' ? currentProduct : modalData}
@@ -1014,7 +1024,7 @@ const RegisterSelling = () => {
                         placeholder={'kategoriyani qidirish...'}
                         value={searchCategory}
                         onChange={handleSearchCategory}
-                        onKeyUp={() => {}}
+                        onKeyUp={() => { }}
                     />
                     <div className='grow relative overflow-auto'>
                         <div className='cards-container absolute left-0 right-[0.125rem] top-0 bottom-0'>
@@ -1059,7 +1069,7 @@ const RegisterSelling = () => {
                     </button>
                 </div>
             </div>
-        </div>
+        </motion.div>
     )
 }
 
