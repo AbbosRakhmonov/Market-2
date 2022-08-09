@@ -5,10 +5,12 @@ import Table from './../../Components/Table/Table';
 import {useSelector, useDispatch} from "react-redux"
 import Spinner from './../../Components/Spinner/SmallLoader'
 import NotFind from './../../Components/NotFind/NotFind'
+import {checkEmptyString} from '../../App/globalFunctions.js'
 import {
     successAddSellerMessage,
     successUpdateSellerMessage,
     universalToast,
+    warningEmptyInput
 } from './../../Components/ToastMessages/ToastMessages'
 import {
     addSeller,
@@ -56,36 +58,57 @@ function Sellers() {
    
     // handle Changed inputs 
     const addNewSeller = (e) => {
-     e.preventDefault()
-     const body = {
-        login : sellerLogin,
-        firstname : sellerName,
-        lastname : sellerSurname,
-        fathername : user.lastname,
-        phone : sellerNumber,
-        password : sellerPassword,
-        type: "Seller",
-        user : user._id,
-     }
+    e && e.preventDefault()
+    const filter = checkEmptyString([sellerName,sellerSurname,sellerNumber,sellerLogin,sellerPassword,sellerAgainPassword])
+    if (filter) {
+        warningEmptyInput()
+    } 
+    if( sellerPassword !== sellerAgainPassword) {
+       universalToast("Sotuvchining paroli bilan tasdiqlash paroli mos kelmadi", "warning")
+    }  
+    if (!filter && sellerPassword === sellerAgainPassword){
+        const body = {
+            login : sellerLogin,
+            firstname : sellerName,
+            lastname : sellerSurname,
+            fathername : user.lastname,
+            phone : sellerNumber,
+            password : sellerPassword,
+            type: "Seller",
+            user : user._id,
+         }
      dispatch(addSeller(body))
+    }
+        
+    
     }
 
     const handleEdit = (e) => {
-     e.preventDefault()
-     const body = {
-        _id : currentSeller._id,
-        login : sellerLogin,
-        firstname : sellerName,
-        lastname : sellerSurname,
-        fathername : user.lastname,
-        phone : sellerNumber,
-        type : "Seller",
-        user : user._id,
-     }
-    dispatch(updateSeller(body))
+    e && e.preventDefault()
+        const filter = checkEmptyString([sellerName,sellerSurname,sellerNumber,sellerLogin])
+        if (filter) {
+            warningEmptyInput()
+        } 
+        if( sellerPassword !== sellerAgainPassword) {
+           universalToast("Sotuvchining paroli bilan tasdiqlash paroli mos kelmadi", "warning")
+        }  
+        if (!filter && sellerPassword === sellerAgainPassword){
+             const body = {
+                _id : currentSeller._id,
+                login : sellerLogin,
+                firstname : sellerName,
+                lastname : sellerSurname,
+                fathername : user.lastname,
+                phone : sellerNumber,
+                type : "Seller",
+                user : user._id,
+            }
+           dispatch(updateSeller(body))
+        } 
     }
 
     const clearForm = (e) => {
+      e && e.preventDefault()
       setSellerName('')
       setSellerSurname('')
       setSellerNumber('')
