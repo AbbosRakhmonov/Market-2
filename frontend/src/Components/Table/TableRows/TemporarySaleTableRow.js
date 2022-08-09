@@ -3,10 +3,10 @@ import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
 import {useNavigate} from 'react-router-dom'
 
-export const TemporarySaleTableRow = ({data, Edit, Delete, currency}) => {
+export const TemporarySaleTableRow = ({data, Delete, currency}) => {
     const navigate = useNavigate()
     const linkToSale = (temporary) => {
-        navigate('/sotuv/sotish/sotuv', {state: {temporary: {...temporary}}})
+        navigate('/sotuv/sotish', {state: {temporary: {...temporary}}})
     }
     return (
         <>

@@ -7,16 +7,18 @@ import {
     IoKeyOutline,
     IoSettingsOutline,
     IoWallet,
+    IoPeople
 } from 'react-icons/io5'
 import {FaCashRegister} from 'react-icons/fa'
 
-const navList = [
+
+const navListForDirector = [
     {
         id: 1,
         label: 'Bosh sahifa',
         icon: <IoHome size={'1.5rem'} />,
         path: '/',
-        submenu: false,
+        submenu: false
     },
     {
         id: 2,
@@ -34,41 +36,41 @@ const navList = [
                         id: 1,
                         label: 'Kategoriyalar',
                         icon: 'home',
-                        path: 'maxsulotlar/yaratish/kategoriyalar',
+                        path: 'maxsulotlar/yaratish/kategoriyalar'
                     },
                     {
                         id: 2,
                         label: 'Maxsulotlar',
                         icon: 'home',
-                        path: 'maxsulotlar/yaratish/maxsulotlar',
+                        path: 'maxsulotlar/yaratish/maxsulotlar'
                     },
                     {
                         id: 3,
-                        label: "O'lchov birliklari",
+                        label: 'O\'lchov birliklari',
                         icon: 'home',
-                        path: 'maxsulotlar/yaratish/ulchov',
+                        path: 'maxsulotlar/yaratish/ulchov'
                     },
                     {
                         id: 4,
                         label: 'Yetkazib beruvchilar',
                         icon: 'home',
-                        path: 'maxsulotlar/yaratish/yetkazuvchilar',
-                    },
-                ],
+                        path: 'maxsulotlar/yaratish/yetkazuvchilar'
+                    }
+                ]
             },
             {
                 id: 2,
                 label: 'Maxsulotlar hisoboti',
                 icon: '',
                 path: 'maxsulotlar/hisobot',
-                submenu: false,
+                submenu: false
             },
             {
                 id: 3,
                 label: 'Qabul qilish',
                 icon: '',
                 path: 'maxsulotlar/qabul/qabulqilish',
-                submenu: false,
+                submenu: false
             },
             {
                 id: 4,
@@ -80,75 +82,92 @@ const navList = [
                         id: 1,
                         label: 'Inventarizatsiya',
                         icon: 'home',
-                        path: 'maxsulotlar/inventarizatsiya/inventarizatsiya',
+                        path: 'maxsulotlar/inventarizatsiya/inventarizatsiya'
                     },
                     {
                         id: 2,
                         label: 'Inventarizatsiyalar',
                         icon: 'home',
-                        path: 'maxsulotlar/inventarizatsiya/inventarizatsiyalar',
-                    },
-                ],
-            },
-        ],
+                        path: 'maxsulotlar/inventarizatsiya/inventarizatsiyalar'
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        id: 7,
+        label: 'Sotuv',
+        path: 'sotuv/sotish',
+        icon: <IoWallet size={'1.5rem'} />,
+        submenu: false
     },
     {
         id: 3,
-        label: 'Sotuv',
-        path: 'sotuv',
-        icon: <IoWallet size={'1.5rem'} />,
+        label: 'Hamkorlar',
+        path: 'hamkorlar',
+        icon: <IoPeople size={'1.5rem'} />,
         submenu: [
             {
                 id: 1,
-                label: 'Sotish',
+                label: 'Agentlar',
                 icon: '',
-                path: 'sotuv/sotish/sotuv',
-                submenu: false,
+                path: 'hamkorlar/agentlar',
+                submenu: false
             },
             {
                 id: 2,
-                label: 'Agentlar',
+                label: 'Mijozlar',
                 icon: '',
-                path: 'sotuv/agentlar',
-                submenu: false,
+                path: 'hamkorlar/mijozlar',
+                submenu: false
             },
             {
                 id: 3,
-                label: 'Mijozlar',
-                icon: '',
-                path: 'sotuv/mijozlar',
-                submenu: false,
-            },
-            {
-                id: 4,
                 label: 'Sotuvchilar',
                 icon: '',
-                path: 'sotuv/sotuvchilar',
-                submenu: false,
-            },
-        ],
+                path: 'hamkorlar/sotuvchilar',
+                submenu: false
+            }
+        ]
     },
     {
         id: 4,
-        label: "Do'konlar",
+        label: 'Do\'konlar',
         icon: <IoBusiness size={'1.5rem'} />,
         path: 'dukonlar',
-        submenu: false,
+        submenu: [
+            {
+                id: 1,
+                label: 'Filiallar',
+                path: 'dukonlar/filiallar',
+                icon: '',
+                submenu: false
+            }
+        ]
     },
     {
         id: 5,
         label: 'Kassa',
         icon: <FaCashRegister size={'1.5rem'} />,
         path: 'kassa',
-        submenu: false,
+        submenu: false
     },
     {
         id: 6,
         label: 'Valyuta kursi',
         icon: <IoCash size={'1.5rem'} />,
         path: 'valyuta',
-        submenu: false,
-    },
+        submenu: false
+    }
+]
+export const navListForSeller = [
+    {
+        id: 1,
+        label: 'Sotuv',
+        path: '/',
+        icon: <IoWallet size={'1.5rem'} />,
+        submenu: false
+    }
 ]
 
 export const profileList = [
@@ -156,19 +175,19 @@ export const profileList = [
         id: 1,
         label: 'Tahrirlash',
         path: 'shaxsiy/tahrirlash',
-        icon: <IoSettingsOutline size={'1rem'} />,
+        icon: <IoSettingsOutline size={'1rem'} />
     },
     {
         id: 2,
         path: 'shaxsiy/parol',
-        label: "Parolni o'zgartirish",
-        icon: <IoKeyOutline size={'1rem'} />,
+        label: 'Parolni o\'zgartirish',
+        icon: <IoKeyOutline size={'1rem'} />
     },
     {
         id: 3,
         label: 'Chiqish',
-        icon: <IoExitOutline size={'1rem'} />,
-    },
+        icon: <IoExitOutline size={'1rem'} />
+    }
 ]
 
-export default navList
+export default navListForDirector
