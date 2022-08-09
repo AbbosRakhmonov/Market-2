@@ -187,7 +187,7 @@ module.exports.registerAll = async (req, res) => {
       )
       .populate({
         path: "productdata",
-        select: "name code",
+        select: "name code barcode",
         match: { name: productname, code: productcode },
       })
       .populate({
@@ -223,6 +223,7 @@ module.exports.register = async (req, res) => {
       });
     }
     const {
+      barcode,
       category,
       name,
       code,
@@ -248,9 +249,19 @@ module.exports.register = async (req, res) => {
       category,
     });
 
+    const productBarcode = await ProductData.findOne({
+      barcode,
+    });
+
     if (product) {
       return res.status(400).json({
         message: `Diqqat! ${code} kodli mahsulot avval yaratilgan.`,
+      });
+    }
+
+    if (productBarcode) {
+      return res.status(400).json({
+        message: `Diqqat! ${barcode} shtrixkodli mahsulot avval yaratilgan.`,
       });
     }
 
@@ -276,6 +287,7 @@ module.exports.register = async (req, res) => {
       category,
       unit,
       market,
+      barcode,
     });
     await newProductData.save();
 
@@ -346,7 +358,7 @@ module.exports.register = async (req, res) => {
       )
       .populate({
         path: "productdata",
-        select: "name code",
+        select: "name code barcode",
         match: { name: productname, code: productcode },
       })
       .populate({
@@ -505,12 +517,12 @@ module.exports.update = async (req, res) => {
       )
       .populate({
         path: "productdata",
-        select: "name code",
+        select: "name code barcode",
         match: { name: productname, code: productcode },
       })
       .populate({
         path: "category",
-        select: "code",
+        select: "code name",
         match: { code: productcategory },
       })
       .populate("unit", "name");
@@ -660,7 +672,7 @@ module.exports.getAll = async (req, res) => {
       .sort({ code: 1 })
       .select("name code unit category producttype brand price total")
       .populate("category", "name code")
-      .populate("productdata", "name code")
+      .populate("productdata", "name code barcode")
       .populate("producttype", "name")
       .populate("unit", "name")
       .populate("brand", "name")
@@ -703,7 +715,7 @@ module.exports.getProducts = async (req, res) => {
       )
       .populate({
         path: "productdata",
-        select: "name code",
+        select: "name code barcode",
         match: { name: name, code: code },
       })
       .populate({
@@ -808,7 +820,7 @@ module.exports.getProductExcel = async (req, res) => {
       .populate("unit", "name")
       .populate({
         path: "productdata",
-        select: "name code",
+        select: "name code barcode",
         match: { name: name, code: code },
       })
       .populate({
@@ -850,7 +862,7 @@ module.exports.getAllIncoming = async (req, res) => {
       )
       .populate({
         path: "productdata",
-        select: "name code",
+        select: "name code barcode",
       })
       .populate("unit", "name");
 
@@ -942,7 +954,7 @@ module.exports.getAllCategory = async (req, res) => {
     })
       .sort({ code: -1 })
       .select("unit category price total")
-      .populate("productdata", "name code")
+      .populate("productdata", "name code barcode")
       .populate("category", "name code")
       .populate("unit", "name")
       .populate(
@@ -1038,7 +1050,7 @@ module.exports.getProductsInventory = async (req, res) => {
       .populate("price", "incomingprice sellingprice")
       .populate({
         path: "productdata",
-        select: "name code",
+        select: "name code barcode",
         match: { name: productname, code: productcode },
       })
       .populate("unit", "name");
@@ -1074,7 +1086,7 @@ module.exports.getproductsale = async (req, res) => {
       market,
     })
       .select("market total")
-      .populate("productdata", "name code")
+      .populate("productdata", "name code barcode")
       .populate(
         "price",
         "sellingprice incomingprice sellingpriceuzs incomingpriceuzs"

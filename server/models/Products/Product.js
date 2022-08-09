@@ -4,7 +4,6 @@ const Joi = require("joi");
 const product = new Schema(
   {
     name: { type: String },
-
     code: { type: Number },
     total: { type: Number, default: 0 },
     productdata: { type: Schema.Types.ObjectId, ref: "ProductData" },
@@ -35,6 +34,7 @@ function validateProduct(product) {
     producttype: Joi.string(),
     brand: Joi.string(),
     market: Joi.string().required(),
+    barcode: Joi.string(),
   });
 
   return schema.validate(product);
