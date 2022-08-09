@@ -372,12 +372,12 @@ const IncomingsList = () => {
         "Kodi",
         "Nomi",
         "Soni",
-        "KelishUZS",
-        "KelishUSD",
-        "JamiUZS",
-        "JamiUSD",
-        "SotishUZS",
-        "SotishUSD"
+        "Kelish UZS",
+        "Kelish USD",
+        "Jami UZS",
+        "Jami USD",
+        "Sotish UZS",
+        "Sotish USD"
     ]
 
     return (

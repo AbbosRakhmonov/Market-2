@@ -142,12 +142,12 @@ const Sellings = () => {
         '№',
         "ID",
         "Mijoz",
-        "JamiUZS",
-        "JamiUSD",
-        "ChegirmaUZS",
-        "ChegirmaUSD",
-        "QarzUZS",
-        "QarzUSD",
+        "Jami UZS",
+        "Jami USD",
+        "Chegirma UZS",
+        "Chegirma USD",
+        "Qarz UZS",
+        "Qarz USD",
     ]
     
     const handleClickPrint = (selling) => {
