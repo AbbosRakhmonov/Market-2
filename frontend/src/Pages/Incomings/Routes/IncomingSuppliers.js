@@ -424,6 +424,17 @@ const IncomingSuppliers = () => {
         },
     ]
 
+    const incomingSupplierHeaders =[
+        "№",
+        "Yetkazuvchi",
+        "Kodi",
+        "Nomi",
+        "Soni",
+        "Kelish",
+        "Jami",
+        "Sotish"
+    ]
+
     return (
         <motion.div className=''
             key='content'
@@ -458,7 +469,12 @@ const IncomingSuppliers = () => {
                     ))}
             </div>
             <div className='mainPadding flex items-center justify-between'>
-                <ExportBtn />
+                <ExportBtn 
+                 fileName={`Maxsulotlar-qabul-qabullar-${new Date().toLocaleDateString()}`}
+                 headers={incomingSupplierHeaders}
+                 datas={currentData}
+                 pagesName="IncomingSuppliers"
+                />
                 <span>Ro`yxat</span>
                 <Pagination
                     currentPage={currentPage}

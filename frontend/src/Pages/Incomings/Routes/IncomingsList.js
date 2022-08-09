@@ -366,6 +366,20 @@ const IncomingsList = () => {
         },
     ]
 
+    const incomingHeaders =[
+        "№",
+        "Yetkazuvchi",
+        "Kodi",
+        "Nomi",
+        "Soni",
+        "KelishUZS",
+        "KelishUSD",
+        "JamiUZS",
+        "JamiUSD",
+        "SotishUZS",
+        "SotishUSD"
+    ]
+
     return (
         <motion.div className=''
             key='content'
@@ -381,7 +395,12 @@ const IncomingsList = () => {
                 <p>Ro'yxat</p>
             </div>
             <div className='mainPadding flex items-center justify-between'>
-                <ExportBtn />
+                <ExportBtn 
+                    fileName={`Maxsulotlar-qabul-${new Date().toLocaleDateString()}`}
+                    headers={incomingHeaders}
+                    datas={currentIncoming}
+                    pagesName="IncomingList"
+                />
                 <div className='flex gap-[10px]'>
                     <Dates
                         label={'dan'}

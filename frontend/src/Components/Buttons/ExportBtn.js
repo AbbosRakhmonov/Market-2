@@ -5,7 +5,7 @@ import * as XLSX from 'xlsx'
 
 function ExportBtn({headers, fileName, datas, pagesName }) {
 
-
+    console.log("Data : ", datas)
     const autoFillColumnWidth = (json) => {
         const cols = Object.keys(json[0])
         const maxLength = cols.reduce((acc, curr) => {
@@ -71,23 +71,64 @@ function ExportBtn({headers, fileName, datas, pagesName }) {
                  }))
                  continueHandleClick(ReportData)
                  break;
+
                  case "Sellings" : {
                    
                     const SellingData = datas.map((item, index) =>( {
                         nth: index + 1,
                         id: item.id,
                         client: item?.client?.name ||item?.packman?.name,
-                        all: item.products[0].totalpriceuzs + " UZS",
+                        alluzs: item.products[0].totalpriceuzs,
+                        allusd: item.products[0].totalprice,
                         discount:item.discounts.length > 0 ? item.discounts.map((discount) => {
                             return discount 
-                        }) : 0 + " UZS",
-                        debd: (item.products[0].totalprice + item.products[0].totalpriceuzs - item.payments[0].payment - item.payments[0].paymentuzs - item.discounts.length > 0 ? item.discounts.map((discount) => {
+                        }) : 0,
+                        discountusd:item.discounts.length > 0 ? item.discounts.map((discount) => {
+                            return discount 
+                        }) : 0,
+                        debd: (item.products[0].totalpriceuzs - item.payments[0].paymentuzs - item.discounts.length > 0 ? item.discounts.map((discount) => {
                             return discount.discount 
-                        }) : 0)  + " UZS",
+                        }) : 0) ,
+                        debdusd: (item.products[0].totalprice - item.payments[0].payment - item.discounts.length > 0 ? item.discounts.map((discount) => {
+                            return discount.discount 
+                        }) : 0) ,
                     }))
                     continueHandleClick(SellingData)
                     break;
                  }
+
+
+                 case "IncomingList" : 
+                 const IncomingData = datas.map((item, index) => ({
+                    nth: index + 1,
+                    supplier: item.supplier.name,
+                    code:item.product.productdata.code,
+                    name:item.product.productdata.name,
+                    count:item.pieces + " " + item.unit.name,
+                    unit : item.unitpriceuzs,
+                    unitusd : item.unitprice,
+                    all:item.totalpriceuzs,
+                    allusd:item.totalprice,
+                    sell : item.sellingpriceuzs,
+                    sellusd : item.sellingprice,
+                 }))
+                 continueHandleClick(IncomingData)
+                 break;
+
+                 case "IncomingSuppliers" : 
+                 const IncomingSupplierData = datas.map((item, index) => ({
+                    nth: index + 1,
+                    supplier: item.supplier.name,
+                    code:item.product.productdata.code,
+                    name:item.product.productdata.name,
+                    count:item.pieces + " " + item.unit.name,
+                    unit : item.unitpriceuzs + " UZS",
+                    all:item.totalpriceuzs + " UZS",
+                    sell : item.sellingpriceuzs + " UZS"
+                 }))
+                 continueHandleClick(IncomingSupplierData)
+                 break;
+
             }
           
         } else {

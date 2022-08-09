@@ -142,10 +142,14 @@ const Sellings = () => {
         '№',
         "ID",
         "Mijoz",
-        "Jami",
-        "Chegirma",
-        "Qarz",
+        "JamiUZS",
+        "JamiUSD",
+        "ChegirmaUZS",
+        "ChegirmaUSD",
+        "QarzUZS",
+        "QarzUSD",
     ]
+    
     const handleClickPrint = (selling) => {
         setPrintedSelling(selling)
         setModalVisible(true)
