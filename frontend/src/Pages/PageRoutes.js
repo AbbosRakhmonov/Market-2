@@ -34,16 +34,7 @@ const PageRoutes = () => {
     }, [currencyError, dispatch])
 
     return (
-        <motion.section className={'flex bg-background relative overflow-x-hidden'}
-            key='content'
-            initial='collapsed'
-            animate='open'
-            exit='collapsed'
-            variants={{
-                open: { opacity: 1, height: 'auto' },
-                collapsed: { opacity: 0, height: 0 },
-            }}
-            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>
+        <section className={'flex bg-background relative overflow-x-hidden'}>
             <Currency currency={currencyType} onClick={changeCurrency} />
             <Navbar />
             <div className={'grow h-screen overflow-y-auto'}>
@@ -53,7 +44,7 @@ const PageRoutes = () => {
                     </Routes>
                 </Suspense>
             </div>
-        </motion.section>
+        </section>
     )
 }
 
