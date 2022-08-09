@@ -13,12 +13,27 @@ export const getConnectors = createAsyncThunk(
     }
 )
 
+export const postInventoriesId = createAsyncThunk(
+    'inventories/postInventoriesId',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post('/inventory/inventories', body)
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
+
 const inventoryConnectorsSlice = createSlice({
     name: 'inventories',
     initialState: {
+        dataId : [],
         connectors: [],
         total: 0,
         loading: false,
+        dataLoading : false,
         errorConnectors: null,
     },
     reducers: {
@@ -37,6 +52,17 @@ const inventoryConnectorsSlice = createSlice({
         },
         [getConnectors.rejected]: (state, {payload}) => {
             state.loading = false
+            state.errorConnectors = payload
+        },
+        [postInventoriesId.pending]: (state) => {
+            state.dataLoading = true
+        },
+        [postInventoriesId.fulfilled]: (state, {payload : {inventories, inventoriesConnector}}) => {
+            state.dataLoading = false
+            state.dataId = inventories
+        },
+        [postInventoriesId.rejected]: (state, {payload}) => {
+            state.dataLoading = false
             state.errorConnectors = payload
         },
     },

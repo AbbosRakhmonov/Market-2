@@ -423,6 +423,20 @@ const IncomingSuppliers = () => {
         },
     ]
 
+    const incomingSupplierHeaders =[
+        "№",
+        "Yetkazuvchi",
+        "Kodi",
+        "Nomi",
+        "Soni",
+        "KelishUZS",
+        "KelishUSD",
+        "JamiUZS",
+        "JamiUSD",
+        "SotishUZS",
+        "SotishUSD"
+    ]
+
     return (
         <div className=''
             key='content'
@@ -457,7 +471,12 @@ const IncomingSuppliers = () => {
                     ))}
             </div>
             <div className='mainPadding flex items-center justify-between'>
-                <ExportBtn />
+                <ExportBtn 
+                 fileName={`Maxsulotlar-qabul-qabullar-${new Date().toLocaleDateString()}`}
+                 headers={incomingSupplierHeaders}
+                 datas={currentData}
+                 pagesName="IncomingSuppliers"
+                />
                 <span>Ro`yxat</span>
                 <Pagination
                     currentPage={currentPage}
