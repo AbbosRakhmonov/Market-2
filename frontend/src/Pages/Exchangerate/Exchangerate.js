@@ -80,7 +80,11 @@ const Exchangerate = () => {
     const addNewExchange = (e) => {
         e.preventDefault()
         const body = {exchangerate: exchangeName, market: _id}
+        if (exchangeName === "") {
+            return universalToast("Valyuta kursini kiriting!","error")
+        }
         dispatch(addExchangerate(body))
+
     }
 
     const handleEdit = (e) => {

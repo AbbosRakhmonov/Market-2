@@ -1,54 +1,58 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import CheckoutCards from '../../Components/CheckoutCard/CheckoutCards'
 import SearchForm from '../../Components/SearchForm/SearchForm.js'
-import {useDispatch, useSelector} from 'react-redux'
-import {universalToast} from '../../Components/ToastMessages/ToastMessages.js'
-import {uniqueId} from 'lodash'
-import {clearErrorReports, getReports} from './reportsSlice.js'
+import { useDispatch, useSelector } from 'react-redux'
+import { universalToast } from '../../Components/ToastMessages/ToastMessages.js'
+import { uniqueId } from 'lodash'
+import { clearErrorReports, getReports } from './reportsSlice.js'
+import { useTranslation } from 'react-i18next'
 
 const Reports = () => {
+
+    const { t } = useTranslation(["common"])
+
     const card = [
         {
-            name: 'Savdo',
+            name: `${t('Savdo')}`,
             type: 'sale',
             percentage: 99,
         },
         {
-            name: 'Sof foyda',
+            name: `${t('Sof foyda')}`,
             type: 'income',
         },
         {
-            name: 'Xarajatlar',
+            name: `${t('Xarajatlar')}`,
             type: 'expenses',
         },
         {
-            name: 'Naqd',
+            name: `${t('Naqd')}`,
             type: 'cash',
         },
         {
-            name: 'Plastik',
+            name: `${t('Plastik')}`,
             type: 'card',
         },
         {
-            name: 'O`tkazmalar',
+            name: `${t('O`tkazmalar')}`,
             type: 'transfer',
         },
         {
-            name: 'Qaytarilgan',
+            name: `${t('Qaytarilgan')}`,
             type: 'backproducts',
         },
         {
-            name: 'Chegirmalar',
+            name: `${t('Chegirmalar')}`,
             type: 'discounts',
         },
         {
-            name: 'Qarzlar',
+            name: `${t('Qarzlar')}`,
             type: 'debts',
         },
     ]
 
     const dispatch = useDispatch()
-    const {reports, clearErrorrReports, errorReports} = useSelector(
+    const { reports, clearErrorrReports, errorReports } = useSelector(
         (state) => state.reports
     )
     const [startDate, setStartDate] = useState(
@@ -59,7 +63,7 @@ const Reports = () => {
         )
     )
     const [endDate, setEndDate] = useState(new Date())
-    const {currencyType} = useSelector((state) => state.currency)
+    const { currencyType } = useSelector((state) => state.currency)
 
     useEffect(() => {
         const body = {

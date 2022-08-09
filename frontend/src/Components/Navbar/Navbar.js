@@ -1,14 +1,32 @@
-import {useCallback, useEffect, useLayoutEffect, useState} from 'react'
-import Paths, {profileList} from './Path'
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react'
+import Paths, { profileList } from './Path'
 import NavbarFooterLogo from '../../Images/logo-sm.svg'
 import Avatar from '../Avatar/Avatar'
-import {IoChevronBack, IoEllipsisVertical} from 'react-icons/io5'
+import { IoChevronBack, IoEllipsisVertical } from 'react-icons/io5'
 import ProfileMenuLink from './ProfileMenuLink'
 import NavbarLink from './NavbarLink'
-import {logOut} from '../../Pages/Login/loginSlice'
-import {useDispatch} from 'react-redux'
+import { logOut } from '../../Pages/Login/loginSlice'
+import { useDispatch } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import i18next from 'i18next'
 
 function Navbar() {
+
+    const { i18n, t } = useTranslation(["report"])
+
+    useEffect(() => {
+        if (localStorage.getItem("i18nextLng")?.length > 1) {
+            i18next.changeLanguage("lot");
+        }
+    }, [])
+
+
+    // select language function
+
+    const handleLanguageChange = (e) => {
+        i18n.changeLanguage(e.target.value)
+    }
+
     const dispatch = useDispatch()
     const [navbarExpended, setNavbarExpended] = useState(false)
     const [isAvatarMenuOpen, setIsAvatarMenuOpen] = useState(false)
@@ -72,27 +90,24 @@ function Navbar() {
     return (
         <div className={'relative'}>
             <nav
-                className={`transition-all ease-in-out duration-200 min-h-screen overflow-hidden bg-white-300 flex flex-col justify-between rounded-tr-[8px] rounded-br-[8px] shadow-[5px_0_25px_rgba(0,0,0,0.1),10px_0_50px_rgba(0,0,0,0.05)] ${
-                    navbarExpended
-                        ? 'min-w-[4.375rem] max-w-[4.375rem]'
-                        : 'min-w-[17.625rem] max-w-[17.625rem]'
-                }`}
+                className={`transition-all ease-in-out duration-200 min-h-screen overflow-hidden bg-white-300 flex flex-col justify-between rounded-tr-[8px] rounded-br-[8px] shadow-[5px_0_25px_rgba(0,0,0,0.1),10px_0_50px_rgba(0,0,0,0.05)] ${navbarExpended
+                    ? 'min-w-[4.375rem] max-w-[4.375rem]'
+                    : 'min-w-[17.625rem] max-w-[17.625rem]'
+                    }`}
             >
                 <div className={'navbar-header'}>
                     <div
-                        className={`transition-all ease duration-300 navbar-avatar ${
-                            navbarExpended
-                                ? 'w-[100vw] justify-start'
-                                : 'justify-center'
-                        } bg-white-400 border-b-2 border-b-black-100 flex items-center py-[0.9375rem] px-[10px] gap-[30px]`}
+                        className={`transition-all ease duration-300 navbar-avatar ${navbarExpended
+                            ? 'w-[100vw] justify-start'
+                            : 'justify-center'
+                            } bg-white-400 border-b-2 border-b-black-100 flex items-center py-[0.9375rem] px-[10px] gap-[30px]`}
                     >
                         <Avatar navbarExpended={navbarExpended} />
                         <button
-                            className={`transition ease duration-200 ${
-                                isAvatarMenuOpen
-                                    ? 'text-primary-800'
-                                    : 'text-black-700 hover:text-primary-800'
-                            }`}
+                            className={`transition ease duration-200 ${isAvatarMenuOpen
+                                ? 'text-primary-800'
+                                : 'text-black-700 hover:text-primary-800'
+                                }`}
                             onClick={toggleAvatarMenu}
                             onBlur={cancelAvatarMenu}
                         >
@@ -124,11 +139,10 @@ function Navbar() {
                     </div>
                 </div>
                 <div
-                    className={`navbar-footer transition-all ease-in-out duration-300 text-center flex flex-col justify-center gap-[10px] bg-white-400 border-t-[2px] border-t-black-100 ${
-                        navbarExpended
-                            ? 'h-0 opacity-0'
-                            : 'p-[10px] opacity-100'
-                    }`}
+                    className={`navbar-footer transition-all ease-in-out duration-300 text-center flex flex-col justify-center gap-[10px] bg-white-400 border-t-[2px] border-t-black-100 ${navbarExpended
+                        ? 'h-0 opacity-0'
+                        : 'p-[10px] opacity-100'
+                        }`}
                 >
                     <div className='footer-logo flex items-center justify-center'>
                         <img src={NavbarFooterLogo} alt='alo24 logo' />
@@ -139,9 +153,8 @@ function Navbar() {
                 </div>
             </nav>
             <button
-                className={`w-[40px] h-[40px] flex items-center justify-center z-[30] rounded-full bg-white-900 text-black-700 shadow-[0_10px_20px_rgba(0,0,0,0.1)] absolute backdrop-blur-[10px] top-[5.3rem] right-[-20px] transition-all ease-linear duration-300 hover:bg-black-100 ${
-                    navbarExpended ? 'rotate-180' : ''
-                }`}
+                className={`w-[40px] h-[40px] flex items-center justify-center z-[30] rounded-full bg-white-900 text-black-700 shadow-[0_10px_20px_rgba(0,0,0,0.1)] absolute backdrop-blur-[10px] top-[5.3rem] right-[-20px] transition-all ease-linear duration-300 hover:bg-black-100 ${navbarExpended ? 'rotate-180' : ''
+                    }`}
                 onClick={handleClickNavbarExpand}
             >
                 <IoChevronBack size={'20px'} />
@@ -171,6 +184,7 @@ function Navbar() {
                     )}
                 </div>
             )}
+
         </div>
     )
 }
