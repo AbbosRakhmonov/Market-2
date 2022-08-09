@@ -29,7 +29,6 @@ function Inventories() {
         loading,
         dataLoading,
         total,
-        dataId,
     } = useSelector((state) => state.inventoryConnectors)
     const [data, setData] = useState(connectors)
     const [showByTotal, setShowByTotal] = useState('10')
@@ -55,7 +54,7 @@ function Inventories() {
         'Dastlabki',
         'Sanoq',
         'Farqi',
-        'FarqiUSD',
+        'Farqi USD',
     ]
 
     const autoFillColumnWidth = (json) => {
@@ -78,13 +77,13 @@ function Inventories() {
                 origin: 'A2',
                 skipHeader: true,
             })
-            XLSX.utils.book_append_sheet(wb, ws, 'Maxsulotlar')
+            XLSX.utils.book_append_sheet(wb, ws, 'Inventorizatsiyalar')
             XLSX.writeFile(
                 wb,
                 `${'Invertarizatsiyalar'}-${new Date().toLocaleDateString()}.xlsx`
             )
         },
-        [headers]
+        [headersInventories]
     )
 
     const handleClick = (e, idx) => {

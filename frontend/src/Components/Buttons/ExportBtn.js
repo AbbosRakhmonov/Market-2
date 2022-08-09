@@ -1,11 +1,10 @@
-import React, {useCallback, useEffect} from 'react'
+import React, {useCallback} from 'react'
 import Excel from '../../Images/Excel.svg'
 import { universalToast } from '../ToastMessages/ToastMessages'
 import * as XLSX from 'xlsx'
 
 function ExportBtn({headers, fileName, datas, pagesName }) {
 
-    console.log("Data : ", datas)
     const autoFillColumnWidth = (json) => {
         const cols = Object.keys(json[0])
         const maxLength = cols.reduce((acc, curr) => {
