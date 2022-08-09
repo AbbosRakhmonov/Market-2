@@ -72,6 +72,7 @@ function Products() {
     } = useSelector((state) => state.products)
     const [data, setData] = useState(products)
     const [searchedData, setSearchedData] = useState(searchedProducts)
+    const [checkOfProduct, setCheckOfProduct] = useState('')
     const [codeOfProduct, setCodeOfProduct] = useState('')
     const [nameOfProduct, setNameOfProduct] = useState('')
     const [numberOfProduct, setNumberOfProduct] = useState('')
@@ -159,6 +160,12 @@ function Products() {
     ]
 
     // handle change of inputs
+    const handleChangeCheckOfProduct = (e) => {
+        let val = e.target.value
+        if (regexForTypeNumber.test(val)) {
+            setCheckOfProduct(e.target.value)
+        }
+    }
     const handleChangeCodeOfProduct = (e) => {
         let val = e.target.value
         if (regexForTypeNumber.test(val)) {
@@ -301,7 +308,8 @@ function Products() {
                 unitOfProduct,
                 categoryOfProduct,
                 priceOfProduct,
-                sellingPriceOfProduct
+                sellingPriceOfProduct,
+                checkOfProduct
             ])
             if (filter) {
                 warningEmptyInput()
@@ -338,6 +346,7 @@ function Products() {
         e && e.preventDefault()
         setCodeOfProduct('')
         setNameOfProduct('')
+        setCheckOfProduct('')
         setNumberOfProduct('')
         setPriceOfProduct('')
         setSellingPriceOfProduct('')
@@ -725,6 +734,8 @@ function Products() {
                 unitOfProduct={unitOfProduct}
                 categoryOfProduct={categoryOfProduct}
                 codeOfProduct={codeOfProduct}
+                checkOfProduct={checkOfProduct}
+                handleChangeCheckOfProduct={handleChangeCheckOfProduct}
                 priceOfProduct={
                     currencyType === 'UZS' ? priceOfProduct : priceOfProductUsd
                 }
@@ -754,10 +765,10 @@ function Products() {
             <div className={'flex justify-between items-center mainPadding'}>
                 <div className={'flex gap-[1.5rem]'}>
                     <ExportBtn
-                        datas ={data}
+                        datas={data}
                         headers={exportHeader}
                         fileName={'Maxsulotlar'}
-                        pagesName="Products"
+                        pagesName='Products'
                     />
                     <ImportBtn readExcel={readExcel} />
                 </div>
