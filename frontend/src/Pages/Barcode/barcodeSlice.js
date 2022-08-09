@@ -1,5 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import Api from '../../Config/Api'
+import {universalToast} from '../../Components/ToastMessages/ToastMessages.js'
 
 export const getBarcode = createAsyncThunk(
     'barcode/getBarcodeByCode',
@@ -16,7 +17,7 @@ export const getBarcode = createAsyncThunk(
 const barcodeSlice = createSlice({
     name: 'products',
     initialState: {
-        barcode: null,
+        barcode: '',
         errorGetBarcode: false,
         successGetBarcode: false,
         loading: false,
@@ -24,9 +25,6 @@ const barcodeSlice = createSlice({
     reducers: {
         clearErrorGetBarcode: (state) => {
             state.errorGetBarcode = false
-        },
-        clearBarcode: (state) => {
-            state.barcode = null
         },
     },
     extraReducers: {
@@ -38,11 +36,16 @@ const barcodeSlice = createSlice({
             state.barcode = payload
         },
         [getBarcode.rejected]: (state, {payload}) => {
+            universalToast(payload, 'warning', {
+                position: 'bottom-right',
+                autoClose: 2000,
+            })
             state.loading = false
-            state.errorGetBarcode = payload
+            state.barcode = ''
+            state.errorGetBarcode = true
         },
     },
 })
 
-export const {clearBarcode, clearErrorGetBarcode} = barcodeSlice.actions
+export const {clearErrorGetBarcode} = barcodeSlice.actions
 export default barcodeSlice.reducer

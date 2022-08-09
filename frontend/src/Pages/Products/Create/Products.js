@@ -47,6 +47,7 @@ import {
 } from '../../../App/globalFunctions'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
 import BarcodeReader from 'react-barcode-reader'
+import {clearErrorGetBarcode, getBarcode} from '../../Barcode/barcodeSlice.js'
 
 function Products() {
     const dispatch = useDispatch()
@@ -71,6 +72,7 @@ function Products() {
         totalSearched,
         successDeleteProduct,
     } = useSelector((state) => state.products)
+    const {barcode, errorGetBarcode} = useSelector((state) => state.barcode)
     const [data, setData] = useState(products)
     const [searchedData, setSearchedData] = useState(searchedProducts)
     const [checkOfProduct, setCheckOfProduct] = useState('')
@@ -302,7 +304,10 @@ function Products() {
     // handle submit of inputs
     const searchBarcode = (e) => {
         if (e.key === 'Enter') {
-            console.log('salom')
+            const body = {
+                code: e.target.value,
+            }
+            dispatch(getBarcode(body))
         }
     }
 
@@ -341,6 +346,7 @@ function Products() {
                         sellingprice: sellingPriceOfProductUsd,
                         incomingpriceuzs: priceOfProduct,
                         sellingpriceuzs: sellingPriceOfProduct,
+                        barcode: checkOfProduct,
                     },
                 }
                 dispatch(addProduct(body))
@@ -391,6 +397,7 @@ function Products() {
                     incomingpriceuzs: priceOfProduct,
                     sellingpriceuzs: sellingPriceOfProduct,
                     total: numberOfProduct,
+                    barcode: checkOfProduct,
                 },
                 currentPage,
                 countPage: showByTotal,
@@ -577,7 +584,11 @@ function Products() {
         universalToast("Mahsulot kodi o'qilmadi!", 'warning')
     }
     const handleScan = (data) => {
-        setCheckOfProduct(data)
+        setCheckOfProduct(data.toString())
+        const body = {
+            code: data,
+        }
+        dispatch(getBarcode(body))
     }
 
     useEffect(() => {
@@ -615,6 +626,11 @@ function Products() {
             warningCategory()
             dispatch(clearErrorGetAllCategories())
         }
+
+        if (errorGetBarcode) {
+            setNameOfProduct('')
+            dispatch(clearErrorGetBarcode())
+        }
     }, [
         errorUnits,
         errorProducts,
@@ -626,6 +642,7 @@ function Products() {
         currencyError,
         getCurrencyLoading,
         currency,
+        errorGetBarcode,
     ])
     useEffect(() => {
         const body = {
@@ -653,7 +670,7 @@ function Products() {
     useEffect(() => {
         if (currentProduct) {
             const {
-                productdata: {name, code},
+                productdata: {name, code, barcode},
                 unit,
                 total,
                 category,
@@ -679,6 +696,7 @@ function Products() {
             setSellingPriceOfProduct(sellingpriceuzs)
             setPriceOfProductsUsd(incomingprice)
             setSellingPriceOfProductUsd(sellingprice)
+            setCheckOfProduct(barcode ? barcode : '')
         }
     }, [currentProduct, currencyType])
     useEffect(() => {
@@ -707,7 +725,11 @@ function Products() {
     useEffect(() => {
         setSearchedData(searchedProducts)
     }, [searchedProducts])
-
+    useEffect(() => {
+        if (barcode) {
+            setNameOfProduct(barcode.name)
+        }
+    }, [barcode])
     return (
         <motion.section
             key='content'

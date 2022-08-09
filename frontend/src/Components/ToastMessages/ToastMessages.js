@@ -1,4 +1,4 @@
-import { toast } from 'react-toastify'
+import {toast} from 'react-toastify'
 
 // Long toast message with header and body
 const toastWithHeader = (header, message) => (
@@ -19,9 +19,9 @@ export const successLoggedIn = () =>
 export const successAddProductMessage = () =>
     toast.success('Maxsulot muvaffaqiyatli yaratildi!')
 export const successUpdateProductMessage = () =>
-    toast.success('Maxsulot muvaffaqiyatli o\'zgartirildi!')
+    toast.success("Maxsulot muvaffaqiyatli o'zgartirildi!")
 export const successDeleteProductMessage = () =>
-    toast.success('Maxsulot muvaffaqiyatli o\'chirildi!')
+    toast.success("Maxsulot muvaffaqiyatli o'chirildi!")
 
 export const successAddUnitMessage = () =>
     toast.success("O'lchov birligi muvaffaqiyatli yaratildi!")
@@ -50,7 +50,6 @@ export const successUpdateExchangeMessage = () =>
 export const successDeleteExchangeMessage = () =>
     toast.success("Valyuta kursi muvaffaqiyatli o'chirildi !")
 
-
 export const successUpdateInventoryMessage = () =>
     toast.success('Inventarizatsiya muvaffaqqiyatli saqlandi!')
 export const successCompleteInventoryMessage = () =>
@@ -70,8 +69,10 @@ export const successUpdateCategoryMessage = () =>
 export const successDeleteCategoryMessage = () =>
     toast.success("Kategoriya muvaffaqiyatli o'chirildi!")
 
-export const successDeleteTemporary = () => toast.success('Saqlangan sotuv muvaffaqiyatli o\'chirildi!')
-export const successSavedTemporary = () => toast.success('Sotuv muvaffaqiyatli saqlandi!')
+export const successDeleteTemporary = () =>
+    toast.success("Saqlangan sotuv muvaffaqiyatli o'chirildi!")
+export const successSavedTemporary = () =>
+    toast.success('Sotuv muvaffaqiyatli saqlandi!')
 
 // Warning Messages
 export const warningEmptyInput = () =>
@@ -81,10 +82,14 @@ export const warningCurrencyRate = () =>
 export const warningCategory = () => {
     toast.warn('Kategoriyalar mavjud emas!')
 }
-export const warningSaleProductsEmpty = () => toast.warn('Maxsulot mavjud emas !')
-export const warningMorePayment = () => toast.warn('To\'lov summasidan ortiq summa kiritib bo\'lmaydi')
-export const warningMoreDiscount = (val) => toast.warn(`${val} dan ortiq chegirma kiritib bo'lmaydi`)
-export const warningLessSellPayment = () => toast.warn('Sotish narxi kelish narxidan past bo\'lmasligi kerak')
+export const warningSaleProductsEmpty = () =>
+    toast.warn('Maxsulot mavjud emas !')
+export const warningMorePayment = () =>
+    toast.warn("To'lov summasidan ortiq summa kiritib bo'lmaydi")
+export const warningMoreDiscount = (val) =>
+    toast.warn(`${val} dan ortiq chegirma kiritib bo'lmaydi`)
+export const warningLessSellPayment = () =>
+    toast.warn("Sotish narxi kelish narxidan past bo'lmasligi kerak")
 
 // Error Messages
 export const errorNetwork = () =>
@@ -96,4 +101,5 @@ export const errorNetwork = () =>
     )
 
 // Universal Messages
-export const universalToast = (message, type) => toast[type](message)
+export const universalToast = (message, type, option = {}) =>
+    toast[type](message, option)
