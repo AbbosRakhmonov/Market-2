@@ -15,52 +15,23 @@ export const PaymentsTableRow = ({
                     <td className='text-left td'>
                         {currentPage * countPage + 1 + index}
                     </td>
+                    <td className='text-right td'>
+                        {new Date(sale.createdAt).toLocaleDateString()}
+                    </td>
                     <td className='text-right td'>{sale.id}</td>
                     <td className='text-left td'>
                         {sale.client && sale.client.name}
                     </td>
-                    <td className='text-right td py-[6px]'>
-                        {currency === 'UZS'
-                            ? (
-                                  Math.round(
-                                      sale.products.reduce(
-                                          (summ, product) =>
-                                              summ + product.totalpriceuzs,
-                                          0
-                                      ) * 1
-                                  ) / 1
-                              ).toLocaleString('ru-RU')
-                            : (
-                                  Math.round(
-                                      sale.products.reduce(
-                                          (summ, product) =>
-                                              summ + product.totalprice,
-                                          0
-                                      ) * 1000
-                                  ) / 1000
-                              ).toLocaleString('ru-RU')}{' '}
+                    <td className='text-right td py-[0.625rem] font-bold'>
+                        {currency === 'USD'
+                            ? sale.totalprice.toLocaleString('ru-RU')
+                            : sale.totalpriceuzs.toLocaleString('ru-RU')}{' '}
                         <span className='text-success-500'>{currency}</span>
                     </td>
-                    <td className='text-right border-r-0 td'>
-                        {currency === 'UZS'
-                            ? (
-                                  Math.round(
-                                      sale.payments.reduce(
-                                          (summ, payment) =>
-                                              summ + payment[type + 'uzs'],
-                                          0
-                                      ) * 1
-                                  ) / 1
-                              ).toLocaleString('ru-RU')
-                            : (
-                                  Math.round(
-                                      sale.payments.reduce(
-                                          (summ, payment) =>
-                                              summ + payment[type],
-                                          0
-                                      ) * 1000
-                                  ) / 1000
-                              ).toLocaleString('ru-RU')}{' '}
+                    <td className='text-right border-r-0 td font-bold'>
+                        {currency === 'USD'
+                            ? sale[type].toLocaleString('ru-RU')
+                            : sale[type + 'uzs'].toLocaleString('ru-RU')}{' '}
                         <span className='text-warning-500'>{currency}</span>
                     </td>
                 </tr>

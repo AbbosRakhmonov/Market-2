@@ -23,7 +23,7 @@ export const DebtsTableRow = ({
                         {debt.client && debt.client.name}
                     </td>
                     <td className='text-right td'>{debt.id}</td>
-                    <td className='text-right td'>
+                    <td className='text-right td py-[0.625rem] text-error-500 font-bold'>
                         {currency === 'UZS'
                             ? (Math.round(debt.debtuzs * 1) / 1).toLocaleString(
                                   'ru-RU'
@@ -33,7 +33,7 @@ export const DebtsTableRow = ({
                               ).toLocaleString('ru-RU')}{' '}
                         <span>{currency}</span>
                     </td>
-                    <td className='td border-r-0 py-[6px]'>
+                    {/* <td className='td border-r-0 py-[6px]'>
                         <div className='flex justify-center items-center'>
                             <TableBtn
                                 type={'save'}
@@ -41,7 +41,7 @@ export const DebtsTableRow = ({
                                 onClick={() => Pay(debt)}
                             />
                         </div>
-                    </td>
+                    </td> */}
                 </tr>
             ))}
         </>

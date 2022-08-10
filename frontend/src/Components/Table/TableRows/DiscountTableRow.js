@@ -18,14 +18,14 @@ export const DiscountTableRow = ({data, currentPage, countPage, currency}) => {
                     <td className='text-right td'>
                         {currency === 'UZS'
                             ? (
-                                  Math.round(discount.totaluzs * 1) / 1
+                                  Math.round(discount.totalpriceuzs * 1) / 1
                               ).toLocaleString('ru-RU')
                             : (
-                                  Math.round(discount.total * 1000) / 1000
+                                  Math.round(discount.totalprice * 1000) / 1000
                               ).toLocaleString('ru-RU')}{' '}
                         <span>{currency}</span>
                     </td>
-                    <td className='text-right td border-r-0'>
+                    <td className='text-right td border-r-0 py-[0.625rem] text-success-500'>
                         {currency === 'UZS'
                             ? (
                                   Math.round(discount.discountuzs * 1) / 1
