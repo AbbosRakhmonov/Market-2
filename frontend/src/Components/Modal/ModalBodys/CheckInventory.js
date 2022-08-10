@@ -61,7 +61,7 @@ function CheckInventory(){
                             return(
                                 <tr>
                                     <td className="p-1 border text-end text-[0.875rem] font-bold" colSpan={3}>Jami:</td>
-                                    <td className="check-table-body">{item.product}</td>
+                                    <td className="check-table-body text-start">{item.product}</td>
                                     <td className="check-table-body">{item.initial}</td>
                                     <td className="check-table-body">{item.count}</td>
                                     <td className="check-table-body">{item.difference}</td>

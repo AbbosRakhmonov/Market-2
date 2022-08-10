@@ -35,8 +35,7 @@ export const SaleCheckAll = forwardRef((props, ref) => {
                         <span className='check-ul-li-span'>{market?.address}</span>
                     </li>
                     <li className='check-ul-li'>Sana:
-                        <span
-                            className='check-ul-li-span'>{new Date(product?.createdAt).toLocaleDateString()}</span>
+                        <span className='check-ul-li-span'>{new Date(product?.createdAt).toLocaleDateString()}  <span className='ml-3'>{new Date(product?.createdAt).toLocaleTimeString()}</span></span>    
                     </li>
                     <li className='check-ul-li'>Mijoz: <span
                         className='check-ul-li-span'>{product?.client?.name || product?.packman?.name || ''}</span>
@@ -73,8 +72,8 @@ export const SaleCheckAll = forwardRef((props, ref) => {
                                 <tr key={uniqueId('selled-row')}>
                                     <td className='p-1 border text-center text-[0.875rem] font-bold'>{index + 1}</td>
                                     <td className='check-table-body'>{new Date(item?.createdAt).toLocaleDateString()}</td>
-                                    <td className='check-table-body'>{item?.product?.productdata?.code}</td>
-                                    <td className='check-table-body'>{item?.product?.productdata?.name}</td>
+                                    <td className='check-table-body text-center'>{item?.product?.productdata?.code}</td>
+                                    <td className='check-table-body text-start'>{item?.product?.productdata?.name}</td>
                                     <td className='check-table-body'>{item?.pieces}</td>
                                     <td className='check-table-body'>{currencyType === 'USD' ? item?.unitprice.toLocaleString('ru-Ru') : item?.unitpriceuzs.toLocaleString('ru-Ru')} {currencyType}</td>
                                     <td className='check-table-body'>{currencyType === 'USD' ? item?.totalprice.toLocaleString('ru-Ru') : item?.totalpriceuzs.toLocaleString('ru-Ru')} {currencyType}</td>

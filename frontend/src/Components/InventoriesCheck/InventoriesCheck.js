@@ -20,16 +20,14 @@ const InventoriesCheck = forwardRef ((props,ref) => {
             differencescurrent += (item?.inventorycount * item?.price.incomingprice - item?.productcount * item?.price.incomingprice)              
           })
      }
-          
-      
-      
+        
     return(
         <div ref={ref} className={'bg-white-900 p-4 rounded-md'}>
            <div className="check-inventory-head">
               <div className="flex text-[0.875rem] font-bold">
                 Sana:
                 {data ?     
-                   <span className="check-ul-li-span ml-2">{new Date(data[0]?.createdAt).toLocaleDateString()}</span>  
+                   <span className="check-ul-li-span ml-2">{new Date(data[0]?.createdAt).toLocaleDateString()} <span className="ml-3">{new Date(data[0]?.createdAt).toLocaleTimeString()}</span></span>  
                  : ""}
               </div>
               <h3 className="text-[1.2rem] font-bold">Inventarizatsiya : <span>INV-4</span></h3>
@@ -56,8 +54,8 @@ const InventoriesCheck = forwardRef ((props,ref) => {
                         <tr key={index}>
                         <td className="p-1 border text-center text-[0.875rem] font-bold">{index+1}</td>
                         <td className="check-table-body">{new Date(item?.createdAt).toLocaleDateString()}</td>
-                        <td className="check-table-body">{item?.productdata?.code}</td>
-                        <td className="check-table-body">{item?.productdata?.name}</td>
+                        <td className="check-table-body text-center">{item?.productdata?.code}</td>
+                        <td className="check-table-body text-left">{item?.productdata?.name}</td>
                         <td className="check-table-body">{item?.productcount}</td>
                         <td className="check-table-body">{item?.inventorycount}</td>
                         <td className="check-table-body">{item?.inventorycount - item?.productcount}</td>

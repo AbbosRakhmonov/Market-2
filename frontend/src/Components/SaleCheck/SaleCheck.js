@@ -56,7 +56,7 @@ export const SaleCheck = forwardRef((props, ref) => {
                         return (
                             <tr key={index}>
                                 <td className='p-1 border text-center text-[0.875rem] font-bold'>{index + 1}</td>
-                                <td className='check-table-body text-end'>{item?.product?.productdata?.code}</td>
+                                <td className='check-table-body text-center'>{item?.product?.productdata?.code}</td>
                                 <td className='check-table-body text-start'>{item?.product?.productdata?.name}</td>
                                 <td className='check-table-body'>{item?.pieces}</td>
                                 <td className='check-table-body'>{currencyType === 'USD' ? item?.unitprice : item?.unitpriceuzs} {currencyType}</td>
