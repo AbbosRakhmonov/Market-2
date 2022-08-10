@@ -10,6 +10,7 @@ import NotFind from '../../Components/NotFind/NotFind.js'
 import { motion } from 'framer-motion'
 import {getConnectors, postInventoriesId} from './inventorieSlice.js'
 import SmallLoader from '../../Components/Spinner/SmallLoader.js'
+import UniversalModal from '../../Components/Modal/UniversalModal'
 function Inventories() {
     const headers = [
         { styles: 'w-[10%] text-start', title: '№' },
@@ -38,6 +39,8 @@ function Inventories() {
         new Date(new Date().getFullYear(), new Date().getMonth(), 1)
     )
     const [endDate, setEndDate] = useState(new Date())
+    const [printedInventories, setPrintedInventories] = useState(null)
+    const [modalVisible, setModalVisible] = useState(false)
 
     // filter by total
     const filterByTotal = ({ value }) => {
@@ -55,7 +58,26 @@ function Inventories() {
         'Sanoq',
         'Farqi',
         'Farqi USD',
+        'Farqi UZS',
     ]
+
+    const toggleModal = () => {
+        setModalVisible(!modalVisible)
+        setPrintedInventories(null)
+    }
+
+    const handleClickPrint = (e) => {
+        const body = {
+            id: e._id,
+        }
+        dispatch(postInventoriesId(body)).then(({payload: {inventories}}) => {
+            if (inventories.length > 0) {
+                setPrintedInventories(inventories)
+            }
+        })
+        setModalVisible(true)
+    }
+
 
     const autoFillColumnWidth = (json) => {
         const cols = Object.keys(json[0])
@@ -94,7 +116,7 @@ function Inventories() {
             if (inventories.length > 0) {
                 const newData = inventories.map((item, index) => ({
                     nth: index + 1,
-                    data: item.createdAt,
+                    data: new Date(item?.createdAt).toLocaleDateString(),
                     code: item.productdata.code,
                     name: item.productdata.name,
                     initial: item.productcount,
@@ -103,6 +125,9 @@ function Inventories() {
                     differenceUSD:
                         item.inventorycount * item.price.incomingprice -
                         item.productcount * item.price.incomingprice,
+                    differenceUZS:
+                        item.inventorycount * item.price.incomingpriceuzs -
+                        item.productcount * item.price.incomingpriceuzs,
                 }))
                 continueHandleClick(newData, idx)
             }
@@ -149,6 +174,14 @@ function Inventories() {
             }}
             transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>
 
+            <UniversalModal
+                printedInventories={printedInventories}
+                body={'checkInventory'}
+                isOpen={modalVisible}
+                toggleModal={toggleModal}
+            /> 
+
+
             {dataLoading && (
                 <div className='fixed z-[50] backdrop-blur-[2px] left-0 right-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
                     <SmallLoader />
@@ -192,6 +225,7 @@ function Inventories() {
                         data={data}
                         headers={headers}
                         Excel={handleClick}
+                        Print={handleClickPrint}
                     />
                 )}
             </div>
