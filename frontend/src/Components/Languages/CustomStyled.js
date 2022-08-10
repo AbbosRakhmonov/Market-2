@@ -2,6 +2,8 @@ import React from 'react'
 import { components } from 'react-select'
 import { BsChevronRight } from 'react-icons/bs'
 
+
+
 export const DropdownIcon = (props) => {
     return (
         <components.DropdownIndicator {...props}>
@@ -25,8 +27,6 @@ const IndicatorsContainer = (styles) => ({
 
 const Container = (styles) => ({
     ...styles,
-    outline: "none",
-    border: "none",
 })
 
 const Control = (styles) => ({
@@ -72,19 +72,23 @@ const ValueContainer = (styles) => ({
 
 const Menu = (styles) => ({
     ...styles,
-    width: "140px",
-    marginLeft: "8rem",
-    marginTop: "-3.5rem",
+    position:"absolute",
+    width: "150px",
+    left: "115%",
+    top:"auto",
+    bottom:"0",
     padding: "0 10px",
     display: "flex",
     flexDirection: "column",
     gap: "10px",
+    
 })
 
 const Option = (styles) => ({
     ...styles,
-    width: "120px",
+    width: "130px",
     fontSize: '12px',
+    fontWeight: '300',
     lineHeight: '14px',
     borderRadius: "30px",
     padding: "10px 20px",
@@ -95,6 +99,8 @@ const Option = (styles) => ({
         backgroundColor: "#00B4CC"
     },
 })
+
+
 
 const CustomStyle = {
     option: Option,

@@ -15,9 +15,9 @@ const Language = () => {
             i18next.changeLanguage("lot");
         }
     }, [])
+
     // select language function
     
-    const flag = false
     const handleLanguageChange = (e) => {
         i18n.changeLanguage(e.value)  
 
@@ -25,9 +25,9 @@ const Language = () => {
 
 
     const options = [
-        { value: "lot",label:<span className='flex items-center gap-[10px] justify-center'><div className='p-[1px] rounded-[2px] bg-white-900'><img src={UZBflag}></img></div> UZ(Lotin)</span> },
-        { value: "uz", label:<span className='flex items-center gap-[10px] justify-center'><div className='p-[1px] rounded-[2px] bg-white-900'><img src={UZBflag}></img></div> UZ(Kiril)</span> },
-        { value: "ru", label:<span className='flex items-center gap-[10px] justify-start ml-[3px]'><div><img src={RUFlag}></img></div> RU</span>  }
+        { value: "lot", label:<span className='flex items-center gap-[10px] justify-start'><div className='p-[2px] rounded-[2px] bg-white-900'><img src={UZBflag}></img></div>UZ (Lotin)</span> },
+        { value: "uz", label:<span className='flex items-center gap-[10px] justify-start'><div className='p-[2px] rounded-[2px] bg-white-900'><img src={UZBflag}></img></div>UZ (Kiril)</span> },
+        { value: "ru", label:<span className='flex items-center gap-[10px] justify-start'><div className='p-[2px] rounded-[2px] bg-white-900'><img src={RUFlag}></img></div>RU</span>  }
     ]
     return (
         <div className='relative'>
