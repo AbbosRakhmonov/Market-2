@@ -31,9 +31,11 @@ const SavedSellings = () => {
         setModalVisible(!modalVisible)
     }
     const deletePayment = () => {
-        dispatch(deleteSavedPayment({ _id: selectedPayment })).then(() => {
-            toggleModal()
-            setSelectedPayment(null)
+        dispatch(deleteSavedPayment({ _id: selectedPayment })).then(({error}) => {
+            if(!error){
+                toggleModal()
+                setSelectedPayment(null)
+            }
         })
     }
     const handleGetId = (id) => {

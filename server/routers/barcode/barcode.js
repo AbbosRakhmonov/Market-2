@@ -21,7 +21,7 @@ module.exports.register = async (req, res) => {
 
     const code = new RegExp(".*" + search ? search.code : "" + ".*", "i");
 
-    const barcodesCount = await Barcode.find().count();
+    const barcodesCount = await Barcode.find({ barcode: code }).count();
     const barcodes = await Barcode.find({ barcode: code })
       .sort({ _id: -1 })
       .select("barcode name")
@@ -62,7 +62,7 @@ module.exports.registerAll = async (req, res) => {
 
     const code = new RegExp(".*" + search ? search.code : "" + ".*", "i");
 
-    const barcodesCount = await Barcode.find().count();
+    const barcodesCount = await Barcode.find({ barcode: code }).count();
     const barcodess = await Barcode.find({ barcode: code })
       .sort({ _id: -1 })
       .select("barcode name")
@@ -97,7 +97,7 @@ module.exports.getAll = async (req, res) => {
     const { search, currentPage, countPage } = req.body;
     const code = new RegExp(".*" + search ? search.code : "" + ".*", "i");
 
-    const barcodesCount = await Barcode.find().count();
+    const barcodesCount = await Barcode.find({ barcode: code }).count();
     const barcodes = await Barcode.find({ barcode: code })
       .sort({ _id: -1 })
       .select("barcode name")
@@ -125,7 +125,7 @@ module.exports.update = async (req, res) => {
     await Barcode.findByIdAndUpdate(barcode._id, { ...barcode });
     const code = new RegExp(".*" + search ? search.code : "" + ".*", "i");
 
-    const barcodesCount = await Barcode.find().count();
+    const barcodesCount = await Barcode.find({ barcode: code }).count();
     const barcodes = await Barcode.find({ barcode: code })
       .sort({ _id: -1 })
       .select("barcode name")

@@ -20,7 +20,7 @@ root.render(
         <ToastContainer
             position='top-right'
             theme={'colored'}
-            autoClose={3000}
+            autoClose={2000}
             hideProgressBar={false}
             newestOnTop={false}
             closeOnClick

@@ -131,7 +131,7 @@ const RegisterIncoming = () => {
 
         const countProcient = (price) =>
             currencyType === 'UZS'
-                ? Math.round((price / 100) * target) / 1 + price
+                ? Math.round((price / 100) * target) + price
                 : Math.round((price / 100) * target * 1000) / 1000 + price
 
         const changepieces = (obj) => {
@@ -229,7 +229,7 @@ const RegisterIncoming = () => {
                     products: [...postincoming],
                     user: user._id,
                 })
-            ).then(() => navigate('/maxsulotlar/qabul/qabullar'))
+            ).then(({error}) => !error && navigate('/maxsulotlar/qabul/qabullar'))
             removeTemporary()
         }
     }
@@ -369,7 +369,7 @@ const RegisterIncoming = () => {
                         value={selectProductValue}
                         options={productsData}
                         onSelect={selectProduct}
-                        isDisabled={supplier._id ? false : true}
+                        isDisabled={!supplier._id}
                     />
                 </div>
             </div>
