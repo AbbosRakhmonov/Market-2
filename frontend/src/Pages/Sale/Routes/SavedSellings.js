@@ -48,16 +48,7 @@ const SavedSellings = () => {
     }, [dispatch])
 
     return (
-        <div className='tableContainerPadding pt-[1.25rem]'
-            key='content'
-            initial='collapsed'
-            animate='open'
-            exit='collapsed'
-            variants={{
-                open: { opacity: 1, height: 'auto' },
-                collapsed: { opacity: 0, height: 0 },
-            }}
-            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>
+        <div className='tableContainerPadding pt-[1.25rem]'>
             <UniversalModal isOpen={modalVisible} body={'approve'} approveFunction={deletePayment}
                 toggleModal={toggleModal} headerText={'Saqlangan to\'lovni o\'chirishni tasdiqlaysizmi ?'}
                 title={'Agar to\'lov o\'chsa uni tiklab bo\'lmaydi !'} />

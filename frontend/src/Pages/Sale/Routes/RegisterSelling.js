@@ -896,15 +896,6 @@ const RegisterSelling = () => {
     return (
         <div
             className={'flex grow relative overflow-auto'}
-            key='content'
-            initial='collapsed'
-            animate='open'
-            exit='collapsed'
-            variants={{
-                open: {opacity: 1, height: 'auto'},
-                collapsed: {opacity: 0, height: 0},
-            }}
-            transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
         >
             {loadingMakePayment && (
                 <div className='fixed backdrop-blur-[2px] z-[100] left-0 top-0 right-0 bottom-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
