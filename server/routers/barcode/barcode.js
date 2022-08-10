@@ -91,3 +91,49 @@ module.exports.getbycode = async (req, res) => {
     res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
+
+module.exports.getAll = async (req, res) => {
+  try {
+    const { search, currentPage, countPage } = req.body;
+    const code = new RegExp(".*" + search ? search.code : "" + ".*", "i");
+
+    const barcodesCount = await Barcode.find().count();
+    const barcodes = await Barcode.find({ barcode: code })
+      .sort({ _id: -1 })
+      .select("barcode name")
+      .skip(currentPage * countPage)
+      .limit(countPage);
+
+    res.status(201).send({ barcodes, count: barcodesCount });
+  } catch (error) {
+    console.log(error);
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+  }
+};
+
+module.exports.update = async (req, res) => {
+  try {
+    const { barcode, search, currentPage, countPage } = req.body;
+
+    const { error } = validateBarcode({ ...barcode });
+    if (error) {
+      return res.status(400).json({
+        error: error.message,
+      });
+    }
+
+    await Barcode.findByIdAndUpdate(barcode._id, { ...barcode });
+    const code = new RegExp(".*" + search ? search.code : "" + ".*", "i");
+
+    const barcodesCount = await Barcode.find().count();
+    const barcodes = await Barcode.find({ barcode: code })
+      .sort({ _id: -1 })
+      .select("barcode name")
+      .skip(currentPage * countPage)
+      .limit(countPage);
+
+    res.status(201).send({ barcodes, count: barcodesCount });
+  } catch (error) {
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+  }
+};

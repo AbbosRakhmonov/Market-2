@@ -23,6 +23,7 @@ const barcode = new Schema(
 
 function validateBarcode(barcode) {
   const schema = Joi.object({
+    _id: Joi.string(),
     barcode: Joi.string().required(),
     mxik: Joi.string(),
     group: Joi.string(),
