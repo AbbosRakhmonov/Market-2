@@ -78,7 +78,7 @@ const Sellings = () => {
         setShowByTotal(value)
         setCurrentPage(0)
     }
-
+    
     // handle change client and id
     const handleChangeId = (e) => {
         const val = e.target.value

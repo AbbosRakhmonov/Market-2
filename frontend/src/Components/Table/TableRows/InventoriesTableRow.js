@@ -33,7 +33,7 @@ export const InventoriesTableRow = ({
                             <TableBtn
                                 type={'print'}
                                 bgcolor={'bg-primary-800'}
-                                onClick={Print}
+                                onClick={() => Print(inventory)}
                             />
                             <TableBtn
                                 isDisabled={isDisabled}

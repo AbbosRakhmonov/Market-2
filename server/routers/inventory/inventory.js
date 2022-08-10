@@ -296,7 +296,7 @@ module.exports.inventoryproducts = async (req, res) => {
     })
         .select("inventorycount productcount createdAt comment")
         .populate("productdata", "name code")
-        .populate("price", "incomingprice sellingprice");
+        .populate("price", "incomingprice sellingprice incomingpriceuzs sellingpriceuzs");
 
     res.status(201).json({inventories, inventoriesConnector});
   } catch (error) {

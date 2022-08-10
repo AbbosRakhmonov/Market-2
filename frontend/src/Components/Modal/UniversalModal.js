@@ -7,7 +7,7 @@ import Complate from './ModalBodys/Complate.js'
 import RegisterIncomingModal from './ModalBodys/RegisterIncomingModal'
 import Check from './ModalBodys/Check.js'
 import AllChecks from './ModalBodys/AllChecks.js'
-
+import AllCheckInventories from './ModalBodys/AllCheckInventories'
 function UniversalModal({
                             isOpen,
                             toggleModal,
@@ -23,7 +23,8 @@ function UniversalModal({
                             product,
                             changeProduct,
                             currency,
-                            printedSelling
+                            printedSelling,
+                            printedInventories
                         }) {
     const customStyles = {
         content: {
@@ -100,6 +101,12 @@ function UniversalModal({
                         product={printedSelling}
                     />
                 )
+            case 'checkInventory': 
+            return (
+                    <AllCheckInventories
+                       product={printedInventories}
+                    />
+            )    
             default:
                 return 'Bunday jadval topilmadi'
         }

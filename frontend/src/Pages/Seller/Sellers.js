@@ -119,6 +119,7 @@ function Sellers() {
     }
 
     const handleEditSeller = (seller) => {
+        clearForm()
         setCurrentSeller(seller)
         setStickForm(true)
         setSellerName(seller.firstname)
