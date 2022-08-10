@@ -83,6 +83,8 @@ const RegisterSelling = () => {
     const [modalData, setModalData] = useState(null)
     const [temporary, setTemporary] = useState(null)
     const [saleConnectorId, setSaleConnectorId] = useState(null)
+    const [returnProducts, setReturnProducts] = useState([])
+    const [returnDiscounts, setReturnDiscounts] = useState([])
     const headers = [
         {title: '№'},
         {title: 'Kodi'},
@@ -524,13 +526,15 @@ const RegisterSelling = () => {
             saleconnectorid: saleConnectorId,
         }
         dispatch(saleConnectorId ? addPayment(body) : makePayment(body)).then(
-            ({payload}) => {
-                setModalData(payload)
-                setTimeout(() => {
-                    setModalBody('checkSell')
-                    setModalVisible(true)
-                    clearAll()
-                }, 500)
+            ({payload, error}) => {
+                if (!error) {
+                    setModalData(payload)
+                    setTimeout(() => {
+                        setModalBody('checkSell')
+                        setModalVisible(true)
+                        clearAll()
+                    }, 500)
+                }
             }
         )
         if (temporary) {
@@ -560,9 +564,11 @@ const RegisterSelling = () => {
                     totalPriceUzs: allUzs,
                 },
             }
-            dispatch(savePayment(body)).then(() => {
-                clearAll(false)
-                navigate('/sotuv/saqlanganlar')
+            dispatch(savePayment(body)).then(({error}) => {
+                if (!error) {
+                    clearAll(false)
+                    navigate('/sotuv/saqlanganlar')
+                }
             })
             if (temporary) {
                 dispatch(deleteSavedPayment({_id: temporary._id}))
@@ -626,7 +632,7 @@ const RegisterSelling = () => {
             : tableProducts.filter((obj) => obj.product._id === option.value)
                   .length > 0
         if (!hasProduct) {
-            setSelectedProduct(option)
+            !option.barcode && setSelectedProduct(option)
             const product = option.barcode
                 ? allProducts.find(
                       (obj) => obj.productdata.barcode === option.barcode
@@ -823,14 +829,14 @@ const RegisterSelling = () => {
             setFilteredProducts(
                 filteredData.map((product) => ({
                     value: product._id,
-                    label: `${product.productdata.code} - ${product.productdata.name}`,
+                    label: `${product.category.code}${product.productdata.code} - ${product.productdata.name}`,
                 }))
             )
         } else {
             setFilteredProducts(
                 allProducts.map((product) => ({
                     value: product._id,
-                    label: `${product.productdata.code} - ${product.productdata.name}`,
+                    label: `${product.category.code}${product.productdata.code} - ${product.productdata.name}`,
                 }))
             )
         }
@@ -877,7 +883,7 @@ const RegisterSelling = () => {
             setPackmanValue(data.temporary.packmanValue)
             setUserValue(data.temporary.userValue)
         }
-        if (data && data.saleconnector) {
+        if (data && data.saleconnector && !data.returnProducts) {
             const connector = data.saleconnector
             data.saleconnector.client &&
                 setClientValue({
@@ -890,6 +896,9 @@ const RegisterSelling = () => {
                     value: connector.packman._id,
                 })
             setSaleConnectorId(connector._id)
+        }
+        if (data && data.saleconnector && data.returnProducts) {
+            // const products = data.saleconnector.products.map(producr)
         }
     }, [location.state])
 

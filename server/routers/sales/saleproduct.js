@@ -86,11 +86,13 @@ module.exports.register = async (req, res) => {
         pieces,
         product: product._id,
       });
-
-      const produc = await Product.findById(product._id);
+      const produc = await Product.findById(product._id).populate(
+        "productdata",
+        "name"
+      );
       if (produc.total < pieces) {
         return res.status(400).json({
-          error: `Diqqat! ${produc.name} mahsuloti onmborda yetarlicha mavjud emas. Qolgan mahsulot soni ${product.total} ta`,
+          error: `Diqqat! ${produc.productdata.name} mahsuloti omborda yetarlicha mavjud emas. Qolgan mahsulot soni ${produc.total} ta`,
         });
       }
       if (error) {
@@ -339,10 +341,13 @@ module.exports.addproducts = async (req, res) => {
         product: product._id,
       });
 
-      const produc = await Product.findById(product._id);
+      const produc = await Product.findById(product._id).populate(
+        "productdata",
+        "name"
+      );
       if (produc.total < pieces) {
         return res.status(400).json({
-          error: `Diqqat! ${product.name} mahsuloti onmborda yetarlicha mavjud emas. Qolgan mahsulot soni ${product.total} ta`,
+          error: `Diqqat! ${produc.productdata.name} mahsuloti omborda yetarlicha mavjud emas. Qolgan mahsulot soni ${produc.total} ta`,
         });
       }
       if (error) {

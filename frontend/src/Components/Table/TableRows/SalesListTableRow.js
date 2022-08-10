@@ -9,7 +9,6 @@ export const SalesListTableRow = ({
     countPage,
     currency,
     Print,
-    ReturnPayment,
 }) => {
     const result = (prev, usd, uzs) => {
         return currency === 'USD' ? prev + usd : prev + uzs
@@ -22,9 +21,9 @@ export const SalesListTableRow = ({
     }
 
     const navigate = useNavigate()
-    const linkToSale = (saleconnector) => {
+    const linkToSale = (saleconnector, returnProducts) => {
         navigate('/sotuv/sotish', {
-            state: {saleconnector},
+            state: {saleconnector, returnProducts},
         })
     }
     return (
@@ -98,7 +97,7 @@ export const SalesListTableRow = ({
                             <TableBtn
                                 type={'return'}
                                 bgcolor={'bg-error-500'}
-                                onClick={() => ReturnPayment(saleconnector)}
+                                onClick={() => linkToSale(saleconnector, true)}
                             />
                         </div>
                     </td>

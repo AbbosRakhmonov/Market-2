@@ -25,35 +25,34 @@ import {DiscountTableRow} from './TableRows/DiscountTableRow'
 import {ExpensesTableRow} from './TableRows/ExpensesTableRow'
 import {BarcodeTableRow} from './TableRows/BarcodeTableRow.js'
 
-function Table(
-    {
-        page,
-        data,
-        headers,
-        currentPage,
-        countPage,
-        Sort,
-        Edit,
-        Delete,
-        currency,
-        changeHandler,
-        addProductCheque,
-        productCheque,
-        Print,
-        inputValue,
-        inputDisabled,
-        Excel,
-        editedIncoming,
-        saveEditIncoming,
-        sortItem,
-        ReturnPayment,
-        Save,
-        onKeyUp,
-        currencyType,
-        type,
-        Pay,
-        isDisabled
-    }) {
+function Table({
+    page,
+    data,
+    headers,
+    currentPage,
+    countPage,
+    Sort,
+    Edit,
+    Delete,
+    currency,
+    changeHandler,
+    addProductCheque,
+    productCheque,
+    Print,
+    inputValue,
+    inputDisabled,
+    Excel,
+    editedIncoming,
+    saveEditIncoming,
+    sortItem,
+    ReturnPayment,
+    Save,
+    onKeyUp,
+    currencyType,
+    type,
+    Pay,
+    isDisabled
+}) {
     const checkRows = () => {
         switch (page) {
             case 'product':
