@@ -30,12 +30,13 @@ const IncomingsList = lazy(() => import('./Incomings/Routes/IncomingsList'))
 const IncomingSuppliers = lazy(() =>
     import('./Incomings/Routes/IncomingSuppliers')
 )
+const ReportPage = lazy(() => import('./Reports/ReportPage'))
 // <-- pages
 
 const directorRoutes = [
     {
         path: '/',
-        element: <MainPage />
+        element: <MainPage />,
     },
     {
         path: '/maxsulotlar/qabul/',
@@ -43,53 +44,53 @@ const directorRoutes = [
         subRoutes: [
             {
                 path: 'qabulqilish',
-                element: <RegisterIncoming />
+                element: <RegisterIncoming />,
             },
             {
                 path: 'qabullar',
-                element: <Incomings />
+                element: <Incomings />,
             },
             {
                 path: 'qabullar/:id',
-                element: <IncomingSuppliers />
+                element: <IncomingSuppliers />,
             },
             {
                 path: 'saqlanganlar',
-                element: <SavedIncoming />
+                element: <SavedIncoming />,
             },
             {
                 path: 'ruyxat',
-                element: <IncomingsList />
-            }
-        ]
+                element: <IncomingsList />,
+            },
+        ],
     },
     {
         path: '/maxsulotlar/yaratish/maxsulotlar',
-        element: <Products />
+        element: <Products />,
     },
     {
         path: '/maxsulotlar/yaratish/kategoriyalar',
-        element: <Category />
+        element: <Category />,
     },
     {
         path: '/maxsulotlar/yaratish/yetkazuvchilar',
-        element: <Supplier />
+        element: <Supplier />,
     },
     {
         path: '/maxsulotlar/hisobot',
-        element: <ProductReport />
+        element: <ProductReport />,
     },
     {
         path: '/maxsulotlar/inventarizatsiya/inventarizatsiya',
-        element: <Inventory />
+        element: <Inventory />,
     },
     {
         path: '/maxsulotlar/inventarizatsiya/inventarizatsiyalar',
-        element: <Inventories />
+        element: <Inventories />,
     },
     {
         path: '/maxsulotlar/yaratish/ulchov',
-        element: <Unit />
+        element: <Unit />,
     },
     {
         path: '/sotuv/',
@@ -97,37 +98,41 @@ const directorRoutes = [
         subRoutes: [
             {
                 path: 'sotish',
-                element: <RegisterSelling />
+                element: <RegisterSelling />,
             },
             {
                 path: 'saqlanganlar',
-                element: <SavedSellings />
+                element: <SavedSellings />,
             },
             {
                 path: 'ruyxat',
-                element: <Sellings />
-            }
-        ]
+                element: <Sellings />,
+            },
+        ],
     },
     {
         path: '/hamkorlar/agentlar',
-        element: <Packman />
+        element: <Packman />,
     },
     {
         path: '/hamkorlar/mijozlar',
-        element: <ClientsPage />
+        element: <ClientsPage />,
     },
     {
         path: '/hamkorlar/sotuvchilar',
-        element: <Sellers />
+        element: <Sellers />,
     },
     {
         path: '/valyuta',
-        element: <Exchangerate />
+        element: <Exchangerate />,
     },
     {
         path: '/kassa',
-        element: <Reports />
+        element: <Reports />,
+    },
+    {
+        path: '/kassa/:id',
+        element: <ReportPage />,
     },
     {
         path: '/dukonlar/*',
@@ -135,14 +140,14 @@ const directorRoutes = [
         subRoutes: [
             {
                 path: ':tablename/:_id',
-                element: <Shops />
+                element: <Shops />,
             },
             {
                 path: 'filiallar',
-                element: <Shops />
-            }
-        ]
-    }
+                element: <Shops />,
+            },
+        ],
+    },
 ]
 const sellerRoutes = [
     {
@@ -151,18 +156,18 @@ const sellerRoutes = [
         subRoutes: [
             {
                 path: '/',
-                element: <RegisterSelling />
+                element: <RegisterSelling />,
             },
             {
                 path: 'saqlanganlar',
-                element: <SavedSellings />
+                element: <SavedSellings />,
             },
             {
                 path: 'ruyxat',
-                element: <Sellings />
-            }
-        ]
-    }
+                element: <Sellings />,
+            },
+        ],
+    },
 ]
 
 const chooseRoute = (type) => {
@@ -175,24 +180,38 @@ const chooseRoute = (type) => {
             return [
                 {
                     path: '/',
-                    element: <h1>Sahifa mavjud emas</h1>
-                }
+                    element: <h1>Sahifa mavjud emas</h1>,
+                },
             ]
     }
 }
 
 const protectedRoutes = (type) => {
     const catchRoutes = chooseRoute(type.toLowerCase())
-    return catchRoutes.map((route) => route.subRoutes ?
-        <Route exact key={uniqueId('route')} path={route.path} element={route.element}>
-            {
-                route.subRoutes.map((subRoute) =>
+    return catchRoutes.map((route) =>
+        route.subRoutes ? (
+            <Route
+                exact
+                key={uniqueId('route')}
+                path={route.path}
+                element={route.element}
+            >
+                {route.subRoutes.map((subRoute) => (
                     <Route
                         key={uniqueId('sub-route')}
                         path={subRoute.path}
-                        element={subRoute.element} />)
-            }
-        </Route> :
-        <Route exact key={uniqueId('route')} path={route.path} element={route.element} />)
+                        element={subRoute.element}
+                    />
+                ))}
+            </Route>
+        ) : (
+            <Route
+                exact
+                key={uniqueId('route')}
+                path={route.path}
+                element={route.element}
+            />
+        )
+    )
 }
 export default protectedRoutes

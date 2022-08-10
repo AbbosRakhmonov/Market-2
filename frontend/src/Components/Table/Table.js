@@ -243,7 +243,7 @@ function Table({
                         Delete={Delete}
                     />
                 )
-            case 'salereturn':
+            case 'backproducts':
                 return (
                     <SaleReturnTableRow
                         onKeyUp={onKeyUp}
@@ -262,7 +262,27 @@ function Table({
                         data={data}
                     />
                 )
-            case 'payments':
+            case 'cash':
+                return (
+                    <PaymentsTableRow
+                        currentPage={currentPage}
+                        countPage={countPage}
+                        currency={currency}
+                        data={data}
+                        type={type}
+                    />
+                )
+            case 'card':
+                return (
+                    <PaymentsTableRow
+                        currentPage={currentPage}
+                        countPage={countPage}
+                        currency={currency}
+                        data={data}
+                        type={type}
+                    />
+                )
+            case 'transfer':
                 return (
                     <PaymentsTableRow
                         currentPage={currentPage}

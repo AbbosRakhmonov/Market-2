@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 
 const CheckoutCards = ({
     type,
@@ -9,6 +10,7 @@ const CheckoutCards = ({
     active,
     currency,
     report,
+    path,
 }) => {
     const chooseCardName = `cardContainer ${
         type === 'sale' ||
@@ -27,7 +29,7 @@ const CheckoutCards = ({
     } ${active ? 'activeCard' : ''}`
 
     return (
-        <button onClick={onClick}>
+        <Link to={`/kassa/${path}`} onClick={onClick}>
             <span className={chooseCardName}>
                 <span className='tradeIn'>
                     <span
@@ -66,7 +68,7 @@ const CheckoutCards = ({
                     </span>
                 </span>
             </span>
-        </button>
+        </Link>
     )
 }
 

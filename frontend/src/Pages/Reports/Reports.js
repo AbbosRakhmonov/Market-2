@@ -57,11 +57,7 @@ const Reports = () => {
         (state) => state.reports
     )
     const [startDate, setStartDate] = useState(
-        new Date(
-            new Date().getFullYear(),
-            new Date().getMonth(),
-            new Date().getDate()
-        )
+        new Date(new Date().getFullYear(), new Date().getMonth(), 1)
     )
     const [endDate, setEndDate] = useState(new Date())
     const { currencyType } = useSelector((state) => state.currency)
@@ -107,6 +103,7 @@ const Reports = () => {
                     card.map((i) => (
                         <CheckoutCards
                             key={uniqueId('card')}
+                            path={i.type}
                             name={i.name}
                             type={i.type}
                             percentage={i.percentage}

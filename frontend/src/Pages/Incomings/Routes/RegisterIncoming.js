@@ -41,6 +41,10 @@ const RegisterIncoming = () => {
         label: 'Yetkazib beruvchi',
         value: '',
     })
+    const [selectProductValue, setSelectProductValue] = useState({
+        label: 'Mahsulotlar',
+        value: '',
+    })
 
     // functions for onchange of select
     const selectSupplier = (e) => {
@@ -65,6 +69,10 @@ const RegisterIncoming = () => {
     }
 
     const selectProduct = (e) => {
+        setSelectProductValue({
+            label: e.label,
+            value: e.value,
+        })
         if (
             !incomings.some(
                 (incoming) =>
@@ -250,7 +258,16 @@ const RegisterIncoming = () => {
                     incomings,
                 },
             })
-        )
+        ).then(() => {
+            setSelectSupplierValue({
+                label: 'Yetkazib beruvchi',
+                value: '',
+            })
+            setSelectProductValue({
+                label: 'Mahsulotlar',
+                value: '',
+            })
+        })
     }
 
     // Tableheader
@@ -358,6 +375,7 @@ const RegisterIncoming = () => {
                 </div>
                 <div className='w-full pl-[1.25rem]'>
                     <SelectInput
+                        value={selectProductValue}
                         options={productsData}
                         onSelect={selectProduct}
                         isDisabled={supplier._id ? false : true}
