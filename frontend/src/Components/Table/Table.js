@@ -23,35 +23,37 @@ import {IncomeTableRow} from './TableRows/IncomeTableRow'
 import {DebtsTableRow} from './TableRows/DebtsTableRow'
 import {DiscountTableRow} from './TableRows/DiscountTableRow'
 import {ExpensesTableRow} from './TableRows/ExpensesTableRow'
+import {BarcodeTableRow} from './TableRows/BarcodeTableRow.js'
 
-function Table({
-    page,
-    data,
-    headers,
-    currentPage,
-    countPage,
-    Sort,
-    Edit,
-    Delete,
-    currency,
-    changeHandler,
-    addProductCheque,
-    productCheque,
-    Print,
-    inputValue,
-    inputDisabled,
-    Excel,
-    editedIncoming,
-    saveEditIncoming,
-    sortItem,
-    ReturnPayment,
-    Save,
-    onKeyUp,
-    currencyType,
-    type,
-    Pay,
-    isDisabled
-}) {
+function Table(
+    {
+        page,
+        data,
+        headers,
+        currentPage,
+        countPage,
+        Sort,
+        Edit,
+        Delete,
+        currency,
+        changeHandler,
+        addProductCheque,
+        productCheque,
+        Print,
+        inputValue,
+        inputDisabled,
+        Excel,
+        editedIncoming,
+        saveEditIncoming,
+        sortItem,
+        ReturnPayment,
+        Save,
+        onKeyUp,
+        currencyType,
+        type,
+        Pay,
+        isDisabled
+    }) {
     const checkRows = () => {
         switch (page) {
             case 'product':
@@ -329,6 +331,16 @@ function Table({
                         countPage={countPage}
                     />
                 )
+            case 'barcode':
+                return (
+                    <BarcodeTableRow
+                        data={data}
+                        currentPage={currentPage}
+                        countPage={countPage}
+                        Edit={Edit}
+                        Delete={Delete}
+                    />
+                )
             default:
                 return ''
         }
@@ -336,7 +348,7 @@ function Table({
     return (
         <table className='overflow-x-auto w-full'>
             <thead className='rounded-t-lg'>
-                {<Thead headers={headers} Sort={Sort} sortItem={sortItem} />}
+            {<Thead headers={headers} Sort={Sort} sortItem={sortItem} />}
             </thead>
             <tbody>{checkRows()}</tbody>
         </table>

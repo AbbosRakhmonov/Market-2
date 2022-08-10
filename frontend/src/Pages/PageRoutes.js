@@ -1,19 +1,13 @@
 import {Suspense, useEffect} from 'react'
-import {Routes} from 'react-router-dom'
+import {Route, Routes} from 'react-router-dom'
 import Navbar from '../Components/Navbar/Navbar'
 import Currency from '../Components/Currency/Currency.js'
 import {useDispatch, useSelector} from 'react-redux'
-import {
-    changeCurrencyType,
-    clearError,
-    getCurrency,
-    getCurrencyType,
-} from './Currency/currencySlice'
-import {
-    universalToast,
-    warningCurrencyRate,
-} from '../Components/ToastMessages/ToastMessages.js'
+import {changeCurrencyType, clearError, getCurrency, getCurrencyType} from './Currency/currencySlice'
+import {universalToast, warningCurrencyRate} from '../Components/ToastMessages/ToastMessages.js'
 import protectedRoutes from './ProtectedRoutes.js'
+import Barcode from './Barcode/Barcode.js'
+
 
 const PageRoutes = () => {
     const dispatch = useDispatch()
@@ -46,7 +40,10 @@ const PageRoutes = () => {
             <Navbar />
             <div className={'grow h-screen overflow-y-auto'}>
                 <Suspense fallback={'loading'}>
-                    <Routes>{protectedRoutes(user.type)}</Routes>
+                    <Routes>
+                        {protectedRoutes(user.type)}
+                        <Route path={'/admin'} element={<Barcode />} />
+                    </Routes>
                 </Suspense>
             </div>
         </section>

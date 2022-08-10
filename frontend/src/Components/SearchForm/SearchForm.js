@@ -6,36 +6,40 @@ import PrintBtn from '../Buttons/PrintBtn.js'
 import {ConfirmBtn} from '../Buttons/SaveConfirmBtn.js'
 import Dates from '../Dates/Dates.js'
 
-function SearchForm({
-                        filterByTotal,
-                        searchByCode,
-                        searchById,
-                        searchByDelivererName,
-                        filterByDelivererName,
-                        filterByDelivererNameWhenPressEnter,
-                        searchByClientName,
-                        filterByClientName,
-                        filterByClientNameWhenPressEnter,
-                        filterById,
-                        filterByIdWhenPressEnter,
-                        filterByCode,
-                        filterByCodeAndNameAndCategoryWhenPressEnter,
-                        searchByName,
-                        filterByName,
-                        filterBy,
-                        searchByCategory,
-                        filterByCategory,
-                        numberOfChecks,
-                        setNumberOfChecks,
-                        clickPrintBtn,
-                        startDate,
-                        endDate,
-                        setStartDate,
-                        setEndDate,
-                        date,
-                        setDate,
-                        clickConfirmBtn
-                    }) {
+function SearchForm(
+    {
+        filterByTotal,
+        searchByCode,
+        searchById,
+        searchByDelivererName,
+        filterByDelivererName,
+        filterByDelivererNameWhenPressEnter,
+        searchByClientName,
+        filterByClientName,
+        filterByClientNameWhenPressEnter,
+        filterById,
+        filterByIdWhenPressEnter,
+        filterByCode,
+        filterByCodeAndNameAndCategoryWhenPressEnter,
+        searchByName,
+        filterByName,
+        filterBy,
+        searchByCategory,
+        filterByCategory,
+        numberOfChecks,
+        setNumberOfChecks,
+        clickPrintBtn,
+        startDate,
+        endDate,
+        setStartDate,
+        setEndDate,
+        date,
+        setDate,
+        clickConfirmBtn,
+        barcode,
+        filterByBarcode,
+        filterByBarcodeWhenPressEnter
+    }) {
     const chooseComponent = (key) => {
         switch (key) {
             case 'total':
@@ -199,6 +203,23 @@ function SearchForm({
                         onClick={clickConfirmBtn}
                     />
                 )
+            case 'barcode':
+                return (<FilterButtons
+                    key={'barcode_1'}
+                    label={'Shtrix kodi'}
+                    element={
+                        <FieldContainer
+                            placeholder={'misol: 10156678'}
+                            type={'text'}
+                            value={barcode}
+                            onChange={filterByBarcode}
+                            maxWidth={'w-[10rem]'}
+                            onKeyUp={
+                                filterByBarcodeWhenPressEnter
+                            }
+                        />
+                    }
+                />)
             default:
                 return null
         }

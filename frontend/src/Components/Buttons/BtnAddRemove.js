@@ -6,9 +6,7 @@ const BtnAddRemove = ({onClick, text, add, edit}) => {
     return (
         <button
             onClick={onClick}
-            className={
-                add ? 'createElement' : edit ? 'edit-button' : 'clearElement'
-            }
+            className={`focus-visible:outline-none ${add ? 'createElement' : edit ? 'edit-button' : 'clearElement'}`}
         >
             {add && !edit ? (
                 <div className='plusIcon'>
