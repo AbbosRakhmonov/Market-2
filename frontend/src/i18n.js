@@ -7,12 +7,11 @@ i18n.use(Backend)
     .use(LanguageDetector)
     .use(initReactI18next)
     .init({
-        // translate file path
         backend: {
             loadPath: "assets/i18n/{{ns}}/{{lng}}.json",
         },
         fallbackLng: "lot",
-        debug: true,
+        debug: false,
         ns: ["common"],
         interpolation: {
             escapeValue: false,

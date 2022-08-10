@@ -7,26 +7,8 @@ import ProfileMenuLink from './ProfileMenuLink'
 import NavbarLink from './NavbarLink'
 import {logOut} from '../../Pages/Login/loginSlice'
 import {useDispatch, useSelector} from 'react-redux'
-import { useTranslation } from 'react-i18next'
-import i18next from 'i18next'
 
 function Navbar() {
-
-    const { i18n, t } = useTranslation(["report"])
-
-    useEffect(() => {
-        if (localStorage.getItem("i18nextLng")?.length > 1) {
-            i18next.changeLanguage("lot");
-        }
-    }, [])
-
-
-    // select language function
-
-    const handleLanguageChange = (e) => {
-        i18n.changeLanguage(e.target.value)
-    }
-
     const dispatch = useDispatch()
     const {user} = useSelector((state) => state.login)
     const [navbarExpended, setNavbarExpended] = useState(false)
