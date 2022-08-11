@@ -7,16 +7,6 @@ export const CashierSaleTableRow = ({
     countPage,
     currency,
 }) => {
-    const result = (prev, usd, uzs) => {
-        return currency === 'USD' ? prev + usd : prev + uzs
-    }
-
-    const reduceEl = (arr, usd, uzs) => {
-        return arr.reduce((prev, item) => {
-            return result(prev, item[usd], item[uzs])
-        }, 0)
-    }
-
     return (
         <>
             {data.map((saleconnector, index) => (
@@ -28,39 +18,38 @@ export const CashierSaleTableRow = ({
                         {new Date(saleconnector.createdAt).toLocaleDateString()}
                     </td>
                     <td className='text-left td'>
-                        {saleconnector?.client?.name || saleconnector.id}
+                        {saleconnector.saleconnector.id}
                     </td>
-                    <td className='text-right td py-[0.625rem] font-bold'>
-                        {reduceEl(
-                            saleconnector.products,
-                            'totalprice',
-                            'totalpriceuzs'
+                    <td className='text-left td'>
+                        {saleconnector?.client?.name}
+                    </td>
+                    <td className='text-right td py-[0.625rem] font-medium'>
+                        {(currency === 'USD'
+                            ? saleconnector.payment.totalprice
+                            : saleconnector.payment.totalpriceuzs
                         ).toLocaleString('ru-Ru')}{' '}
                         {currency}
                     </td>
-                    <td className='text-right td text-primary-800 font-bold'>
-                        {reduceEl(
-                            saleconnector.payments,
-                            'cash',
-                            'cashuzs'
+                    <td className='text-right td font-medium'>
+                        {(currency === 'USD'
+                            ? saleconnector.payment.cash
+                            : saleconnector.payment.cashuzs
                         ).toLocaleString('ru-Ru')}{' '}
-                        {currency}
+                        <span className='text-primary-800'>{currency}</span>
                     </td>
-                    <td className='text-right td text-success-500 font-bold'>
-                        {reduceEl(
-                            saleconnector.payments,
-                            'card',
-                            'carduzs'
+                    <td className='text-right td font-medium'>
+                        {(currency === 'USD'
+                            ? saleconnector.payment.card
+                            : saleconnector.payment.carduzs
                         ).toLocaleString('ru-Ru')}{' '}
-                        {currency}
+                        <span className='text-success-500'>{currency}</span>
                     </td>
-                    <td className='text-right td text-warning-500 font-bold border-r-0'>
-                        {reduceEl(
-                            saleconnector.payments,
-                            'transfer',
-                            'transferuzs'
+                    <td className='text-right td font-medium border-r-0'>
+                        {(currency === 'USD'
+                            ? saleconnector.payment.transfer
+                            : saleconnector.payment.transferuzs
                         ).toLocaleString('ru-Ru')}{' '}
-                        {currency}
+                        <span className='text-warning-500'>{currency}</span>
                     </td>
                 </tr>
             ))}

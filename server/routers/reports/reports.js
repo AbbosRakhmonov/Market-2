@@ -173,7 +173,11 @@ module.exports.getReport = async (req, res) => {
 
 module.exports.getSales = async (req, res) => {
   try {
-    const { market, currentPage, countPage, startDate, endDate } = req.body;
+    const { market, currentPage, countPage, startDate, endDate, search } =
+      req.body;
+
+    const id = new RegExp('.*' + search ? search.id : '' + '.*', 'i');
+    const client = new RegExp('.*' + search ? search.client : '' + '.*', 'i');
 
     const marke = await Market.findById(market);
     if (!marke) {
@@ -182,7 +186,7 @@ module.exports.getSales = async (req, res) => {
         .json({ message: `Diqqat! Do'kon haqida malumotlar topilmadi!` });
     }
 
-    const saleconnector = await SaleConnector.find({
+    const saleconnector = await DailySaleConnector.find({
       market,
       createdAt: {
         $gte: startDate,
@@ -190,26 +194,41 @@ module.exports.getSales = async (req, res) => {
       },
     })
       .select('-isArchive -user -updatedAt -__v -packman')
+      .populate({
+        path: 'saleconnector',
+        select: 'id',
+        match: { id: id },
+      })
       .populate(
-        'payments',
+        'payment',
         'cash cashuzs card carduzs transfer transferuzs payment paymentuzs totalprice totalpriceuzs'
       )
-      .populate('client', 'name')
+      .populate({
+        path: 'client',
+        select: 'name',
+        match: { name: client },
+      })
       .populate('products', 'totalprice totalpriceuzs pieces price');
 
-    const count = saleconnector.length;
-    const data = saleconnector.slice(currentPage * countPage, countPage);
+    let filter = saleconnector.filter((sale) => {
+      return sale.saleconnector !== null && sale.client !== null;
+    });
+    const count = filter.length;
+    const data = filter.slice(currentPage * countPage, countPage);
 
     res.status(200).json({ data, count });
   } catch (error) {
-    console.log(error);
     res.status(400).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
 module.exports.getProfitData = async (req, res) => {
   try {
-    const { market, currentPage, countPage, startDate, endDate } = req.body;
+    const { market, currentPage, countPage, startDate, endDate, search } =
+      req.body;
+
+    const id = new RegExp('.*' + search ? search.id : '' + '.*', 'i');
+    const client = new RegExp('.*' + search ? search.client : '' + '.*', 'i');
 
     const marke = await Market.findById(market);
     if (!marke) {
@@ -218,74 +237,79 @@ module.exports.getProfitData = async (req, res) => {
         .json({ message: `Diqqat! Do'kon haqida malumotlar topilmadi!` });
     }
 
-    const saleconnector = await SaleConnector.find({
+    const saleconnector = await DailySaleConnector.find({
       market,
       createdAt: {
         $gte: startDate,
         $lte: endDate,
       },
     })
-      .select('-isArchive -user -updatedAt -__v -packman')
-      .populate('client', 'name')
+      .select('-isArchive -updatedAt -user -market -__v')
+      .populate(
+        'payment',
+        'cash cashuzs card carduzs transfer transferuzs payment paymentuzs totalprice totalpriceuzs'
+      )
+      .populate({
+        path: 'saleconnector',
+        select: 'id',
+        match: { id: id },
+      })
+      .populate({
+        path: 'client',
+        select: 'name',
+        match: { name: client },
+      })
       .populate({
         path: 'products',
-        select:
-          'totalprice unitprice totalpriceuzs unitpriceuzs pieces createdAt discount price',
+        select: 'totalprice totalpriceuzs pieces price',
         populate: {
           path: 'price',
-          select: 'incomingprice incomingpriceuzs',
+          select: 'incomingprice incomingpriceuzs sellingprice sellingpriceuzs',
         },
       })
-      .populate('discounts', 'discount discountuzs');
+      .populate(
+        'discount',
+        'discount discountuzs totalprice totalpriceuzs procient'
+      );
 
-    let profitData = saleconnector.map((sale) => {
-      let totalincomingprice = sale.products.reduce(
-        (prev, product) => prev + product.price.incomingprice,
-        0
-      );
-      let totalincomingpriceuzs = sale.products.reduce(
-        (prev, product) => prev + product.price.incomingpriceuzs,
-        0
-      );
-      let totalsellingprice = sale.products.reduce(
-        (prev, product) => prev + product.totalprice,
-        0
-      );
-      let totalsellingpriceuzs = sale.products.reduce(
-        (prev, product) => prev + product.totalpriceuzs,
-        0
-      );
-      let totaldiscount = sale.discounts.reduce(
-        (prev, discount) => prev + discount.discount,
-        0
-      );
-      let totaldiscountuzs = sale.discounts.reduce(
-        (prev, discount) => prev + discount.discountuzs,
-        0
-      );
-      let profit = totalsellingprice - totalincomingprice - totaldiscount;
-      let profituzs =
-        totalsellingpriceuzs - totalincomingpriceuzs - totaldiscountuzs;
+    const profitData = saleconnector
+      .map((sale) => {
+        const totalincomingprice = sale.products.reduce(
+          (prev, item) => prev + item.pieces * item.price.incomingprice,
+          0
+        );
+        const totalincomingpriceuzs = sale.products.reduce(
+          (prev, item) => prev + item.pieces * item.price.incomingpriceuzs,
+          0
+        );
+        const totalprice = sale.payment.totalprice;
+        const totalpriceuzs = sale.payment.totalpriceuzs;
+        const discount = (sale.discount && sale.discount.discount) || 0;
+        const discountuzs = (sale.discount && sale.discount.discountuzs) || 0;
+        const profit = totalprice - totalincomingprice - discount;
+        const profituzs = totalpriceuzs - totalincomingpriceuzs - discountuzs;
 
-      return {
-        createdAt: sale.createdAt,
-        client: sale.client && sale.client,
-        id: sale.id,
-        totalincomingprice,
-        totalincomingpriceuzs,
-        totalsellingprice,
-        totalsellingpriceuzs,
-        totaldiscount,
-        totaldiscountuzs,
-        profit,
-        profituzs,
-      };
-    });
+        return {
+          createdAt: sale.createdAt,
+          id: sale.id,
+          saleconnector: sale.saleconnector,
+          client: sale.client && sale.client,
+          totalincomingprice,
+          totalincomingpriceuzs,
+          totalprice,
+          totalpriceuzs,
+          discount,
+          discountuzs,
+          profit,
+          profituzs,
+        };
+      })
+      .filter((sale) => sale.saleconnector !== null && sale.client !== null);
 
     const count = profitData.length;
-    profitData = profitData.slice(currentPage * countPage, countPage);
+    const profitreport = profitData.slice(currentPage * countPage, countPage);
 
-    res.status(201).json({ data: profitData, count });
+    res.status(201).json({ data: profitreport, count });
   } catch (error) {
     res.status(400).json({ error: 'Serverda xatolik yuz berdi...' });
   }
@@ -293,7 +317,11 @@ module.exports.getProfitData = async (req, res) => {
 
 module.exports.getPayment = async (req, res) => {
   try {
-    const { market, currentPage, countPage, startDate, endDate } = req.body;
+    const { market, currentPage, countPage, startDate, endDate, search } =
+      req.body;
+
+    const id = new RegExp('.*' + search ? search.id : '' + '.*', 'i');
+    const client = new RegExp('.*' + search ? search.client : '' + '.*', 'i');
 
     const marke = await Market.findById(market);
     if (!marke) {
@@ -302,7 +330,7 @@ module.exports.getPayment = async (req, res) => {
         .json({ message: `Diqqat! Do'kon haqida malumotlar topilmadi!` });
     }
 
-    const saleconnector = await SaleConnector.find({
+    const saleconnector = await DailySaleConnector.find({
       market,
       createdAt: {
         $gte: startDate,
@@ -311,37 +339,40 @@ module.exports.getPayment = async (req, res) => {
     })
       .select('-isArchive -user -updatedAt -__v -packman')
       .populate(
-        'payments',
+        'payment',
         'cash cashuzs card carduzs transfer transferuzs payment paymentuzs totalprice totalpriceuzs'
       )
-      .populate('client', 'name')
-      .populate('products', 'totalprice totalpriceuzs pieces price');
+      .populate({
+        path: 'client',
+        select: 'name',
+        match: { name: client },
+      })
+      .populate({
+        path: 'saleconnector',
+        select: 'id',
+        match: { id: id },
+      });
 
-    const payments = saleconnector.map((sale) => {
-      const count = (arr, el) => arr.reduce((prev, item) => prev + item[el], 0);
-      let cash = count(sale.payments, 'cash');
-      let cashuzs = count(sale.payments, 'cashuzs');
-      let card = count(sale.payments, 'card');
-      let carduzs = count(sale.payments, 'carduzs');
-      let transfer = count(sale.payments, 'transfer');
-      let transferuzs = count(sale.payments, 'transferuzs');
-      let totalprice = count(sale.products, 'totalprice');
-      let totalpriceuzs = count(sale.products, 'totalpriceuzs');
-
-      return {
-        id: sale.id,
-        createdAt: sale.createdAt,
-        client: sale.client && sale.client,
-        cash,
-        cashuzs,
-        card,
-        carduzs,
-        transfer,
-        transferuzs,
-        totalprice,
-        totalpriceuzs,
-      };
-    });
+    const payments = saleconnector
+      .map((sale) => {
+        return {
+          id: sale.id,
+          saleconnector: sale.saleconnector,
+          createdAt: sale.createdAt,
+          client: sale.client && sale.client,
+          cash: sale.payment.cash,
+          cashuzs: sale.payment.cashuzs,
+          card: sale.payment.card,
+          carduzs: sale.payment.carduzs,
+          transfer: sale.payment.transfer,
+          transferuzs: sale.payment.transferuzs,
+          totalprice: sale.payment.totalprice,
+          totalpriceuzs: sale.payment.totalpriceuzs,
+        };
+      })
+      .filter(
+        (payment) => payment.saleconnector !== null && payment.client !== null
+      );
 
     const count = payments.length;
 
@@ -355,7 +386,7 @@ module.exports.getPayment = async (req, res) => {
 
 module.exports.getDebtsReport = async (req, res) => {
   try {
-    const { market, currentPage, countPage, startDate, endDate } = req.body;
+    const { market } = req.body;
 
     const marke = await Market.findById(market);
     if (!marke) {
@@ -364,50 +395,44 @@ module.exports.getDebtsReport = async (req, res) => {
         .json({ message: `Diqqat! Do'kon haqida malumotlar topilmadi!` });
     }
 
-    const saleconnector = await SaleConnector.find({
+    const saleconnector = await DailySaleConnector.find({
       market,
-      createdAt: {
-        $gte: startDate,
-        $lte: endDate,
-      },
     })
       .select('-isArchive -user -updatedAt -__v -packman')
       .populate(
-        'payments',
+        'payment',
         'cash cashuzs card carduzs transfer transferuzs payment paymentuzs totalprice totalpriceuzs'
       )
       .populate('client', 'name')
-      .populate('products', 'totalprice totalpriceuzs pieces price')
-      .populate('discounts', 'discount discountuzs');
+      .populate('saleconnector', 'id')
+      .populate('discount', 'discount discountuzs');
 
     const debtsreport = saleconnector
       .map((sale) => {
-        const count = (arr, el) =>
-          arr.reduce((prev, item) => prev + item[el], 0);
-        let totalprice = count(sale.products, 'totalprice');
-        let totalpriceuzs = count(sale.products, 'totalpriceuzs');
-        let payment = count(sale.payments, 'payment');
-        let paymentuzs = count(sale.payments, 'paymentuzs');
-        let discount = count(sale.discounts, 'discount');
-        let discountuzs = count(sale.discounts, 'discountuzs');
-
+        let discount = (sale.discount && sale.discount.discount) || 0;
+        let discountuzs = (sale.discount && sale.discount.discountuzs) || 0;
+        const round = (el) => Math.round(el * 1000) / 1000;
         return {
           createdAt: sale.createdAt,
           id: sale.id,
+          saleconnector: sale.saleconnector,
+          totalprice: sale.payment.totalprice,
+          totalpriceuzs: sale.payment.totalpriceuzs,
           client: sale.client && sale.client,
-          debt: Math.round((totalprice - payment - discount) * 1000) / 1000,
-          debtuzs:
-            Math.round((totalpriceuzs - paymentuzs - discountuzs) * 1000) /
-            1000,
+          debt: round(
+            sale.payment.totalprice - sale.payment.payment - discount
+          ),
+          debtuzs: round(
+            sale.payment.totalpriceuzs - sale.payment.paymentuzs - discountuzs
+          ),
         };
       })
-      .filter(({ debt }) => debt > 0);
+      .filter(
+        (sale) =>
+          sale.debt > 0 && sale.saleconnector !== null && sale.client !== null
+      );
 
-    let count = debtsreport.length;
-
-    let reportdebts = debtsreport.slice(currentPage * countPage, countPage);
-
-    res.status(201).json({ data: reportdebts, count });
+    res.status(201).json({ data: debtsreport });
   } catch (error) {
     res.status(400).json({ error: 'Serverda xatolik yuz berdi...' });
   }
@@ -415,7 +440,11 @@ module.exports.getDebtsReport = async (req, res) => {
 
 module.exports.getDiscountsReport = async (req, res) => {
   try {
-    const { market, currentPage, countPage, startDate, endDate } = req.body;
+    const { market, currentPage, countPage, startDate, endDate, search } =
+      req.body;
+
+    const id = new RegExp('.*' + search ? search.id : '' + '.*', 'i');
+    const client = new RegExp('.*' + search ? search.client : '' + '.*', 'i');
 
     const marke = await Market.findById(market);
     if (!marke) {
@@ -424,7 +453,7 @@ module.exports.getDiscountsReport = async (req, res) => {
         .json({ message: `Diqqat! Do'kon haqida malumotlar topilmadi!` });
     }
 
-    const saleconnector = await SaleConnector.find({
+    const saleconnector = await DailySaleConnector.find({
       market,
       createdAt: {
         $gte: startDate,
@@ -432,30 +461,38 @@ module.exports.getDiscountsReport = async (req, res) => {
       },
     })
       .select('-isArchive -user -updatedAt -__v -packman')
-      .populate('client', 'name')
-      .populate('products', 'totalprice totalpriceuzs pieces price')
-      .populate('discounts', 'discount discountuzs');
+      .populate({
+        path: 'client',
+        select: 'name',
+        match: { name: client },
+      })
+      .populate({
+        path: 'saleconnector',
+        select: 'id',
+        match: { id: id },
+      })
+      .populate('payment', 'totalprice totalpriceuzs')
+      .populate('discount', 'discount discountuzs');
 
     const discountsreport = saleconnector
       .map((sale) => {
-        const count = (arr, el) =>
-          arr.reduce((prev, item) => prev + item[el], 0);
-        let totalprice = count(sale.products, 'totalprice');
-        let totalpriceuzs = count(sale.products, 'totalpriceuzs');
-        let discount = count(sale.discounts, 'discount');
-        let discountuzs = count(sale.discounts, 'discountuzs');
-
         return {
           createdAt: sale.createdAt,
           id: sale.id,
+          saleconnector: sale.saleconnector,
           client: sale.client && sale.client,
-          totalprice,
-          totalpriceuzs,
-          discount,
-          discountuzs,
+          totalprice: sale.payment.totalprice,
+          totalpriceuzs: sale.payment.totalpriceuzs,
+          discount: (sale.discount && sale.discount.discount) || 0,
+          discountuzs: (sale.discount && sale.discount.discountuzs) || 0,
         };
       })
-      .filter(({ discount }) => discount > 0);
+      .filter(
+        (sale) =>
+          sale.discount > 0 &&
+          sale.saleconnector !== null &&
+          sale.client !== null
+      );
 
     const count = discountsreport.length;
 
