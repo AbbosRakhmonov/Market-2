@@ -99,6 +99,9 @@ export const warningMoreDiscount = (val) =>
 export const warningLessSellPayment = () =>
     toast.warn('Sotish narxi kelish narxidan past bo\'lmasligi kerak')
 
+export const warningReturnProductsEmpty = () =>
+    toast.warn('Qaytariladigan maxsulotlar mavjud emas !')
+
 // Error Messages
 export const errorNetwork = () =>
     toast.error(

@@ -14,6 +14,7 @@ import {
     getAllProducts,
     getClients,
     makePayment,
+    returnSaleProducts,
     savePayment,
 } from '../Slices/registerSellingSlice.js'
 import {deleteSavedPayment} from '../Slices/savedSellingsSlice.js'
@@ -26,6 +27,7 @@ import {
     warningLessSellPayment,
     warningMoreDiscount,
     warningMorePayment,
+    warningReturnProductsEmpty,
     warningSaleProductsEmpty,
 } from '../../../Components/ToastMessages/ToastMessages.js'
 import CustomerPayment from '../../../Components/Payment/CustomerPayment.js'
@@ -37,7 +39,7 @@ const RegisterSelling = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const {user} = useSelector((state) => state.login)
-    const {currencyType, currency} = useSelector((state) => state.currency)
+    const {currencyType} = useSelector((state) => state.currency)
     const {allcategories, loading} = useSelector((state) => state.category)
     const {allProducts, clients, loadingMakePayment} = useSelector(
         (state) => state.registerSelling
@@ -84,7 +86,13 @@ const RegisterSelling = () => {
     const [temporary, setTemporary] = useState(null)
     const [saleConnectorId, setSaleConnectorId] = useState(null)
     const [returnProducts, setReturnProducts] = useState([])
+    const [discounts, setDiscounts] = useState([])
     const [returnDiscounts, setReturnDiscounts] = useState([])
+    const [totalPaymentsUsd, setTotalPaymentsUsd] = useState(0)
+    const [totalPaymentsUzs, setTotalPaymentsUzs] = useState(0)
+    const [totalPaysUsd, setTotalPaysUsd] = useState(0)
+    const [totalPaysUzs, setTotalPaysUzs] = useState(0)
+    const [exchangerate, setExchangerate] = useState(0)
     const headers = [
         {title: '№'},
         {title: 'Kodi'},
@@ -93,6 +101,15 @@ const RegisterSelling = () => {
         {title: 'Narxi'},
         {title: 'Jami', styles: 'w-[10rem]'},
         {title: ''},
+    ]
+    const headerReturn = [
+        {title: '№'},
+        {title: 'Kodi'},
+        {title: 'Nomi'},
+        {title: 'Soni'},
+        {title: 'Jami'},
+        {title: 'Soni'},
+        {title: 'Jami'},
     ]
     const toggleModal = () => {
         setModalBody('')
@@ -124,6 +141,10 @@ const RegisterSelling = () => {
     }
     const convertToUsd = (value) => Math.round(value * 1000) / 1000
     const convertToUzs = (value) => Math.round(value)
+    const currentEchangerate = (uzs, usd) => {
+        setExchangerate(convertToUzs(uzs / usd))
+    }
+
     const handleClickPayment = () => {
         if (tableProducts.length) {
             const all = tableProducts.reduce(
@@ -141,6 +162,7 @@ const RegisterSelling = () => {
             setPaid(all)
             setPaidUzs(allUzs)
             setPaymentModalVisible(true)
+            currentEchangerate(allUzs, all)
         } else {
             warningSaleProductsEmpty()
         }
@@ -205,8 +227,8 @@ const RegisterSelling = () => {
         }
     }
     const writePayment = (value, type) => {
-        const maxSum = allPayment - Number(paymentDiscount)
-        const maxSumUzs = allPaymentUzs - Number(paymentDiscountUzs)
+        const maxSum = Math.abs(allPayment) - Number(paymentDiscount)
+        const maxSumUzs = Math.abs(allPaymentUzs) - Number(paymentDiscountUzs)
         if (currencyType === 'USD') {
             if (type === 'cash') {
                 const all =
@@ -214,14 +236,14 @@ const RegisterSelling = () => {
                     Number(paymentCard) +
                     Number(paymentTransfer)
                 const allUzs =
-                    Number(paymentCashUzs) +
+                    Number(UsdToUzs(value, exchangerate)) +
                     Number(paymentCardUzs) +
                     Number(paymentTransferUzs)
                 if (all <= maxSum) {
                     setPaymentCash(value)
-                    setPaymentCashUzs(UsdToUzs(value, currency))
+                    setPaymentCashUzs(UsdToUzs(value, exchangerate))
                     setPaymentDebt(convertToUsd(maxSum - all))
-                    setPaymentDebtUzs(UsdToUzs(maxSum - all, currency))
+                    setPaymentDebtUzs(convertToUzs(maxSumUzs - allUzs))
                     setPaid(all)
                     setPaidUzs(allUzs)
                 } else {
@@ -234,13 +256,13 @@ const RegisterSelling = () => {
                     Number(paymentTransfer)
                 const allUzs =
                     Number(paymentCashUzs) +
-                    Number(paymentCardUzs) +
+                    Number(UsdToUzs(value, exchangerate)) +
                     Number(paymentTransferUzs)
                 if (all <= maxSum) {
                     setPaymentCard(value)
-                    setPaymentCardUzs(UsdToUzs(value, currency))
+                    setPaymentCardUzs(UsdToUzs(value, exchangerate))
                     setPaymentDebt(convertToUsd(maxSum - all))
-                    setPaymentDebtUzs(UsdToUzs(maxSum - all, currency))
+                    setPaymentDebtUzs(convertToUzs(maxSumUzs - allUzs))
                     setPaid(all)
                     setPaidUzs(allUzs)
                 } else {
@@ -252,12 +274,12 @@ const RegisterSelling = () => {
                 const allUzs =
                     Number(paymentCashUzs) +
                     Number(paymentCardUzs) +
-                    Number(paymentTransferUzs)
+                    Number(UsdToUzs(value, exchangerate))
                 if (all <= maxSum) {
                     setPaymentTransfer(value)
-                    setPaymentTransferUzs(UsdToUzs(value, currency))
+                    setPaymentTransferUzs(UsdToUzs(value, exchangerate))
                     setPaymentDebt(convertToUsd(maxSum - all))
-                    setPaymentDebtUzs(UsdToUzs(maxSum - all, currency))
+                    setPaymentDebtUzs(convertToUzs(maxSumUzs - allUzs))
                     setPaid(all)
                     setPaidUzs(allUzs)
                 } else {
@@ -271,13 +293,13 @@ const RegisterSelling = () => {
                     Number(paymentCardUzs) +
                     Number(paymentTransferUzs)
                 const allUsd =
-                    Number(paymentCash) +
+                    Number(UzsToUsd(value, exchangerate)) +
                     Number(paymentCard) +
                     Number(paymentTransfer)
                 if (all <= maxSumUzs) {
                     setPaymentCashUzs(value)
-                    setPaymentCash(UzsToUsd(value, currency))
-                    setPaymentDebt(UzsToUsd(maxSumUzs - all, currency))
+                    setPaymentCash(UzsToUsd(value, exchangerate))
+                    setPaymentDebt(convertToUsd(maxSum - allUsd))
                     setPaymentDebtUzs(convertToUzs(maxSumUzs - all))
                     setPaid(allUsd)
                     setPaidUzs(all)
@@ -289,12 +311,16 @@ const RegisterSelling = () => {
                     Number(value) +
                     Number(paymentCashUzs) +
                     Number(paymentTransferUzs)
+                const allUsd =
+                    Number(paymentCash) +
+                    Number(UzsToUsd(value, exchangerate)) +
+                    Number(paymentTransfer)
                 if (all <= maxSumUzs) {
-                    setPaymentCard(UzsToUsd(value, currency))
+                    setPaymentCard(UzsToUsd(value, exchangerate))
                     setPaymentCardUzs(value)
-                    setPaymentDebt(UzsToUsd(maxSumUzs - all, currency))
+                    setPaymentDebt(convertToUsd(maxSum - allUsd))
                     setPaymentDebtUzs(convertToUzs(maxSumUzs - all))
-                    setPaid(UzsToUsd(all, currency))
+                    setPaid(UzsToUsd(all, exchangerate))
                     setPaidUzs(all)
                 } else {
                     warningMorePayment()
@@ -307,11 +333,11 @@ const RegisterSelling = () => {
                 const allUsd =
                     Number(paymentCash) +
                     Number(paymentCard) +
-                    Number(paymentTransfer)
+                    Number(UzsToUsd(value, exchangerate))
                 if (all <= maxSumUzs) {
-                    setPaymentTransfer(UzsToUsd(value, currency))
+                    setPaymentTransfer(UzsToUsd(value, exchangerate))
                     setPaymentTransferUzs(value)
-                    setPaymentDebt(UzsToUsd(maxSumUzs - all, currency))
+                    setPaymentDebt(convertToUsd(maxSum - allUsd))
                     setPaymentDebtUzs(convertToUzs(maxSumUzs - all))
                     setPaid(allUsd)
                     setPaidUzs(all)
@@ -323,31 +349,31 @@ const RegisterSelling = () => {
     }
     const handleChangeDiscount = (value) => {
         const allPaymentAfterDiscount =
-            Math.round(((allPayment * 5) / 100) * 10) / 10
+            Math.round(((allPayment * 5) / 100) * 1000) / 1000
         const allPaymentUzsAfterDiscount =
-            Math.round(((allPaymentUzs * 5) / 100) * 10) / 10
+            Math.round(((allPaymentUzs * 5) / 100) * 1) / 1
         if (discountSelectOption.value === 'USD') {
             if (value > allPaymentAfterDiscount) {
                 warningMoreDiscount(`${allPaymentAfterDiscount} USD`)
             } else {
                 setPaymentDiscount(value)
-                setPaymentDiscountUzs(UsdToUzs(value, currency))
+                setPaymentDiscountUzs(UsdToUzs(value, exchangerate))
                 setPaymentDiscountPercent(
-                    Math.round(((allPayment * value) / 100) * 10) / 10
+                    Math.round(((allPayment * value) / 100) * 1000) / 1000
                 )
                 setPaymentDebt(allPayment - value)
-                setPaymentDebtUzs(UsdToUzs(allPayment - value, currency))
+                setPaymentDebtUzs(UsdToUzs(allPayment - value, exchangerate))
             }
         } else if (discountSelectOption.value === 'UZS') {
             if (value > allPaymentUzsAfterDiscount) {
                 warningMoreDiscount(`${allPaymentUzsAfterDiscount} UZS`)
             } else {
                 setPaymentDiscountUzs(value)
-                setPaymentDiscount(UzsToUsd(value, currency))
+                setPaymentDiscount(UzsToUsd(value, exchangerate))
                 setPaymentDiscountPercent(
-                    Math.round(((allPaymentUzs * value) / 100) * 10) / 10
+                    Math.round(((allPaymentUzs * value) / 100) * 1000) / 1000
                 )
-                setPaymentDebt(UzsToUsd(allPaymentUzs - value, currency))
+                setPaymentDebt(UzsToUsd(allPaymentUzs - value, exchangerate))
                 setPaymentDebtUzs(allPaymentUzs - value)
             }
         } else {
@@ -355,9 +381,9 @@ const RegisterSelling = () => {
                 warningMoreDiscount('5%')
             } else {
                 const discountUsd =
-                    Math.round(((allPayment * value) / 100) * 10) / 10
+                    Math.round(((allPayment * value) / 100) * 1000) / 1000
                 const discountUzs =
-                    Math.round(((allPaymentUzs * value) / 100) * 10) / 10
+                    Math.round(((allPaymentUzs * value) / 100) * 1) / 1
                 setPaymentDiscountPercent(value)
                 setPaymentDiscount(discountUsd)
                 setPaymentDiscountUzs(discountUzs)
@@ -471,6 +497,13 @@ const RegisterSelling = () => {
         setCurrentProduct(null)
         setSearchCategory('')
         setSaleConnectorId(null)
+        setReturnDiscounts([])
+        setDiscounts([])
+        setReturnProducts([])
+        setTotalPaysUsd(0)
+        setTotalPaysUzs(0)
+        setTotalPaymentsUzs(0)
+        setTotalPaymentsUsd(0)
         togglePaymentModal(bool)
     }
     const handleClickPay = () => {
@@ -541,6 +574,54 @@ const RegisterSelling = () => {
             dispatch(deleteSavedPayment({_id: temporary._id}))
             setTemporary(null)
         }
+    }
+
+    const handleApproveReturn = () => {
+        handleClosePay()
+        const body = {
+            saleproducts: returnProducts.filter(
+                (product) => Number(product.pieces) > 0
+            ),
+            discounts: returnDiscounts,
+            payment: {
+                totalprice: Number(allPayment),
+                totalpriceuzs: Number(allPaymentUzs),
+                type: paymentType,
+                cash: Number(allPayment < 0 ? -1 * paymentCash : paymentCash),
+                cashuzs: Number(
+                    allPaymentUzs < 0 ? -1 * paymentCashUzs : paymentCashUzs
+                ),
+                card: Number(allPayment < 0 ? -1 * paymentCard : paymentCard),
+                carduzs: Number(
+                    allPayment < 0 ? -1 * paymentCardUzs : paymentCardUzs
+                ),
+                transfer: Number(
+                    allPayment < 0 ? -1 * paymentTransfer : paymentTransfer
+                ),
+                transferuzs: Number(
+                    allPayment < 0 ? -1 * paymentTransferUzs : paymentTransfer
+                ),
+            },
+            debt: {
+                debt: Number(allPayment < 0 ? -1 * paymentDebt : paymentDebt),
+                debtuzs: Number(
+                    allPayment < 0 ? -1 * paymentDebtUzs : paymentDebtUzs
+                ),
+                comment: '',
+            },
+            user: user._id,
+            saleconnectorid: saleConnectorId,
+        }
+        dispatch(returnSaleProducts(body)).then(({payload, error}) => {
+            if (!error) {
+                setModalData(payload)
+                setTimeout(() => {
+                    setModalBody('checkSellReturn')
+                    setModalVisible(true)
+                    clearAll()
+                }, 500)
+            }
+        })
     }
 
     const handleClickSave = () => {
@@ -707,31 +788,25 @@ const RegisterSelling = () => {
         setCurrentProduct({
             ...currentProduct,
             unitprice:
-                currencyType === 'USD' ? value : UzsToUsd(value, currency),
+                currencyType === 'USD' ? value : UzsToUsd(value, exchangerate),
             unitpriceuzs:
-                currencyType === 'UZS' ? value : UsdToUzs(value, currency),
+                currencyType === 'UZS' ? value : UsdToUzs(value, exchangerate),
             totalprice:
                 currencyType === 'USD'
                     ? value * currentProduct.pieces
-                    : UzsToUsd(value * currentProduct.pieces, currency),
+                    : UzsToUsd(value * currentProduct.pieces, exchangerate),
             totalpriceuzs:
                 currencyType === 'UZS'
                     ? value * currentProduct.pieces
-                    : UsdToUzs(value * currentProduct.pieces, currency),
+                    : UsdToUzs(value * currentProduct.pieces, exchangerate),
         })
     }
     const handleChangeProductNumber = (value) => {
         setCurrentProduct({
             ...currentProduct,
             pieces: value,
-            totalprice:
-                currencyType === 'USD'
-                    ? value * currentProduct.unitprice
-                    : UzsToUsd(value * currentProduct.unitpriceuzs, currency),
-            totalpriceuzs:
-                currencyType === 'UZS'
-                    ? value * currentProduct.unitpriceuzs
-                    : UsdToUzs(value * currentProduct.unitprice, currency),
+            totalprice: value * currentProduct.unitprice,
+            totalpriceuzs: value * currentProduct.unitpriceuzs,
         })
     }
     const handleChangeProductUnitPriceTable = (id, value) => {
@@ -742,19 +817,25 @@ const RegisterSelling = () => {
                       unitprice:
                           currencyType === 'USD'
                               ? value
-                              : UzsToUsd(value, currency),
+                              : UzsToUsd(value, exchangerate),
                       unitpriceuzs:
                           currencyType === 'UZS'
                               ? value
-                              : UsdToUzs(value, currency),
+                              : UsdToUzs(value, exchangerate),
                       totalprice:
                           currencyType === 'USD'
                               ? value * prevProduct.pieces
-                              : UzsToUsd(value * prevProduct.pieces, currency),
+                              : UzsToUsd(
+                                    value * prevProduct.pieces,
+                                    exchangerate
+                                ),
                       totalpriceuzs:
                           currencyType === 'UZS'
                               ? value * prevProduct.pieces
-                              : UsdToUzs(value * prevProduct.pieces, currency),
+                              : UsdToUzs(
+                                    value * prevProduct.pieces,
+                                    exchangerate
+                                ),
                   }
                 : prevProduct
         )
@@ -766,20 +847,10 @@ const RegisterSelling = () => {
                 ? {
                       ...prevProduct,
                       pieces: value,
-                      totalprice:
-                          currencyType === 'USD'
-                              ? value * prevProduct.unitprice
-                              : UzsToUsd(
-                                    value * prevProduct.unitpriceuzs,
-                                    currency
-                                ),
-                      totalpriceuzs:
-                          currencyType === 'UZS'
-                              ? value * prevProduct.unitpriceuzs
-                              : UsdToUzs(
-                                    value * prevProduct.unitprice,
-                                    currency
-                                ),
+                      totalprice: convertToUsd(value * prevProduct.unitprice),
+                      totalpriceuzs: convertToUzs(
+                          value * prevProduct.unitpriceuzs
+                      ),
                   }
                 : prevProduct
         )
@@ -819,6 +890,96 @@ const RegisterSelling = () => {
     }
     const handleScan = (data) => {
         handleChangeSelectedProduct({barcode: data})
+    }
+
+    const handleChangeReturnProduct = (value, id, index) => {
+        if (value > Number(returnProducts[index].product.pieces))
+            return universalToast(
+                "Diqqat! Qaytariladigan mahsulot soni sotilgan mahsulot sonidan ortiq bo'lolmaydi",
+                'warning'
+            )
+        const newRelease = returnProducts.map((prevProduct) =>
+            prevProduct._id === id
+                ? {
+                      ...prevProduct,
+                      pieces: value,
+                      totalprice: convertToUsd(value * prevProduct.unitprice),
+                      totalpriceuzs: convertToUzs(
+                          value * prevProduct.unitpriceuzs
+                      ),
+                  }
+                : prevProduct
+        )
+        setReturnProducts(newRelease)
+    }
+
+    const handleClickReturnPayment = () => {
+        if (returnProducts.length) {
+            const all = returnProducts.reduce(
+                (summ, product) => convertToUsd(summ + product.totalprice),
+                0
+            )
+            const allUzs = returnProducts.reduce(
+                (summ, product) => convertToUzs(summ + product.totalpriceuzs),
+                0
+            )
+
+            const newRelease = discounts.map((discount) => {
+                let newDiscount = {...discount}
+                returnProducts.map((product) => {
+                    if (discount._id === product.product?.discount) {
+                        newDiscount = {
+                            ...discount,
+                            discount: convertToUsd(
+                                newDiscount.discount -
+                                    (product.totalprice * discount.procient) /
+                                        100
+                            ),
+                            discountuzs: convertToUzs(
+                                newDiscount.discountuzs -
+                                    (product.totalpriceuzs *
+                                        discount.procient) /
+                                        100
+                            ),
+                            totalprice: convertToUsd(
+                                newDiscount.totalprice - product.totalprice
+                            ),
+                            totalpriceuzs: convertToUzs(
+                                newDiscount.totalpriceuzs -
+                                    product.totalpriceuzs
+                            ),
+                        }
+                    }
+                    return ''
+                })
+                return {...newDiscount}
+            })
+            const totalDiscountsUsd = newRelease.reduce(
+                (summ, discount) => summ + discount.discount,
+                0
+            )
+            const totalDiscountsUzs = newRelease.reduce(
+                (summ, discount) => summ + discount.discountuzs,
+                0
+            )
+            const payment = convertToUsd(
+                totalPaymentsUsd - totalPaysUsd - totalDiscountsUsd - all
+            )
+            const paymentUzs = convertToUzs(
+                totalPaymentsUzs - totalPaysUzs - totalDiscountsUzs - allUzs
+            )
+            setReturnDiscounts(newRelease)
+            setAllPayment(payment)
+            setAllPaymentUzs(paymentUzs)
+            setPaymentCash(Math.abs(payment))
+            setPaymentCashUzs(Math.abs(paymentUzs))
+            setPaid(Math.abs(payment))
+            setPaidUzs(Math.abs(paymentUzs))
+            setPaymentModalVisible(true)
+            currentEchangerate(allUzs, all)
+        } else {
+            warningReturnProductsEmpty()
+        }
     }
 
     useEffect(() => {
@@ -876,6 +1037,19 @@ const RegisterSelling = () => {
     }, [clients])
     useEffect(() => {
         const data = location.state
+        const setClientData = () => {
+            data.saleconnector.client &&
+                setClientValue({
+                    label: data.saleconnector.client.name,
+                    value: data.saleconnector.client._id,
+                })
+            data.saleconnector.packman &&
+                setPackmanValue({
+                    label: data.saleconnector.packman.name,
+                    value: data.saleconnector.packman._id,
+                })
+            setSaleConnectorId(data.saleconnector._id)
+        }
         if (data && data.temporary) {
             setTemporary(data.temporary)
             setTableProducts(data.temporary.tableProducts)
@@ -884,34 +1058,77 @@ const RegisterSelling = () => {
             setUserValue(data.temporary.userValue)
         }
         if (data && data.saleconnector && !data.returnProducts) {
-            const connector = data.saleconnector
-            data.saleconnector.client &&
-                setClientValue({
-                    label: connector.client.name,
-                    value: connector.client._id,
-                })
-            data.saleconnector.packman &&
-                setPackmanValue({
-                    label: connector.packman.name,
-                    value: connector.packman._id,
-                })
-            setSaleConnectorId(connector._id)
+            setClientData()
         }
         if (data && data.saleconnector && data.returnProducts) {
-            // const products = data.saleconnector.products.map(producr)
+            setClientData()
+            let returned = []
+            data.saleconnector.products.map((saleProduct) => {
+                const sale = {
+                    _id: saleProduct.product._id,
+                    discount: saleProduct.discount && saleProduct.discount,
+                    pieces: saleProduct.pieces,
+                    totalprice: saleProduct.totalprice,
+                    totalpriceuzs: saleProduct.totalpriceuzs,
+                }
+                saleProduct.saleproducts.map((product) => {
+                    sale.pieces += product.pieces
+                    sale.totalprice += product.totalprice
+                    sale.totalpriceuzs += product.totalpriceuzs
+                    return ''
+                })
+                saleProduct.pieces > 0 &&
+                    returned.push({
+                        pieces: '',
+                        totalpriceuzs: 0,
+                        totalprice: 0,
+                        unitprice: saleProduct.unitprice,
+                        unitpriceuzs: saleProduct.unitpriceuzs,
+                        product: {...sale},
+                        productdata: {...saleProduct.product.productdata},
+                        _id: saleProduct._id,
+                    })
+                return ''
+            })
+
+            setReturnProducts(
+                returned.filter((product) => product.product.pieces > 0)
+            )
+            setDiscounts([...data.saleconnector.discounts])
+            const totalSumm = (datas, property, type) => {
+                return type === 'uzs'
+                    ? convertToUzs(
+                          datas.reduce((summ, data) => summ + data[property], 0)
+                      )
+                    : convertToUsd(
+                          datas.reduce((summ, data) => summ + data[property], 0)
+                      )
+            }
+            setTotalPaymentsUsd(
+                totalSumm(data.saleconnector.products, 'totalprice', 'usd')
+            )
+            setTotalPaymentsUzs(
+                totalSumm(data.saleconnector.products, 'totalpriceuzs', 'uzs')
+            )
+            setTotalPaysUsd(
+                totalSumm(data.saleconnector.payments, 'payment', 'usd')
+            )
+            setTotalPaysUzs(
+                totalSumm(data.saleconnector.payments, 'paymentuzs', 'uzs')
+            )
         }
+        window.history.replaceState({}, document.title)
     }, [location.state])
 
     return (
-        <div
-            className={'flex grow relative overflow-auto'}
-        >
+        <div className={'flex grow relative overflow-auto'}>
             {loadingMakePayment && (
                 <div className='fixed backdrop-blur-[2px] z-[100] left-0 top-0 right-0 bottom-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
                     <SmallLoader />
                 </div>
             )}
             <CustomerPayment
+                returned={!!returnProducts.length}
                 type={paymentType}
                 active={paymentModalVisible}
                 togglePaymentModal={togglePaymentModal}
@@ -959,7 +1176,9 @@ const RegisterSelling = () => {
                     modalBody === 'sell'
                         ? handleAddProduct
                         : modalBody === 'complete'
-                        ? handleApprovePay
+                        ? returnProducts.length
+                            ? handleApproveReturn
+                            : handleApprovePay
                         : handleClickPrint
                 }
                 isOpen={modalVisible}
@@ -1012,17 +1231,27 @@ const RegisterSelling = () => {
                         />
                     </div>
                 </form>
-                <form>
-                    <FieldContainer
-                        select={true}
-                        placeholder={'misol: kompyuter'}
-                        value={selectedProduct}
-                        label={'Maxsulotlar'}
-                        onChange={handleChangeSelectedProduct}
-                        options={filteredProducts}
+                {!returnProducts.length && (
+                    <form>
+                        <FieldContainer
+                            select={true}
+                            placeholder={'misol: kompyuter'}
+                            value={selectedProduct}
+                            label={'Maxsulotlar'}
+                            onChange={handleChangeSelectedProduct}
+                            options={filteredProducts}
+                        />
+                    </form>
+                )}
+                {returnProducts.length ? (
+                    <Table
+                        page={'backproducts'}
+                        data={returnProducts}
+                        headers={headerReturn}
+                        currency={currencyType}
+                        changeHandler={handleChangeReturnProduct}
                     />
-                </form>
-                {tableProducts.length === 0 ? (
+                ) : !tableProducts.length ? (
                     <NotFind text={"Sotuvda mahsulotlar qo'shilmagan!"} />
                 ) : (
                     <Table
@@ -1073,17 +1302,23 @@ const RegisterSelling = () => {
                     <button
                         type={'button'}
                         className={'register-selling-right-accept-btn'}
-                        onClick={handleClickPayment}
+                        onClick={
+                            returnProducts.length
+                                ? handleClickReturnPayment
+                                : handleClickPayment
+                        }
                     >
                         To'lov
                     </button>
-                    <button
-                        type={'button'}
-                        onClick={handleClickSave}
-                        className={'register-selling-right-deny-btn'}
-                    >
-                        <IoAttach size={'1.5rem'} />
-                    </button>
+                    {!returnProducts.length && (
+                        <button
+                            type={'button'}
+                            onClick={handleClickSave}
+                            className={'register-selling-right-deny-btn'}
+                        >
+                            <IoAttach size={'1.5rem'} />
+                        </button>
+                    )}
                 </div>
             </div>
             <BarcodeReader onError={handleError} onScan={handleScan} />

@@ -17,6 +17,9 @@ const { Category } = require("../../models/Products/Category");
 const { DailySaleConnector } = require("../../models/Sales/DailySaleConnector");
 const ObjectId = require("mongodb").ObjectId;
 
+const convertToUsd = (value) => Math.round(value * 1000) / 1000;
+const convertToUzs = (value) => Math.round(value);
+
 module.exports.register = async (req, res) => {
   try {
     const {
@@ -29,7 +32,6 @@ module.exports.register = async (req, res) => {
       market,
       user,
     } = req.body;
-
     const marke = await Market.findById(market);
 
     if (!marke) {
@@ -46,19 +48,17 @@ module.exports.register = async (req, res) => {
       });
     }
 
-    const totalprice =
-      Math.round(
-        saleproducts.reduce((summ, saleproduct) => {
-          return summ + saleproduct.totalprice;
-        }, 0) * 10000
-      ) / 10000;
+    const totalprice = convertToUsd(
+      saleproducts.reduce((summ, saleproduct) => {
+        return summ + saleproduct.totalprice;
+      }, 0)
+    );
 
-    const totalpriceuzs =
-      Math.round(
-        saleproducts.reduce((summ, saleproduct) => {
-          return summ + saleproduct.totalpriceuzs;
-        }, 0) * 1
-      ) / 1;
+    const totalpriceuzs = convertToUzs(
+      saleproducts.reduce((summ, saleproduct) => {
+        return summ + saleproduct.totalpriceuzs;
+      }, 0)
+    );
 
     if (checkPayments(totalprice, payment, discount, debt)) {
       return res.status(400).json({
@@ -103,10 +103,10 @@ module.exports.register = async (req, res) => {
 
       const newSaleProduct = new SaleProduct({
         price: produc.price,
-        totalprice,
-        totalpriceuzs,
-        unitprice,
-        unitpriceuzs,
+        totalprice: convertToUsd(totalprice),
+        totalpriceuzs: convertToUzs(totalpriceuzs),
+        unitprice: convertToUsd(unitprice),
+        unitpriceuzs: convertToUzs(unitpriceuzs),
         pieces,
         product: product._id,
         market,
@@ -146,8 +146,8 @@ module.exports.register = async (req, res) => {
 
     if (discount.discount > 0) {
       const newDiscount = new Discount({
-        discount: discount.discount,
-        discountuzs: discount.discountuzs,
+        discount: convertToUsd(discount.discount),
+        discountuzs: convertToUzs(discount.discountuzs),
         comment: discount.comment,
         procient: discount.procient,
         market,
@@ -169,10 +169,10 @@ module.exports.register = async (req, res) => {
     if (debt.debt > 0) {
       const newDebt = new Debt({
         comment: debt.comment,
-        debt: debt.debt,
-        debtuzs: debt.debtuzs,
-        totalprice,
-        totalpriceuzs,
+        debt: convertToUsd(debt.debt),
+        debtuzs: convertToUzs(debt.debtuzs),
+        totalprice: convertToUsd(totalprice),
+        totalpriceuzs: convertToUzs(totalpriceuzs),
         market,
         user,
         saleconnector: saleconnector._id,
@@ -186,8 +186,10 @@ module.exports.register = async (req, res) => {
     if (payment.totalprice > 0) {
       const newPayment = new Payment({
         comment: payment.comment,
-        payment: payment.card + payment.cash + payment.transfer,
-        paymentuzs: payment.carduzs + payment.cashuzs + payment.transferuzs,
+        payment: convertToUsd(payment.card + payment.cash + payment.transfer),
+        paymentuzs: convertToUzs(
+          payment.carduzs + payment.cashuzs + payment.transferuzs
+        ),
         card: payment.card,
         cash: payment.cash,
         transfer: payment.transfer,
@@ -587,8 +589,14 @@ module.exports.getsaleconnectors = async (req, res) => {
           select: "totalprice unitprice totalpriceuzs unitpriceuzs pieces",
         },
       })
-      .populate("payments", "payment paymentuzs comment")
-      .populate("discounts", "discount discountuzs procient products")
+      .populate(
+        "payments",
+        "payment paymentuzs comment totalprice totalpriceuzs"
+      )
+      .populate(
+        "discounts",
+        "discount discountuzs procient products totalprice totalpriceuzs"
+      )
       .populate("debts", "debt debtuzs")
       .populate({ path: "client", match: { name: name }, select: "name" })
       .populate("packman", "name")
@@ -695,19 +703,17 @@ module.exports.registeredit = async (req, res) => {
       });
     }
 
-    const totalprice =
-      Math.round(
-        saleproducts.reduce((summ, saleproduct) => {
-          return summ + saleproduct.totalprice;
-        }, 0) * 10000
-      ) / 10000;
+    const totalprice = convertToUsd(
+      saleproducts.reduce((summ, saleproduct) => {
+        return summ + saleproduct.totalprice;
+      }, 0)
+    );
 
-    const totalpriceuzs =
-      Math.round(
-        saleproducts.reduce((summ, saleproduct) => {
-          return summ + saleproduct.totalpriceuzs;
-        }, 0) * 1
-      ) / 1;
+    const totalpriceuzs = convertToUzs(
+      saleproducts.reduce((summ, saleproduct) => {
+        return summ + saleproduct.totalpriceuzs;
+      }, 0)
+    );
 
     let all = [];
 
@@ -809,13 +815,15 @@ module.exports.registeredit = async (req, res) => {
     if (payment.carduzs + payment.cashuzs + payment.transferuzs !== 0) {
       const newPayment = new Payment({
         comment: payment.comment,
-        payment: payment.card + payment.cash + payment.transfer,
-        paymentuzs: payment.carduzs + payment.cashuzs + payment.transferuzs,
-        card: payment.card,
-        cash: payment.cash,
-        transfer: payment.transfer,
-        carduzs: payment.carduzs,
-        cashuzs: payment.cashuzs,
+        payment: convertToUsd(payment.card + payment.cash + payment.transfer),
+        paymentuzs: convertToUzs(
+          payment.carduzs + payment.cashuzs + payment.transferuzs
+        ),
+        card: convertToUsd(payment.card),
+        cash: convertToUsd(payment.cash),
+        transfer: convertToUsd(payment.transfer),
+        carduzs: convertToUzs(payment.carduzs),
+        cashuzs: convertToUzs(payment.cashuzs),
         transferuzs: payment.transferuzs,
         type: payment.type,
         totalprice,
@@ -837,27 +845,26 @@ module.exports.registeredit = async (req, res) => {
     dailysaleconnector.products = [...products];
     await dailysaleconnector.save();
 
-    const saleconnectors = await SaleConnector.findById(saleconnectorid)
-      .select("-isArchive -updatedAt -user -market -__v")
+    const connector = await DailySaleConnector.findById(dailysaleconnector._id)
+      .select("-isArchive -updatedAt -market -__v")
       .populate({
         path: "products",
-        select:
-          "totalprice unitprice totalpriceuzs unitpriceuzs pieces createdAt discount",
-        options: { sort: { createdAt: -1 } },
+        select: "totalprice unitprice totalpriceuzs unitpriceuzs pieces",
+        options: { sort: { created_at: -1 } },
         populate: {
           path: "product",
-          select: "productdata",
-          populate: { path: "productdata", select: "name code" },
+          select: "poductdata",
+          populate: { path: "productdata", select: "code name" },
         },
       })
-      .populate("payments", "payment paymentuzs")
-      .populate("discounts", "discount discountuzs procient products")
-      .populate("debts", "debt debtuzs")
+      .populate("payment", "payment paymentuzs totalprice totalpriceuzs")
+      .populate("discount", "discount discountuzs")
+      .populate("debt", "debt debtuzs")
       .populate("client", "name")
       .populate("packman", "name")
-      .populate("user", "firstname lastname");
-
-    res.status(201).send(saleconnectors);
+      .populate("user", "firstname lastname")
+      .populate("saleconnector", "id");
+    res.status(201).send(connector);
   } catch (error) {
     res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
   }

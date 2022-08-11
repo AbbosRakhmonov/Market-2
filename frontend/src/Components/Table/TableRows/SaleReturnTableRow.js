@@ -6,7 +6,6 @@ export const SaleReturnTableRow = ({
     changeHandler,
     currency,
     onKeyUp,
-    inputValue,
 }) => {
     return (
         <>
@@ -19,20 +18,35 @@ export const SaleReturnTableRow = ({
                     <td className='text-left td'>
                         {salereturn.productdata.name}
                     </td>
-                    <td className='text-right td'>{salereturn.pieces}</td>
                     <td className='text-right td'>
-                        {salereturn.totalprice} {currency}
+                        {salereturn.product.pieces}
+                    </td>
+                    <td className='text-right td'>
+                        {(currency === 'UZS'
+                            ? salereturn.product.totalpriceuzs
+                            : salereturn.product.totalprice
+                        ).toLocaleString('ru-RU')}{' '}
+                        {currency}
                     </td>
                     <td className='text-right td py-[5px]'>
                         <TableInput
                             onKeyUp={onKeyUp}
-                            onChange={(e) => changeHandler(e, 'returnpieces')}
-                            value={inputValue}
+                            onChange={(e) =>
+                                changeHandler(
+                                    e.target.value,
+                                    salereturn._id,
+                                    index
+                                )
+                            }
+                            value={salereturn.pieces}
                             type={'number'}
                         />
                     </td>
                     <td className='text-right td'>
-                        {salereturn.returntotalprice} {currency}
+                        {currency === 'UZS'
+                            ? salereturn.totalpriceuzs
+                            : salereturn.totalprice}{' '}
+                        {currency}
                     </td>
                 </tr>
             ))}

@@ -48,7 +48,7 @@ router.post("/saleproducts/register", (req, res) => {
   require("./saleproduct").register(req, res);
 });
 
-router.post("/saleproducts/registeredit", (req, res) => {
+router.post("/saleproducts/returnproducts", (req, res) => {
   require("./saleproduct").registeredit(req, res);
 });
 

@@ -7,40 +7,40 @@ import Complate from './ModalBodys/Complate.js'
 import RegisterIncomingModal from './ModalBodys/RegisterIncomingModal'
 import Check from './ModalBodys/Check.js'
 import AllChecks from './ModalBodys/AllChecks.js'
-import AllCheckInventories from './ModalBodys/AllCheckInventories'
+
 function UniversalModal({
-                            isOpen,
-                            toggleModal,
-                            body,
-                            approveFunction,
-                            closeModal,
-                            excelData,
-                            headers,
-                            setCreatedData,
-                            createdData,
-                            headerText,
-                            title,
-                            product,
-                            changeProduct,
-                            currency,
-                            printedSelling,
-                            printedInventories
-                        }) {
+    isOpen,
+    toggleModal,
+    body,
+    approveFunction,
+    closeModal,
+    excelData,
+    headers,
+    setCreatedData,
+    createdData,
+    headerText,
+    title,
+    product,
+    changeProduct,
+    currency,
+    printedSelling,
+    printedInventories,
+}) {
     const customStyles = {
         content: {
             width: '90%',
             height: '85%',
             padding: '1.25rem',
-            transform: 'auto'
-        }
+            transform: 'auto',
+        },
     }
     const modalFull = {
         content: {
             width: '100%',
             height: '100%',
             padding: '1rem',
-            transform: 'auto'
-        }
+            transform: 'auto',
+        },
     }
     const switchBody = () => {
         switch (body) {
@@ -79,7 +79,9 @@ function UniversalModal({
                         product={product}
                         changeProduct={changeProduct}
                         approveFunction={approveFunction}
-                        currency={currency} />)
+                        currency={currency}
+                    />
+                )
             case 'sell':
                 return (
                     <Sell
@@ -90,23 +92,13 @@ function UniversalModal({
                     />
                 )
             case 'checkSell':
-                return (
-                    <Check
-                        product={product}
-                    />
-                )
+                return <Check returned={false} product={product} />
+            case 'checkSellReturn':
+                return <Check returned={true} product={product} />
             case 'allChecks':
-                return (
-                    <AllChecks
-                        product={printedSelling}
-                    />
-                )
-            case 'checkInventory': 
-            return (
-                    <AllCheckInventories
-                       product={printedInventories}
-                    />
-            )    
+                return <AllChecks product={printedSelling} />
+            // case 'checkInventory':
+            //     return <AllCheckInventories product={printedInventories} />
             default:
                 return 'Bunday jadval topilmadi'
         }
@@ -114,7 +106,13 @@ function UniversalModal({
     return (
         <Modal
             isOpen={isOpen}
-            style={body === 'checkSell' || body === 'allChecks' ? {...modalFull} : (body === 'approve' || body === 'complete') ? {} : {...customStyles}}
+            style={
+                body === 'checkSell' || body === 'allChecks'
+                    ? {...modalFull}
+                    : body === 'approve' || body === 'complete'
+                    ? {}
+                    : {...customStyles}
+            }
             onRequestClose={closeModal || toggleModal}
             closeTimeoutMS={100}
             contentLabel='Example Modal'

@@ -3,8 +3,9 @@ import PrintBtn from '../../Buttons/PrintBtn'
 import {SaleCheck} from '../../SaleCheck/SaleCheck.js'
 import {useReactToPrint} from 'react-to-print'
 import SmallLoader from '../../Spinner/SmallLoader.js'
+import {SaleCheckReturn} from '../../SaleCheck/SaleCheckReturn.js'
 
-function Check({product}) {
+function Check({product, returned}) {
     const [loadContent, setLoadContent] = useState(false)
     const saleCheckRef = useRef(null)
     const onBeforeGetContentResolve = useRef(null)
@@ -27,22 +28,29 @@ function Check({product}) {
         content: reactToPrintContent,
         documentTitle: 'Sale Check',
         onBeforeGetContent: handleOnBeforeGetContent,
-        removeAfterPrint: true
+        removeAfterPrint: true,
     })
     useEffect(() => {
-        if (loadContent && typeof onBeforeGetContentResolve.current === 'function') {
+        if (
+            loadContent &&
+            typeof onBeforeGetContentResolve.current === 'function'
+        ) {
             onBeforeGetContentResolve.current()
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [onBeforeGetContentResolve.current, loadContent])
     return (
         <section className='w-[27cm] mt-4 mx-auto'>
-            {loadContent &&
-                <div
-                    className='fixed backdrop-blur-[2px] left-0 top-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
+            {loadContent && (
+                <div className='fixed backdrop-blur-[2px] left-0 top-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
                     <SmallLoader />
-                </div>}
-            <SaleCheck product={product} ref={saleCheckRef} />
+                </div>
+            )}
+            {returned ? (
+                <SaleCheckReturn product={product} ref={saleCheckRef} />
+            ) : (
+                <SaleCheck product={product} ref={saleCheckRef} />
+            )}
             <div className='flex justify-center items-center mt-6'>
                 <PrintBtn onClick={print} isDisabled={loadContent} />
             </div>

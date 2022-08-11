@@ -54,11 +54,26 @@ export const savePayment = createAsyncThunk(
 )
 
 export const addPayment = createAsyncThunk(
-    'registerSelling/makePayment',
+    'addSelling/makePayment',
     async (body = {}, {rejectWithValue}) => {
         try {
             const {data} = await Api.post(
                 '/sales/saleproducts/addproducts',
+                body
+            )
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
+export const returnSaleProducts = createAsyncThunk(
+    'returnSelling/makePayment',
+    async (body = {}, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post(
+                '/sales/saleproducts/returnproducts',
                 body
             )
             return data
@@ -145,6 +160,19 @@ const registerSellingSlice = createSlice({
             state.lastPayments.unshift(payload)
         },
         [addPayment.rejected]: (state, {payload}) => {
+            universalToast(payload, 'error')
+            state.loadingMakePayment = false
+            state.errorMakePayment = payload
+            state.errorMakePayment = null
+        },
+        [returnSaleProducts.pending]: (state) => {
+            state.loadingMakePayment = true
+        },
+        [returnSaleProducts.fulfilled]: (state, {payload}) => {
+            state.loadingMakePayment = false
+            state.lastPayments.unshift(payload)
+        },
+        [returnSaleProducts.rejected]: (state, {payload}) => {
             universalToast(payload, 'error')
             state.loadingMakePayment = false
             state.errorMakePayment = payload
