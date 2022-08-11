@@ -1,29 +1,30 @@
-import {PackmanTableRow} from './TableRows/PackmanTableRow'
-import {SellerTableRow} from './TableRows/SellerTableRow'
-import {CategoryTableRow} from './TableRows/CategoryTableRow'
-import {RegisterIncomingTableRow} from './TableRows/RegisterIncomingTableRow'
-import {InventoriesTableRow} from './TableRows/InventoriesTableRow'
-import {InventoryTableRow} from './TableRows/InventoryTableRow'
-import {ProductReportTableRow} from './TableRows/ProductReportTableRow'
-import {ProductTableRow} from './TableRows/ProductTableRow'
-import {SupplierTableRow} from './TableRows/SupplierTableRow'
-import {UnitTableRow} from './TableRows/UnitTableRow'
+import { PackmanTableRow } from './TableRows/PackmanTableRow'
+import { SellerTableRow } from './TableRows/SellerTableRow'
+import { CategoryTableRow } from './TableRows/CategoryTableRow'
+import { RegisterIncomingTableRow } from './TableRows/RegisterIncomingTableRow'
+import { InventoriesTableRow } from './TableRows/InventoriesTableRow'
+import { InventoryTableRow } from './TableRows/InventoryTableRow'
+import { ProductReportTableRow } from './TableRows/ProductReportTableRow'
+import { ProductTableRow } from './TableRows/ProductTableRow'
+import { SupplierTableRow } from './TableRows/SupplierTableRow'
+import { UnitTableRow } from './TableRows/UnitTableRow'
 import Thead from './Thead'
-import {IncomingsTableRow} from './TableRows/IncomingsTableRow'
-import {RegisterSaleTableRow} from './TableRows/RegisterSaleTableRow'
-import {TemporaryIncomingsTableRow} from './TableRows/TemporaryIncomingsTableRow'
-import {TemporarySaleTableRow} from './TableRows/TemporarySaleTableRow'
-import {SalesListTableRow} from './TableRows/SalesListTableRow'
-import {ClientTableRow} from './TableRows/ClientTableRow'
-import {ExchangenerateTableRow} from './TableRows/ExchangenerateTableRow'
-import {SaleReturnTableRow} from './TableRows/SaleReturnTableRow'
-import {CashierSaleTableRow} from './TableRows/CashierSaleTableRow'
-import {PaymentsTableRow} from './TableRows/PaymentsTableRow'
-import {IncomeTableRow} from './TableRows/IncomeTableRow'
-import {DebtsTableRow} from './TableRows/DebtsTableRow'
-import {DiscountTableRow} from './TableRows/DiscountTableRow'
-import {ExpensesTableRow} from './TableRows/ExpensesTableRow'
-import {BarcodeTableRow} from './TableRows/BarcodeTableRow.js'
+import { IncomingsTableRow } from './TableRows/IncomingsTableRow'
+import { RegisterSaleTableRow } from './TableRows/RegisterSaleTableRow'
+import { TemporaryIncomingsTableRow } from './TableRows/TemporaryIncomingsTableRow'
+import { TemporarySaleTableRow } from './TableRows/TemporarySaleTableRow'
+import { SalesListTableRow } from './TableRows/SalesListTableRow'
+import { ClientTableRow } from './TableRows/ClientTableRow'
+import { ExchangenerateTableRow } from './TableRows/ExchangenerateTableRow'
+import { SaleReturnTableRow } from './TableRows/SaleReturnTableRow'
+import { CashierSaleTableRow } from './TableRows/CashierSaleTableRow'
+import { PaymentsTableRow } from './TableRows/PaymentsTableRow'
+import { IncomeTableRow } from './TableRows/IncomeTableRow'
+import { DebtsTableRow } from './TableRows/DebtsTableRow'
+import { DiscountTableRow } from './TableRows/DiscountTableRow'
+import { ExpensesTableRow } from './TableRows/ExpensesTableRow'
+import { BarcodeTableRow } from './TableRows/BarcodeTableRow.js'
+import { AdminProductTableRow } from './TableRows/AdminProductTableRow';
 
 function Table({
     page,
@@ -58,6 +59,18 @@ function Table({
             case 'product':
                 return (
                     <ProductTableRow
+                        currencyType={currencyType}
+                        data={data}
+                        currentPage={currentPage}
+                        countPage={countPage}
+                        Edit={Edit}
+                        Delete={Delete}
+                        currency={currency}
+                    />
+                )
+            case 'adminProduct':
+                return (
+                    <AdminProductTableRow
                         currencyType={currencyType}
                         data={data}
                         currentPage={currentPage}
@@ -347,7 +360,7 @@ function Table({
     return (
         <table className='overflow-x-auto w-full'>
             <thead className='rounded-t-lg'>
-            {<Thead headers={headers} Sort={Sort} sortItem={sortItem} />}
+                {<Thead headers={headers} Sort={Sort} sortItem={sortItem} />}
             </thead>
             <tbody>{checkRows()}</tbody>
         </table>
