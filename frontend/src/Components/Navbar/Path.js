@@ -7,7 +7,8 @@ import {
     IoKeyOutline,
     IoSettingsOutline,
     IoWallet,
-    IoPeople
+    IoPeople,
+    IoQrCode,
 } from 'react-icons/io5'
 import {FaCashRegister} from 'react-icons/fa'
 
@@ -166,6 +167,27 @@ export const navListForSeller = [
         label: 'Sotuv',
         path: '/',
         icon: <IoWallet size={'1.5rem'} />,
+        submenu: false
+    }
+]
+export const navListForAdmin = [
+    {
+        id: 1,
+        label: 'Bosh sahifa',
+        icon: <IoHome size={'1.5rem'} />,
+        path: '/'
+    },
+    {
+        id: 2,
+        label: 'Shtrix Kodlar',
+        path: 'maxsulotlar',
+        icon: <IoQrCode size={'1.5rem'} />
+    },
+    {
+        id: 3,
+        label: 'Do\'konlar',
+        icon: <IoBusiness size={'1.5rem'} />,
+        path: 'dukonlar',
         submenu: false
     }
 ]
