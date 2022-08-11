@@ -30,7 +30,7 @@ const IncomingsList = lazy(() => import('./Incomings/Routes/IncomingsList'))
 const IncomingSuppliers = lazy(() =>
     import('./Incomings/Routes/IncomingSuppliers')
 )
-const ReportPage = lazy(() => import('./Reports/ReportPage'))
+const ReportPage = lazy(() => import('./Reports/ReportPage.js'))
 // <-- pages
 
 const directorRoutes = [

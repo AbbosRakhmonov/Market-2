@@ -147,10 +147,9 @@ const reportSlice = createSlice({
             state.loading = false
             universalToast(`${payload}`, 'error')
         },
-        [getDebts.fulfilled]: (state, {payload: {data, count}}) => {
+        [getDebts.fulfilled]: (state, {payload: {data}}) => {
             state.loading = true
             state.datas = data
-            state.count = count
         },
         [getDiscounts.pending]: (state) => {
             state.loading = true

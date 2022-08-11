@@ -13,6 +13,9 @@ export const ReportsTableHeaders = (header) => {
                 title: 'Sana',
             },
             {
+                title: 'ID',
+            },
+            {
                 title: 'Mijoz',
             },
             {
@@ -59,13 +62,19 @@ export const ReportsTableHeaders = (header) => {
                 title: 'Sana',
             },
             {
-                title: 'Mijoz',
-            },
-            {
                 title: 'ID',
             },
             {
+                title: 'Mijoz',
+            },
+            {
+                title: 'Jami',
+            },
+            {
                 title: 'Qarz',
+            },
+            {
+                title: '',
             },
         ],
         expenses: [
@@ -91,6 +100,9 @@ export const ReportsTableHeaders = (header) => {
             },
             {
                 title: 'Sana',
+            },
+            {
+                title: 'ID',
             },
             {
                 title: 'Mijoz',

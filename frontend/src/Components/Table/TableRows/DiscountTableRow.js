@@ -13,9 +13,12 @@ export const DiscountTableRow = ({data, currentPage, countPage, currency}) => {
                         {new Date(discount.createdAt).toLocaleDateString()}
                     </td>
                     <td className='text-left td'>
+                        {discount.saleconnector.id}
+                    </td>
+                    <td className='text-left td'>
                         {discount.client && discount.client.name}
                     </td>
-                    <td className='text-right td'>
+                    <td className='text-right td font-medium'>
                         {currency === 'UZS'
                             ? (
                                   Math.round(discount.totalpriceuzs * 1) / 1
@@ -23,9 +26,9 @@ export const DiscountTableRow = ({data, currentPage, countPage, currency}) => {
                             : (
                                   Math.round(discount.totalprice * 1000) / 1000
                               ).toLocaleString('ru-RU')}{' '}
-                        <span>{currency}</span>
+                        <span className='text-warning-500'>{currency}</span>
                     </td>
-                    <td className='text-right td border-r-0 py-[0.625rem] text-success-500'>
+                    <td className='text-right td border-r-0 py-[0.625rem] font-medium'>
                         {currency === 'UZS'
                             ? (
                                   Math.round(discount.discountuzs * 1) / 1
@@ -33,7 +36,7 @@ export const DiscountTableRow = ({data, currentPage, countPage, currency}) => {
                             : (
                                   Math.round(discount.discount * 1000) / 1000
                               ).toLocaleString('ru-RU')}{' '}
-                        <span>{currency}</span>
+                        <span className='text-success-500'>{currency}</span>
                     </td>
                 </tr>
             ))}
