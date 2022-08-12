@@ -27,6 +27,8 @@ const IndicatorsContainer = (styles) => ({
 
 const Container = (styles) => ({
     ...styles,
+    outline: "none",
+    border: "none",
 })
 
 const Control = (styles) => ({
@@ -81,7 +83,8 @@ const Menu = (styles) => ({
     display: "flex",
     flexDirection: "column",
     gap: "10px",
-    
+    backgroundColor:"rgba(255, 255, 255, 0.7)",
+    backdropFilter: "blur(8px)" 
 })
 
 const Option = (styles) => ({
@@ -99,8 +102,6 @@ const Option = (styles) => ({
         backgroundColor: "#00B4CC"
     },
 })
-
-
 
 const CustomStyle = {
     option: Option,
