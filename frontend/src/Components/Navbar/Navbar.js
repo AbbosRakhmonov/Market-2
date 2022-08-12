@@ -89,7 +89,7 @@ function Navbar() {
                     : 'min-w-[17.625rem] max-w-[17.625rem]'
                 }`}
             >
-                <div className={'navbar-header'}>
+                <div className={'navbar-header overflow-hidden'}>
                     <div
                         className={`transition-all ease duration-300 navbar-avatar ${navbarExpended
                             ? 'w-[100vw] justify-start'
