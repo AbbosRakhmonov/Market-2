@@ -5,6 +5,7 @@ const administration = new Schema(
   {
     login: { type: String, required: true },
     password: { type: String, min: 8, required: true },
+    type: { type: String, required: true },
   },
   {
     timestamps: true,
@@ -16,8 +17,8 @@ function validateAdministration(administration) {
     password: Joi.string().required(),
     confirmpassword: Joi.string(),
     login: Joi.string().required(),
+    type: Joi.string().required(),
   });
-
   return schema.validate(administration);
 }
 
