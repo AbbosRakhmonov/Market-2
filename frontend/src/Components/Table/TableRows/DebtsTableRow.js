@@ -19,7 +19,7 @@ export const DebtsTableRow = ({
                     <td className='text-right td'>
                         {new Date(debt.createdAt).toLocaleDateString()}
                     </td>
-                    <td className='text-right td'>{debt.saleconnector.id}</td>
+                    <td className='text-right td'>{debt.id}</td>
                     <td className='text-left td'>
                         {debt.client && debt.client.name}
                     </td>
@@ -43,7 +43,7 @@ export const DebtsTableRow = ({
                     <td className='td border-r-0 py-[6px]'>
                         <div className='flex justify-center items-center'>
                             <TableBtn
-                                type={'save'}
+                                type={'pay'}
                                 bgcolor={'bg-success-500'}
                                 onClick={() => Pay(debt)}
                             />
