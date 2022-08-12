@@ -46,6 +46,21 @@ module.exports.getReport = async (req, res) => {
       })
       .populate('discount', 'discount discountuzs procient');
 
+    // qarz uchun saleconnector ishlatiyapman
+    const saleconnector = await SaleConnector.find({
+      market,
+      createdAt: {
+        $gte: startDate,
+        $lt: endDate,
+      },
+    })
+      .select('-isArchive -updatedAt -user -market -__v')
+      .populate(
+        'payments',
+        'cash cashuzs card carduzs transfer transferuzs payment paymentuzs totalprice totalpriceuzs'
+      )
+      .populate('discounts', 'discount discountuzs procient');
+
     let reports = {
       sale: {
         sale: 0,
@@ -132,8 +147,6 @@ module.exports.getReport = async (req, res) => {
         (sale.discount && sale.discount.discountuzs) || 0
       );
       reports.discounts.discounts > 0 && reports.discounts.discountscount++;
-      sale.payment.totalprice - sale.payment.payment > 0.1 &&
-        reports.debts.debtscount++;
     });
     reports.income.income = roundUsd(
       Number(reports.sale.sale) -
@@ -145,21 +158,48 @@ module.exports.getReport = async (req, res) => {
         Number(incomingpriceuzs) -
         Number(reports.discounts.discountsuzs)
     );
-    reports.debts.debts = roundUsd(
-      Number(reports.sale.sale) -
-        Number(reports.discounts.discounts) -
-        Number(reports.cash.cash) -
-        Number(reports.card.card) -
-        Number(reports.transfer.transfer)
-    );
+    // reports.debts.debts = roundUsd(
+    //   Number(reports.sale.sale) -
+    //     Number(reports.discounts.discounts) -
+    //     Number(reports.cash.cash) -
+    //     Number(reports.card.card) -
+    //     Number(reports.transfer.transfer)
+    // );
 
-    reports.debts.debtsuzs = roundUzs(
-      Number(reports.sale.saleuzs) -
-        Number(reports.discounts.discountsuzs) -
-        Number(reports.cash.cashuzs) -
-        Number(reports.card.carduzs) -
-        Number(reports.transfer.transferuzs)
-    );
+    // reports.debts.debtsuzs = roundUzs(
+    //   Number(reports.sale.saleuzs) -
+    //     Number(reports.discounts.discountsuzs) -
+    //     Number(reports.cash.cashuzs) -
+    //     Number(reports.card.carduzs) -
+    //     Number(reports.transfer.transferuzs)
+    // );
+
+    const reducecount = (arr, el) =>
+      arr.reduce((prev, item) => prev + (item[el] || 0), 0);
+
+    reports.debts.debtscount = saleconnector.reduce((prev, sale) => {
+      let totalprice = reducecount(sale.payments, 'totalprice');
+      let payment = reducecount(sale.payments, 'payment');
+      let discount = reducecount(sale.discounts, 'discount');
+      if (totalprice - payment - discount > 0.01) {
+        return prev + 1;
+      }
+      return prev;
+    }, 0);
+
+    reports.debts.debts = saleconnector.reduce((prev, sale) => {
+      let totalprice = reducecount(sale.payments, 'totalprice');
+      let payment = reducecount(sale.payments, 'payment');
+      let discount = reducecount(sale.discounts, 'discount');
+      return prev + (totalprice - payment - discount);
+    }, 0);
+
+    reports.debts.debtsuzs = saleconnector.reduce((prev, sale) => {
+      let totalpriceuzs = reducecount(sale.payments, 'totalpriceuzs');
+      let paymentuzs = reducecount(sale.payments, 'paymentuzs');
+      let discountuzs = reducecount(sale.discounts, 'discountuzs');
+      return prev + (totalpriceuzs - paymentuzs - discountuzs);
+    }, 0);
 
     reports.backproducts.backproducts = backproduct;
     reports.backproducts.backproductsuzs = backproductuzs;
@@ -395,42 +435,40 @@ module.exports.getDebtsReport = async (req, res) => {
         .json({ message: `Diqqat! Do'kon haqida malumotlar topilmadi!` });
     }
 
-    const saleconnector = await DailySaleConnector.find({
+    const saleconnector = await SaleConnector.find({
       market,
     })
       .select('-isArchive -user -updatedAt -__v -packman')
       .populate(
-        'payment',
+        'payments',
         'cash cashuzs card carduzs transfer transferuzs payment paymentuzs totalprice totalpriceuzs'
       )
       .populate('client', 'name')
-      .populate('saleconnector', 'id')
-      .populate('discount', 'discount discountuzs');
+      .populate('discounts', 'discount discountuzs');
 
     const debtsreport = saleconnector
       .map((sale) => {
-        let discount = (sale.discount && sale.discount.discount) || 0;
-        let discountuzs = (sale.discount && sale.discount.discountuzs) || 0;
-        const round = (el) => Math.round(el * 1000) / 1000;
+        const reduce = (arr, el) =>
+          arr.reduce((prev, item) => prev + (item[el] || 0), 0);
+        const discount = reduce(sale.discounts, 'discount');
+        const discountuzs = reduce(sale.discounts, 'discountuzs');
+        const payment = reduce(sale.payments, 'payment');
+        const paymentuzs = reduce(sale.payments, 'paymentuzs');
+        const totalprice = reduce(sale.payments, 'totalprice');
+        const totalpriceuzs = reduce(sale.payments, 'totalpriceuzs');
+
         return {
-          createdAt: sale.createdAt,
+          _id: sale._id,
           id: sale.id,
-          saleconnector: sale.saleconnector,
-          totalprice: sale.payment.totalprice,
-          totalpriceuzs: sale.payment.totalpriceuzs,
+          createdAt: sale.createdAt,
           client: sale.client && sale.client,
-          debt: round(
-            sale.payment.totalprice - sale.payment.payment - discount
-          ),
-          debtuzs: round(
-            sale.payment.totalpriceuzs - sale.payment.paymentuzs - discountuzs
-          ),
+          totalprice,
+          totalpriceuzs,
+          debt: totalprice - payment - discount,
+          debtuzs: totalpriceuzs - paymentuzs - discountuzs,
         };
       })
-      .filter(
-        (sale) =>
-          sale.debt > 0 && sale.saleconnector !== null && sale.client !== null
-      );
+      .filter((sale) => sale.debt > 0);
 
     res.status(201).json({ data: debtsreport });
   } catch (error) {
