@@ -16,6 +16,7 @@ import reportsReducer from '../Pages/Reports/reportsSlice.js'
 import sellingsReducer from '../Pages/Sale/Slices/sellingsSlice.js'
 import sellersReducer from './../Pages/Seller/sellerSlice'
 import barcodeReducer from './../Pages/Barcode/barcodeSlice.js'
+import expenseReducer from '../Pages/Expense/expenseSlice'
 
 export default configureStore({
     devTools: process.env.NODE_ENV === 'development',
@@ -37,5 +38,6 @@ export default configureStore({
         sellings: sellingsReducer,
         sellers: sellersReducer,
         barcode: barcodeReducer,
+        expense: expenseReducer,
     },
 })

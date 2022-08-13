@@ -6,7 +6,6 @@ module.exports.getExpense = async (req, res) => {
     const { market, currentPage, countPage, startDate, endDate } = req.body;
 
     const marke = await Market.findById(market);
-
     if (!marke) {
       return res
         .status(401)
@@ -34,7 +33,7 @@ module.exports.getExpense = async (req, res) => {
 
 module.exports.registerExpense = async (req, res) => {
   try {
-    const { currentPage, countPage, startDate, endDate } = req.body;
+    const { currentPage, countPage } = req.body;
     const { sum, type, comment, market } = req.body.expense;
 
     const { error } = validateExpense(req.body.expense);
@@ -62,11 +61,14 @@ module.exports.registerExpense = async (req, res) => {
 
     await expense.save();
 
-    const responseExpense = await Expense.findById(expense._id).select(
+    const responseExpense = await Expense.find({ market }).select(
       'sum comment type market createdAt'
     );
-
-    res.status(201).json(responseExpense);
+    console.log(responseExpense);
+    res.status(201).json({
+      count: responseExpense.length,
+      expenses: responseExpense.splice(currentPage * countPage, countPage),
+    });
   } catch (error) {
     res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
@@ -74,7 +76,7 @@ module.exports.registerExpense = async (req, res) => {
 
 module.exports.deleteExpense = async (req, res) => {
   try {
-    const { _id, market } = req.body;
+    const { _id, market, currentPage, countPage } = req.body;
 
     const marke = await Market.findById(market);
     if (!marke) {
@@ -83,11 +85,20 @@ module.exports.deleteExpense = async (req, res) => {
         .json({ message: "Diqqat! Do'kon ma'lumotlari topilmadi." });
     }
 
-    const expense = await Expense.findById(_id);
-
     await Expense.findByIdAndDelete(_id);
 
-    res.status(201).json(expense);
+    const expenses = await Expense.find({
+      market,
+    })
+      .sort({ _id: -1 })
+      .select('sum comment type market createdAt')
+      .skip(currentPage * countPage)
+      .limit(countPage);
+
+    res.status(201).json({
+      count: expenses.length,
+      expenses: expenses.splice(currentPage * countPage, countPage),
+    });
   } catch (error) {
     res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
