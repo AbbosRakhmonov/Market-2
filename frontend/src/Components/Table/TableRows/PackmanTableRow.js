@@ -1,13 +1,14 @@
 import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
-import {uniqueId} from "lodash"
+import {uniqueId} from 'lodash'
+
 export const PackmanTableRow = ({
-    data,
-    currentPage,
-    countPage,
-    Edit,
-    Delete,
-}) => {
+                                    data,
+                                    currentPage,
+                                    countPage,
+                                    Edit,
+                                    Delete
+                                }) => {
     return (
         <>
             {data.map((packman, index) => (

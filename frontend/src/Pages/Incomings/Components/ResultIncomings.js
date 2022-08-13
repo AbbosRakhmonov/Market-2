@@ -5,11 +5,11 @@ const ResultIncomings = ({connectors, styles, currencyType}) => {
         if (connectors.length > 0) {
             return currencyType === 'USD'
                 ? connectors
-                      .reduce((prev, item) => prev + item.totalprice, 0)
-                      .toLocaleString('ru-RU')
+                    .reduce((prev, item) => prev + item.totalprice, 0)
+                    .toLocaleString('ru-RU')
                 : connectors
-                      .reduce((prev, item) => prev + item.totalpriceuzs, 0)
-                      .toLocaleString('ru-RU')
+                    .reduce((prev, item) => prev + item.totalpriceuzs, 0)
+                    .toLocaleString('ru-RU')
         }
         return 0
     }

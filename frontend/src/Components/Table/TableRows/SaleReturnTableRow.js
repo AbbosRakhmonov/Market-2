@@ -2,11 +2,11 @@ import React from 'react'
 import TableInput from '../../Inputs/TableInput'
 
 export const SaleReturnTableRow = ({
-    data,
-    changeHandler,
-    currency,
-    onKeyUp,
-}) => {
+                                       data,
+                                       changeHandler,
+                                       currency,
+                                       onKeyUp
+                                   }) => {
     return (
         <>
             {data.map((salereturn, index) => (
@@ -23,8 +23,8 @@ export const SaleReturnTableRow = ({
                     </td>
                     <td className='text-right td'>
                         {(currency === 'UZS'
-                            ? salereturn.product.totalpriceuzs
-                            : salereturn.product.totalprice
+                                ? salereturn.product.totalpriceuzs
+                                : salereturn.product.totalprice
                         ).toLocaleString('ru-RU')}{' '}
                         {currency}
                     </td>

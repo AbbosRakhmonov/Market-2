@@ -42,7 +42,7 @@ export const deletePackman = createAsyncThunk(
     async (body, {rejectWithValue}) => {
         try {
             const {data} = await Api.delete('/sales/packman/delete', {
-                data: body,
+                data: body
             })
             return data
         } catch (error) {
@@ -74,7 +74,7 @@ const packmansSlice = createSlice({
         errorPackmans: null,
         successAddPackman: false,
         successUpdatePackman: false,
-        successDeletePackman: false,
+        successDeletePackman: false
     },
     reducers: {
         clearErrorPackmans: (state) => {
@@ -92,7 +92,7 @@ const packmansSlice = createSlice({
         clearSearchedPackmans: (state) => {
             state.searchedPackmans = []
             state.totalSearched = 0
-        },
+        }
     },
     extraReducers: {
         [getPackmans.pending]: (state) => {
@@ -176,8 +176,8 @@ const packmansSlice = createSlice({
         [deletePackman.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorPackmans = payload
-        },
-    },
+        }
+    }
 })
 
 export const {
@@ -185,6 +185,6 @@ export const {
     clearSuccessAddPackmans,
     clearSuccessDeletePackmans,
     clearSuccessUpdatePackmans,
-    clearSearchedPackmans,
+    clearSearchedPackmans
 } = packmansSlice.actions
 export default packmansSlice.reducer

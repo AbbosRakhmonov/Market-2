@@ -57,7 +57,7 @@ const unitsSlice = createSlice({
         errorUnits: null,
         successAddUnit: false,
         successUpdateUnit: false,
-        successDeleteUnit: false,
+        successDeleteUnit: false
     },
     reducers: {
         clearErrorUnits: (state) => {
@@ -71,7 +71,7 @@ const unitsSlice = createSlice({
         },
         clearSuccessDeleteUnit: (state) => {
             state.successDeleteUnit = false
-        },
+        }
     },
     extraReducers: {
         [getUnits.pending]: (state) => {
@@ -120,14 +120,14 @@ const unitsSlice = createSlice({
         [deleteUnit.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorUnits = payload
-        },
-    },
+        }
+    }
 })
 
 export const {
     clearErrorUnits,
     clearSuccessAddUnit,
     clearSuccessUpdateUnit,
-    clearSuccessDeleteUnit,
+    clearSuccessDeleteUnit
 } = unitsSlice.actions
 export default unitsSlice.reducer

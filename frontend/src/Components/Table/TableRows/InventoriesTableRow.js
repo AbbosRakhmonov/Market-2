@@ -1,14 +1,15 @@
 import React from 'react'
 import {StatusIcon} from '../TableIcons/StatusIcon'
 import TableBtn from '../../Buttons/TableBtn'
+
 export const InventoriesTableRow = ({
-    data,
-    currentPage,
-    countPage,
-    Print,
-    Excel,
-    isDisabled,
-}) => {
+                                        data,
+                                        currentPage,
+                                        countPage,
+                                        Print,
+                                        Excel,
+                                        isDisabled
+                                    }) => {
     return (
         <>
             {data.map((inventory, index) => (

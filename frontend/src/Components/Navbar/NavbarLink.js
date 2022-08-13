@@ -1,7 +1,6 @@
-import {NavLink} from 'react-router-dom'
+import {NavLink, useLocation} from 'react-router-dom'
 import AccordionLink from './AccordionLink'
 import {useSelector} from 'react-redux'
-import {useLocation} from 'react-router-dom'
 
 function NavbarLink({
                         path,

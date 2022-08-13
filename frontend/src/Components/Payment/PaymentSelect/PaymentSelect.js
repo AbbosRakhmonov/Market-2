@@ -6,7 +6,7 @@ function PaymentSelect({value, onChange, option, onSelect}) {
     const {currencyType} = useSelector((state) => state.currency)
     const options = [
         {value: currencyType, label: currencyType},
-        {value: '%', label: '%'},
+        {value: '%', label: '%'}
     ]
     return (
         <div
@@ -32,7 +32,7 @@ function PaymentSelect({value, onChange, option, onSelect}) {
                 options={options}
                 components={{
                     IndicatorSeparator: () => null,
-                    DropdownIndicator: DropdownIcon,
+                    DropdownIndicator: DropdownIcon
                 }}
             />
         </div>

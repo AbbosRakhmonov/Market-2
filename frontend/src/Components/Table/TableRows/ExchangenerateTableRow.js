@@ -2,12 +2,12 @@ import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
 
 export const ExchangenerateTableRow = ({
-    data,
-    currentPage,
-    countPage,
-    Edit,
-    Delete,
-}) => {
+                                           data,
+                                           currentPage,
+                                           countPage,
+                                           Edit,
+                                           Delete
+                                       }) => {
     return (
         <>
             {data.map((exchange, index) => (
@@ -16,7 +16,7 @@ export const ExchangenerateTableRow = ({
                         {currentPage * countPage + 1 + index}
                     </td>
                     <td className='text-left td'>
-                        {new Date (exchange.createdAt).toLocaleDateString()}
+                        {new Date(exchange.createdAt).toLocaleDateString()}
                     </td>
                     <td className='text-left td'>
                         1 USD - {exchange.exchangerate} UZS

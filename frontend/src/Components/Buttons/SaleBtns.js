@@ -1,13 +1,12 @@
 import React from 'react'
 import {
-    IoSwapHorizontalOutline,
-    IoCashOutline,
     IoCardOutline,
+    IoCashOutline,
     IoGitCompareOutline,
-    IoPricetagOutline
+    IoPricetagOutline,
+    IoSwapHorizontalOutline,
+    IoWalletOutline
 } from 'react-icons/io5'
-
-import {IoWalletOutline} from 'react-icons/io5'
 
 export const SaleBtn = ({onClick, text, type, active}) => {
     const icons = {

@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { universalSort, UsdToUzs, UzsToUsd } from '../../../App/globalFunctions'
+import React, {useCallback, useEffect, useState} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import {universalSort, UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
 import ExportBtn from '../../../Components/Buttons/ExportBtn'
 import Dates from '../../../Components/Dates/Dates'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
@@ -8,23 +8,17 @@ import Pagination from '../../../Components/Pagination/Pagination'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
 import Table from '../../../Components/Table/Table'
 
-import {
-    clearSuccesDelete,
-    clearSuccessUpdate,
-    deleteIncoming,
-    getIncomings,
-    updateIncoming,
-} from '../incomingSlice'
+import {clearSuccesDelete, clearSuccessUpdate, deleteIncoming, getIncomings, updateIncoming} from '../incomingSlice'
 
 const IncomingsList = () => {
     const dispatch = useDispatch()
 
     const {
-        market: { _id },
+        market: {_id}
     } = useSelector((state) => state.login)
-    const { incomings, incomingscount, successUpdate, successDelete } =
+    const {incomings, incomingscount, successUpdate, successDelete} =
         useSelector((state) => state.incoming)
-    const { currencyType, currency } = useSelector((state) => state.currency)
+    const {currencyType, currency} = useSelector((state) => state.currency)
 
     const [beginDay, setBeginDay] = useState(
         new Date(
@@ -39,12 +33,12 @@ const IncomingsList = () => {
     const [sendingSearch, setSendingSearch] = useState({
         name: '',
         code: '',
-        supplier: '',
+        supplier: ''
     })
     const [localSearch, setLocalSearch] = useState({
         name: '',
         code: '',
-        supplier: '',
+        supplier: ''
     })
     const [currentPage, setCurrentPage] = useState(0)
     const [countPage, setCountPage] = useState(10)
@@ -52,7 +46,7 @@ const IncomingsList = () => {
     const [sortItem, setSortItem] = useState({
         filter: '',
         sort: '',
-        count: 0,
+        count: 0
     })
 
     const [editedIncoming, setEditedIncoming] = useState({})
@@ -65,7 +59,7 @@ const IncomingsList = () => {
             return {
                 ...incoming,
                 sellingprice: incoming.product.price.sellingprice,
-                sellingpriceuzs: incoming.product.price.sellingpriceuzs,
+                sellingpriceuzs: incoming.product.price.sellingpriceuzs
             }
         })
         setCurrentIncoming(current)
@@ -81,7 +75,7 @@ const IncomingsList = () => {
     const changeEditedIncoming = (e, key) => {
         let target = Number(e.target.value)
         let obj = {
-            ...editedIncoming,
+            ...editedIncoming
         }
 
         const check = (prop) => key === prop
@@ -128,7 +122,7 @@ const IncomingsList = () => {
                     market: _id,
                     startDate: beginDay,
                     endDate: endDay,
-                    product: { ...editedIncoming },
+                    product: {...editedIncoming}
                 })
             )
         } else {
@@ -153,13 +147,13 @@ const IncomingsList = () => {
     const searchName = (e) => {
         let target = e.target.value.toLowerCase()
         setCurrentIncoming([
-            ...storageCurrentIncoming.filter(({ product }) =>
+            ...storageCurrentIncoming.filter(({product}) =>
                 product.productdata.name.toLowerCase().includes(target)
-            ),
+            )
         ])
         setLocalSearch({
             ...localSearch,
-            name: target,
+            name: target
         })
     }
 
@@ -167,13 +161,13 @@ const IncomingsList = () => {
     const searchCode = (e) => {
         let target = e.target.value.toLowerCase()
         setCurrentIncoming([
-            ...storageCurrentIncoming.filter(({ product }) =>
+            ...storageCurrentIncoming.filter(({product}) =>
                 product.productdata.code.includes(target)
-            ),
+            )
         ])
         setLocalSearch({
             ...localSearch,
-            code: target,
+            code: target
         })
     }
 
@@ -183,11 +177,11 @@ const IncomingsList = () => {
         setCurrentIncoming([
             ...storageCurrentIncoming.filter((product) =>
                 product.supplier.name.toLowerCase().includes(target)
-            ),
+            )
         ])
         setLocalSearch({
             ...localSearch,
-            supplier: target,
+            supplier: target
         })
     }
 
@@ -199,7 +193,7 @@ const IncomingsList = () => {
                     setSortItem({
                         filter: filterKey,
                         sort: '1',
-                        count: 2,
+                        count: 2
                     })
                     universalSort(
                         currentIncoming,
@@ -213,7 +207,7 @@ const IncomingsList = () => {
                     setSortItem({
                         filter: filterKey,
                         sort: '',
-                        count: 0,
+                        count: 0
                     })
                     universalSort(
                         currentIncoming,
@@ -227,7 +221,7 @@ const IncomingsList = () => {
                     setSortItem({
                         filter: filterKey,
                         sort: '-1',
-                        count: 1,
+                        count: 1
                     })
                     universalSort(
                         currentIncoming,
@@ -241,7 +235,7 @@ const IncomingsList = () => {
             setSortItem({
                 filter: filterKey,
                 sort: '-1',
-                count: 1,
+                count: 1
             })
             universalSort(
                 currentIncoming,
@@ -276,7 +270,7 @@ const IncomingsList = () => {
                 market: _id,
                 beginDay,
                 endDay,
-                product: { ...deletedIncoming },
+                product: {...deletedIncoming}
             })
         )
         setModal(false)
@@ -290,7 +284,7 @@ const IncomingsList = () => {
                 endDay,
                 currentPage,
                 countPage,
-                search: sendingSearch,
+                search: sendingSearch
             })
         )
     }, [dispatch, _id, beginDay, endDay, currentPage, countPage, sendingSearch])
@@ -307,7 +301,7 @@ const IncomingsList = () => {
         endDay,
         currentPage,
         countPage,
-        sendingSearch,
+        sendingSearch
     ])
 
     useEffect(() => {
@@ -328,56 +322,56 @@ const IncomingsList = () => {
 
     const headers = [
         {
-            title: '№',
+            title: '№'
         },
         {
             title: 'Yetkazuvchi',
             filter: 'supplier.name',
-            styles: 'w-[10%]',
+            styles: 'w-[10%]'
         },
         {
             title: 'Kodi',
             filter: 'product.productdata.code',
-            styles: 'w-[7%]',
+            styles: 'w-[7%]'
         },
         {
             title: 'Nomi',
-            filter: 'product.productdata.name',
+            filter: 'product.productdata.name'
         },
         {
             title: 'Soni',
-            styles: 'w-[10%]',
+            styles: 'w-[10%]'
         },
         {
             title: 'Kelish',
-            styles: 'w-[10%]',
+            styles: 'w-[10%]'
         },
         {
             title: 'Jami',
-            styles: 'w-[15%]',
+            styles: 'w-[15%]'
         },
         {
             title: 'Sotish',
-            styles: 'w-[10%]',
+            styles: 'w-[10%]'
         },
         {
             title: '',
-            styles: 'w-[5%]',
-        },
+            styles: 'w-[5%]'
+        }
     ]
 
-    const incomingHeaders =[
-        "№",
-        "Yetkazuvchi",
-        "Kodi",
-        "Nomi",
-        "Soni",
-        "Kelish UZS",
-        "Kelish USD",
-        "Jami UZS",
-        "Jami USD",
-        "Sotish UZS",
-        "Sotish USD"
+    const incomingHeaders = [
+        '№',
+        'Yetkazuvchi',
+        'Kodi',
+        'Nomi',
+        'Soni',
+        'Kelish UZS',
+        'Kelish USD',
+        'Jami UZS',
+        'Jami USD',
+        'Sotish UZS',
+        'Sotish USD'
     ]
 
     return (
@@ -386,11 +380,11 @@ const IncomingsList = () => {
                 <p>Ro'yxat</p>
             </div>
             <div className='mainPadding flex items-center justify-between'>
-                <ExportBtn 
+                <ExportBtn
                     fileName={`Maxsulotlar-qabul-${new Date().toLocaleDateString()}`}
                     headers={incomingHeaders}
                     datas={currentIncoming}
-                    pagesName="IncomingList"
+                    pagesName='IncomingList'
                 />
                 <div className='flex gap-[10px]'>
                     <Dates
@@ -444,8 +438,8 @@ const IncomingsList = () => {
             <UniversalModal
                 body={'approve'}
                 isOpen={modal}
-                headerText={"Mahsulotni o'chirishni tasdiqlaysizmi?"}
-                title={"O'chirilgan mahsulotni tiklashning imkoni mavjud emas!"}
+                headerText={'Mahsulotni o\'chirishni tasdiqlaysizmi?'}
+                title={'O\'chirilgan mahsulotni tiklashning imkoni mavjud emas!'}
                 approveFunction={removeIncoming}
                 closeModal={closeModal}
                 toggleModal={closeModal}

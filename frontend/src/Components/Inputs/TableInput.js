@@ -1,12 +1,12 @@
 function TableInput({
-    placeholder,
-    type,
-    value,
-    onChange,
-    label,
-    disabled,
-    onKeyUp,
-}) {
+                        placeholder,
+                        type,
+                        value,
+                        onChange,
+                        label,
+                        disabled,
+                        onKeyUp
+                    }) {
     return (
         <div className={'w-full'}>
             <label>

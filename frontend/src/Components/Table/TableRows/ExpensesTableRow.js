@@ -2,13 +2,13 @@ import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
 
 export const ExpensesTableRow = ({
-    data,
-    currentPage,
-    countPage,
-    currency,
-    reports,
-    Delete,
-}) => {
+                                     data,
+                                     currentPage,
+                                     countPage,
+                                     currency,
+                                     reports,
+                                     Delete
+                                 }) => {
     return (
         <>
             {data.map((expense, index) => (

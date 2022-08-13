@@ -33,7 +33,7 @@ export const RegisterSaleTableRow = (
                         />
                     </td>
                     <td className='text-right td'>
-                        {currency !== 'UZS' ? (product.totalprice).toLocaleString("ru-Ru") : (product.totalpriceuzs).toLocaleString("ru-Ru")} {currency}
+                        {currency !== 'UZS' ? (product.totalprice).toLocaleString('ru-Ru') : (product.totalpriceuzs).toLocaleString('ru-Ru')} {currency}
                     </td>
                     <td className='td border-r-0'>
                         <div className='flex items-center justify-center'>

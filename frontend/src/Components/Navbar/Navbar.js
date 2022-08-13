@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useLayoutEffect, useState} from 'react'
-import Paths, {profileList, navListForSeller, navListForAdmin} from './Path'
+import Paths, {navListForAdmin, navListForSeller, profileList} from './Path'
 import NavbarFooterLogo from '../../Images/logo-sm.svg'
 import Avatar from '../Avatar/Avatar'
 import {IoChevronBack, IoEllipsisVertical} from 'react-icons/io5'

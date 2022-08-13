@@ -68,46 +68,46 @@ export const SaleCheck = forwardRef((props, ref) => {
             <div className='mt-4'>
                 <table className='border-collapse border border-slate-400 w-full break-inside-auto'>
                     <thead>
-                        <tr className={'break-inside-avoid break-after-auto'}>
-                            <td className='check-table-rtr'>№</td>
-                            <td className='check-table-rtr'>Kodi</td>
-                            <td className='check-table-rtr'>Maxsulot</td>
-                            <td className='check-table-rtr'>Soni</td>
-                            <td className='check-table-rtr'>Narxi (dona)</td>
-                            <td className='check-table-rtr'>Jami</td>
-                        </tr>
+                    <tr className={'break-inside-avoid break-after-auto'}>
+                        <td className='check-table-rtr'>№</td>
+                        <td className='check-table-rtr'>Kodi</td>
+                        <td className='check-table-rtr'>Maxsulot</td>
+                        <td className='check-table-rtr'>Soni</td>
+                        <td className='check-table-rtr'>Narxi (dona)</td>
+                        <td className='check-table-rtr'>Jami</td>
+                    </tr>
                     </thead>
                     <tbody>
-                        {product?.products.map((item, index) => {
-                            return (
-                                <tr key={index}>
-                                    <td className='p-1 border text-center text-[0.875rem] font-bold'>
-                                        {index + 1}
-                                    </td>
-                                    <td className='check-table-body text-center'>
-                                        {item?.product?.productdata?.code}
-                                    </td>
-                                    <td className='check-table-body text-start'>
-                                        {item?.product?.productdata?.name}
-                                    </td>
-                                    <td className='check-table-body'>
-                                        {item?.pieces}
-                                    </td>
-                                    <td className='check-table-body'>
-                                        {currencyType === 'USD'
-                                            ? item?.unitprice
-                                            : item?.unitpriceuzs}{' '}
-                                        {currencyType}
-                                    </td>
-                                    <td className='check-table-body'>
-                                        {currencyType === 'USD'
-                                            ? item?.totalprice
-                                            : item?.totalpriceuzs}{' '}
-                                        {currencyType}
-                                    </td>
-                                </tr>
-                            )
-                        })}
+                    {product?.products.map((item, index) => {
+                        return (
+                            <tr key={index}>
+                                <td className='p-1 border text-center text-[0.875rem] font-bold'>
+                                    {index + 1}
+                                </td>
+                                <td className='check-table-body text-center'>
+                                    {item?.product?.productdata?.code}
+                                </td>
+                                <td className='check-table-body text-start'>
+                                    {item?.product?.productdata?.name}
+                                </td>
+                                <td className='check-table-body'>
+                                    {item?.pieces}
+                                </td>
+                                <td className='check-table-body'>
+                                    {currencyType === 'USD'
+                                        ? item?.unitprice
+                                        : item?.unitpriceuzs}{' '}
+                                    {currencyType}
+                                </td>
+                                <td className='check-table-body'>
+                                    {currencyType === 'USD'
+                                        ? item?.totalprice
+                                        : item?.totalpriceuzs}{' '}
+                                    {currencyType}
+                                </td>
+                            </tr>
+                        )
+                    })}
                     </tbody>
                 </table>
             </div>
@@ -150,15 +150,15 @@ export const SaleCheck = forwardRef((props, ref) => {
                     <span>
                         {currencyType === 'USD'
                             ? calculateDebt(
-                                  product?.payment?.totalprice,
-                                  product?.payment?.payment,
-                                  product?.discount?.discount
-                              )
+                                product?.payment?.totalprice,
+                                product?.payment?.payment,
+                                product?.discount?.discount
+                            )
                             : calculateDebt(
-                                  product?.payment?.totalpriceuzs,
-                                  product?.payment?.paymentuzs,
-                                  product?.discount?.discountuzs
-                              )}{' '}
+                                product?.payment?.totalpriceuzs,
+                                product?.payment?.paymentuzs,
+                                product?.discount?.discountuzs
+                            )}{' '}
                         {currencyType}
                     </span>
                 </li>

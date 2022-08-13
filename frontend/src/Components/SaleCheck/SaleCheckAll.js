@@ -35,7 +35,8 @@ export const SaleCheckAll = forwardRef((props, ref) => {
                         <span className='check-ul-li-span'>{market?.address}</span>
                     </li>
                     <li className='check-ul-li'>Sana:
-                        <span className='check-ul-li-span'>{new Date(product?.createdAt).toLocaleDateString()}  <span className='ml-3'>{new Date(product?.createdAt).toLocaleTimeString()}</span></span>    
+                        <span className='check-ul-li-span'>{new Date(product?.createdAt).toLocaleDateString()} <span
+                            className='ml-3'>{new Date(product?.createdAt).toLocaleTimeString()}</span></span>
                     </li>
                     <li className='check-ul-li'>Mijoz: <span
                         className='check-ul-li-span'>{product?.client?.name || product?.packman?.name || ''}</span>

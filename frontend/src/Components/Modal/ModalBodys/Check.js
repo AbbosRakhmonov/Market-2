@@ -29,7 +29,7 @@ function Check({product, returned, isPayment, payment}) {
         content: reactToPrintContent,
         documentTitle: 'Sale Check',
         onBeforeGetContent: handleOnBeforeGetContent,
-        removeAfterPrint: true,
+        removeAfterPrint: true
     })
     useEffect(() => {
         if (
@@ -43,7 +43,8 @@ function Check({product, returned, isPayment, payment}) {
     return (
         <section className='w-[27cm] mt-4 mx-auto'>
             {loadContent && (
-                <div className='fixed backdrop-blur-[2px] left-0 top-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
+                <div
+                    className='fixed backdrop-blur-[2px] left-0 top-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
                     <SmallLoader />
                 </div>
             )}

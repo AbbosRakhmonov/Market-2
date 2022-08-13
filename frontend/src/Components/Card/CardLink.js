@@ -2,22 +2,22 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 
 const CardLink = ({
-    totalprice,
-    pieces,
-    suppliers,
-    createdAt,
-    currencyType,
-    path,
-    totalpriceuzs,
-    state,
-}) => {
+                      totalprice,
+                      pieces,
+                      suppliers,
+                      createdAt,
+                      currencyType,
+                      path,
+                      totalpriceuzs,
+                      state
+                  }) => {
     return (
         <Link to={path} className='flex-[0_0_23.5%]' state={state}>
             <div className='w-full cardStyle'>
                 <h1 className='headerStyle'>
                     {(currencyType === 'USD'
-                        ? totalprice
-                        : totalpriceuzs
+                            ? totalprice
+                            : totalpriceuzs
                     ).toLocaleString('ru-Ru')}
                     <span className='cardSpan'>{currencyType}</span>
                 </h1>

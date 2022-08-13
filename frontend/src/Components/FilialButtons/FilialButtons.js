@@ -5,25 +5,25 @@ function FilialButtons({type, onClick, active}) {
     const propsType = {
         product: {
             icon: <IoNewspaperOutline className='shopIcons' />,
-            bgColor: 'bg-[#12B76A]',
+            bgColor: 'bg-[#12B76A]'
         },
         selling: {
             icon: <IoCartOutline className='shopIcons' />,
-            bgColor: 'bg-[#F79009]',
+            bgColor: 'bg-[#F79009]'
         },
         payments: {
             icon: <IoCubeOutline className='shopIcons' />,
-            bgColor: 'bg-[#00B4CC]',
-        },
+            bgColor: 'bg-[#00B4CC]'
+        }
     }
 
     return (
-    <button
-        onClick={onClick}
-        className={`${active ? "filial-active" : propsType[type].bgColor} shopButton`}
+        <button
+            onClick={onClick}
+            className={`${active ? 'filial-active' : propsType[type].bgColor} shopButton`}
         >
-        {propsType[type].icon}
-    </button>
+            {propsType[type].icon}
+        </button>
     )
 }
 

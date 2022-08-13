@@ -610,62 +610,76 @@
     }
 
     /* Admin product Cards styly start */
-
     .admin-card {
         @apply flex-[0_0_31.3814%] bg-blue-100 rounded-[.5rem] shadow-[0px_10px_10px_rgba(0,0,0,0.05)] hover:bg-blue-200 transition-all ease-in-out duration-200;
     }
+
     .admin-card-header {
         @apply flex flex-col justify-center items-center pt-[1.25rem] pb-[1.25rem] pl-[6.25rem] pr-[6.25rem] w-full gap-[.625rem];
     }
+
     .admin-header-paragraf {
         @apply mt-[-12px] font-semibold text-[.875rem] leading-[1rem] text-[#fff];
     }
+
     .admin-users {
         @apply flex flex-row justify-center items-center pt-[1.25rem] pb-[1.25rem] pl-[.625rem] pr-[.625rem] gap-[1.25rem] bg-black-500;
     }
+
     .admin-users-data {
         @apply flex flex-row items-center gap-[.625rem];
     }
+
     .admin-users-name {
         @apply font-normal text-[.875rem] leading-[1.1rem] text-[#fff];
     }
+
     .admin-users-checkbox {
         @apply flex flex-row justify-center items-center  pt-[1.25rem] pb-[1.25rem] pr-[.625rem] pl-[.625rem] gap-[1.25rem];
     }
+
     .checkbox-card {
         @apply flex items-center gap-[.625rem];
     }
+
     .checkbox-card-paragraf {
         @apply font-medium text-[.75rem] leading-[12px] text-[#fff];
     }
-    /* Admin product Cards styly end */
 
+    /* Admin product Cards styly end */
     /* admin Report style start */
     .admin-report-label {
         @apply mainPadding flex justify-between w-full text-[1.2rem]
     }
+
     .report-card {
-        @apply pt-[1.6rem] pb-[1.6rem] border-[2px] border-[rgb(0_180_204)] flex justify-around 
+        @apply pt-[1.6rem] pb-[1.6rem] border-[2px] border-[rgb(0_180_204)] flex justify-around
     }
+
     .cards-number {
         @apply flex flex-col justify-center items-center leading-[1.6rem]
     }
+
     .number-paragraf {
         @apply font-bold
     }
+
     .tr-row {
         @apply p-[.8rem]
     }
+
     .tr-div {
         @apply border-[2px] border-[rgb(0_180_204)] text-lg
     }
+
     .td-page {
         @apply border-r-[2px] border-r-[rgb(0_180_204)] tr-row  font-bold pl-[1.5rem]
     }
+
     .td-page-two {
         @apply text-right pr-[.8rem]
     }
-       
+
     /* admin Report style start */
 }
 
@@ -678,9 +692,9 @@ body {
 .loginPage {
     height: 100vh;
     background: radial-gradient(
-        100% 316.36% at 0% 50%,
-        #0090a3 0%,
-        rgba(36, 86, 50, 0.9) 100%
+            100% 316.36% at 0% 50%,
+            #0090a3 0%,
+            rgba(36, 86, 50, 0.9) 100%
     );
 }
 
@@ -854,10 +868,12 @@ input[type='checkbox'] {
     outline: none;
     transition: 0.3s;
 }
+
 input[type='checkbox']:checked {
     background: #ffffff50;
     mix-blend-mode: normal;
 }
+
 input[type='checkbox']::before {
     content: '';
     position: absolute;
@@ -868,11 +884,12 @@ input[type='checkbox']::before {
     left: 0;
     transform: scale(1.1);
     box-shadow: 0px 0.1px 0.3px rgba(0, 0, 0, 0.1),
-        0px 1px 2px rgba(0, 0, 0, 0.2);
+    0px 1px 2px rgba(0, 0, 0, 0.2);
     transition: 0.3s;
     background: #ffffff;
     z-index: 20;
 }
+
 input[type='checkbox']:checked::before {
     left: 20px;
 }

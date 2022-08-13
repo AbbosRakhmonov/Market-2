@@ -3,14 +3,14 @@ import TableBtn from '../../Buttons/TableBtn'
 import TableInput from '../../Inputs/TableInput'
 
 export const InventoryTableRow = ({
-    data,
-    currentPage,
-    countPage,
-    changeHandler,
-    inputDisabled,
-    Save,
-    onKeyUp,
-}) => {
+                                      data,
+                                      currentPage,
+                                      countPage,
+                                      changeHandler,
+                                      inputDisabled,
+                                      Save,
+                                      onKeyUp
+                                  }) => {
     return (
         <>
             {data.map((product, index) => (
@@ -41,23 +41,23 @@ export const InventoryTableRow = ({
                     <td className='td text-error-500 text-right'>
                         {product.inventory && product.inventory.inventorycount
                             ? product.inventory.inventorycount -
-                                  product.inventory.productcount >
-                              0
+                            product.inventory.productcount >
+                            0
                                 ? '+' +
-                                  (
-                                      Math.round(
-                                          (product.inventory.inventorycount -
-                                              product.inventory.productcount) *
-                                              100
-                                      ) / 100
-                                  ).toLocaleString('ru-RU')
+                                (
+                                    Math.round(
+                                        (product.inventory.inventorycount -
+                                            product.inventory.productcount) *
+                                        100
+                                    ) / 100
+                                ).toLocaleString('ru-RU')
                                 : (
-                                      Math.round(
-                                          (product.inventory.inventorycount -
-                                              product.inventory.productcount) *
-                                              100
-                                      ) / 100
-                                  ).toLocaleString('ru-RU')
+                                    Math.round(
+                                        (product.inventory.inventorycount -
+                                            product.inventory.productcount) *
+                                        100
+                                    ) / 100
+                                ).toLocaleString('ru-RU')
                             : ''}{' '}
                         <span className='text-error-500'>
                             {product.unit.name}

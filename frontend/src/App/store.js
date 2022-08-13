@@ -38,6 +38,6 @@ export default configureStore({
         sellings: sellingsReducer,
         sellers: sellersReducer,
         barcode: barcodeReducer,
-        expense: expenseReducer,
-    },
+        expense: expenseReducer
+    }
 })

@@ -2,11 +2,11 @@ import {uniqueId} from 'lodash'
 import React from 'react'
 
 export const ReturnProductsTableRow = ({
-    data,
-    currentPage,
-    countPage,
-    currency,
-}) => {
+                                           data,
+                                           currentPage,
+                                           countPage,
+                                           currency
+                                       }) => {
     return (
         <>
             {data.map((connector, index) => (

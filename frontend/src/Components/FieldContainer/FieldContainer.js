@@ -2,27 +2,27 @@ import Input from '../Inputs/Input'
 import SelectInput from '../SelectInput/SelectInput'
 
 function FieldContainer({
-    maxWidth,
-    value,
-    onChange,
-    label,
-    placeholder,
-    type,
-    select,
-    disabled,
-    options,
-    border,
-    onKeyUp,
-}) {
+                            maxWidth,
+                            value,
+                            onChange,
+                            label,
+                            placeholder,
+                            type,
+                            select,
+                            disabled,
+                            options,
+                            border,
+                            onKeyUp
+                        }) {
     return (
         <div
             className={
                 maxWidth
                     ? `${maxWidth} ${
-                          border
-                              ? 'border-r-[1px] border-r-blue-100 pr-[1.25rem]'
-                              : ''
-                      }`
+                        border
+                            ? 'border-r-[1px] border-r-blue-100 pr-[1.25rem]'
+                            : ''
+                    }`
                     : 'grow'
             }
         >

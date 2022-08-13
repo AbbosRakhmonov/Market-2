@@ -5,17 +5,19 @@ import {universalToast, warningEmptyInput} from '../../Components/ToastMessages/
 import ExportBtn from '../../Components/Buttons/ExportBtn.js'
 import ImportBtn from '../../Components/Buttons/ImportBtn.js'
 import Pagination from '../../Components/Pagination/Pagination.js'
-import {useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import Table from '../../Components/Table/Table.js'
 import SearchForm from '../../Components/SearchForm/SearchForm.js'
 import {
     addBarcode,
-    clearSearchedProducts, deleteBarCode,
+    clearSearchedProducts,
+    deleteBarCode,
     getAllProductsWithBarcode,
-    getBarcode, getBarcodeByFilter, registerAllBarcode,
+    getBarcode,
+    getBarcodeByFilter,
+    registerAllBarcode,
     updateBarcode
 } from './barcodeSlice.js'
-import {useDispatch} from 'react-redux'
 import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
 import BarcodeReader from 'react-barcode-reader'

@@ -1,7 +1,7 @@
 import React from 'react'
 import Logo from '../../Images/logo-lg.svg'
 
-const AdminReportDate = ({ date1, date2 }) => {
+const AdminReportDate = ({date1, date2}) => {
     return (
         <div className='flex justify-between items-center mainPadding'>
             <p className='text-2xl font-bold'>Moliyaviy hisobat</p>

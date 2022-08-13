@@ -1,4 +1,4 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import Api from '../../../Config/Api.js'
 import {successDeleteTemporary, universalToast} from '../../../Components/ToastMessages/ToastMessages.js'
 

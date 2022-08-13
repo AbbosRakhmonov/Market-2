@@ -1,57 +1,53 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import ExportBtn from '../../../Components/Buttons/ExportBtn.js'
 import Pagination from '../../../Components/Pagination/Pagination.js'
 import Table from '../../../Components/Table/Table.js'
 import SearchForm from '../../../Components/SearchForm/SearchForm.js'
-import { useDispatch, useSelector } from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import Spinner from '../../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../../Components/NotFind/NotFind.js'
-import { motion } from "framer-motion"
-import {
-    clearSearchedSellings,
-    getSellings,
-    getSellingsByFilter,
-} from '../Slices/sellingsSlice.js'
-import { regexForTypeNumber } from '../../../Components/RegularExpressions/RegularExpressions.js'
+import {motion} from 'framer-motion'
+import {clearSearchedSellings, getSellings, getSellingsByFilter} from '../Slices/sellingsSlice.js'
+import {regexForTypeNumber} from '../../../Components/RegularExpressions/RegularExpressions.js'
 import UniversalModal from '../../../Components/Modal/UniversalModal.js'
 
 const Sellings = () => {
     const headers = [
         {
-            title: '№',
+            title: '№'
         },
         {
             title: 'ID',
-            filter: 'id',
+            filter: 'id'
         },
         {
-            title: 'Mijoz',
+            title: 'Mijoz'
         },
         {
-            title: 'Jami',
+            title: 'Jami'
         },
         {
-            title: 'Chegirma',
+            title: 'Chegirma'
         },
         {
-            title: 'Qarz',
+            title: 'Qarz'
         },
         {
-            title: 'Izoh',
+            title: 'Izoh'
         },
         {
             title: '',
-            styles: 'w-[7rem]',
-        },
+            styles: 'w-[7rem]'
+        }
     ]
     const dispatch = useDispatch()
-    const { currencyType } = useSelector((state) => state.currency)
+    const {currencyType} = useSelector((state) => state.currency)
     const {
         sellings,
         searchedSellings,
         getSellingsLoading,
         total,
-        totalSearched,
+        totalSearched
     } = useSelector((state) => state.sellings)
     const [data, setData] = useState(sellings)
     const [filteredDataTotal, setFilteredDataTotal] = useState(total)
@@ -60,7 +56,7 @@ const Sellings = () => {
     const [currentPage, setCurrentPage] = useState(0)
     const [search, setSearch] = useState({
         id: '',
-        client: '',
+        client: ''
     })
     const [startDate, setStartDate] = useState(
         new Date(
@@ -74,18 +70,18 @@ const Sellings = () => {
     const [modalVisible, setModalVisible] = useState(false)
 
     // filter by total
-    const filterByTotal = ({ value }) => {
+    const filterByTotal = ({value}) => {
         setShowByTotal(value)
         setCurrentPage(0)
     }
-    
+
     // handle change client and id
     const handleChangeId = (e) => {
         const val = e.target.value
         const valForSearch = val.replace(/\s+/g, ' ').trim()
-        regexForTypeNumber.test(val) && setSearch({ ...search, id: val })
-            ; (searchedData.length > 0 || totalSearched > 0) &&
-                dispatch(clearSearchedSellings())
+        regexForTypeNumber.test(val) && setSearch({...search, id: val})
+        ;(searchedData.length > 0 || totalSearched > 0) &&
+        dispatch(clearSearchedSellings())
         if (valForSearch === '') {
             setData(sellings)
             setFilteredDataTotal(total)
@@ -100,9 +96,9 @@ const Sellings = () => {
     const handleChangeClient = (e) => {
         const val = e.target.value
         const valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
-        setSearch({ ...search, client: val })
-            ; (searchedData.length > 0 || totalSearched > 0) &&
-                dispatch(clearSearchedSellings())
+        setSearch({...search, client: val})
+        ;(searchedData.length > 0 || totalSearched > 0) &&
+        dispatch(clearSearchedSellings())
         if (valForSearch === '') {
             setData(sellings)
             setFilteredDataTotal(total)
@@ -127,7 +123,7 @@ const Sellings = () => {
                 countPage: showByTotal,
                 startDate: startDate.toISOString(),
                 endDate: endDate.toISOString(),
-                search: search,
+                search: search
             }
             dispatch(getSellingsByFilter(body))
         }
@@ -140,16 +136,16 @@ const Sellings = () => {
 
     const sellingHeaders = [
         '№',
-        "ID",
-        "Mijoz",
-        "Jami UZS",
-        "Jami USD",
-        "Chegirma UZS",
-        "Chegirma USD",
-        "Qarz UZS",
-        "Qarz USD",
+        'ID',
+        'Mijoz',
+        'Jami UZS',
+        'Jami USD',
+        'Chegirma UZS',
+        'Chegirma USD',
+        'Qarz UZS',
+        'Qarz USD'
     ]
-    
+
     const handleClickPrint = (selling) => {
         setPrintedSelling(selling)
         setModalVisible(true)
@@ -173,8 +169,8 @@ const Sellings = () => {
             endDate: endDate.toISOString(),
             search: {
                 id: '',
-                client: '',
-            },
+                client: ''
+            }
         }
         dispatch(getSellings(body))
     }, [currentPage, showByTotal, startDate, endDate, dispatch])
@@ -185,10 +181,10 @@ const Sellings = () => {
             animate='open'
             exit='collapsed'
             variants={{
-                open: { opacity: 1, height: 'auto' },
-                collapsed: { opacity: 0, height: 0 },
+                open: {opacity: 1, height: 'auto'},
+                collapsed: {opacity: 0, height: 0}
             }}
-            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
+            transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
         >
             <UniversalModal
                 printedSelling={printedSelling}
@@ -202,7 +198,7 @@ const Sellings = () => {
                     headers={sellingHeaders}
                     datas={data}
                     fileName={`Sotuvlar-${new Date().toLocaleDateString()}`}
-                    pagesName="Sellings"
+                    pagesName='Sellings'
                 />
                 <p className='flex items-center'>Sotuvlar</p>
                 {(filteredDataTotal !== 0 || totalSearched !== 0) && (
@@ -234,7 +230,7 @@ const Sellings = () => {
                 {getSellingsLoading ? (
                     <Spinner />
                 ) : data.length === 0 && searchedData.length === 0 ? (
-                    <NotFind text={"Ro'yxat mavjud emas..."} />
+                    <NotFind text={'Ro\'yxat mavjud emas...'} />
                 ) : (
                     <Table
                         data={data}

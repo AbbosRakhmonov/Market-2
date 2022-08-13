@@ -8,7 +8,7 @@ const Pagination = ({countPage, totalDatas, setCurrentPage, currentPage}) => {
     for (let i = 1; i <= Math.ceil(totalDatas / countPage); i++) {
         pageNumbers.push(i)
     }
-    
+
 
     const pageHandle = (data) => {
         setCurrentPage(data.selected)

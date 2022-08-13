@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import Button from '../../Components/Buttons/BtnAddRemove.js'
 import Table from '../../Components/Table/Table.js'
 import FieldContainer from '../../Components/FieldContainer/FieldContainer.js'
-import { useDispatch, useSelector } from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import {
     successAddUnitMessage,
     successDeleteUnitMessage,
     successUpdateUnitMessage,
     universalToast,
-    warningEmptyInput,
+    warningEmptyInput
 } from '../../Components/ToastMessages/ToastMessages.js'
 import {
     addUnit,
@@ -18,13 +18,13 @@ import {
     clearSuccessUpdateUnit,
     deleteUnit,
     getUnits,
-    updateUnit,
+    updateUnit
 } from './unitsSlice.js'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
 import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
-import { checkEmptyString } from '../../App/globalFunctions.js'
-import { motion } from 'framer-motion';
+import {checkEmptyString} from '../../App/globalFunctions.js'
+import {motion} from 'framer-motion'
 
 function Unit() {
     const dispatch = useDispatch()
@@ -34,16 +34,16 @@ function Unit() {
         successAddUnit,
         successUpdateUnit,
         successDeleteUnit,
-        loading,
+        loading
     } = useSelector((state) => state.units)
     const headers = [
-        { styles: 'w-[10%] text-start', filter: '', title: '№' },
+        {styles: 'w-[10%] text-start', filter: '', title: '№'},
         {
             styles: 'w-[80%] text-start',
             filter: '',
-            title: "O'lchov birligi nomi",
+            title: 'O\'lchov birligi nomi'
         },
-        { styles: 'w-[10%]', filter: '', title: ' ' },
+        {styles: 'w-[10%]', filter: '', title: ' '}
     ]
 
     // states
@@ -73,7 +73,7 @@ function Unit() {
         toggleModal()
     }
     const handleClickApproveToDelete = () => {
-        const body = { _id: deletedUnit._id }
+        const body = {_id: deletedUnit._id}
         dispatch(deleteUnit(body))
         handleClickCancelToDelete()
     }
@@ -89,7 +89,7 @@ function Unit() {
         if (filter) {
             warningEmptyInput()
         } else {
-            const body = { name: unitName }
+            const body = {name: unitName}
             dispatch(addUnit(body))
         }
     }
@@ -102,7 +102,7 @@ function Unit() {
         } else {
             const body = {
                 name: unitName,
-                _id: currentUnit._id,
+                _id: currentUnit._id
             }
             dispatch(updateUnit(body))
         }
@@ -144,7 +144,7 @@ function Unit() {
         errorUnits,
         successAddUnit,
         successUpdateUnit,
-        successDeleteUnit,
+        successDeleteUnit
     ])
 
     useEffect(() => {
@@ -162,13 +162,13 @@ function Unit() {
             animate='open'
             exit='collapsed'
             variants={{
-                open: { opacity: 1, height: 'auto' },
-                collapsed: { opacity: 0, height: 0 },
+                open: {opacity: 1, height: 'auto'},
+                collapsed: {opacity: 0, height: 0}
             }}
-            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>
+            transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}>
             <UniversalModal
                 headerText={`${deletedUnit && deletedUnit.name
-                    } o'lchov birligini o'chirishni tasdiqlaysizmi?`}
+                } o'lchov birligini o'chirishni tasdiqlaysizmi?`}
                 title="O'chirilgan o'lchov birligini tklashning imkoni mavjud emas!"
                 toggleModal={toggleModal}
                 body={'approve'}
@@ -180,7 +180,7 @@ function Unit() {
                 <FieldContainer
                     onChange={handleChangeUnitName}
                     value={unitName}
-                    label={"O'lchov birligini kiriting"}
+                    label={'O\'lchov birligini kiriting'}
                     placeholder={'misol: kg'}
                     maxWidth={'w-[43.75rem]'}
                 />
@@ -204,7 +204,7 @@ function Unit() {
                 {loading ? (
                     <Spinner />
                 ) : data.length === 0 ? (
-                    <NotFind text={"O'lchov birliklari mavjud emas"} />
+                    <NotFind text={'O\'lchov birliklari mavjud emas'} />
                 ) : (
                     <Table
                         page='unit'

@@ -1,4 +1,4 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {universalToast} from '../../Components/ToastMessages/ToastMessages'
 import Api from '../../Config/Api'
 
@@ -31,7 +31,7 @@ export const deleteExpense = createAsyncThunk(
     async (body, {rejectWithValue}) => {
         try {
             const {data} = await Api.delete('/expense/delete', {
-                data: body,
+                data: body
             })
             return data
         } catch (error) {
@@ -46,12 +46,12 @@ const expenseSlice = createSlice({
         expenses: [],
         count: 0,
         loading: false,
-        successRegister: false,
+        successRegister: false
     },
     reducers: {
         clearSuccessRegister: (state) => {
             state.successRegister = false
-        },
+        }
     },
     extraReducers: {
         [getExpense.pending]: (state) => {
@@ -92,8 +92,8 @@ const expenseSlice = createSlice({
             state.expenses = expenses
             state.count = count
             universalToast('Xarajat ochirildi!', 'success')
-        },
-    },
+        }
+    }
 })
 export const {clearSuccessRegister} = expenseSlice.actions
 export default expenseSlice.reducer

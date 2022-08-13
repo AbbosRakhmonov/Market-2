@@ -31,7 +31,7 @@ function MainPage() {
                 new Date(startDate).getMonth(),
                 new Date(startDate).getDate()
             ).toISOString(),
-            endDate: endDate.toISOString(),
+            endDate: endDate.toISOString()
         }
         dispatch(getReports(body))
     }, [dispatch, startDate, endDate])
@@ -91,7 +91,7 @@ function MainPage() {
                             currencyType === 'UZS'
                                 ? reports?.income?.incomeuzs?.toLocaleString()
                                 : reports?.income?.income?.toLocaleString(),
-                            120,
+                            120
                         ]}
                     />
                 </div>

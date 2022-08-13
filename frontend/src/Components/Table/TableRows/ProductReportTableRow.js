@@ -3,16 +3,16 @@ import TableBtn from '../../Buttons/TableBtn'
 import TableInput from '../../Inputs/TableInput'
 
 export const ProductReportTableRow = ({
-    data,
-    Print,
-    currentPage,
-    countPage,
-    currency,
-    changeHandler,
-    addProductCheque,
-    productCheque,
-    inputValue,
-}) => {
+                                          data,
+                                          Print,
+                                          currentPage,
+                                          countPage,
+                                          currency,
+                                          changeHandler,
+                                          addProductCheque,
+                                          productCheque,
+                                          inputValue
+                                      }) => {
     const activeProduct =
         'bg-primary-500 text-white-900 group-hover:bg-black-300'
     return (
@@ -69,21 +69,21 @@ export const ProductReportTableRow = ({
                     <td className='td text-right'>
                         {currency === 'UZS'
                             ? product.price.incomingpriceuzs.toLocaleString(
-                                  'ru-RU'
-                              )
+                                'ru-RU'
+                            )
                             : product.price.incomingprice.toLocaleString(
-                                  'ru-RU'
-                              )}{' '}
+                                'ru-RU'
+                            )}{' '}
                         {currency}
                     </td>
                     <td className='td text-right'>
                         {currency === 'UZS'
                             ? (
-                                  product.price.incomingpriceuzs * product.total
-                              ).toLocaleString('ru-RU')
+                                product.price.incomingpriceuzs * product.total
+                            ).toLocaleString('ru-RU')
                             : (
-                                  product.price.incomingprice * product.total
-                              ).toLocaleString('ru-RU')}{' '}
+                                product.price.incomingprice * product.total
+                            ).toLocaleString('ru-RU')}{' '}
                         {currency}
                     </td>
                     <td
@@ -100,21 +100,21 @@ export const ProductReportTableRow = ({
                     >
                         {currency === 'UZS'
                             ? product.price.sellingpriceuzs.toLocaleString(
-                                  'ru-RU'
-                              )
+                                'ru-RU'
+                            )
                             : product.price.sellingprice.toLocaleString(
-                                  'ru-RU'
-                              )}{' '}
+                                'ru-RU'
+                            )}{' '}
                         {currency}
                     </td>
                     <td className='td text-right'>
                         {currency === 'UZS'
                             ? (
-                                  product.price.sellingpriceuzs * product.total
-                              ).toLocaleString('ru-RU')
+                                product.price.sellingpriceuzs * product.total
+                            ).toLocaleString('ru-RU')
                             : (
-                                  product.price.sellingprice * product.total
-                              ).toLocaleString('ru-RU')}{' '}
+                                product.price.sellingprice * product.total
+                            ).toLocaleString('ru-RU')}{' '}
                         {currency}
                     </td>
                     <td className='py-[0.25rem] td'>

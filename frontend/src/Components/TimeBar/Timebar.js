@@ -11,7 +11,7 @@ function Timebar() {
         'Chorshanba',
         'Payshanba',
         'Juma',
-        'Shanba',
+        'Shanba'
     ]
     const monthNames = [
         'Yanvar',
@@ -25,7 +25,7 @@ function Timebar() {
         'Sentabr',
         'Oktabr',
         'Noyabr',
-        'Dekabr',
+        'Dekabr'
     ]
     setTimeout(() => {
         setHour(new Date().toLocaleTimeString('uz-UZ', {hour12: false}))

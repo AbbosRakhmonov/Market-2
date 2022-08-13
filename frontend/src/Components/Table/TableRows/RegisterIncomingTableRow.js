@@ -3,11 +3,11 @@ import TableBtn from '../../Buttons/TableBtn'
 import TableInput from '../../Inputs/TableInput'
 
 export const RegisterIncomingTableRow = ({
-    changeHandler,
-    data,
-    Delete,
-    currency,
-}) => {
+                                             changeHandler,
+                                             data,
+                                             Delete,
+                                             currency
+                                         }) => {
     return (
         <>
             {data.map((product, index) => (

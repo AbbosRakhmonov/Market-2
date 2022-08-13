@@ -105,7 +105,7 @@ const reportSlice = createSlice({
         loading: false,
         errorReports: null,
         datas: [],
-        count: 0,
+        count: 0
     },
     reducers: {
         clearErrorReports: (state) => {
@@ -114,7 +114,7 @@ const reportSlice = createSlice({
         clearDatas: (state) => {
             state.datas = []
             state.count = 0
-        },
+        }
     },
     extraReducers: {
         [getReports.pending]: (state) => {
@@ -209,8 +209,8 @@ const reportSlice = createSlice({
             state.loading = false
             state.datas = data
             state.count = count
-        },
-    },
+        }
+    }
 })
 
 export const {clearErrorReports, clearDatas} = reportSlice.actions

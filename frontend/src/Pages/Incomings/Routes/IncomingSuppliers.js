@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useLocation } from 'react-router-dom'
+import React, {useCallback, useEffect, useState} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import {useLocation} from 'react-router-dom'
 import ExportBtn from '../../../Components/Buttons/ExportBtn'
 import CardBtn from '../../../Components/Card/CardBtn'
 import LinkToBack from '../../../Components/LinkToBack/LinkToBack'
@@ -12,30 +12,30 @@ import {
     deleteIncoming,
     getIncomingConnectors,
     getIncomings,
-    updateIncoming,
+    updateIncoming
 } from '../incomingSlice'
 import Table from '../../../Components/Table/Table'
-import { universalSort, UsdToUzs, UzsToUsd } from '../../../App/globalFunctions'
+import {universalSort, UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
-import { uniqueId } from 'lodash'
+import {uniqueId} from 'lodash'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
 
 const IncomingSuppliers = () => {
     const dispatch = useDispatch()
     const {
-        market: { _id },
+        market: {_id}
     } = useSelector((state) => state.login)
     const {
         incomings,
         incomingscount,
         incomingconnectors,
         successUpdate,
-        successDelete,
+        successDelete
     } = useSelector((state) => state.incoming)
-    const { currencyType, currency } = useSelector((state) => state.currency)
+    const {currencyType, currency} = useSelector((state) => state.currency)
 
     const {
-        state: { date, supplier },
+        state: {date, supplier}
     } = useLocation()
 
     let beginDay = new Date(new Date(date).setHours(3, 0, 0, 0)).toISOString()
@@ -46,17 +46,17 @@ const IncomingSuppliers = () => {
     const [sendingSearch, setSendingSearch] = useState({
         name: '',
         code: '',
-        supplier: supplier,
+        supplier: supplier
     })
     const [localSearch, setLocalSearch] = useState({
         name: '',
         code: '',
-        supplier: supplier,
+        supplier: supplier
     })
     const [sortItem, setSortItem] = useState({
         filter: '',
         sort: '',
-        count: 0,
+        count: 0
     })
 
     const [incomingCard, setIncomingCard] = useState([])
@@ -81,11 +81,11 @@ const IncomingSuppliers = () => {
                     createdAt: new Date(
                         incoming.createdAt
                     ).toLocaleDateString(),
-                    supplier: { ...incoming.supplier },
+                    supplier: {...incoming.supplier},
                     products: incoming.incoming.length,
                     pieces: pieces(incoming.incoming),
                     totalprice: incoming.total,
-                    totalpriceuzs: incoming.totaluzs,
+                    totalpriceuzs: incoming.totaluzs
                 }
                 groups.push(obj)
             }
@@ -125,11 +125,11 @@ const IncomingSuppliers = () => {
     const changeCurrentData = (value) => {
         setSendingSearch({
             ...sendingSearch,
-            supplier: value,
+            supplier: value
         })
         setLocalSearch({
             ...localSearch,
-            supplier: value,
+            supplier: value
         })
     }
 
@@ -138,7 +138,7 @@ const IncomingSuppliers = () => {
             return {
                 ...incoming,
                 sellingprice: incoming.product.price.sellingprice,
-                sellingpriceuzs: incoming.product.price.sellingpriceuzs,
+                sellingpriceuzs: incoming.product.price.sellingpriceuzs
             }
         })
         setCurrentData(current)
@@ -154,7 +154,7 @@ const IncomingSuppliers = () => {
     const changeEditedIncoming = (e, key) => {
         let target = Number(e.target.value)
         let obj = {
-            ...editedIncoming,
+            ...editedIncoming
         }
 
         const check = (prop) => key === prop
@@ -201,7 +201,7 @@ const IncomingSuppliers = () => {
                     market: _id,
                     startDate: beginDay,
                     endDate: endDay,
-                    product: { ...editedIncoming },
+                    product: {...editedIncoming}
                 })
             )
         } else {
@@ -229,13 +229,13 @@ const IncomingSuppliers = () => {
     const searchName = (e) => {
         let target = e.target.value.toLowerCase()
         setCurrentData([
-            ...currentDataStorage.filter(({ product }) =>
+            ...currentDataStorage.filter(({product}) =>
                 product.productdata.name.toLowerCase().includes(target)
-            ),
+            )
         ])
         setLocalSearch({
             ...localSearch,
-            name: target,
+            name: target
         })
     }
 
@@ -243,13 +243,13 @@ const IncomingSuppliers = () => {
     const searchCode = (e) => {
         let target = e.target.value.toLowerCase()
         setCurrentData([
-            ...currentDataStorage.filter(({ product }) =>
+            ...currentDataStorage.filter(({product}) =>
                 product.productdata.code.includes(target)
-            ),
+            )
         ])
         setLocalSearch({
             ...localSearch,
-            code: target,
+            code: target
         })
     }
 
@@ -268,7 +268,7 @@ const IncomingSuppliers = () => {
                 endDay,
                 currentPage,
                 countPage,
-                search: sendingSearch,
+                search: sendingSearch
             })
         )
     }, [dispatch, _id, beginDay, endDay, currentPage, countPage, sendingSearch])
@@ -279,7 +279,7 @@ const IncomingSuppliers = () => {
                 market: _id,
                 beginDay,
                 endDay,
-                product: { ...deletedIncoming },
+                product: {...deletedIncoming}
             })
         )
         setModal(false)
@@ -293,7 +293,7 @@ const IncomingSuppliers = () => {
                     setSortItem({
                         filter: filterKey,
                         sort: '1',
-                        count: 2,
+                        count: 2
                     })
                     universalSort(
                         currentData,
@@ -307,7 +307,7 @@ const IncomingSuppliers = () => {
                     setSortItem({
                         filter: filterKey,
                         sort: '',
-                        count: 0,
+                        count: 0
                     })
                     universalSort(
                         currentData,
@@ -321,7 +321,7 @@ const IncomingSuppliers = () => {
                     setSortItem({
                         filter: filterKey,
                         sort: '-1',
-                        count: 1,
+                        count: 1
                     })
                     universalSort(
                         currentData,
@@ -335,7 +335,7 @@ const IncomingSuppliers = () => {
             setSortItem({
                 filter: filterKey,
                 sort: '-1',
-                count: 1,
+                count: 1
             })
             universalSort(
                 currentData,
@@ -371,7 +371,7 @@ const IncomingSuppliers = () => {
             getIncomingConnectors({
                 market: _id,
                 beginDay,
-                endDay,
+                endDay
             })
         )
     }, [dispatch, _id, beginDay, endDay])
@@ -386,55 +386,55 @@ const IncomingSuppliers = () => {
 
     const headers = [
         {
-            title: '№',
+            title: '№'
         },
         {
             title: 'Yetkazuvchi',
-            styles: 'w-[10%]',
+            styles: 'w-[10%]'
         },
         {
             title: 'Kodi',
             filter: 'product.productdata.code',
-            styles: 'w-[7%]',
+            styles: 'w-[7%]'
         },
         {
             title: 'Nomi',
-            filter: 'product.productdata.name',
+            filter: 'product.productdata.name'
         },
         {
             title: 'Soni',
-            styles: 'w-[10%]',
+            styles: 'w-[10%]'
         },
         {
             title: 'Kelish',
-            styles: 'w-[10%]',
+            styles: 'w-[10%]'
         },
         {
             title: 'Jami',
-            styles: 'w-[15%]',
+            styles: 'w-[15%]'
         },
         {
             title: 'Sotish',
-            styles: 'w-[10%]',
+            styles: 'w-[10%]'
         },
         {
             title: '',
-            styles: 'w-[5%]',
-        },
+            styles: 'w-[5%]'
+        }
     ]
 
-    const incomingSupplierHeaders =[
-        "№",
-        "Yetkazuvchi",
-        "Kodi",
-        "Nomi",
-        "Soni",
-        "Kelish UZS",
-        "Kelish USD",
-        "Jami UZS",
-        "Jami USD",
-        "Sotish UZS",
-        "Sotish USD"
+    const incomingSupplierHeaders = [
+        '№',
+        'Yetkazuvchi',
+        'Kodi',
+        'Nomi',
+        'Soni',
+        'Kelish UZS',
+        'Kelish USD',
+        'Jami UZS',
+        'Jami USD',
+        'Sotish UZS',
+        'Sotish USD'
     ]
 
     return (
@@ -462,11 +462,11 @@ const IncomingSuppliers = () => {
                     ))}
             </div>
             <div className='mainPadding flex items-center justify-between'>
-                <ExportBtn 
-                 fileName={`Maxsulotlar-qabul-qabullar-${new Date().toLocaleDateString()}`}
-                 headers={incomingSupplierHeaders}
-                 datas={currentData}
-                 pagesName="IncomingSuppliers"
+                <ExportBtn
+                    fileName={`Maxsulotlar-qabul-qabullar-${new Date().toLocaleDateString()}`}
+                    headers={incomingSupplierHeaders}
+                    datas={currentData}
+                    pagesName='IncomingSuppliers'
                 />
                 <span>Ro`yxat</span>
                 <Pagination
@@ -506,8 +506,8 @@ const IncomingSuppliers = () => {
             <UniversalModal
                 body={'approve'}
                 isOpen={modal}
-                headerText={"Mahsulotni o'chirishni tasdiqlaysizmi?"}
-                title={"O'chirilgan mahsulotni tiklashning imkoni mavjud emas!"}
+                headerText={'Mahsulotni o\'chirishni tasdiqlaysizmi?'}
+                title={'O\'chirilgan mahsulotni tiklashning imkoni mavjud emas!'}
                 approveFunction={removeIncoming}
                 closeModal={closeModal}
                 toggleModal={closeModal}

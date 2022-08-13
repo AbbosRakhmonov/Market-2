@@ -70,10 +70,10 @@ export const PaymentCheck = forwardRef((props, ref) => {
                         {payment.type === 'cash'
                             ? 'Naqt'
                             : payment.type === 'card'
-                            ? 'Plastik'
-                            : payment.type === 'transfer'
-                            ? "O'tkazma"
-                            : 'Aralash'}
+                                ? 'Plastik'
+                                : payment.type === 'transfer'
+                                    ? 'O\'tkazma'
+                                    : 'Aralash'}
                     </span>
                 </li>
             </ul>

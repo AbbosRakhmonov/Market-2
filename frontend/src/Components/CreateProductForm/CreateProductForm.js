@@ -2,31 +2,31 @@ import FieldContainer from '../FieldContainer/FieldContainer'
 import Button from '../Buttons/BtnAddRemove'
 
 function CreateProductForm({
-    searchBarcode,
-    stickyForm,
-    handleChangeCodeOfProduct,
-    codeOfProduct,
-    handleChangeNameOfProduct,
-    nameOfProduct,
-    numberOfProduct,
-    handleChangeNumberOfProduct,
-    unitOfProduct,
-    handleChangeUnitOfProduct,
-    handleChangePriceOfProduct,
-    priceOfProduct,
-    sellingPriceOfProduct,
-    handleChangeSellingPriceOfProduct,
-    handleEdit,
-    addNewProduct,
-    clearForm,
-    pageName,
-    unitOptions,
-    categoryOfProduct,
-    categoryOptions,
-    handleChangeCategoryOfProduct,
-    checkOfProduct,
-    handleChangeCheckOfProduct,
-}) {
+                               searchBarcode,
+                               stickyForm,
+                               handleChangeCodeOfProduct,
+                               codeOfProduct,
+                               handleChangeNameOfProduct,
+                               nameOfProduct,
+                               numberOfProduct,
+                               handleChangeNumberOfProduct,
+                               unitOfProduct,
+                               handleChangeUnitOfProduct,
+                               handleChangePriceOfProduct,
+                               priceOfProduct,
+                               sellingPriceOfProduct,
+                               handleChangeSellingPriceOfProduct,
+                               handleEdit,
+                               addNewProduct,
+                               clearForm,
+                               pageName,
+                               unitOptions,
+                               categoryOfProduct,
+                               categoryOptions,
+                               handleChangeCategoryOfProduct,
+                               checkOfProduct,
+                               handleChangeCheckOfProduct
+                           }) {
     return (
         <form
             className={`flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200 ${
@@ -78,7 +78,7 @@ function CreateProductForm({
                 <FieldContainer
                     value={unitOfProduct}
                     onChange={handleChangeUnitOfProduct}
-                    label={"O'lchov birligi"}
+                    label={'O\'lchov birligi'}
                     placeholder={'tanlang...'}
                     select={true}
                     options={unitOptions}
@@ -124,7 +124,7 @@ function CreateProductForm({
                         add={!stickyForm}
                         edit={stickyForm}
                         text={
-                            stickyForm ? 'Saqlash' : "Yangi maxsulot qo'shish"
+                            stickyForm ? 'Saqlash' : 'Yangi maxsulot qo\'shish'
                         }
                     />
                     <Button onClick={clearForm} text={'Tozalash'} />

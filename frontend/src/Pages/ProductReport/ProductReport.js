@@ -7,11 +7,7 @@ import SearchForm from '../../Components/SearchForm/SearchForm.js'
 import {useDispatch, useSelector} from 'react-redux'
 import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
-import {
-    clearSearchedProducts,
-    getProducts,
-    getProductsByFilter,
-} from '../Products/Create/productSlice.js'
+import {clearSearchedProducts, getProducts, getProductsByFilter} from '../Products/Create/productSlice.js'
 import {useReactToPrint} from 'react-to-print'
 import {BarCode} from '../../Components/BarCode/BarCode.js'
 import {universalSort} from '../../App/globalFunctions.js'
@@ -19,40 +15,40 @@ import {universalSort} from '../../App/globalFunctions.js'
 const ProductReport = () => {
     const headers = [
         {
-            title: '№',
+            title: '№'
         },
         {
             title: 'Maxsulot kodi',
-            filter: 'productdata.code',
+            filter: 'productdata.code'
         },
         {
             title: 'Maxsulot nomi',
-            filter: 'productdata.name',
+            filter: 'productdata.name'
         },
         {
             title: 'Soni(dona)',
-            filter: 'product.total',
+            filter: 'product.total'
         },
         {
             title: 'Olish',
-            filter: 'price.incomingprice',
+            filter: 'price.incomingprice'
         },
         {
-            title: 'Olish jami',
+            title: 'Olish jami'
         },
         {
             title: 'Sotish',
-            filter: 'price.sellingprice',
+            filter: 'price.sellingprice'
         },
         {
-            title: 'Sotish jami',
+            title: 'Sotish jami'
         },
         {
-            title: 'Cheklar soni',
+            title: 'Cheklar soni'
         },
         {
-            title: '',
-        },
+            title: ''
+        }
     ]
 
     const dispatch = useDispatch()
@@ -60,7 +56,7 @@ const ProductReport = () => {
         useSelector((state) => state.products)
     const {currencyType} = useSelector((state) => state.currency)
     const {
-        market: {name},
+        market: {name}
     } = useSelector((state) => state.login)
     const [data, setData] = useState(products)
     const [searchedData, setSearchedData] = useState(searchedProducts)
@@ -77,7 +73,7 @@ const ProductReport = () => {
     const [sorItem, setSorItem] = useState({
         filter: '',
         sort: '',
-        count: 0,
+        count: 0
     })
 
     // handle change of search inputs
@@ -86,7 +82,7 @@ const ProductReport = () => {
         let valForSearch = val.replace(/\s+/g, ' ').trim()
         setSearchByCode(val)
         ;(searchedData.length > 0 || totalSearched > 0) &&
-            dispatch(clearSearchedProducts())
+        dispatch(clearSearchedProducts())
         if (valForSearch === '') {
             setData(products)
             setFilteredDataTotal(total)
@@ -103,7 +99,7 @@ const ProductReport = () => {
         let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
         setSearchByName(val)
         ;(searchedData.length > 0 || totalSearched > 0) &&
-            dispatch(clearSearchedProducts())
+        dispatch(clearSearchedProducts())
         if (valForSearch === '') {
             setData(products)
             setFilteredDataTotal(total)
@@ -131,7 +127,7 @@ const ProductReport = () => {
                     setSorItem({
                         filter: filterKey,
                         sort: '1',
-                        count: 2,
+                        count: 2
                     })
                     universalSort(
                         searchedData.length > 0 ? searchedData : data,
@@ -145,7 +141,7 @@ const ProductReport = () => {
                     setSorItem({
                         filter: filterKey,
                         sort: '',
-                        count: 0,
+                        count: 0
                     })
                     universalSort(
                         searchedData.length > 0 ? searchedData : data,
@@ -159,7 +155,7 @@ const ProductReport = () => {
                     setSorItem({
                         filter: filterKey,
                         sort: '-1',
-                        count: 1,
+                        count: 1
                     })
                     universalSort(
                         searchedData.length > 0 ? searchedData : data,
@@ -173,7 +169,7 @@ const ProductReport = () => {
             setSorItem({
                 filter: filterKey,
                 sort: '-1',
-                count: 1,
+                count: 1
             })
             universalSort(
                 searchedData.length > 0 ? searchedData : data,
@@ -200,7 +196,7 @@ const ProductReport = () => {
     }
 
     const handlePrint = useReactToPrint({
-        content: () => componentRef.current,
+        content: () => componentRef.current
     })
 
     const handlePrintToProduct = async () => {
@@ -221,8 +217,8 @@ const ProductReport = () => {
                 countPage: showByTotal,
                 search: {
                     name: searchByName.replace(/\s+/g, ' ').trim(),
-                    code: searchByCode.replace(/\s+/g, ' ').trim(),
-                },
+                    code: searchByCode.replace(/\s+/g, ' ').trim()
+                }
             }
             dispatch(getProductsByFilter(body))
         }
@@ -240,7 +236,7 @@ const ProductReport = () => {
         'Sotish narxi USD',
         'Sotish narxi UZS',
         'Sotish narxi jami UZS',
-        'Sotish narxi jami USD',
+        'Sotish narxi jami USD'
     ]
 
     useEffect(() => {
@@ -249,8 +245,8 @@ const ProductReport = () => {
             countPage: showByTotal,
             search: {
                 name: searchByName.replace(/\s+/g, ' ').trim(),
-                code: searchByCode.replace(/\s+/g, ' ').trim(),
-            },
+                code: searchByCode.replace(/\s+/g, ' ').trim()
+            }
         }
         dispatch(getProducts(body))
         //    eslint-disable-next-line react-hooks/exhaustive-deps
@@ -275,7 +271,7 @@ const ProductReport = () => {
             exit='collapsed'
             variants={{
                 open: {opacity: 1, height: 'auto'},
-                collapsed: {opacity: 0, height: 0},
+                collapsed: {opacity: 0, height: 0}
             }}
             transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
         >

@@ -4,14 +4,14 @@ import {uniqueId} from 'lodash'
 import {range} from 'lodash/util.js'
 
 export const BarCode = ({
-    countOfCheques,
-    productForCheque,
-    productForCheques,
-    componentRef,
-    currency,
-    countOfCheque,
-    marketName,
-}) => {
+                            countOfCheques,
+                            productForCheque,
+                            productForCheques,
+                            componentRef,
+                            currency,
+                            countOfCheque,
+                            marketName
+                        }) => {
     return (
         <div ref={componentRef}>
             <div>

@@ -2,12 +2,12 @@ import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
 
 export const AdminProductTableRow = ({
-    currentPage,
-    countPage,
-    data,
-    Edit,
-    Delete,
-}) => {
+                                         currentPage,
+                                         countPage,
+                                         data,
+                                         Edit,
+                                         Delete
+                                     }) => {
     return (
         <>
             {data.map((product, index) => (

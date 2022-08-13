@@ -15,40 +15,40 @@ const Reports = () => {
         {
             name: `${t('Savdo')}`,
             type: 'sale',
-            percentage: 99,
+            percentage: 99
         },
         {
             name: `${t('Sof foyda')}`,
-            type: 'income',
+            type: 'income'
         },
         {
             name: `${t('Xarajatlar')}`,
-            type: 'expenses',
+            type: 'expenses'
         },
         {
             name: `${t('Naqd')}`,
-            type: 'cash',
+            type: 'cash'
         },
         {
             name: `${t('Plastik')}`,
-            type: 'card',
+            type: 'card'
         },
         {
             name: `${t('O`tkazmalar')}`,
-            type: 'transfer',
+            type: 'transfer'
         },
         {
             name: `${t('Qaytarilgan')}`,
-            type: 'backproducts',
+            type: 'backproducts'
         },
         {
             name: `${t('Chegirmalar')}`,
-            type: 'discounts',
+            type: 'discounts'
         },
         {
             name: `${t('Qarzlar')}`,
-            type: 'debts',
-        },
+            type: 'debts'
+        }
     ]
 
     const dispatch = useDispatch()
@@ -72,7 +72,7 @@ const Reports = () => {
                 new Date(startDate).getMonth(),
                 new Date(startDate).getDate()
             ).toISOString(),
-            endDate: endDate.toISOString(),
+            endDate: endDate.toISOString()
         }
         dispatch(getReports(body))
     }, [dispatch, startDate, endDate])
@@ -91,7 +91,7 @@ const Reports = () => {
             exit='collapsed'
             variants={{
                 open: {opacity: 1, height: 'auto'},
-                collapsed: {opacity: 0, height: 0},
+                collapsed: {opacity: 0, height: 0}
             }}
             transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
         >

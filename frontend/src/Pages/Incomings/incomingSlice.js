@@ -97,7 +97,7 @@ export const deleteIncoming = createAsyncThunk(
     async (body, {rejectWithValue}) => {
         try {
             const {data} = await Api.delete('/products/incoming/delete', {
-                data: body,
+                data: body
             })
             return {data, body}
         } catch (error) {
@@ -123,7 +123,7 @@ export const deleteTemporary = createAsyncThunk(
     async (body, {rejectWithValue}) => {
         try {
             const {data} = await Api.delete('/products/temporary/delete', {
-                data: body,
+                data: body
             })
             return data
         } catch (error) {
@@ -147,7 +147,7 @@ const incomingSlice = createSlice({
         successTemporary: false,
         successDelete: false,
         temporaries: [],
-        temporary: {},
+        temporary: {}
     },
     reducers: {
         clearError: (state) => {
@@ -169,7 +169,7 @@ const incomingSlice = createSlice({
             state.temporary = {
                 _id,
                 incomings,
-                supplier,
+                supplier
             }
         },
         clearTemporary: (state) => {
@@ -177,7 +177,7 @@ const incomingSlice = createSlice({
         },
         clearSuccesDelete: (state) => {
             state.successDelete = false
-        },
+        }
     },
     extraReducers: {
         [getSuppliers.pending]: (state) => {
@@ -278,7 +278,7 @@ const incomingSlice = createSlice({
         [deleteIncoming.fulfilled]: (state) => {
             state.loading = false
             state.successDelete = true
-            universalToast("Mahsulot o'chirildi!", 'success')
+            universalToast('Mahsulot o\'chirildi!', 'success')
         },
         [deleteIncoming.rejected]: (state, {payload}) => {
             state.loading = false
@@ -295,8 +295,8 @@ const incomingSlice = createSlice({
         [updateIncoming.rejected]: (state, {payload}) => {
             state.loading = false
             universalToast(`${payload}`, 'error')
-        },
-    },
+        }
+    }
 })
 
 export const {
@@ -306,6 +306,6 @@ export const {
     clearSuccessTemporary,
     setTemporaryRegister,
     clearTemporary,
-    clearSuccesDelete,
+    clearSuccesDelete
 } = incomingSlice.actions
 export default incomingSlice.reducer

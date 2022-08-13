@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react'
+import {useEffect, useState} from 'react'
 import Logo from '../../Images/logo-lg.svg'
 import Input from '../../Components/Inputs/Input'
-import { clearError, signIn } from './loginSlice'
-import { useDispatch, useSelector } from 'react-redux'
+import {clearError, signIn} from './loginSlice'
+import {useDispatch, useSelector} from 'react-redux'
 import Timebar from '../../Components/TimeBar/Timebar'
-import { universalToast } from '../../Components/ToastMessages/ToastMessages'
+import {universalToast} from '../../Components/ToastMessages/ToastMessages'
 import {reset} from '../Currency/currencySlice.js'
 
 function Login() {
     const dispatch = useDispatch()
-    const { loading, error } = useSelector((state) => state.login)
+    const {loading, error} = useSelector((state) => state.login)
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
     const handleChangeLogin = (e) => {
@@ -24,7 +24,7 @@ function Login() {
         e.preventDefault()
         const data = {
             login,
-            password,
+            password
         }
         dispatch(signIn(data))
     }
@@ -40,8 +40,10 @@ function Login() {
     return (
         <section className={'loginPage flex items-center justify-center'}>
             <div className='loginCircle relative flex items-center justify-center'>
-                <div className='bg-circle-1 w-full h-full rounded-full backdrop-blur-[10px] bg-white-400 absolute left-0 right-0 top-0 bottom-0'></div>
-                <div className='bg-circle-2 rounded-full bg-white-900 z-20 flex flex-col gap-[1.875rem] justify-center items-center'>
+                <div
+                    className='bg-circle-1 w-full h-full rounded-full backdrop-blur-[10px] bg-white-400 absolute left-0 right-0 top-0 bottom-0'></div>
+                <div
+                    className='bg-circle-2 rounded-full bg-white-900 z-20 flex flex-col gap-[1.875rem] justify-center items-center'>
                     <div className='logo-container w-[36.9%]'>
                         <img
                             src={Logo}

@@ -1,27 +1,27 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import Api from "../../Config/Api"
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
+import Api from '../../Config/Api'
 
 
 export const getSellers = createAsyncThunk(
-     'sellers/getSellers',
-     async (body, {rejectWithValue}) => {
-       try {
-        const {data} = await Api.post("/user/getsellers", body)
-        return data;
-       } catch(error) {
-        return rejectWithValue(error)
-       }
-     }
+    'sellers/getSellers',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post('/user/getsellers', body)
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
 )
 
 export const addSeller = createAsyncThunk(
-    'sellers/addSeller', 
+    'sellers/addSeller',
     async (body, {rejectWithValue}) => {
         try {
-            const {data} = await Api.post("/user/createseller", body);
+            const {data} = await Api.post('/user/createseller', body)
             return data
-        } catch(error) {
-           return rejectWithValue(error)
+        } catch (error) {
+            return rejectWithValue(error)
         }
     }
 )
@@ -30,9 +30,9 @@ export const updateSeller = createAsyncThunk(
     'sellers/updateSeller',
     async (body, {rejectWithValue}) => {
         try {
-            const {data} = await Api.post('/user/createseller', body);
-            return data;
-        } catch(error) {
+            const {data} = await Api.post('/user/createseller', body)
+            return data
+        } catch (error) {
             return rejectWithValue(error)
         }
     }
@@ -40,62 +40,62 @@ export const updateSeller = createAsyncThunk(
 
 
 const sellerSlice = createSlice({
-    name : "sellers",
-    initialState : {
-        sellers : [],
-        user: "",
-        loading : false,
-        errorSellings : null,
-        successAddSelling : false,
-        successUpdateSelling : false,
-    }, 
-    reducers : {
-        clearErrorSellers : (state) => {
-         state.errorSellings = null
+    name: 'sellers',
+    initialState: {
+        sellers: [],
+        user: '',
+        loading: false,
+        errorSellings: null,
+        successAddSelling: false,
+        successUpdateSelling: false
+    },
+    reducers: {
+        clearErrorSellers: (state) => {
+            state.errorSellings = null
         },
-        clearSuccessAddSeller : (state) => {
-         state.successAddSelling = false
+        clearSuccessAddSeller: (state) => {
+            state.successAddSelling = false
         },
-        clearSuccessUpdateSeller : (state) => {
+        clearSuccessUpdateSeller: (state) => {
             state.successUpdateSelling = false
-        },
-    }, 
-    extraReducers : {
-        [getSellers.pending] : (state) => {
+        }
+    },
+    extraReducers: {
+        [getSellers.pending]: (state) => {
             state.loading = true
         },
-        [getSellers.fulfilled] : (state, {payload}) => {
+        [getSellers.fulfilled]: (state, {payload}) => {
             state.loading = false
             state.sellers = payload
         },
-        [getSellers.rejected] : (state, {payload}) => {
+        [getSellers.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorSellings = payload
         },
-        [addSeller.pending] : (state) => {
+        [addSeller.pending]: (state) => {
             state.loading = true
         },
-        [addSeller.fulfilled] : (state, {payload})=> {
+        [addSeller.fulfilled]: (state, {payload}) => {
             state.loading = false
             state.successAddSelling = true
             state.sellers = payload
         },
-        [addSeller.rejected] : (state, {payload}) => {
+        [addSeller.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorSellings = payload
         },
-        [updateSeller.pending] : (state) => {
+        [updateSeller.pending]: (state) => {
             state.loading = false
         },
-        [updateSeller.fulfilled] : (state, {payload}) => {
+        [updateSeller.fulfilled]: (state, {payload}) => {
             state.loading = false
             state.successUpdateSelling = true
             state.sellers = payload
-        }, 
-        [updateSeller.rejected] : (state, {payload}) => {
+        },
+        [updateSeller.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorSellings = payload
-        },
+        }
     }
 })
 
@@ -103,6 +103,6 @@ export const {
     clearErrorSellers,
     clearSuccessAddSeller,
     clearSuccessDeleteSeller,
-    clearSuccessUpdateSeller,
+    clearSuccessUpdateSeller
 } = sellerSlice.actions
 export default sellerSlice.reducer

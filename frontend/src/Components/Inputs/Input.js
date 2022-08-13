@@ -2,15 +2,15 @@ import {useState} from 'react'
 import {IoEye, IoEyeOff} from 'react-icons/io5'
 
 function Input({
-    placeholder,
-    type,
-    value,
-    onChange,
-    password,
-    label,
-    onKeyUp,
-    disabled,
-}) {
+                   placeholder,
+                   type,
+                   value,
+                   onChange,
+                   password,
+                   label,
+                   onKeyUp,
+                   disabled
+               }) {
     const [currentShow, setCurrentShow] = useState(false)
     const changeType = () => {
         setCurrentShow(!currentShow)

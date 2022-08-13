@@ -1,11 +1,26 @@
 import React from 'react'
 
-const AdminReport = ({ label1, label2, text1, text2, text3, currencycost, number1, currency, number2, number3, redText, head, all, end }) => {
+const AdminReport = ({
+                         label1,
+                         label2,
+                         text1,
+                         text2,
+                         text3,
+                         currencycost,
+                         number1,
+                         currency,
+                         number2,
+                         number3,
+                         redText,
+                         head,
+                         all,
+                         end
+                     }) => {
     return (
         <div className='mainPadding'>
             <div className={`admin-report-label`}>
                 <p className='number-paragraf'>{label1}</p>
-                <p className='text-xl'>{label2}  <span className='font-bold'>{currencycost}</span></p>
+                <p className='text-xl'>{label2} <span className='font-bold'>{currencycost}</span></p>
             </div>
             <div className={`report-card ${redText ? 'text-xl' : 'text-lg'}`}>
                 <div className='cards-number'>

@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import FieldContainer from '../../Components/FieldContainer/FieldContainer.js'
 import Button from '../../Components/Buttons/BtnAddRemove.js'
 import SearchForm from '../../Components/SearchForm/SearchForm.js'
 import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
 import Table from '../../Components/Table/Table.js'
-import { useDispatch, useSelector } from 'react-redux'
-import { regexForTypeNumber } from '../../Components/RegularExpressions/RegularExpressions.js'
-import { checkEmptyString, universalSort } from '../../App/globalFunctions.js'
+import {useDispatch, useSelector} from 'react-redux'
+import {regexForTypeNumber} from '../../Components/RegularExpressions/RegularExpressions.js'
+import {checkEmptyString, universalSort} from '../../App/globalFunctions.js'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
-import { motion } from 'framer-motion'
+import {motion} from 'framer-motion'
 import {
     successAddCategoryMessage,
     successDeleteCategoryMessage,
     successUpdateCategoryMessage,
     universalToast,
     warningCategory,
-    warningEmptyInput,
+    warningEmptyInput
 } from '../../Components/ToastMessages/ToastMessages.js'
 import {
     addCategory,
@@ -31,7 +31,7 @@ import {
     deleteCategory,
     getCategories,
     getCategoriesByFilter,
-    updateCategory,
+    updateCategory
 } from './categorySlice.js'
 import Pagination from '../../Components/Pagination/Pagination.js'
 
@@ -39,21 +39,21 @@ const Category = () => {
     const headers = [
         {
             title: '№',
-            styles: 'w-[10%]',
+            styles: 'w-[10%]'
         },
         {
             title: 'Kategoriya kodi',
             filter: 'code',
-            styles: 'w-[16%]',
+            styles: 'w-[16%]'
         },
         {
             title: 'Kategoriya nomi',
             filter: 'name',
-            styles: 'w-[64%]',
+            styles: 'w-[64%]'
         },
         {
-            title: '',
-        },
+            title: ''
+        }
     ]
     const dispatch = useDispatch()
     const {
@@ -68,7 +68,7 @@ const Category = () => {
         successUpdateCategory,
         errorUpdateCategory,
         successDeleteCategory,
-        errorDeleteCategory,
+        errorDeleteCategory
     } = useSelector((state) => state.category)
     const [data, setData] = useState(categories)
     const [searchedData, setSearchedData] = useState(searchedCategories)
@@ -83,7 +83,7 @@ const Category = () => {
     const [sorItem, setSorItem] = useState({
         filter: '',
         sort: '',
-        count: 0,
+        count: 0
     })
     const [currentCategory, setCurrentCategory] = useState(null)
     const [deletedCategory, setDeletedCategory] = useState(null)
@@ -104,7 +104,7 @@ const Category = () => {
     }
 
     // filter by total
-    const filterByTotal = ({ value }) => {
+    const filterByTotal = ({value}) => {
         setShowByTotal(value)
         setCurrentPage(0)
     }
@@ -124,13 +124,13 @@ const Category = () => {
             countPage: showByTotal,
             search: {
                 name: searchByName.replace(/\s+/g, ' ').trim(),
-                code: searchByCode.replace(/\s+/g, ' ').trim(),
+                code: searchByCode.replace(/\s+/g, ' ').trim()
             },
             category: {
                 name: nameOfCategory,
                 code: codeOfCategory,
-                _id: currentCategory._id,
-            },
+                _id: currentCategory._id
+            }
         }
         dispatch(updateCategory(body))
     }
@@ -142,8 +142,8 @@ const Category = () => {
             countPage: showByTotal,
             search: {
                 name: searchByName.replace(/\s+/g, ' ').trim(),
-                code: searchByCode.replace(/\s+/g, ' ').trim(),
-            },
+                code: searchByCode.replace(/\s+/g, ' ').trim()
+            }
         }
         setDeletedCategory(body)
         toggleModal()
@@ -169,12 +169,12 @@ const Category = () => {
                 countPage: showByTotal,
                 category: {
                     name: nameOfCategory,
-                    code: codeOfCategory,
+                    code: codeOfCategory
                 },
                 search: {
                     name: searchByName.replace(/\s+/g, ' ').trim(),
-                    code: searchByCode.replace(/\s+/g, ' ').trim(),
-                },
+                    code: searchByCode.replace(/\s+/g, ' ').trim()
+                }
             }
             dispatch(addCategory(body))
         }
@@ -193,8 +193,8 @@ const Category = () => {
         let val = e.target.value
         let valForSearch = val.replace(/\s+/g, ' ').trim()
         setSearchByCode(val)
-            ; (searchedData.length > 0 || totalSearched > 0) &&
-                dispatch(clearSearchedCategories())
+        ;(searchedData.length > 0 || totalSearched > 0) &&
+        dispatch(clearSearchedCategories())
         if (valForSearch === '') {
             setData(categories)
             setFilteredDataTotal(total)
@@ -210,8 +210,8 @@ const Category = () => {
         let val = e.target.value
         let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
         setSearchByName(val)
-            ; (searchedData.length > 0 || totalSearched > 0) &&
-                dispatch(clearSearchedCategories())
+        ;(searchedData.length > 0 || totalSearched > 0) &&
+        dispatch(clearSearchedCategories())
         if (valForSearch === '') {
             setData(categories)
             setFilteredDataTotal(total)
@@ -234,8 +234,8 @@ const Category = () => {
                 countPage: showByTotal,
                 search: {
                     name: searchByName.replace(/\s+/g, ' ').trim(),
-                    code: searchByCode.replace(/\s+/g, ' ').trim(),
-                },
+                    code: searchByCode.replace(/\s+/g, ' ').trim()
+                }
             }
             dispatch(getCategoriesByFilter(body))
         }
@@ -248,7 +248,7 @@ const Category = () => {
                     setSorItem({
                         filter: filterKey,
                         sort: '1',
-                        count: 2,
+                        count: 2
                     })
                     universalSort(
                         searchedData.length > 0 ? searchedData : data,
@@ -264,7 +264,7 @@ const Category = () => {
                     setSorItem({
                         filter: filterKey,
                         sort: '',
-                        count: 0,
+                        count: 0
                     })
                     universalSort(
                         searchedData.length > 0 ? searchedData : data,
@@ -280,7 +280,7 @@ const Category = () => {
                     setSorItem({
                         filter: filterKey,
                         sort: '-1',
-                        count: 1,
+                        count: 1
                     })
                     universalSort(
                         searchedData.length > 0 ? searchedData : data,
@@ -296,7 +296,7 @@ const Category = () => {
             setSorItem({
                 filter: filterKey,
                 sort: '-1',
-                count: 1,
+                count: 1
             })
             universalSort(
                 searchedData.length > 0 ? searchedData : data,
@@ -350,7 +350,7 @@ const Category = () => {
         successUpdateCategory,
         errorUpdateCategory,
         errorDeleteCategory,
-        successDeleteCategory,
+        successDeleteCategory
     ])
     useEffect(() => {
         const body = {
@@ -358,8 +358,8 @@ const Category = () => {
             countPage: showByTotal,
             search: {
                 name: searchByName.replace(/\s+/g, ' ').trim(),
-                code: searchByCode.replace(/\s+/g, ' ').trim(),
-            },
+                code: searchByCode.replace(/\s+/g, ' ').trim()
+            }
         }
         dispatch(getCategories(body))
         //    eslint-disable-next-line react-hooks/exhaustive-deps
@@ -381,17 +381,17 @@ const Category = () => {
             animate='open'
             exit='collapsed'
             variants={{
-                open: { opacity: 1, height: 'auto' },
-                collapsed: { opacity: 0, height: 0 },
+                open: {opacity: 1, height: 'auto'},
+                collapsed: {opacity: 0, height: 0}
             }}
-            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>
+            transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}>
             <UniversalModal
                 body='approve'
                 toggleModal={toggleModal}
                 headerText={`${deletedCategory && deletedCategory.code
-                    } - kategoriyani o'chirishni tasdiqlaysizmi?`}
+                } - kategoriyani o'chirishni tasdiqlaysizmi?`}
                 title={
-                    "O'chirilgan kategoriyalarni tiklashning imkoni mavjud emas!"
+                    'O\'chirilgan kategoriyalarni tiklashning imkoni mavjud emas!'
                 }
                 approveFunction={handleClickApproveToDelete}
                 closeModal={handleClickCancelToDelete}
@@ -399,7 +399,7 @@ const Category = () => {
             />
             <form
                 className={`flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200 ${stickyForm ? 'stickyForm' : ''
-                    }`}
+                }`}
             >
                 <div className='supplier-style'>
                     <FieldContainer
@@ -426,7 +426,7 @@ const Category = () => {
                             text={
                                 stickyForm
                                     ? 'Saqlash'
-                                    : "Yangi kategoriya qo'shish"
+                                    : 'Yangi kategoriya qo\'shish'
                             }
                         />
                         <Button onClick={clearForm} text={'Tozalash'} />

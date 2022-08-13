@@ -29,17 +29,17 @@ export const postInventoriesId = createAsyncThunk(
 const inventoryConnectorsSlice = createSlice({
     name: 'inventories',
     initialState: {
-        dataId : [],
+        dataId: [],
         connectors: [],
         total: 0,
         loading: false,
-        dataLoading : false,
-        errorConnectors: null,
+        dataLoading: false,
+        errorConnectors: null
     },
     reducers: {
         clearErrorConnectors: (state) => {
             state.errorConnectors = null
-        },
+        }
     },
     extraReducers: {
         [getConnectors.pending]: (state) => {
@@ -57,15 +57,15 @@ const inventoryConnectorsSlice = createSlice({
         [postInventoriesId.pending]: (state) => {
             state.dataLoading = true
         },
-        [postInventoriesId.fulfilled]: (state, {payload : {inventories, inventoriesConnector}}) => {
+        [postInventoriesId.fulfilled]: (state, {payload: {inventories, inventoriesConnector}}) => {
             state.dataLoading = false
             state.dataId = inventories
         },
         [postInventoriesId.rejected]: (state, {payload}) => {
             state.dataLoading = false
             state.errorConnectors = payload
-        },
-    },
+        }
+    }
 })
 
 export const {clearErrorConnectors} = inventoryConnectorsSlice.actions

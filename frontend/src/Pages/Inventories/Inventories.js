@@ -1,24 +1,25 @@
-import React, {useEffect, useState, useCallback} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import * as XLSX from 'xlsx'
 import Table from '../../Components/Table/Table'
 import Pagination from '../../Components/Pagination/Pagination'
 import SearchForm from '../../Components/SearchForm/SearchForm.js'
-import { useDispatch, useSelector } from 'react-redux'
-import { universalToast } from '../../Components/ToastMessages/ToastMessages.js'
+import {useDispatch, useSelector} from 'react-redux'
+import {universalToast} from '../../Components/ToastMessages/ToastMessages.js'
 import Spinner from '../../Components/Spinner/SmallLoader.js'
-import NotFind from '../../Components/NotFind/NotFind.js'
-import { motion } from 'framer-motion'
-import {getConnectors, postInventoriesId} from './inventorieSlice.js'
 import SmallLoader from '../../Components/Spinner/SmallLoader.js'
+import NotFind from '../../Components/NotFind/NotFind.js'
+import {motion} from 'framer-motion'
+import {getConnectors, postInventoriesId} from './inventorieSlice.js'
 import UniversalModal from '../../Components/Modal/UniversalModal'
+
 function Inventories() {
     const headers = [
-        { styles: 'w-[10%] text-start', title: '№' },
-        { styles: 'w-[10%] text-start', filter: 'createdAt', title: 'Sana' },
-        { styles: 'w-[10%] text-start', filter: 'id', title: 'ID' },
-        { styles: 'text-start', title: 'Maxsulotlar' },
-        { styles: 'w-[10%]', title: 'Holati' },
-        { styles: 'w-[10%]', title: ' ' },
+        {styles: 'w-[10%] text-start', title: '№'},
+        {styles: 'w-[10%] text-start', filter: 'createdAt', title: 'Sana'},
+        {styles: 'w-[10%] text-start', filter: 'id', title: 'ID'},
+        {styles: 'text-start', title: 'Maxsulotlar'},
+        {styles: 'w-[10%]', title: 'Holati'},
+        {styles: 'w-[10%]', title: ' '}
     ]
 
     const dispatch = useDispatch()
@@ -29,7 +30,7 @@ function Inventories() {
         clearErrorConnectors,
         loading,
         dataLoading,
-        total,
+        total
     } = useSelector((state) => state.inventoryConnectors)
     const [data, setData] = useState(connectors)
     const [showByTotal, setShowByTotal] = useState('10')
@@ -43,7 +44,7 @@ function Inventories() {
     const [modalVisible, setModalVisible] = useState(false)
 
     // filter by total
-    const filterByTotal = ({ value }) => {
+    const filterByTotal = ({value}) => {
         setShowByTotal(value)
         setCurrentPage(0)
     }
@@ -58,7 +59,7 @@ function Inventories() {
         'Sanoq',
         'Farqi',
         'Farqi USD',
-        'Farqi UZS',
+        'Farqi UZS'
     ]
 
     const toggleModal = () => {
@@ -68,7 +69,7 @@ function Inventories() {
 
     const handleClickPrint = (e) => {
         const body = {
-            id: e._id,
+            id: e._id
         }
         dispatch(postInventoriesId(body)).then(({payload: {inventories}}) => {
             if (inventories.length > 0) {
@@ -85,7 +86,7 @@ function Inventories() {
             return acc > curr.length ? acc : curr.length
         }, 0)
         return cols.map((col) => ({
-            wch: maxLength,
+            wch: maxLength
         }))
     }
     const continueHandleClick = useCallback(
@@ -97,7 +98,7 @@ function Inventories() {
             XLSX.utils.sheet_add_aoa(ws, [headersInventories])
             XLSX.utils.sheet_add_json(ws, data, {
                 origin: 'A2',
-                skipHeader: true,
+                skipHeader: true
             })
             XLSX.utils.book_append_sheet(wb, ws, 'Inventorizatsiyalar')
             XLSX.writeFile(
@@ -110,7 +111,7 @@ function Inventories() {
 
     const handleClick = (e, idx) => {
         const body = {
-            id: e._id,
+            id: e._id
         }
         dispatch(postInventoriesId(body)).then(({payload: {inventories}}) => {
             if (inventories.length > 0) {
@@ -127,7 +128,7 @@ function Inventories() {
                         item.productcount * item.price.incomingprice,
                     differenceUZS:
                         item.inventorycount * item.price.incomingpriceuzs -
-                        item.productcount * item.price.incomingpriceuzs,
+                        item.productcount * item.price.incomingpriceuzs
                 }))
                 continueHandleClick(newData, idx)
             }
@@ -151,7 +152,7 @@ function Inventories() {
                 new Date(startDate).getMonth(),
                 new Date(startDate).getDate()
             ).toISOString(),
-            endDate: endDate.toISOString(),
+            endDate: endDate.toISOString()
         }
         dispatch(getConnectors(body))
     }, [currentPage, showByTotal, dispatch, startDate, endDate])
@@ -161,7 +162,7 @@ function Inventories() {
     useEffect(() => {
         setFilteredDataTotal(total)
     }, [total])
-    
+
     return (
         <motion.section
             key='content'
@@ -169,21 +170,22 @@ function Inventories() {
             animate='open'
             exit='collapsed'
             variants={{
-                open: { opacity: 1, height: 'auto' },
-                collapsed: { opacity: 0, height: 0 },
+                open: {opacity: 1, height: 'auto'},
+                collapsed: {opacity: 0, height: 0}
             }}
-            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>
+            transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}>
 
             <UniversalModal
                 printedInventories={printedInventories}
                 body={'checkInventory'}
                 isOpen={modalVisible}
                 toggleModal={toggleModal}
-            /> 
+            />
 
 
             {dataLoading && (
-                <div className='fixed z-[50] backdrop-blur-[2px] left-0 right-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
+                <div
+                    className='fixed z-[50] backdrop-blur-[2px] left-0 right-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
                     <SmallLoader />
                 </div>
             )}

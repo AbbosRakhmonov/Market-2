@@ -2,14 +2,14 @@ import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
 
 export const ProductTableRow = ({
-    currentPage,
-    countPage,
-    data,
-    Edit,
-    Delete,
-    currency,
-    currencyType,
-}) => {
+                                    currentPage,
+                                    countPage,
+                                    data,
+                                    Edit,
+                                    Delete,
+                                    currency,
+                                    currencyType
+                                }) => {
     return (
         <>
             {data.map((product, index) => (
@@ -32,22 +32,22 @@ export const ProductTableRow = ({
                         {product.price &&
                             (currency === 'UZS'
                                 ? product.price.incomingpriceuzs.toLocaleString(
-                                      'ru-RU'
-                                  )
+                                    'ru-RU'
+                                )
                                 : product.price.incomingprice.toLocaleString(
-                                      'ru-RU'
-                                  ))}{' '}
+                                    'ru-RU'
+                                ))}{' '}
                         {currencyType}
                     </td>
                     <td className='td text-right'>
                         {product.price &&
                             (currency === 'UZS'
                                 ? product.price.sellingpriceuzs.toLocaleString(
-                                      'ru-RU'
-                                  )
+                                    'ru-RU'
+                                )
                                 : product.price.sellingprice.toLocaleString(
-                                      'ru-RU'
-                                  ))}{' '}
+                                    'ru-RU'
+                                ))}{' '}
                         {currencyType}
                     </td>
                     <td className='td py-[0.375rem] border-r-0'>

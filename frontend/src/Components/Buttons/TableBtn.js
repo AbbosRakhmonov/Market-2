@@ -1,12 +1,5 @@
 import React from 'react'
-import {
-    IoAdd,
-    IoCreateOutline,
-    IoPrint,
-    IoSave,
-    IoSwapHorizontal,
-    IoTrashOutline,
-} from 'react-icons/io5'
+import {IoAdd, IoCreateOutline, IoPrint, IoSave, IoSwapHorizontal, IoTrashOutline} from 'react-icons/io5'
 import {SiMicrosoftexcel} from 'react-icons/si'
 import {FaMoneyBill} from 'react-icons/fa'
 

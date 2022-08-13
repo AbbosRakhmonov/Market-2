@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import CardLink from '../../../Components/Card/CardLink'
-import { useDispatch, useSelector } from 'react-redux'
-import { uniqueId } from 'lodash'
-import { getIncomingConnectors, getSuppliers } from '../incomingSlice'
+import {useDispatch, useSelector} from 'react-redux'
+import {uniqueId} from 'lodash'
+import {getIncomingConnectors, getSuppliers} from '../incomingSlice'
 import Dates from '../../../Components/Dates/Dates'
 import SelectInput from '../../../Components/SelectInput/SelectInput'
 import FilterButtons from '../../../Components/FilterButtons/FilterButtons'
@@ -11,10 +11,10 @@ import ResultIncomings from '../Components/ResultIncomings'
 function Incomings() {
     const dispatch = useDispatch()
     const {
-        market: { _id },
+        market: {_id}
     } = useSelector((state) => state.login)
-    const { currencyType } = useSelector((state) => state.currency)
-    const { incomingconnectors, suppliers } = useSelector(
+    const {currencyType} = useSelector((state) => state.currency)
+    const {incomingconnectors, suppliers} = useSelector(
         (state) => state.incoming
     )
 
@@ -38,7 +38,7 @@ function Incomings() {
         const suppliers = data.map((supplier) => {
             return {
                 label: supplier.name,
-                value: supplier._id,
+                value: supplier._id
             }
         })
         setSuppliersData(suppliers)
@@ -64,7 +64,7 @@ function Incomings() {
     const addChnagedIncomings = (groups) => {
         const sumSupplier = (arr) => {
             let repeat = []
-            return arr.reduce((prev, { _id }) => {
+            return arr.reduce((prev, {_id}) => {
                 if (!repeat.includes(_id)) {
                     repeat.push(_id)
                     return prev + 1
@@ -81,7 +81,7 @@ function Incomings() {
                 products: income.incoming.length,
                 suppliers: sumSupplier(income.supplier),
                 totalprice: sumTotal(income.total),
-                totalpriceuzs: sumTotal(income.totaluzs),
+                totalpriceuzs: sumTotal(income.totaluzs)
             }
         })
         setCardConnectors(data)
@@ -102,7 +102,7 @@ function Incomings() {
             total: [el.total],
             totaluzs: [el.totaluzs],
             supplier: [el.supplier],
-            _id: el._id,
+            _id: el._id
         }
         group.push(newgroup)
     }
@@ -115,7 +115,7 @@ function Incomings() {
             setSupplierSearch('')
         } else {
             const connectorsForSupplier = incomingconnectors.filter(
-                ({ supplier }) => {
+                ({supplier}) => {
                     return supplier._id === target
                 }
             )
@@ -143,13 +143,13 @@ function Incomings() {
             getIncomingConnectors({
                 market: _id,
                 beginDay,
-                endDay,
+                endDay
             })
         )
     }, [dispatch, _id, beginDay, endDay])
 
     useEffect(() => {
-        dispatch(getSuppliers({ _id }))
+        dispatch(getSuppliers({_id}))
     }, [dispatch, _id])
 
     return (
@@ -174,9 +174,9 @@ function Incomings() {
                             options={[
                                 {
                                     label: 'Yetkazib beruvchilar',
-                                    value: 'all',
+                                    value: 'all'
                                 },
-                                ...suppliersData,
+                                ...suppliersData
                             ]}
                             onSelect={selectSuppliers}
                         />
@@ -206,7 +206,7 @@ function Incomings() {
                             ).toLocaleDateString()}`}
                             state={{
                                 date: item.createdAt,
-                                supplier: supplierSearch,
+                                supplier: supplierSearch
                             }}
                         />
                     )

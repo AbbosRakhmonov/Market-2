@@ -1,5 +1,5 @@
 import {Suspense, useEffect} from 'react'
-import {Route, Routes, Navigate} from 'react-router-dom'
+import {Navigate, Route, Routes} from 'react-router-dom'
 import Navbar from '../Components/Navbar/Navbar'
 import Currency from '../Components/Currency/Currency.js'
 import {useDispatch, useSelector} from 'react-redux'
@@ -17,9 +17,11 @@ const PageRoutes = () => {
         dispatch(changeCurrencyType({currency: prevCurrencyType}))
     }
     useEffect(() => {
-        dispatch(getCurrency())
-        dispatch(getCurrencyType())
-    }, [dispatch])
+        if (user.type !== 'Admin') {
+            dispatch(getCurrency())
+            dispatch(getCurrencyType())
+        }
+    }, [dispatch, user.type])
     useEffect(() => {
         if (!currency && !getCurrencyLoading) {
             warningCurrencyRate()
@@ -34,7 +36,7 @@ const PageRoutes = () => {
 
     return (
         <section className={'flex bg-background relative overflow-x-hidden'}>
-            <Currency currency={currencyType} onClick={changeCurrency} />
+            {user.type !== 'Admin' && <Currency currency={currencyType} onClick={changeCurrency} />}
             <Navbar />
             <div className={'grow h-screen overflow-y-auto'}>
                 <Suspense fallback={'loading'}>

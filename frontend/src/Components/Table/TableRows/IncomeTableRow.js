@@ -15,29 +15,29 @@ export const IncomeTableRow = ({data, currentPage, countPage, currency}) => {
                     <td className='text-left td'>{income.saleconnector.id}</td>
                     <td className='text-right td font-bold text-error-500'>
                         {(currency === 'USD'
-                            ? income.totalincomingprice
-                            : income.totalincomingpriceuzs
+                                ? income.totalincomingprice
+                                : income.totalincomingpriceuzs
                         ).toLocaleString('ru-RU')}{' '}
                         <span>{currency}</span>
                     </td>
                     <td className='text-right td font-bold text-primary-800'>
                         {(currency === 'USD'
-                            ? income.totalprice
-                            : income.totalpriceuzs
+                                ? income.totalprice
+                                : income.totalpriceuzs
                         ).toLocaleString('ru-RU')}{' '}
                         <span>{currency}</span>
                     </td>
                     <td className='text-right td py-[0.625rem] font-bold text-warning-500'>
                         {(currency === 'USD'
-                            ? income.discount
-                            : income.discountuzs
+                                ? income.discount
+                                : income.discountuzs
                         ).toLocaleString('ru-RU')}{' '}
                         <span>{currency}</span>
                     </td>
                     <td className='text-right border-r-0 td font-bold text-success-500'>
                         {(currency === 'USD'
-                            ? income.profit
-                            : income.profituzs
+                                ? income.profit
+                                : income.profituzs
                         ).toLocaleString('ru-RU')}{' '}
                         <span>{currency}</span>
                     </td>

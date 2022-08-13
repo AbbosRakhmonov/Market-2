@@ -59,7 +59,7 @@ function Avatar({border = false, navbarExpended, director = null}) {
                             `${
                                 user?.firstname &&
                                 user?.firstname[0]?.toUpperCase() +
-                                    user?.lastname &&
+                                user?.lastname &&
                                 user?.lastname[0]?.toUpperCase()
                             }`
                         )}

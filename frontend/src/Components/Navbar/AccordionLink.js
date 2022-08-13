@@ -4,17 +4,17 @@ import {NavLink, useLocation} from 'react-router-dom'
 import SubAccordionLink from './SubAccordionLink'
 
 function AccordionLink({
-    label,
-    icon,
-    submenu,
-    id,
-    path,
-    handleClickFirstMenu,
-    activeFirstSubMenuId,
-    activeSecondSubMenuId,
-    handleClickSecondMenu,
-    expanded,
-}) {
+                           label,
+                           icon,
+                           submenu,
+                           id,
+                           path,
+                           handleClickFirstMenu,
+                           activeFirstSubMenuId,
+                           activeSecondSubMenuId,
+                           handleClickSecondMenu,
+                           expanded
+                       }) {
     const globalPath = useLocation()
         .pathname.split('/')
         .filter((item) => item !== '')
@@ -84,7 +84,7 @@ function AccordionLink({
                                     return `flex items-center transition ease-in-out duration-100 py-[5px] px-[0.9375rem] rounded-[4px] border-b-[1px] ${
                                         isActive ||
                                         globalPath[1] ===
-                                            item.path.split('/')[1]
+                                        item.path.split('/')[1]
                                             ? 'bg-primary-700 text-white-900 border-primary-800'
                                             : 'border-transparent text-black-700 hover:bg-black-100'
                                     }`

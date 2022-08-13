@@ -3,12 +3,12 @@ import {uniqueId} from 'lodash'
 import TableBtn from '../../Buttons/TableBtn'
 
 export const TemporaryIncomingsTableRow = ({
-    data,
-    Print,
-    Edit,
-    Delete,
-    currency,
-}) => {
+                                               data,
+                                               Print,
+                                               Edit,
+                                               Delete,
+                                               currency
+                                           }) => {
     return (
         <>
             {data.map((temporary, index) => (
@@ -20,8 +20,8 @@ export const TemporaryIncomingsTableRow = ({
                     </td>
                     <td className='text-success-500 td text-right'>
                         {(currency === 'USD'
-                            ? temporary.incomings.totalprice
-                            : temporary.incomings.totalpriceuzs
+                                ? temporary.incomings.totalprice
+                                : temporary.incomings.totalpriceuzs
                         ).toLocaleString('ru-RU')}{' '}
                         {currency}
                     </td>

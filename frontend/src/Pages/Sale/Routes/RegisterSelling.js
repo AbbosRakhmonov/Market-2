@@ -23,7 +23,8 @@ import SearchInput from '../../../Components/Inputs/SearchInput.js'
 import UniversalModal from '../../../Components/Modal/UniversalModal.js'
 import {UsdToUzs, UzsToUsd} from '../../../App/globalFunctions.js'
 import {
-    universalToast, warningCurrencyRate,
+    universalToast,
+    warningCurrencyRate,
     warningLessSellPayment,
     warningMoreDiscount,
     warningMorePayment,

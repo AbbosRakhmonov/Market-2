@@ -21,21 +21,21 @@ export const DiscountTableRow = ({data, currentPage, countPage, currency}) => {
                     <td className='text-right td font-medium'>
                         {currency === 'UZS'
                             ? (
-                                  Math.round(discount.totalpriceuzs * 1) / 1
-                              ).toLocaleString('ru-RU')
+                                Math.round(discount.totalpriceuzs * 1) / 1
+                            ).toLocaleString('ru-RU')
                             : (
-                                  Math.round(discount.totalprice * 1000) / 1000
-                              ).toLocaleString('ru-RU')}{' '}
+                                Math.round(discount.totalprice * 1000) / 1000
+                            ).toLocaleString('ru-RU')}{' '}
                         <span className='text-warning-500'>{currency}</span>
                     </td>
                     <td className='text-right td py-[0.625rem] font-medium'>
                         {currency === 'UZS'
                             ? (
-                                  Math.round(discount.discountuzs * 1) / 1
-                              ).toLocaleString('ru-RU')
+                                Math.round(discount.discountuzs * 1) / 1
+                            ).toLocaleString('ru-RU')
                             : (
-                                  Math.round(discount.discount * 1000) / 1000
-                              ).toLocaleString('ru-RU')}{' '}
+                                Math.round(discount.discount * 1000) / 1000
+                            ).toLocaleString('ru-RU')}{' '}
                         <span className='text-success-500'>{currency}</span>
                     </td>
                     <td className='text-right td border-r-0 py-[0.625rem] font-medium'>

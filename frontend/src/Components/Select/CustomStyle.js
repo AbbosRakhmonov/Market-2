@@ -2,7 +2,7 @@ import React from 'react'
 import {components} from 'react-select'
 import {IoCaretDown} from 'react-icons/io5'
 
-export const DropdownIcon = (props, {isDisabled}) => {
+export const DropdownIcon = (props) => {
     return (
         <components.DropdownIndicator {...props}>
             <IoCaretDown size={'0.625rem'} color='86A7E9' />
@@ -12,7 +12,7 @@ export const DropdownIcon = (props, {isDisabled}) => {
 const Container = (styles) => ({
     ...styles,
     height: '100%',
-    marginLeft: '0.75rem',
+    marginLeft: '0.75rem'
 })
 const DropdownIndicator = (styles, {isFocused, isDisabled}) => ({
     ...styles,
@@ -20,17 +20,17 @@ const DropdownIndicator = (styles, {isFocused, isDisabled}) => ({
     color: isFocused
         ? '#193F8A'
         : '#071F45' || isDisabled
-        ? 'rgba(28, 28, 28, 0.2)'
-        : '#071F45',
+            ? 'rgba(28, 28, 28, 0.2)'
+            : '#071F45'
 })
 
 const IndicatorsContainer = (styles) => ({
     ...styles,
-    marginLeft: '5px',
+    marginLeft: '5px'
 })
 const Menu = (styles) => ({
     ...styles,
-    overflow: 'hidden',
+    overflow: 'hidden'
 })
 const Option = (styles, {isFocused, isSelected}) => ({
     ...styles,
@@ -40,21 +40,21 @@ const Option = (styles, {isFocused, isSelected}) => ({
     backgroundColor: isSelected ? '#0090A3' : isFocused ? '#00B4CC' : '#ffffff',
     transition: 'all 0.2s ease',
     overflow: 'hidden',
-    cursor: 'pointer',
+    cursor: 'pointer'
 })
 const SingleValue = (styles, {isDisabled}) => ({
     ...styles,
     fontSize: '.875rem',
     fontWeight: '400',
     margin: 0,
-    color: isDisabled ? 'rgba(28, 28, 28, 0.2)' : '#071F45',
+    color: isDisabled ? 'rgba(28, 28, 28, 0.2)' : '#071F45'
 })
 const ValueContainer = (styles) => ({
     ...styles,
     padding: 0,
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
 })
 const Control = (styles, {isDisabled}) => ({
     ...styles,
@@ -69,9 +69,9 @@ const Control = (styles, {isDisabled}) => ({
     cursor: 'pointer',
     height: '100%',
     '&:hover': {
-        backgroundColor: '#EAEAEA',
+        backgroundColor: '#EAEAEA'
     },
-    backgroundColor: isDisabled ? 'rgba(28, 28, 28, 0.2)' : '#fff',
+    backgroundColor: isDisabled ? 'rgba(28, 28, 28, 0.2)' : '#fff'
 })
 
 const CustomStyle = {
@@ -82,7 +82,7 @@ const CustomStyle = {
     singleValue: SingleValue,
     valueContainer: ValueContainer,
     indicatorsContainer: IndicatorsContainer,
-    dropdownIndicator: DropdownIndicator,
+    dropdownIndicator: DropdownIndicator
 }
 
 export default CustomStyle

@@ -4,7 +4,7 @@ function CategoryCard({id, title, code, products, activeCategory, onClick}) {
     return (
         <div className={`category-card ${activeCategory ? 'active-category' : ''}`}
              onClick={() => onClick(id)}>
-            <h1 className={`text-black-700 text-base leading-[1.5625rem]`}>{title || "Nomsiz kategoriya"}</h1>
+            <h1 className={`text-black-700 text-base leading-[1.5625rem]`}>{title || 'Nomsiz kategoriya'}</h1>
             <div className={'flex justify-between'}>
                 <div className='flex gap-[0.3125rem] items-center'>
                     <p className={'footer-text'}>Kodi :</p>

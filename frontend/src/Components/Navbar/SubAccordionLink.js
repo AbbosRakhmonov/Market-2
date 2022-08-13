@@ -4,14 +4,14 @@ import {GoPrimitiveDot} from 'react-icons/go'
 import {NavLink} from 'react-router-dom'
 
 function SubAccordionLink({
-    submenu,
-    id,
-    path,
-    label,
-    activeSecondSubMenuId,
-    handleClickSecondMenu,
-    globalPath,
-}) {
+                              submenu,
+                              id,
+                              path,
+                              label,
+                              activeSecondSubMenuId,
+                              handleClickSecondMenu,
+                              globalPath
+                          }) {
     const navLinkClasses = ({isActive}) => {
         return `flex items-center rounded-[4px] gap-[5px] py-[5px] pl-[0.625rem] leading-[1.1875rem] transition-all ease-in-out duration-200 text-base ${
             isActive ? 'text-warning-500' : 'text-black-700 hover:bg-black-100'

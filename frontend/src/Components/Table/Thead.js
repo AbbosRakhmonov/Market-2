@@ -11,8 +11,8 @@ function Thead({headers, Sort, sortItem}) {
         return index === headers.length - 1
             ? 'rounded-tr-lg'
             : index === 0
-            ? 'rounded-tl-lg border-r-2 border-primary-700'
-            : 'border-r-2 border-primary-700'
+                ? 'rounded-tl-lg border-r-2 border-primary-700'
+                : 'border-r-2 border-primary-700'
     }
 
     return (
@@ -35,14 +35,14 @@ function Thead({headers, Sort, sortItem}) {
                                         size={14}
                                         color={sort(header.filter, '1')}
                                         style={{
-                                            transform: 'translateY(50%)',
+                                            transform: 'translateY(50%)'
                                         }}
                                     />
                                     <FaSortDown
                                         size={14}
                                         color={sort(header.filter, '-1')}
                                         style={{
-                                            transform: 'translateY(-50%)',
+                                            transform: 'translateY(-50%)'
                                         }}
                                     />
                                 </button>

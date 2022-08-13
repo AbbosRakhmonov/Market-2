@@ -1,10 +1,5 @@
 import React from 'react'
-import {
-    IoAttach,
-    IoBagCheck,
-    IoCloudDone,
-    IoDocumentText,
-} from 'react-icons/io5'
+import {IoAttach, IoBagCheck, IoCloudDone, IoDocumentText} from 'react-icons/io5'
 import {NavLink} from 'react-router-dom'
 
 
@@ -16,7 +11,7 @@ export const RouteLink = ({path, title, iconType}) => {
         bag: <IoBagCheck size={'1.5rem'} color='#12B76A' />,
         cloud: <IoCloudDone size={'1.5rem'} color='#F04438' />,
         clip: <IoAttach size={'1.5rem'} color='#F79009' />,
-        text: <IoDocumentText size={'1.5rem'} color='#00B4CC' />,
+        text: <IoDocumentText size={'1.5rem'} color='#00B4CC' />
     }
     return (
         <NavLink to={path} className={setActive}>

@@ -2,164 +2,164 @@ export const ReportsTableHeaders = (header) => {
     let paymenttype =
         (header === 'cash' && 'Naqt') ||
         (header === 'card' && 'Plastik') ||
-        (header === 'transfer' && "O'tkazma")
+        (header === 'transfer' && 'O\'tkazma')
 
     const headers = {
         sale: [
             {
-                title: '№',
+                title: '№'
             },
             {
-                title: 'Sana',
+                title: 'Sana'
             },
             {
-                title: 'ID',
+                title: 'ID'
             },
             {
-                title: 'Mijoz',
+                title: 'Mijoz'
             },
             {
-                title: 'Sotuv',
+                title: 'Sotuv'
             },
             {
-                title: 'Naqt',
+                title: 'Naqt'
             },
             {
-                title: 'Plastic',
+                title: 'Plastic'
             },
             {
-                title: "O'tkazma",
-            },
+                title: 'O\'tkazma'
+            }
         ],
         income: [
             {
-                title: '№',
+                title: '№'
             },
             {
-                title: 'Sana',
+                title: 'Sana'
             },
             {
-                title: 'ID',
+                title: 'ID'
             },
             {
-                title: 'Kelgan narxi',
+                title: 'Kelgan narxi'
             },
             {
-                title: 'Sotilgan narxi',
+                title: 'Sotilgan narxi'
             },
             {
-                title: 'Chegirma',
+                title: 'Chegirma'
             },
             {
-                title: 'Foyda',
-            },
+                title: 'Foyda'
+            }
         ],
         debts: [
             {
-                title: '№',
+                title: '№'
             },
             {
-                title: 'Sana',
+                title: 'Sana'
             },
             {
-                title: 'ID',
+                title: 'ID'
             },
             {
-                title: 'Mijoz',
+                title: 'Mijoz'
             },
             {
-                title: 'Jami',
+                title: 'Jami'
             },
             {
-                title: 'Qarz',
+                title: 'Qarz'
             },
             {
-                title: '',
-            },
+                title: ''
+            }
         ],
         expenses: [
             {
-                title: '№',
+                title: '№'
             },
             {
-                title: 'Sana',
+                title: 'Sana'
             },
             {
-                title: 'Summa',
+                title: 'Summa'
             },
             {
-                title: 'Izoh',
+                title: 'Izoh'
             },
             {
-                title: 'Turi',
-            },
+                title: 'Turi'
+            }
         ],
         discounts: [
             {
-                title: '№',
+                title: '№'
             },
             {
-                title: 'Sana',
+                title: 'Sana'
             },
             {
-                title: 'ID',
+                title: 'ID'
             },
             {
-                title: 'Mijoz',
+                title: 'Mijoz'
             },
             {
-                title: 'Jami',
+                title: 'Jami'
             },
             {
-                title: 'Chegirma',
+                title: 'Chegirma'
             },
             {
-                title: 'Foiz',
-            },
+                title: 'Foiz'
+            }
         ],
         backproducts: [
             {
-                title: '№',
+                title: '№'
             },
             {
-                title: 'Sana',
+                title: 'Sana'
             },
             {
-                title: 'ID',
+                title: 'ID'
             },
             {
-                title: 'Mijoz',
+                title: 'Mijoz'
             },
             {
-                title: 'Soni',
+                title: 'Soni'
             },
             {
-                title: 'Jami',
+                title: 'Jami'
             },
             {
-                title: 'Qaytarilgan',
-            },
+                title: 'Qaytarilgan'
+            }
         ],
         payments: [
             {
-                title: '№',
+                title: '№'
             },
             {
-                title: 'Sana',
+                title: 'Sana'
             },
             {
-                title: 'ID',
+                title: 'ID'
             },
             {
-                title: 'Mijoz',
+                title: 'Mijoz'
             },
             {
-                title: 'Sotuv',
+                title: 'Sotuv'
             },
             {
-                title: paymenttype,
-            },
-        ],
+                title: paymenttype
+            }
+        ]
     }
 
     return header === 'cash' || header === 'card' || header === 'transfer'

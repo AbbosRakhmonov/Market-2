@@ -2,14 +2,14 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 
 const CheckoutCards = ({
-    type,
-    onClick,
-    name,
-    active,
-    currency,
-    report,
-    path,
-}) => {
+                           type,
+                           onClick,
+                           name,
+                           active,
+                           currency,
+                           report,
+                           path
+                       }) => {
     const chooseCardName = `cardContainer ${
         type === 'sale' ||
         type === 'income' ||
@@ -18,12 +18,12 @@ const CheckoutCards = ({
         type === 'transfer'
             ? 'tradeCard'
             : type === 'expenses' || type === 'debts'
-            ? 'debts'
-            : type === 'backproducts'
-            ? 'returnedCard'
-            : type === 'discounts'
-            ? 'discountCard'
-            : ''
+                ? 'debts'
+                : type === 'backproducts'
+                    ? 'returnedCard'
+                    : type === 'discounts'
+                        ? 'discountCard'
+                        : ''
     } ${active ? 'activeCard' : ''}`
 
     return (
@@ -58,8 +58,8 @@ const CheckoutCards = ({
                             <p className='costCard float-right'>
                                 {currency === 'UZS'
                                     ? report[type + 'uzs'].toLocaleString(
-                                          'ru-Ru'
-                                      )
+                                        'ru-Ru'
+                                    )
                                     : report[type].toLocaleString('ru-Ru')}
                             </p>
                         </div>

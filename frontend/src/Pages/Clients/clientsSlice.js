@@ -54,7 +54,7 @@ export const deleteClients = createAsyncThunk(
     async (body, {rejectWithValue}) => {
         try {
             const {data} = await Api.delete('/sales/client/delete', {
-                data: body,
+                data: body
             })
             return data
         } catch (error) {
@@ -87,7 +87,7 @@ const clientsSlice = createSlice({
         errorClients: null,
         successAddClients: false,
         successUpdateClients: false,
-        successDeleteClients: false,
+        successDeleteClients: false
     },
     reducers: {
         clearErrorClients: (state) => {
@@ -105,7 +105,7 @@ const clientsSlice = createSlice({
         clearSearchedClients: (state) => {
             state.searchedClients = []
             state.totalSearched = 0
-        },
+        }
     },
     extraReducers: {
         [getClients.pending]: (state) => {
@@ -200,8 +200,8 @@ const clientsSlice = createSlice({
         [deleteClients.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorClients = payload
-        },
-    },
+        }
+    }
 })
 
 export const {
@@ -209,6 +209,6 @@ export const {
     clearSuccessAddClients,
     clearSuccessDeleteClients,
     clearSuccessUpdateClients,
-    clearSearchedClients,
+    clearSearchedClients
 } = clientsSlice.actions
 export default clientsSlice.reducer

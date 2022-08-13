@@ -1,13 +1,13 @@
 import {IoSearchOutline} from 'react-icons/io5'
 
 function SearchInput({
-    placeholder,
-    value,
-    onChange,
-    someClasses,
-    onKeyUp,
-    disabled,
-}) {
+                         placeholder,
+                         value,
+                         onChange,
+                         someClasses,
+                         onKeyUp,
+                         disabled
+                     }) {
     return (
         <div
             className={`${

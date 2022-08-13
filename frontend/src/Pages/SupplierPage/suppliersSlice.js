@@ -72,7 +72,7 @@ const suppliersSlice = createSlice({
         errorSuppliers: null,
         successAddSupplier: false,
         successUpdateSupplier: false,
-        successDeleteSupplier: false,
+        successDeleteSupplier: false
     },
     reducers: {
         clearErrorSuppliers: (state) => {
@@ -90,7 +90,7 @@ const suppliersSlice = createSlice({
         clearSearchedSuppliers: (state) => {
             state.searchedSuppliers = []
             state.totalSearched = 0
-        },
+        }
     },
     extraReducers: {
         [getSuppliers.pending]: (state) => {
@@ -174,8 +174,8 @@ const suppliersSlice = createSlice({
         [deleteSupplier.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorSuppliers = payload
-        },
-    },
+        }
+    }
 })
 
 export const {
@@ -183,6 +183,6 @@ export const {
     clearSuccessAddSupplier,
     clearSuccessUpdateSupplier,
     clearSuccessDeleteSupplier,
-    clearSearchedSuppliers,
+    clearSearchedSuppliers
 } = suppliersSlice.actions
 export default suppliersSlice.reducer

@@ -4,12 +4,7 @@ import Button from '../../Components/Buttons/BtnAddRemove.js'
 import Table from '../../Components/Table/Table.js'
 import {useDispatch, useSelector} from 'react-redux'
 import {motion} from 'framer-motion'
-import {
-    addExchangerate,
-    deleteExchangerate,
-    getCurrencies,
-    updateExchangerate
-} from './currencySlice.js'
+import {addExchangerate, deleteExchangerate, getCurrencies, updateExchangerate} from './currencySlice.js'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
 import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
@@ -68,7 +63,11 @@ const Currency = () => {
         if (checkEmptyString([exchangeName])) {
             return universalToast('Valyuta kursini kiriting!', 'error')
         }
-        dispatch(addExchangerate(body))
+        dispatch(addExchangerate(body)).then(({error}) => {
+            if (!error) {
+                clearForm()
+            }
+        })
 
     }
 
@@ -78,7 +77,11 @@ const Currency = () => {
             exchangerate: exchangeName,
             _id: currentExchange._id
         }
-        dispatch(updateExchangerate(body))
+        dispatch(updateExchangerate(body)).then(({error}) => {
+            if (!error) {
+                clearForm()
+            }
+        })
     }
 
     const clearForm = (e) => {

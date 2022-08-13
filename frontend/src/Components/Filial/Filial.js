@@ -8,15 +8,15 @@ import {AnimatePresence} from 'framer-motion'
 import Sellings from '../../Pages/Sale/Routes/Sellings'
 
 const Filial = ({
-    typecount,
-    productcount,
-    totalPrice,
-    shopname,
-    active,
-    currency,
-    director,
-    id,
-}) => {
+                    typecount,
+                    productcount,
+                    totalPrice,
+                    shopname,
+                    active,
+                    currency,
+                    director,
+                    id
+                }) => {
     const {tablename, _id} = useParams()
     const location = useLocation()
 

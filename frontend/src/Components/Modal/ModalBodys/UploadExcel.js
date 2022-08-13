@@ -3,13 +3,13 @@ import {uniqueId} from 'lodash'
 import SelectInput from '../../SelectInput/SelectInput'
 
 function UploadExcel({
-    excelData,
-    headers,
-    createdData,
-    setCreatedData,
-    approveFunction,
-    toggleModal,
-}) {
+                         excelData,
+                         headers,
+                         createdData,
+                         setCreatedData,
+                         approveFunction,
+                         toggleModal
+                     }) {
     const [cols, setCols] = useState([])
     const [values, setValues] = useState([])
     const clone = (obj) => Object.assign({}, obj)
@@ -33,7 +33,7 @@ function UploadExcel({
         setCreatedData([...excelData])
         const newOptions = Object.keys(excelData[0]).map((obj) => ({
             label: obj,
-            value: obj,
+            value: obj
         }))
         setCols(newOptions)
         //    eslint-disable-next-line react-hooks/exhaustive-deps
@@ -42,49 +42,49 @@ function UploadExcel({
         <div className={'modalContent mt-10'}>
             <table className='overflow-x-auto w-full'>
                 <thead className='rounded-t-lg'>
-                    <tr className='bg-primary-900 rounded-t-lg'>
-                        {headers.map((header, index) => (
-                            <th
-                                key={uniqueId('header')}
-                                scope='col'
-                                className={'th'}
-                            >
-                                <div className='ml-1'>
+                <tr className='bg-primary-900 rounded-t-lg'>
+                    {headers.map((header, index) => (
+                        <th
+                            key={uniqueId('header')}
+                            scope='col'
+                            className={'th'}
+                        >
+                            <div className='ml-1'>
                                     <span className={'mb-4 block'}>
                                         {header.name}
                                     </span>
-                                    <SelectInput
-                                        onSelect={(option) =>
-                                            handleSelect(
-                                                index,
-                                                header.value,
-                                                option
-                                            )
-                                        }
-                                        options={cols}
-                                        value={values[index]}
-                                        placeholder={"Bo'limni tanlang ..."}
-                                    />
-                                </div>
-                            </th>
-                        ))}
-                    </tr>
+                                <SelectInput
+                                    onSelect={(option) =>
+                                        handleSelect(
+                                            index,
+                                            header.value,
+                                            option
+                                        )
+                                    }
+                                    options={cols}
+                                    value={values[index]}
+                                    placeholder={'Bo\'limni tanlang ...'}
+                                />
+                            </div>
+                        </th>
+                    ))}
+                </tr>
                 </thead>
                 <tbody>
-                    <tr className='tr'>
-                        {values.map((option, index) => (
-                            <td
-                                key={uniqueId('column')}
-                                className='td text-center py-4'
-                            >
-                                {
-                                    excelData[0][
-                                        option.value || cols[index].value
+                <tr className='tr'>
+                    {values.map((option, index) => (
+                        <td
+                            key={uniqueId('column')}
+                            className='td text-center py-4'
+                        >
+                            {
+                                excelData[0][
+                                option.value || cols[index].value
                                     ]
-                                }
-                            </td>
-                        ))}
-                    </tr>
+                            }
+                        </td>
+                    ))}
+                </tr>
                 </tbody>
             </table>
             <div className={'flex mt-12 items-center justify-end gap-[1.5rem]'}>

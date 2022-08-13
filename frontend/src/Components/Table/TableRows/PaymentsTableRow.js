@@ -2,12 +2,12 @@ import {uniqueId} from 'lodash'
 import React from 'react'
 
 export const PaymentsTableRow = ({
-    data,
-    currentPage,
-    countPage,
-    currency,
-    type,
-}) => {
+                                     data,
+                                     currentPage,
+                                     countPage,
+                                     currency,
+                                     type
+                                 }) => {
     return (
         <>
             {data.map((sale, index) => (

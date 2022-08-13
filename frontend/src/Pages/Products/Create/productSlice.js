@@ -20,8 +20,8 @@ export const getProductsAll = createAsyncThunk(
             search: {
                 name: '',
                 code: '',
-                category: '',
-            },
+                category: ''
+            }
         },
         {rejectWithValue}
     ) => {
@@ -78,7 +78,7 @@ export const deleteProduct = createAsyncThunk(
     async (body, {rejectWithValue}) => {
         try {
             const {data} = await Api.delete('/products/product/delete', {
-                data: body,
+                data: body
             })
             return data
         } catch (error) {
@@ -124,7 +124,7 @@ const productSlice = createSlice({
         errorProducts: null,
         successAddProduct: false,
         successUpdateProduct: false,
-        successDeleteProduct: false,
+        successDeleteProduct: false
     },
     reducers: {
         clearErrorProducts: (state) => {
@@ -145,7 +145,7 @@ const productSlice = createSlice({
         },
         clearUploadExcel: (state) => {
             state.allProducts = []
-        },
+        }
     },
     extraReducers: {
         [getProducts.pending]: (state) => {
@@ -267,8 +267,8 @@ const productSlice = createSlice({
         [getCodeOfCategory.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorProducts = payload
-        },
-    },
+        }
+    }
 })
 
 export const {
@@ -277,6 +277,6 @@ export const {
     clearSuccessUpdateProduct,
     clearSearchedProducts,
     clearSuccessDeleteProduct,
-    clearUploadExcel,
+    clearUploadExcel
 } = productSlice.actions
 export default productSlice.reducer

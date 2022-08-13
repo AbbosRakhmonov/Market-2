@@ -3,17 +3,17 @@ import TableBtn from '../../Buttons/TableBtn'
 import TableInput from '../../Inputs/TableInput'
 
 export const IncomingsTableRow = ({
-    editedIncoming,
-    currency,
-    saveEditIncoming,
-    changeHandler,
-    Delete,
-    Edit,
-    currentPage,
-    countPage,
-    data,
-    onKeyUp,
-}) => {
+                                      editedIncoming,
+                                      currency,
+                                      saveEditIncoming,
+                                      changeHandler,
+                                      Delete,
+                                      Edit,
+                                      currentPage,
+                                      countPage,
+                                      data,
+                                      onKeyUp
+                                  }) => {
     const current = (usd, uzs) => (currency === 'USD' ? usd : uzs || 0)
 
     return (
@@ -72,13 +72,13 @@ export const IncomingsTableRow = ({
                     <td className='td text-right font-bold'>
                         {editedIncoming._id === incoming._id
                             ? current(
-                                  editedIncoming.totalprice,
-                                  editedIncoming.totalpriceuzs
-                              ).toLocaleString('ru-RU')
+                                editedIncoming.totalprice,
+                                editedIncoming.totalpriceuzs
+                            ).toLocaleString('ru-RU')
                             : current(
-                                  incoming.totalprice,
-                                  incoming.totalpriceuzs
-                              ).toLocaleString('ru-RU')}{' '}
+                                incoming.totalprice,
+                                incoming.totalpriceuzs
+                            ).toLocaleString('ru-RU')}{' '}
                         <span className='text-success-500 font-medium'>
                             {currency}
                         </span>

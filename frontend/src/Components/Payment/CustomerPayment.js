@@ -5,28 +5,28 @@ import {useSelector} from 'react-redux'
 import PaymentInput from './PaymentInput/PaymentInput.js'
 
 function CustomerPayment({
-    returned,
-    active,
-    togglePaymentModal,
-    type = 'cash',
-    cash = '',
-    card = '',
-    transfer = '',
-    discount,
-    hasDiscount,
-    debt,
-    allPayment,
-    paid = 0,
-    client = '',
-    onChange,
-    onClose,
-    changePaymentType,
-    discountSelectOption,
-    handleClickDiscountBtn,
-    handleChangeDiscountSelectOption,
-    handleChangeDiscount,
-    handleClickPay,
-}) {
+                             returned,
+                             active,
+                             togglePaymentModal,
+                             type = 'cash',
+                             cash = '',
+                             card = '',
+                             transfer = '',
+                             discount,
+                             hasDiscount,
+                             debt,
+                             allPayment,
+                             paid = 0,
+                             client = '',
+                             onChange,
+                             onClose,
+                             changePaymentType,
+                             discountSelectOption,
+                             handleClickDiscountBtn,
+                             handleChangeDiscountSelectOption,
+                             handleChangeDiscount,
+                             handleClickPay
+                         }) {
     const defineLabel = () => {
         switch (type) {
             case 'card':
@@ -48,7 +48,7 @@ function CustomerPayment({
                         keyInput={type}
                         onChange={onChange}
                         onClose={onClose}
-                        label={"O'tkazma"}
+                        label={'O\'tkazma'}
                     />
                 )
             case 'mixed':
@@ -56,10 +56,10 @@ function CustomerPayment({
                     {label: 'Naqd', key: 'cash', value: cash},
                     {label: 'Plastik', key: 'card', value: card},
                     {
-                        label: "O'tkazma",
+                        label: 'O\'tkazma',
                         key: 'transfer',
-                        value: transfer,
-                    },
+                        value: transfer
+                    }
                 ].map((obj) => (
                     <PaymentInput
                         value={obj.value}
@@ -142,7 +142,7 @@ function CustomerPayment({
                             <span className='custom-payment-text-style'>
                                 {allPayment < 0
                                     ? 'Qaytarilayotgan'
-                                    : "To'lanayotgan"}{' '}
+                                    : 'To\'lanayotgan'}{' '}
                                 :{' '}
                             </span>
                             <h3 className='text-[1rem] text-loginButton'>
@@ -151,7 +151,8 @@ function CustomerPayment({
                         </li>
                     </ul>
                 </div>
-                <div className='bottom-payment w-full flex flex-col gap-[1.25rem] border-t-[1px] border-black-200 pt-[1.25rem]'>
+                <div
+                    className='bottom-payment w-full flex flex-col gap-[1.25rem] border-t-[1px] border-black-200 pt-[1.25rem]'>
                     <div className='custom-paymet-btn'>
                         <SaleBtn
                             text={`Naqd`}

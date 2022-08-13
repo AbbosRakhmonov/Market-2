@@ -1,6 +1,6 @@
 import React from 'react'
 
-const AdminReportTable = ({ number, currency, cost, plastic, transfer }) => {
+const AdminReportTable = ({number, currency, cost, plastic, transfer}) => {
     return (
         <table className='w-full'>
             <tr className='tr-div'>
