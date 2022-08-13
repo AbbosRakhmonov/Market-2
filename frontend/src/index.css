@@ -639,6 +639,34 @@
         @apply font-medium text-[.75rem] leading-[12px] text-[#fff];
     }
     /* Admin product Cards styly end */
+
+    /* admin Report style start */
+    .admin-report-label {
+        @apply mainPadding flex justify-between w-full text-[1.2rem]
+    }
+    .report-card {
+        @apply pt-[1.6rem] pb-[1.6rem] border-[2px] border-[rgb(0_180_204)] flex justify-around 
+    }
+    .cards-number {
+        @apply flex flex-col justify-center items-center leading-[1.6rem]
+    }
+    .number-paragraf {
+        @apply font-bold
+    }
+    .tr-row {
+        @apply p-[.8rem]
+    }
+    .tr-div {
+        @apply border-[2px] border-[rgb(0_180_204)] text-lg
+    }
+    .td-page {
+        @apply border-r-[2px] border-r-[rgb(0_180_204)] tr-row  font-bold pl-[1.5rem]
+    }
+    .td-page-two {
+        @apply text-right pr-[.8rem]
+    }
+       
+    /* admin Report style start */
 }
 
 html,
