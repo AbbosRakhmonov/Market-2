@@ -49,16 +49,18 @@ function Avatar({border = false, navbarExpended, director = null}) {
                     <div
                         className={`avatar-image flex items-center justify-center transition-all ease-linear duration-300 w-[50px] h-[50px] rounded-full overflow-hidden shadow-[0_10px_10px_rgba(0,0,0,0.15)]`}
                     >
-                        {user.image && checkImageHas(user.image) ? (
+                        {user?.image && checkImageHas(user?.image) ? (
                             <img
-                                src={user.image}
-                                alt={user.firstname}
+                                src={user?.image}
+                                alt={user?.firstname}
                                 className={'pointer-events-none'}
                             />
                         ) : (
                             `${
-                                user.firstname[0].toUpperCase() +
-                                user.lastname[0].toUpperCase()
+                                user?.firstname &&
+                                user?.firstname[0]?.toUpperCase() +
+                                    user?.lastname &&
+                                user?.lastname[0]?.toUpperCase()
                             }`
                         )}
                     </div>
