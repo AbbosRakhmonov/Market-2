@@ -205,10 +205,12 @@ const ProductReport = () => {
 
     const handlePrintToProduct = async () => {
         await handlePrint()
-        setCountOfCheque(null)
-        setCountOfCheques(null)
-        setProductForCheque(null)
-        setProductForCheques(null)
+        setTimeout(() => {
+            setCountOfCheque('')
+            setCountOfCheques(null)
+            setProductForCheque(null)
+            setProductForCheques(null)
+        }, 1000)
     }
 
     const filterByCodeAndNameAndCategoryWhenPressEnter = (e) => {
@@ -279,11 +281,11 @@ const ProductReport = () => {
         >
             <div className='pagination mainPadding'>
                 <ExportBtn
-                   datas={data}
-                   headers={exportProductHead} 
-                   fileName={'Maxsulotlar hisoboti'}
-                   pagesName="ProductReport"
-                   />
+                    datas={data}
+                    headers={exportProductHead}
+                    fileName={'Maxsulotlar hisoboti'}
+                    pagesName='ProductReport'
+                />
                 <p className='product_name'>Maxsulot hisoboti</p>
                 {(filteredDataTotal !== 0 || totalSearched !== 0) && (
                     <Pagination
