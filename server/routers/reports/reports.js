@@ -649,18 +649,62 @@ module.exports.getProductsReport = async (req, res) => {
 
     const productsreport = {
       producttypes: products.length,
-      total: 0,
-      incomingprice: 0,
-      incomingpriceuzs: 0,
+      totalpieces: 0,
+      totalprice: 0,
+      totalpriceuzs: 0,
     };
 
     products.map((product) => {
-      productsreport.total = product.total;
-      productsreport.incomingprice = product.price.incomingprice;
-      productsreport.incomingpriceuzs = product.price.incomingpriceuzs;
+      productsreport.totalpieces += product.total;
+      productsreport.totalprice += product.price.incomingprice;
+      productsreport.totalpriceuzs += product.price.incomingpriceuzs;
     });
 
     res.status(200).json(productsreport);
+  } catch (error) {
+    res.status(400).json({ error: 'Serverda xatolik yuz berdi...' });
+  }
+};
+
+module.exports.getIncomingsReport = async (req, res) => {
+  try {
+    const { market, startDate, endDate } = req.body;
+
+    const isMarket = await Market.findById(market);
+    if (!isMarket) {
+      return res
+        .status(400)
+        .json({ message: `Diqqat! Do'kon haqida malumotlar topilmadi!` });
+    }
+
+    const incomings = await Incoming.find({
+      market,
+      createdAt: {
+        $gte: startDate,
+        $lte: endDate,
+      },
+    }).select('pieces totalprice totalpriceuzs product');
+
+    const incomingsreport = {
+      totalincomings: incomings.length,
+      producttypes: 0,
+      totalpieces: 0,
+      totalprice: 0,
+      totalpriceuzs: 0,
+    };
+
+    let arr = [];
+    incomings.map((incoming) => {
+      if (!arr.includes(incoming.product.toString())) {
+        incomingsreport.producttypes += 1;
+        arr.push(incoming.product.toString());
+      }
+      incomingsreport.totalpieces += incoming.pieces;
+      incomingsreport.totalprice += incoming.totalprice;
+      incomingsreport.totalpriceuzs += incoming.totalpriceuzs;
+    });
+
+    res.status(200).json(incomingsreport);
   } catch (error) {
     res.status(400).json({ error: 'Serverda xatolik yuz berdi...' });
   }
