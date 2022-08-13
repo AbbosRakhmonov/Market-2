@@ -25,6 +25,7 @@ function UniversalModal({
     currency,
     printedSelling,
     printedInventories,
+    payment,
 }) {
     const customStyles = {
         content: {
@@ -95,6 +96,8 @@ function UniversalModal({
                 return <Check returned={false} product={product} />
             case 'checkSellReturn':
                 return <Check returned={true} product={product} />
+            case 'checkPayment':
+                return <Check payment={payment} isPayment={true} />
             case 'allChecks':
                 return <AllChecks product={printedSelling} />
             // case 'checkInventory':

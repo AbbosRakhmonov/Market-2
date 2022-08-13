@@ -113,6 +113,9 @@ export const ReportsTableHeaders = (header) => {
             {
                 title: 'Chegirma',
             },
+            {
+                title: 'Foiz',
+            },
         ],
         backproducts: [
             {

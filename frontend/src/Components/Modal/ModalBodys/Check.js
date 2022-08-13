@@ -4,8 +4,9 @@ import {SaleCheck} from '../../SaleCheck/SaleCheck.js'
 import {useReactToPrint} from 'react-to-print'
 import SmallLoader from '../../Spinner/SmallLoader.js'
 import {SaleCheckReturn} from '../../SaleCheck/SaleCheckReturn.js'
+import {PaymentCheck} from '../../SaleCheck/PaymentCheck.js'
 
-function Check({product, returned}) {
+function Check({product, returned, isPayment, payment}) {
     const [loadContent, setLoadContent] = useState(false)
     const saleCheckRef = useRef(null)
     const onBeforeGetContentResolve = useRef(null)
@@ -48,6 +49,8 @@ function Check({product, returned}) {
             )}
             {returned ? (
                 <SaleCheckReturn product={product} ref={saleCheckRef} />
+            ) : isPayment ? (
+                <PaymentCheck payment={payment} ref={saleCheckRef} />
             ) : (
                 <SaleCheck product={product} ref={saleCheckRef} />
             )}

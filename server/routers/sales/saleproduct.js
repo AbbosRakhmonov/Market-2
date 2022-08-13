@@ -888,7 +888,9 @@ module.exports.payment = async (req, res) => {
         message: `Diqqat! Avtorizatsiyadan o'tilmagan!`,
       });
     }
-    const saleconnector = await SaleConnector.findById(saleconnectorid);
+    const saleconnector = await SaleConnector.findById(saleconnectorid)
+      .populate("client", "name")
+      .populate("packman", "name");
 
     const newPayment = new Payment({
       comment: payment.comment,
@@ -908,42 +910,14 @@ module.exports.payment = async (req, res) => {
     await newPayment.save();
     saleconnector.payments.push(newPayment._id);
     await saleconnector.save();
-
-    const daily = await DailySaleConnector.find({ market })
-      .select("-isArchive -updatedAt -market -__v")
-      .populate({
-        path: "products",
-        select: "totalprice unitprice totalpriceuzs unitpriceuzs pieces",
-        populate: {
-          path: "product",
-          select: "productdata",
-          populate: {
-            path: "productdata",
-            select: "code name",
-            options: { sort: { code: 1 } },
-          },
-        },
-      })
-      .populate("payment", "payment paymentuzs totalprice totalpriceuzs")
-      .populate("discount", "discount discountuzs")
-      .populate("debt", "debt debtuzs")
-      .populate("client", "name")
-      .populate("packman", "name")
-      .populate("user", "firstname lastname")
-      .populate({
-        path: "saleconnector",
-        select: "id",
-        match: { _id: saleconnectorid },
-      });
-
-    const response = daily.filter((item) => item.saleconnector !== null)[0];
-
-    response.payment = newPayment;
-    response.payment.totalprice = payment.totalprice;
-    response.payment.totalpriceuzs = payment.totalpriceuzs;
-
-    res.status(201).send(response);
+    const returnpayment = await Payment.findById(newPayment._id).populate({
+      path: "saleconnector",
+      select: "client packman",
+      populate: { path: "client", select: "name" },
+    });
+    res.status(201).send(returnpayment);
   } catch (error) {
+    console.log(error);
     res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };

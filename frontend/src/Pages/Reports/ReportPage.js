@@ -57,7 +57,6 @@ const ReportPage = () => {
 
     // Payments STATES
     const [modalVisible, setModalVisible] = useState(false)
-    const [currentProduct, setCurrentProduct] = useState(null)
     const [paymentModalVisible, setPaymentModalVisible] = useState(false)
     const [paymentType, setPaymentType] = useState('cash')
     const [paymentCash, setPaymentCash] = useState('')
@@ -84,7 +83,6 @@ const ReportPage = () => {
     const [paidUzs, setPaidUzs] = useState(0)
     const [modalBody, setModalBody] = useState('')
     const [modalData, setModalData] = useState(null)
-    const [checked, setChecked] = useState(false)
 
     const headers = [
         {title: '№'},
@@ -426,7 +424,6 @@ const ReportPage = () => {
         setPaid(0)
         setPaidUzs(0)
         setUserValue('')
-        setChecked(false)
         setSaleConnectorId(null)
         togglePaymentModal(bool)
     }
@@ -463,7 +460,7 @@ const ReportPage = () => {
             setModalData(payload)
             dispatch(getDebts())
             setTimeout(() => {
-                setModalBody('checkSell')
+                setModalBody('checkPayment')
                 setModalVisible(true)
                 clearAll()
             }, 500)
@@ -474,11 +471,11 @@ const ReportPage = () => {
         setModalBody('')
         setModalVisible(!modalVisible)
         setTimeout(() => {
-            setCurrentProduct(null)
+            // setCurrentProduct(null)
         }, 500)
     }
 
-    const handleClickPrint = () => {}
+    // const handleClickPrint = () => {}
 
     // search functions
     const searchId = (e) => {
@@ -620,6 +617,7 @@ const ReportPage = () => {
             </div>
             <div>
                 <CustomerPayment
+                    returned={true}
                     type={paymentType}
                     active={paymentModalVisible}
                     togglePaymentModal={togglePaymentModal}
@@ -668,7 +666,7 @@ const ReportPage = () => {
                 }
                 approveFunction={handleApprovePay}
                 isOpen={modalVisible}
-                product={modalBody === 'sell' ? currentProduct : modalData}
+                payment={modalData}
                 headers={headers}
                 headerText={
                     modalBody === 'complete' &&

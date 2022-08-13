@@ -24,7 +24,7 @@ export const ReturnProductsTableRow = ({
                         {connector.saleconnector?.client &&
                             connector.saleconnector?.client?.name}
                     </td>
-                    <td className='text-left td'>
+                    <td className='text-right td'>
                         {Number(connector.count).toLocaleString()}
                     </td>
                     <td className='text-right td font-medium'>
@@ -35,8 +35,8 @@ export const ReturnProductsTableRow = ({
                     </td>
                     <td className='text-right td border-r-0 py-[0.625rem] font-medium'>
                         {currency === 'UZS'
-                            ? connector.back.toLocaleString('ru-RU')
-                            : connector.backuzs.toLocaleString('ru-RU')}{' '}
+                            ? connector.backuzs.toLocaleString('ru-RU')
+                            : connector.back.toLocaleString('ru-RU')}{' '}
                         <span className='text-success-500'>{currency}</span>
                     </td>
                 </tr>

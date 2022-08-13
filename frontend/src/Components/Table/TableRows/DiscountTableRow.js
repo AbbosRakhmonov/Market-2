@@ -28,7 +28,7 @@ export const DiscountTableRow = ({data, currentPage, countPage, currency}) => {
                               ).toLocaleString('ru-RU')}{' '}
                         <span className='text-warning-500'>{currency}</span>
                     </td>
-                    <td className='text-right td border-r-0 py-[0.625rem] font-medium'>
+                    <td className='text-right td py-[0.625rem] font-medium'>
                         {currency === 'UZS'
                             ? (
                                   Math.round(discount.discountuzs * 1) / 1
@@ -37,6 +37,10 @@ export const DiscountTableRow = ({data, currentPage, countPage, currency}) => {
                                   Math.round(discount.discount * 1000) / 1000
                               ).toLocaleString('ru-RU')}{' '}
                         <span className='text-success-500'>{currency}</span>
+                    </td>
+                    <td className='text-right td border-r-0 py-[0.625rem] font-medium'>
+                        {discount?.procient?.toLocaleString()}{' '}
+                        <span className='text-primary-500'>%</span>
                     </td>
                 </tr>
             ))}
