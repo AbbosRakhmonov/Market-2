@@ -8,6 +8,7 @@ import NavbarLink from './NavbarLink'
 import {logOut} from '../../Pages/Login/loginSlice'
 import {useDispatch, useSelector} from 'react-redux'
 import Language from './../Languages/Language'
+import {uniqueId} from 'lodash'
 
 function Navbar() {
     const dispatch = useDispatch()
@@ -129,7 +130,7 @@ function Navbar() {
                                 expanded={navbarExpended}
                                 handleClickFirstMenu={handleClickFirstMenu}
                                 handleClickSecondMenu={handleClickSecondMenu}
-                                key={item.id}
+                                key={uniqueId('navbar-link-')}
                             />
                         ))}
                     </div>
