@@ -5,6 +5,7 @@ import { clearError, signIn } from './loginSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import Timebar from '../../Components/TimeBar/Timebar'
 import { universalToast } from '../../Components/ToastMessages/ToastMessages'
+import {reset} from '../Currency/currencySlice.js'
 
 function Login() {
     const dispatch = useDispatch()
@@ -34,6 +35,7 @@ function Login() {
                 dispatch(clearError())
             }, 1000)
         }
+        dispatch(reset())
     }, [error, dispatch])
     return (
         <section className={'loginPage flex items-center justify-center'}>

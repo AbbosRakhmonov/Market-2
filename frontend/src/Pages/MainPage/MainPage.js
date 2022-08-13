@@ -1,9 +1,15 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import LineChart from '../../Components/LineChart/LineChart.js'
 import PieChart from '../../Components/PieChart/PieChart.js'
 import DailyCircle from '../../Components/DailyCircle/DailyCircle.js'
+import {useDispatch} from 'react-redux'
+import {getCurrency} from '../Currency/currencySlice.js'
 
 function MainPage() {
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(getCurrency())
+    }, [dispatch])
     return <section
         className={'mainPadding pr-[2.5rem] flex flex-col gap-[5rem] overflow-y-auto overflow-x-hidden'}>
         <div className={'flex items-center justify-around gap-[3.1rem]'}>

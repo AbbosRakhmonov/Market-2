@@ -1,53 +1,36 @@
-import React, { useEffect, useState } from 'react'
-import FieldContainer from '../../Components/FieldContainer/FieldContainer'
-import Button from '../../Components/Buttons/BtnAddRemove'
-import Table from '../../Components/Table/Table'
-import { useDispatch, useSelector } from 'react-redux'
-import { motion } from "framer-motion"
-
-import {
-    successAddExchangeMessage,
-    successDeleteExchangeMessage,
-    successUpdateExchangeMessage,
-    universalToast,
-} from '../../Components/ToastMessages/ToastMessages.js'
+import React, {useEffect, useState} from 'react'
+import FieldContainer from '../../Components/FieldContainer/FieldContainer.js'
+import Button from '../../Components/Buttons/BtnAddRemove.js'
+import Table from '../../Components/Table/Table.js'
+import {useDispatch, useSelector} from 'react-redux'
+import {motion} from 'framer-motion'
 import {
     addExchangerate,
-    clearErrorExchange,
-    clearSuccessAddExchange,
-    clearSuccessDeleteExchange,
-    clearSuccessUpdateExchange,
     deleteExchangerate,
-    getExchangeAll,
-    updateExchangerate,
-} from './ExchangerateSlice.js'
+    getCurrencies,
+    updateExchangerate
+} from './currencySlice.js'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
 import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
+import {checkEmptyString} from '../../App/globalFunctions.js'
+import {universalToast} from '../../Components/ToastMessages/ToastMessages.js'
 
-const Exchangerate = () => {
+const Currency = () => {
     const dispatch = useDispatch()
     const {
-        errorExchange,
-        exchangerate,
-        successAddExchange,
-        successUpdateExchange,
-        successDeleteExchange,
-        loading,
-    } = useSelector((state) => state.exchangerate)
-
-    const {
-        market: { _id },
-    } = useSelector((state) => state.login)
+        currencies,
+        getCurrenciesLoading
+    } = useSelector((state) => state.currency)
 
     const headers = [
-        { title: '№', styles: 'w-[8%] text-left' },
-        { title: 'Sana', styles: 'w-[17%] text-center' },
-        { title: 'Kurs', styles: 'w-[67%] text-center' },
-        { title: '', styles: 'w-[8%] text-center' },
+        {title: '№', styles: 'w-[8%] text-left'},
+        {title: 'Sana', styles: 'w-[17%] text-center'},
+        {title: 'Kurs', styles: 'w-[67%] text-center'},
+        {title: '', styles: 'w-[8%] text-center'}
     ]
 
-    const [data, setData] = useState(exchangerate)
+    const [data, setData] = useState(currencies)
     const [exchangeName, setExchangeName] = useState('')
     const [currentExchange, setCurrentExchange] = useState('')
     const [deletedExchange, setDeletedExchange] = useState(null)
@@ -70,7 +53,7 @@ const Exchangerate = () => {
         toggleModal()
     }
     const handleClickApproveToDelete = () => {
-        const body = { _id: deletedExchange._id }
+        const body = {_id: deletedExchange._id}
         dispatch(deleteExchangerate(body))
         handleClickCancelToDelete()
     }
@@ -81,9 +64,9 @@ const Exchangerate = () => {
 
     const addNewExchange = (e) => {
         e.preventDefault()
-        const body = { exchangerate: exchangeName, market: _id }
-        if (exchangeName === "") {
-            return universalToast("Valyuta kursini kiriting!", "error")
+        const body = {exchangerate: exchangeName}
+        if (checkEmptyString([exchangeName])) {
+            return universalToast('Valyuta kursini kiriting!', 'error')
         }
         dispatch(addExchangerate(body))
 
@@ -93,8 +76,7 @@ const Exchangerate = () => {
         e.preventDefault()
         const body = {
             exchangerate: exchangeName,
-            _id: currentExchange._id,
-            market: _id,
+            _id: currentExchange._id
         }
         dispatch(updateExchangerate(body))
     }
@@ -114,42 +96,12 @@ const Exchangerate = () => {
     }
 
     useEffect(() => {
-        if (clearErrorExchange) {
-            universalToast(errorExchange, 'error')
-            dispatch(clearErrorExchange())
-        }
-        if (successAddExchange) {
-            successAddExchangeMessage()
-            dispatch(clearSuccessAddExchange())
-            clearForm()
-        }
-        if (successUpdateExchange) {
-            successUpdateExchangeMessage()
-            dispatch(clearSuccessUpdateExchange())
-            setCurrentExchange('')
-            setStickyForm(false)
-            clearForm()
-        }
-        if (successDeleteExchange) {
-            successDeleteExchangeMessage()
-            dispatch(clearSuccessDeleteExchange())
-            clearForm()
-        }
-    }, [
-        dispatch,
-        errorExchange,
-        successAddExchange,
-        successUpdateExchange,
-        successDeleteExchange,
-    ])
-
-    useEffect(() => {
-        dispatch(getExchangeAll())
+        dispatch(getCurrencies())
     }, [dispatch])
 
     useEffect(() => {
-        setData(exchangerate)
-    }, [exchangerate])
+        setData(currencies)
+    }, [currencies])
 
     return (
         <motion.section
@@ -158,14 +110,14 @@ const Exchangerate = () => {
             animate='open'
             exit='collapsed'
             variants={{
-                open: { opacity: 1, height: 'auto' },
-                collapsed: { opacity: 0, height: 0 },
+                open: {opacity: 1, height: 'auto'},
+                collapsed: {opacity: 0, height: 0}
             }}
-            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
+            transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
         >
             <UniversalModal
                 headerText={`${deletedExchange && deletedExchange.exchangerate
-                    } kurs narxini o'chirishni tasdiqlaysizmi?`}
+                } kurs narxini o'chirishni tasdiqlaysizmi?`}
                 title="O'chirilgan kurs narxini tiklashning imkoni mavjud emas!"
                 toggleModal={toggleModal}
                 body={'approve'}
@@ -175,7 +127,7 @@ const Exchangerate = () => {
             />
             <form
                 className={`unitFormStyle ${stickyForm && 'stickyForm'
-                    } flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200`}
+                } flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200`}
             >
                 <div className='exchangerate-style'>
                     <FieldContainer
@@ -207,10 +159,10 @@ const Exchangerate = () => {
             </form>
 
             <div className='tableContainerPadding'>
-                {loading ? (
+                {getCurrenciesLoading ? (
                     <Spinner />
-                ) : exchangerate.length === 0 ? (
-                    <NotFind text={'Maxsulot mavjud emas'} />
+                ) : currencies.length === 0 ? (
+                    <NotFind text={'Valyuta kursi mavjud emas'} />
                 ) : (
                     <Table
                         page={'exchange'}
@@ -227,4 +179,4 @@ const Exchangerate = () => {
     )
 }
 
-export default Exchangerate
+export default Currency

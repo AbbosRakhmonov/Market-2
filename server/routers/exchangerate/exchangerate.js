@@ -4,7 +4,7 @@ const {
 } = require('../../models/Exchangerate/Exchangerate');
 const { Market } = require('../../models/MarketAndBranch/Market');
 
-//Exchangerate register
+//Currency register
 
 module.exports.register = async (req, res) => {
   try {
@@ -37,7 +37,7 @@ module.exports.register = async (req, res) => {
   }
 };
 
-//Exchangerate update
+//Currency update
 module.exports.update = async (req, res) => {
   try {
     const { exchangerate, market } = req.body;
@@ -61,7 +61,7 @@ module.exports.update = async (req, res) => {
   }
 };
 
-//Exchangerate update
+//Currency update
 module.exports.delete = async (req, res) => {
   try {
     const { _id } = req.body;
@@ -74,7 +74,7 @@ module.exports.delete = async (req, res) => {
   }
 };
 
-//Exchangerate getall
+//Currency getall
 module.exports.getAll = async (req, res) => {
   try {
     const { market } = req.body;
@@ -98,7 +98,7 @@ module.exports.getAll = async (req, res) => {
   }
 };
 
-//Exchangerate get
+//Currency get
 module.exports.get = async (req, res) => {
   try {
     const { market } = req.body;
