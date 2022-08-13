@@ -1,7 +1,8 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import Api from '../../Config/Api'
 import {successLoggedIn} from '../../Components/ToastMessages/ToastMessages'
-import bcrypt from 'bcryptjs'
+
+const bcryptjs = require('bcryptjs')
 
 const types = ['Admin', 'Director', 'Seller']
 
@@ -58,7 +59,7 @@ const slice = createSlice({
                 ...payload,
                 user: {
                     ...payload.user,
-                    type: bcrypt.compareSync(types[0], payload.user.type) ? types[0] : bcrypt.compareSync(types[1], payload.user.type) ? types[1] : types[2]
+                    type: bcryptjs.compareSync(types[0], payload.user.type) ? types[0] : bcryptjs.compareSync(types[1], payload.user.type) ? types[1] : types[2]
                 }
             }
             state.loading = false
