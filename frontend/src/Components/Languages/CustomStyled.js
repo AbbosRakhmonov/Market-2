@@ -98,7 +98,7 @@ const Option = (styles, {isSelected}) => ({
     lineHeight: '14px',
     borderRadius: '30px',
     color: isSelected ? '#ffffff' : '#071F45',
-    backgroundColor: isSelected ? '#0090A3' : '#ffffff',
+    backgroundColor: isSelected ? '#0090A3' : 'transparent',
     padding: '10px 20px',
     height: '34px',
     margin: '5px 0',
