@@ -61,6 +61,12 @@ router.put('/director/updatepassword', (req, res) => {
 });
 
 //========================================================
+//Administrator
+router.post('/admin/register', (req, res) => {
+  require('./user.route').registerAdmin(req, res);
+});
+
+//========================================================
 //User
 router.post('/user/register', auth, (req, res) => {
   require('./user.route').register(req, res);
