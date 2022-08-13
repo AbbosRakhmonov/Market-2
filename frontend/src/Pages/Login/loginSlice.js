@@ -67,6 +67,7 @@ const slice = createSlice({
             state.market = payload.market
             localStorage.setItem('userData', JSON.stringify(newObj))
             successLoggedIn()
+            console.log(payload)
         },
         [signIn.rejected]: (state, {payload}) => {
             state.loading = false
