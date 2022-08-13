@@ -4,8 +4,8 @@ const Joi = require('joi');
 const user = new Schema(
   {
     login: { type: String, required: true },
-    firstname: { type: String, required: true },
-    lastname: { type: String, required: true },
+    firstname: { type: String },
+    lastname: { type: String },
     fathername: { type: String },
     image: { type: String },
     phone: { type: String },
@@ -51,6 +51,16 @@ function validateUserLogin(user) {
   return schema.validate(user);
 }
 
+function validateAdministration(administration) {
+  const schema = Joi.object({
+    password: Joi.string().required(),
+    confirmPassword: Joi.string(),
+    login: Joi.string().required(),
+  });
+  return schema.validate(administration);
+}
+
+module.exports.validateAdministration = validateAdministration;
 module.exports.validateUser = validateUser;
 module.exports.validateUserLogin = validateUserLogin;
 module.exports.User = model('User', user);

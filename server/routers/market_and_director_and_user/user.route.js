@@ -1,4 +1,9 @@
-const { User, validateUser, validateUserLogin } = require('../../models/Users');
+const {
+  User,
+  validateUser,
+  validateUserLogin,
+  validateAdministration,
+} = require('../../models/Users');
 const bcrypt = require('bcryptjs');
 const { Market } = require('../../models/MarketAndBranch/Market');
 const { Department } = require('../../models/Products/Category');
@@ -171,6 +176,51 @@ module.exports.registerDirector = async (req, res) => {
   }
 };
 
+module.exports.registerAdmin = async (req, res) => {
+  try {
+    const { error } = validateAdministration(req.body);
+    if (error) {
+      return res.status(400).json({
+        error: error.message,
+      });
+    }
+
+    const { login, password, confirmPassword } = req.body;
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({
+        message: "Parolni tasdiqlashda notug'ri terilgan!",
+      });
+    }
+
+    const oldAdmin = await User.findOne({
+      login,
+    });
+
+    if (oldAdmin) {
+      return res.status(400).json({
+        message:
+          "Diqqat! Ushbu nomdagi administrator avval ro'yxatdan o'tkazilgan.",
+      });
+    }
+
+    const hashPasword = await bcrypt.hash(password, 12);
+
+    const newAdmin = new User({
+      login,
+      password: hashPasword,
+      type: 'Admin',
+    });
+    await newAdmin.save();
+
+    res
+      .status(201)
+      .send({ message: 'Foydalanuvchi muvaffaqqiyatli yaratildi!' });
+  } catch (error) {
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+  }
+};
+
 // User LOGIN
 module.exports.login = async (req, res) => {
   try {
@@ -209,14 +259,17 @@ module.exports.login = async (req, res) => {
     );
 
     const userr = await User.findById(user._id)
-      .select('firstname lastname type image')
+      .select('firstname type lastname image')
       .populate('market', 'name phone1 phone2 phone3 image permission address');
+
+    const hashType = await bcrypt.hash(userr.type, 8);
 
     res.send({
       token,
       userId: userr._id,
       user: userr,
       market: userr.market,
+      type: hashType,
     });
   } catch (e) {
     res.status(500).json({ message: 'Serverda xatolik yuz berdi' });
