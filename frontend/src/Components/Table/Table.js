@@ -54,6 +54,7 @@ function Table({
     type,
     Pay,
     isDisabled,
+    reports,
 }) {
     const checkRows = () => {
         switch (page) {
@@ -342,6 +343,8 @@ function Table({
                         currency={currency}
                         currentPage={currentPage}
                         countPage={countPage}
+                        Delete={Delete}
+                        reports={reports}
                     />
                 )
             case 'barcode':

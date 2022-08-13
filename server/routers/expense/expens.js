@@ -20,7 +20,7 @@ module.exports.getExpense = async (req, res) => {
       },
     })
       .sort({ _id: -1 })
-      .select('sum comment type market createdAt');
+      .select('sum sumuzs comment type market createdAt');
 
     res.status(201).json({
       count: expenses.length,
@@ -34,7 +34,7 @@ module.exports.getExpense = async (req, res) => {
 module.exports.registerExpense = async (req, res) => {
   try {
     const { currentPage, countPage } = req.body;
-    const { sum, type, comment, market } = req.body.expense;
+    const { sum, sumuzs, type, comment, market } = req.body.expense;
 
     const { error } = validateExpense(req.body.expense);
 
@@ -54,6 +54,7 @@ module.exports.registerExpense = async (req, res) => {
 
     const expense = new Expense({
       sum,
+      sumuzs,
       type,
       comment,
       market,
@@ -62,9 +63,9 @@ module.exports.registerExpense = async (req, res) => {
     await expense.save();
 
     const responseExpense = await Expense.find({ market }).select(
-      'sum comment type market createdAt'
+      'sum sumuzs comment type market createdAt'
     );
-    console.log(responseExpense);
+
     res.status(201).json({
       count: responseExpense.length,
       expenses: responseExpense.splice(currentPage * countPage, countPage),
@@ -91,7 +92,7 @@ module.exports.deleteExpense = async (req, res) => {
       market,
     })
       .sort({ _id: -1 })
-      .select('sum comment type market createdAt')
+      .select('sum sumuzs comment type market createdAt')
       .skip(currentPage * countPage)
       .limit(countPage);
 

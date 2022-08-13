@@ -4,6 +4,7 @@ const Joi = require('joi');
 const expense = new Schema(
   {
     sum: { type: Number, required: true },
+    sumuzs: { type: Number, required: true },
     type: { type: String, required: true },
     comment: { type: String, required: true },
     market: { type: Schema.Types.ObjectId, ref: 'Market' },
@@ -17,6 +18,7 @@ const expense = new Schema(
 function validateExpense(expense) {
   const schema = Joi.object({
     sum: Joi.number().required(),
+    sumuzs: Joi.number().required(),
     type: Joi.string().required(),
     comment: Joi.string().required(),
     market: Joi.string().required(),
