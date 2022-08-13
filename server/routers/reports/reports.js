@@ -1,18 +1,21 @@
-const { Expense } = require('../../models/Expense/Expense');
-const { Market } = require('../../models/MarketAndBranch/Market');
-const { Incoming } = require('../../models/Products/Incoming');
-const { Product } = require('../../models/Products/Product');
-const { ProductData } = require('../../models/Products/Productdata');
-const { ProductPrice } = require('../../models/Products/ProductPrice');
-const { Debt } = require('../../models/Sales/Debt');
-const { Discount } = require('../../models/Sales/Discount');
-const { Payment } = require('../../models/Sales/Payment');
-const { SaleConnector } = require('../../models/Sales/SaleConnector');
-const { SaleProduct } = require('../../models/Sales/SaleProduct');
+const { Expense } = require("../../models/Expense/Expense");
+const { Market } = require("../../models/MarketAndBranch/Market");
+const { Incoming } = require("../../models/Products/Incoming");
+const { Product } = require("../../models/Products/Product");
+const { ProductData } = require("../../models/Products/Productdata");
+const { ProductPrice } = require("../../models/Products/ProductPrice");
+const { Debt } = require("../../models/Sales/Debt");
+const { Discount } = require("../../models/Sales/Discount");
+const { Payment } = require("../../models/Sales/Payment");
+const { SaleConnector } = require("../../models/Sales/SaleConnector");
+const { SaleProduct } = require("../../models/Sales/SaleProduct");
 const {
   DailySaleConnector,
-} = require('../../models/Sales/DailySaleConnector.js');
-require('../../models/Sales/Client');
+} = require("../../models/Sales/DailySaleConnector.js");
+require("../../models/Sales/Client");
+
+const reduce = (arr, el) =>
+  arr.reduce((prev, item) => prev + (item[el] || 0), 0);
 
 module.exports.getReport = async (req, res) => {
   try {
@@ -31,35 +34,54 @@ module.exports.getReport = async (req, res) => {
         $lt: endDate,
       },
     })
-      .select('-isArchive -updatedAt -user -market -__v')
+      .select("-isArchive -updatedAt -user -market -__v")
       .populate(
-        'payment',
-        'cash cashuzs card carduzs transfer transferuzs payment paymentuzs totalprice totalpriceuzs'
+        "payment",
+        "cash cashuzs card carduzs transfer transferuzs payment paymentuzs totalprice totalpriceuzs"
       )
       .populate({
-        path: 'products',
-        select: 'totalprice totalpriceuzs pieces price',
+        path: "products",
+        select: "totalprice totalpriceuzs pieces price",
         populate: {
-          path: 'price',
-          select: 'incomingprice incomingpriceuzs sellingprice sellingpriceuzs',
+          path: "price",
+          select: "incomingprice incomingpriceuzs sellingprice sellingpriceuzs",
         },
       })
-      .populate('discount', 'discount discountuzs procient');
+      .populate("discount", "discount discountuzs procient");
 
     // qarz uchun saleconnector ishlatiyapman
     const saleconnector = await SaleConnector.find({
+      market,
+      // createdAt: {
+      //   $gte: startDate,
+      //   $lt: endDate,
+      // },
+    })
+      .select("-isArchive -updatedAt -user -market -__v")
+      .populate("products", "totalprice totalpriceuzs")
+      .populate(
+        "payments",
+        "cash cashuzs card carduzs transfer transferuzs payment paymentuzs totalprice totalpriceuzs"
+      )
+      .populate("discounts", "discount discountuzs procient");
+
+    const payments = await Payment.find({
+      payment: { $ne: 0 },
       market,
       createdAt: {
         $gte: startDate,
         $lt: endDate,
       },
-    })
-      .select('-isArchive -updatedAt -user -market -__v')
-      .populate(
-        'payments',
-        'cash cashuzs card carduzs transfer transferuzs payment paymentuzs totalprice totalpriceuzs'
-      )
-      .populate('discounts', 'discount discountuzs procient');
+    });
+
+    const discounts = await Discount.find({
+      discount: { $ne: 0 },
+      market,
+      createdAt: {
+        $gte: startDate,
+        $lt: endDate,
+      },
+    });
 
     let reports = {
       sale: {
@@ -97,9 +119,15 @@ module.exports.getReport = async (req, res) => {
         backproductscount: 0,
       },
       discounts: {
-        discounts: 0,
-        discountsuzs: 0,
-        discountscount: 0,
+        discounts: discounts.reduce(
+          (summ, discount) => summ + discount.discount,
+          0
+        ),
+        discountsuzs: discounts.reduce(
+          (summ, discount) => summ + discount.discountuzs,
+          0
+        ),
+        discountscount: discounts.length,
       },
       debts: {
         debts: 0,
@@ -107,6 +135,22 @@ module.exports.getReport = async (req, res) => {
         debtscount: 0,
       },
     };
+
+    payments.forEach((payment) => {
+      reports.cash.cash += payment.cash;
+      reports.cash.cashuzs += payment.cashuzs;
+      reports.card.card += payment.card;
+      reports.card.carduzs += payment.carduzs;
+      reports.transfer.transfer += payment.transfer;
+      reports.transfer.transferuzs += payment.transferuzs;
+      if (payment.type === "mixed") {
+        payment.cash !== 0 && reports.cash.cashcount++;
+        payment.card !== 0 && reports.card.cardcount++;
+        payment.transfer !== 0 && reports.transfer.transfercount++;
+      } else {
+        reports[payment.type][payment.type + "count"]++;
+      }
+    });
 
     let incomingprice = 0;
     let incomingpriceuzs = 0;
@@ -119,35 +163,22 @@ module.exports.getReport = async (req, res) => {
     const roundUsd = (price) => Math.round(Number(price) * 1000) / 1000;
 
     sales.map((sale) => {
-      reports.sale.sale += roundUsd(sale.payment.totalprice);
-      reports.sale.saleuzs += roundUzs(sale.payment.totalpriceuzs);
       reports.sale.salecount++;
       sale.products.map((product) => {
-        incomingprice += roundUsd(product.price.incomingprice);
-        incomingpriceuzs += roundUzs(product.price.incomingpriceuzs);
+        reports.sale.sale += roundUsd(product.totalprice);
+        reports.sale.saleuzs += roundUzs(product.totalpriceuzs);
+        incomingprice += roundUsd(product.price.incomingprice * product.pieces);
+        incomingpriceuzs += roundUzs(
+          product.price.incomingpriceuzs * product.pieces
+        );
         if (product.totalprice < 0) {
           backproduct += roundUsd(product.totalprice);
           backproductuzs += roundUzs(product.totalpriceuzs);
           backproductcount++;
         }
       });
-      reports.cash.cash += roundUsd(sale.payment.cash);
-      reports.cash.cashuzs += roundUzs(sale.payment.cashuzs);
-      reports.cash.cash > 0 && reports.cash.cashcount++;
-      reports.card.card += roundUsd(sale.payment.card);
-      reports.card.carduzs += roundUzs(sale.payment.carduzs);
-      reports.card.card > 0 && reports.card.card++;
-      reports.transfer.transfer += roundUsd(sale.payment.transfer);
-      reports.transfer.transferuzs += roundUzs(sale.payment.transferuzs);
-      reports.transfer.transfer > 0 && reports.transfer.transfercount++;
-      reports.discounts.discounts += roundUsd(
-        (sale.discount && sale.discount.discount) || 0
-      );
-      reports.discounts.discountsuzs += roundUzs(
-        (sale.discount && sale.discount.discountuzs) || 0
-      );
-      reports.discounts.discounts > 0 && reports.discounts.discountscount++;
     });
+
     reports.income.income = roundUsd(
       Number(reports.sale.sale) -
         Number(incomingprice) -
@@ -158,29 +189,14 @@ module.exports.getReport = async (req, res) => {
         Number(incomingpriceuzs) -
         Number(reports.discounts.discountsuzs)
     );
-    // reports.debts.debts = roundUsd(
-    //   Number(reports.sale.sale) -
-    //     Number(reports.discounts.discounts) -
-    //     Number(reports.cash.cash) -
-    //     Number(reports.card.card) -
-    //     Number(reports.transfer.transfer)
-    // );
-
-    // reports.debts.debtsuzs = roundUzs(
-    //   Number(reports.sale.saleuzs) -
-    //     Number(reports.discounts.discountsuzs) -
-    //     Number(reports.cash.cashuzs) -
-    //     Number(reports.card.carduzs) -
-    //     Number(reports.transfer.transferuzs)
-    // );
 
     const reducecount = (arr, el) =>
       arr.reduce((prev, item) => prev + (item[el] || 0), 0);
 
     reports.debts.debtscount = saleconnector.reduce((prev, sale) => {
-      let totalprice = reducecount(sale.payments, 'totalprice');
-      let payment = reducecount(sale.payments, 'payment');
-      let discount = reducecount(sale.discounts, 'discount');
+      let totalprice = reducecount(sale.products, "totalprice");
+      let payment = reducecount(sale.payments, "payment");
+      let discount = reducecount(sale.discounts, "discount");
       if (totalprice - payment - discount > 0.01) {
         return prev + 1;
       }
@@ -188,16 +204,16 @@ module.exports.getReport = async (req, res) => {
     }, 0);
 
     reports.debts.debts = saleconnector.reduce((prev, sale) => {
-      let totalprice = reducecount(sale.payments, 'totalprice');
-      let payment = reducecount(sale.payments, 'payment');
-      let discount = reducecount(sale.discounts, 'discount');
+      let totalprice = reducecount(sale.products, "totalprice");
+      let payment = reducecount(sale.payments, "payment");
+      let discount = reducecount(sale.discounts, "discount");
       return prev + (totalprice - payment - discount);
     }, 0);
 
     reports.debts.debtsuzs = saleconnector.reduce((prev, sale) => {
-      let totalpriceuzs = reducecount(sale.payments, 'totalpriceuzs');
-      let paymentuzs = reducecount(sale.payments, 'paymentuzs');
-      let discountuzs = reducecount(sale.discounts, 'discountuzs');
+      let totalpriceuzs = reducecount(sale.products, "totalpriceuzs");
+      let paymentuzs = reducecount(sale.payments, "paymentuzs");
+      let discountuzs = reducecount(sale.discounts, "discountuzs");
       return prev + (totalpriceuzs - paymentuzs - discountuzs);
     }, 0);
 
@@ -207,7 +223,7 @@ module.exports.getReport = async (req, res) => {
 
     res.status(201).send(reports);
   } catch (error) {
-    res.status(400).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -216,8 +232,8 @@ module.exports.getSales = async (req, res) => {
     const { market, currentPage, countPage, startDate, endDate, search } =
       req.body;
 
-    const id = new RegExp('.*' + search ? search.id : '' + '.*', 'i');
-    const client = new RegExp('.*' + search ? search.client : '' + '.*', 'i');
+    const id = new RegExp(".*" + search ? search.id : "" + ".*", "i");
+    const client = new RegExp(".*" + search ? search.client : "" + ".*", "i");
 
     const marke = await Market.findById(market);
     if (!marke) {
@@ -233,32 +249,32 @@ module.exports.getSales = async (req, res) => {
         $lte: endDate,
       },
     })
-      .select('-isArchive -user -updatedAt -__v -packman')
+      .select("-isArchive -user -updatedAt -__v -packman")
       .populate({
-        path: 'saleconnector',
-        select: 'id',
+        path: "saleconnector",
+        select: "id",
         match: { id: id },
       })
       .populate(
-        'payment',
-        'cash cashuzs card carduzs transfer transferuzs payment paymentuzs totalprice totalpriceuzs'
+        "payment",
+        "cash cashuzs card carduzs transfer transferuzs payment paymentuzs totalprice totalpriceuzs"
       )
       .populate({
-        path: 'client',
-        select: 'name',
+        path: "client",
+        select: "name",
         match: { name: client },
       })
-      .populate('products', 'totalprice totalpriceuzs pieces price');
+      .populate("products", "totalprice totalpriceuzs pieces price");
 
     let filter = saleconnector.filter((sale) => {
       return sale.saleconnector !== null && sale.client !== null;
     });
     const count = filter.length;
-    const data = filter.slice(currentPage * countPage, countPage);
+    const data = filter.splice(currentPage * countPage, countPage);
 
     res.status(200).json({ data, count });
   } catch (error) {
-    res.status(400).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -267,8 +283,8 @@ module.exports.getProfitData = async (req, res) => {
     const { market, currentPage, countPage, startDate, endDate, search } =
       req.body;
 
-    const id = new RegExp('.*' + search ? search.id : '' + '.*', 'i');
-    const client = new RegExp('.*' + search ? search.client : '' + '.*', 'i');
+    const id = new RegExp(".*" + search ? search.id : "" + ".*", "i");
+    const client = new RegExp(".*" + search ? search.client : "" + ".*", "i");
 
     const marke = await Market.findById(market);
     if (!marke) {
@@ -284,32 +300,32 @@ module.exports.getProfitData = async (req, res) => {
         $lte: endDate,
       },
     })
-      .select('-isArchive -updatedAt -user -market -__v')
+      .select("-isArchive -updatedAt -user -market -__v")
       .populate(
-        'payment',
-        'cash cashuzs card carduzs transfer transferuzs payment paymentuzs totalprice totalpriceuzs'
+        "payment",
+        "cash cashuzs card carduzs transfer transferuzs payment paymentuzs totalprice totalpriceuzs"
       )
       .populate({
-        path: 'saleconnector',
-        select: 'id',
+        path: "saleconnector",
+        select: "id",
         match: { id: id },
       })
       .populate({
-        path: 'client',
-        select: 'name',
+        path: "client",
+        select: "name",
         match: { name: client },
       })
       .populate({
-        path: 'products',
-        select: 'totalprice totalpriceuzs pieces price',
+        path: "products",
+        select: "totalprice totalpriceuzs pieces price",
         populate: {
-          path: 'price',
-          select: 'incomingprice incomingpriceuzs sellingprice sellingpriceuzs',
+          path: "price",
+          select: "incomingprice incomingpriceuzs sellingprice sellingpriceuzs",
         },
       })
       .populate(
-        'discount',
-        'discount discountuzs totalprice totalpriceuzs procient'
+        "discount",
+        "discount discountuzs totalprice totalpriceuzs procient"
       );
 
     const profitData = saleconnector
@@ -322,8 +338,14 @@ module.exports.getProfitData = async (req, res) => {
           (prev, item) => prev + item.pieces * item.price.incomingpriceuzs,
           0
         );
-        const totalprice = sale.payment.totalprice;
-        const totalpriceuzs = sale.payment.totalpriceuzs;
+        const totalprice = sale.products.reduce(
+          (summ, product) => summ + product.totalprice,
+          0
+        );
+        const totalpriceuzs = sale.products.reduce(
+          (summ, product) => summ + product.totalpriceuzs,
+          0
+        );
         const discount = (sale.discount && sale.discount.discount) || 0;
         const discountuzs = (sale.discount && sale.discount.discountuzs) || 0;
         const profit = totalprice - totalincomingprice - discount;
@@ -347,21 +369,21 @@ module.exports.getProfitData = async (req, res) => {
       .filter((sale) => sale.saleconnector !== null && sale.client !== null);
 
     const count = profitData.length;
-    const profitreport = profitData.slice(currentPage * countPage, countPage);
+    const profitreport = profitData.splice(currentPage * countPage, countPage);
 
     res.status(201).json({ data: profitreport, count });
   } catch (error) {
-    res.status(400).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
 module.exports.getPayment = async (req, res) => {
   try {
-    const { market, currentPage, countPage, startDate, endDate, search } =
+    const { market, currentPage, countPage, startDate, endDate, search, type } =
       req.body;
 
-    const id = new RegExp('.*' + search ? search.id : '' + '.*', 'i');
-    const client = new RegExp('.*' + search ? search.client : '' + '.*', 'i');
+    const id = new RegExp(".*" + search ? search.id : "" + ".*", "i");
+    const client = new RegExp(".*" + search ? search.client : "" + ".*", "i");
 
     const marke = await Market.findById(market);
     if (!marke) {
@@ -369,58 +391,50 @@ module.exports.getPayment = async (req, res) => {
         .status(401)
         .json({ message: `Diqqat! Do'kon haqida malumotlar topilmadi!` });
     }
-
-    const saleconnector = await DailySaleConnector.find({
+    const allpayments = await Payment.find({
+      [type]: { $ne: 0 },
       market,
       createdAt: {
         $gte: startDate,
         $lte: endDate,
       },
     })
-      .select('-isArchive -user -updatedAt -__v -packman')
-      .populate(
-        'payment',
-        'cash cashuzs card carduzs transfer transferuzs payment paymentuzs totalprice totalpriceuzs'
-      )
-      .populate({
-        path: 'client',
-        select: 'name',
-        match: { name: client },
-      })
-      .populate({
-        path: 'saleconnector',
-        select: 'id',
-        match: { id: id },
-      });
 
-    const payments = saleconnector
-      .map((sale) => {
+      .select(`-isArchive -user -updatedAt -__v -products`)
+      .populate({
+        path: "saleconnector",
+        select: "id client",
+        match: { id: id },
+        populate: {
+          path: "client",
+          select: "name",
+          match: { name: client },
+        },
+      });
+    const payments = allpayments
+      .map((payment) => {
         return {
-          id: sale.id,
-          saleconnector: sale.saleconnector,
-          createdAt: sale.createdAt,
-          client: sale.client && sale.client,
-          cash: sale.payment.cash,
-          cashuzs: sale.payment.cashuzs,
-          card: sale.payment.card,
-          carduzs: sale.payment.carduzs,
-          transfer: sale.payment.transfer,
-          transferuzs: sale.payment.transferuzs,
-          totalprice: sale.payment.totalprice,
-          totalpriceuzs: sale.payment.totalpriceuzs,
+          id: payment.saleconnector && payment.saleconnector.id,
+          saleconnector: payment.saleconnector,
+          createdAt: payment.createdAt,
+          client:
+            payment.saleconnector?.client && payment.saleconnector?.client,
+          cash: payment.cash,
+          cashuzs: payment.cashuzs,
+          card: payment.card,
+          carduzs: payment.carduzs,
+          transfer: payment.transfer,
+          transferuzs: payment.transferuzs,
+          totalprice: payment.totalprice,
+          totalpriceuzs: payment.totalpriceuzs,
         };
       })
-      .filter(
-        (payment) => payment.saleconnector !== null && payment.client !== null
-      );
-
+      .filter((product) => product.saleconnector !== null);
     const count = payments.length;
-
-    let paymentsreport = payments.slice(currentPage * countPage, countPage);
-
+    let paymentsreport = payments.splice(currentPage * countPage, countPage);
     res.status(201).json({ data: paymentsreport, count });
   } catch (error) {
-    res.status(400).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -438,24 +452,25 @@ module.exports.getDebtsReport = async (req, res) => {
     const saleconnector = await SaleConnector.find({
       market,
     })
-      .select('-isArchive -user -updatedAt -__v -packman')
+      .select("-isArchive -user -updatedAt -__v -packman")
       .populate(
-        'payments',
-        'cash cashuzs card carduzs transfer transferuzs payment paymentuzs totalprice totalpriceuzs'
+        "payments",
+        "cash cashuzs card carduzs transfer transferuzs payment paymentuzs totalprice totalpriceuzs"
       )
-      .populate('client', 'name')
-      .populate('discounts', 'discount discountuzs');
+      .populate("client", "name")
+      .populate("discounts", "discount discountuzs")
+      .populate("products", "totalprice totalpriceuzs");
 
     const debtsreport = saleconnector
       .map((sale) => {
         const reduce = (arr, el) =>
           arr.reduce((prev, item) => prev + (item[el] || 0), 0);
-        const discount = reduce(sale.discounts, 'discount');
-        const discountuzs = reduce(sale.discounts, 'discountuzs');
-        const payment = reduce(sale.payments, 'payment');
-        const paymentuzs = reduce(sale.payments, 'paymentuzs');
-        const totalprice = reduce(sale.payments, 'totalprice');
-        const totalpriceuzs = reduce(sale.payments, 'totalpriceuzs');
+        const discount = reduce(sale.discounts, "discount");
+        const discountuzs = reduce(sale.discounts, "discountuzs");
+        const payment = reduce(sale.payments, "payment");
+        const paymentuzs = reduce(sale.payments, "paymentuzs");
+        const totalprice = reduce(sale.products, "totalprice");
+        const totalpriceuzs = reduce(sale.products, "totalpriceuzs");
 
         return {
           _id: sale._id,
@@ -464,15 +479,16 @@ module.exports.getDebtsReport = async (req, res) => {
           client: sale.client && sale.client,
           totalprice,
           totalpriceuzs,
-          debt: totalprice - payment - discount,
-          debtuzs: totalpriceuzs - paymentuzs - discountuzs,
+          debt: Math.round((totalprice - payment - discount) * 1000) / 1000,
+          debtuzs:
+            Math.round((totalpriceuzs - paymentuzs - discountuzs) * 1) / 1,
         };
       })
-      .filter((sale) => sale.debt > 0);
+      .filter((sales) => sales.debt > 0);
 
     res.status(201).json({ data: debtsreport });
   } catch (error) {
-    res.status(400).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -481,8 +497,8 @@ module.exports.getDiscountsReport = async (req, res) => {
     const { market, currentPage, countPage, startDate, endDate, search } =
       req.body;
 
-    const id = new RegExp('.*' + search ? search.id : '' + '.*', 'i');
-    const client = new RegExp('.*' + search ? search.client : '' + '.*', 'i');
+    const id = new RegExp(".*" + search ? search.id : "" + ".*", "i");
+    const client = new RegExp(".*" + search ? search.client : "" + ".*", "i");
 
     const marke = await Market.findById(market);
     if (!marke) {
@@ -491,56 +507,123 @@ module.exports.getDiscountsReport = async (req, res) => {
         .json({ message: `Diqqat! Do'kon haqida malumotlar topilmadi!` });
     }
 
-    const saleconnector = await DailySaleConnector.find({
+    const discounts = await Discount.find({
+      discount: { $ne: 0 },
       market,
       createdAt: {
         $gte: startDate,
         $lte: endDate,
       },
     })
-      .select('-isArchive -user -updatedAt -__v -packman')
+      .select("-isArchive -user -updatedAt -__v ")
       .populate({
-        path: 'client',
-        select: 'name',
-        match: { name: client },
-      })
-      .populate({
-        path: 'saleconnector',
-        select: 'id',
+        path: "saleconnector",
+        select: "id client",
         match: { id: id },
-      })
-      .populate('payment', 'totalprice totalpriceuzs')
-      .populate('discount', 'discount discountuzs');
+        populate: {
+          path: "client",
+          select: "name",
+          match: { name: client },
+        },
+      });
 
-    const discountsreport = saleconnector
-      .map((sale) => {
+    const discountsreport = discounts
+      .map((discount) => {
         return {
-          createdAt: sale.createdAt,
-          id: sale.id,
-          saleconnector: sale.saleconnector,
-          client: sale.client && sale.client,
-          totalprice: sale.payment.totalprice,
-          totalpriceuzs: sale.payment.totalpriceuzs,
-          discount: (sale.discount && sale.discount.discount) || 0,
-          discountuzs: (sale.discount && sale.discount.discountuzs) || 0,
+          createdAt: discount.createdAt,
+          id: discount.saleconnector?.id,
+          saleconnector: discount.saleconnector,
+          client:
+            discount.saleconnector?.client && discount.saleconnector?.client,
+          totalprice: discount.totalprice,
+          totalpriceuzs: discount.totalpriceuzs,
+          discount: discount.discount,
+          discountuzs: discount.discountuzs,
         };
       })
-      .filter(
-        (sale) =>
-          sale.discount > 0 &&
-          sale.saleconnector !== null &&
-          sale.client !== null
-      );
+      .filter((discount) => discount.saleconnector !== null);
 
     const count = discountsreport.length;
 
-    const reportdiscount = discountsreport.slice(
+    const reportdiscount = discountsreport.splice(
       currentPage * countPage,
       countPage
     );
 
     res.status(200).json({ data: reportdiscount, count });
   } catch (error) {
-    res.status(400).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
+  }
+};
+
+module.exports.getBackProducts = async (req, res) => {
+  try {
+    const { market, currentPage, countPage, startDate, endDate, search } =
+      req.body;
+
+    const id = new RegExp(".*" + search ? search.id : "" + ".*", "i");
+    const client = new RegExp(".*" + search ? search.client : "" + ".*", "i");
+
+    const marke = await Market.findById(market);
+    if (!marke) {
+      return res
+        .status(401)
+        .json({ message: `Diqqat! Do'kon haqida malumotlar topilmadi!` });
+    }
+
+    const dailyconnector = await DailySaleConnector.find({
+      market,
+      createdAt: {
+        $gte: startDate,
+        $lte: endDate,
+      },
+    })
+      .select("-isArchive -user -updatedAt -__v -packman")
+      .populate({
+        path: "saleconnector",
+        select: "id",
+        match: { id: id },
+      })
+      .populate(
+        "payment",
+        "cash cashuzs card carduzs transfer transferuzs payment paymentuzs totalprice totalpriceuzs"
+      )
+      .populate({
+        path: "client",
+        select: "name",
+        match: { name: client },
+      })
+      .populate({
+        path: "products",
+        select: "totalprice totalpriceuzs pieces price",
+      });
+
+    let filter = dailyconnector
+      .filter(
+        (sale) =>
+          sale.saleconnector !== null &&
+          sale.client !== null &&
+          sale.products[0].pieces < 0
+      )
+      .map((connector) => {
+        return {
+          createdAt: connector.createdAt,
+          id: connector.saleconnector?.id,
+          saleconnector: connector.saleconnector,
+          client:
+            connector.saleconnector?.client && connector.saleconnector?.client,
+          count: reduce(connector.products, "pieces"),
+          totalprice: reduce(connector.products, "totalprice"),
+          totalpriceuzs: reduce(connector.products, "totalpriceuzs"),
+          back: connector?.payment?.payment || 0,
+          backuzs: connector?.payment?.paymentuzs || 0,
+        };
+      });
+    const count = filter.length;
+    const data = filter.splice(currentPage * countPage, countPage);
+
+    res.status(200).json({ data, count });
+  } catch (error) {
+    res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };

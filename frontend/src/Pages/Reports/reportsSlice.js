@@ -86,6 +86,18 @@ export const payDebt = createAsyncThunk(
     }
 )
 
+export const getBackProducts = createAsyncThunk(
+    'reports/backProducts',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post('/reports/getbackproducts', body)
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
 const reportSlice = createSlice({
     name: 'cash',
     initialState: {
@@ -184,6 +196,19 @@ const reportSlice = createSlice({
         },
         [payDebt.fulfilled]: (state) => {
             state.loading = false
+        },
+
+        [getBackProducts.pending]: (state) => {
+            state.loading = true
+        },
+        [getBackProducts.rejected]: (state, {payload}) => {
+            state.loading = false
+            universalToast(`${payload}`, 'error')
+        },
+        [getBackProducts.fulfilled]: (state, {payload: {data, count}}) => {
+            state.loading = false
+            state.datas = data
+            state.count = count
         },
     },
 })

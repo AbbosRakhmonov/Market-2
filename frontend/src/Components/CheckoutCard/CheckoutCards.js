@@ -4,9 +4,7 @@ import {Link} from 'react-router-dom'
 const CheckoutCards = ({
     type,
     onClick,
-    percentage,
     name,
-    cost,
     active,
     currency,
     report,

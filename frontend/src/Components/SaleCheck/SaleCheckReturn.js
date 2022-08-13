@@ -132,8 +132,8 @@ export const SaleCheckReturn = forwardRef((props, ref) => {
                     To'langan:{' '}
                     <span>
                         {(currencyType === 'USD'
-                            ? product?.payment?.payment
-                            : product?.payment?.paymentuzs
+                            ? product?.payment?.payment || 0
+                            : product?.payment?.paymentuzs || 0
                         ).toLocaleString('ru-RU')}{' '}
                         {currencyType}
                     </span>

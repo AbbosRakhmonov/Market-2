@@ -7,6 +7,10 @@ export const CashierSaleTableRow = ({
     countPage,
     currency,
 }) => {
+    const calculateTotalPrice = (datas, property) => {
+        return datas.reduce((summ, data) => summ + data[property], 0)
+    }
+
     return (
         <>
             {data.map((saleconnector, index) => (
@@ -25,29 +29,35 @@ export const CashierSaleTableRow = ({
                     </td>
                     <td className='text-right td py-[0.625rem] font-medium'>
                         {(currency === 'USD'
-                            ? saleconnector.payment.totalprice
-                            : saleconnector.payment.totalpriceuzs
+                            ? calculateTotalPrice(
+                                  saleconnector.products,
+                                  'totalprice'
+                              )
+                            : calculateTotalPrice(
+                                  saleconnector.products,
+                                  'totalpriceuzs'
+                              )
                         ).toLocaleString('ru-Ru')}{' '}
                         {currency}
                     </td>
                     <td className='text-right td font-medium'>
                         {(currency === 'USD'
-                            ? saleconnector.payment.cash
-                            : saleconnector.payment.cashuzs
+                            ? Number(saleconnector?.payment?.cash || 0)
+                            : Number(saleconnector?.payment?.cashuzs || 0)
                         ).toLocaleString('ru-Ru')}{' '}
                         <span className='text-primary-800'>{currency}</span>
                     </td>
                     <td className='text-right td font-medium'>
                         {(currency === 'USD'
-                            ? saleconnector.payment.card
-                            : saleconnector.payment.carduzs
+                            ? Number(saleconnector?.payment?.card || 0)
+                            : Number(saleconnector?.payment?.carduzs || 0)
                         ).toLocaleString('ru-Ru')}{' '}
                         <span className='text-success-500'>{currency}</span>
                     </td>
                     <td className='text-right td font-medium border-r-0'>
                         {(currency === 'USD'
-                            ? saleconnector.payment.transfer
-                            : saleconnector.payment.transferuzs
+                            ? Number(saleconnector?.payment?.transfer || 0)
+                            : Number(saleconnector?.payment?.transferuzs || 0)
                         ).toLocaleString('ru-Ru')}{' '}
                         <span className='text-warning-500'>{currency}</span>
                     </td>

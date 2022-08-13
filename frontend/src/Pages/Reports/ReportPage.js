@@ -14,6 +14,7 @@ import {
 } from '../../Components/ToastMessages/ToastMessages'
 import {
     clearDatas,
+    getBackProducts,
     getDebts,
     getDiscounts,
     getPaymentReport,
@@ -33,7 +34,11 @@ const ReportPage = () => {
     const {currencyType, currency} = useSelector((state) => state.currency)
 
     const [startDate, setStartDate] = useState(
-        new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+        new Date(
+            new Date().getFullYear(),
+            new Date().getMonth(),
+            new Date().getDate()
+        )
     )
     const [endDate, setEndDate] = useState(new Date())
     const [currentPage, setCurrentPage] = useState(0)
@@ -480,7 +485,9 @@ const ReportPage = () => {
         let target = e.target.value
         setCurrentData([
             ...storageData.filter((item) =>
-                item.saleconnector.id.includes(target)
+                item.saleconnector
+                    ? item.saleconnector.id.includes(target)
+                    : item.id.includes(target)
             ),
         ])
         setLocalSearch({
@@ -513,6 +520,7 @@ const ReportPage = () => {
     useEffect(() => {
         const check = (page) => id === page
         let body = {
+            type: id,
             currentPage,
             countPage,
             startDate,
@@ -527,6 +535,7 @@ const ReportPage = () => {
         check('transfer') && dispatch(getPaymentReport(body))
         check('debts') && dispatch(getDebts())
         check('discounts') && dispatch(getDiscounts(body))
+        check('backproducts') && dispatch(getBackProducts(body))
 
         return () => {
             dispatch(clearDatas())
@@ -543,8 +552,8 @@ const ReportPage = () => {
     ])
     useEffect(() => {
         if (id === 'cash' || id === 'card' || id === 'transfer') {
-            setCurrentData([...datas.filter((item) => item[id] > 0)])
-            setStorageData([...datas.filter((item) => item[id] > 0)])
+            setCurrentData([...datas.filter((item) => item[id] !== 0)])
+            setStorageData([...datas.filter((item) => item[id] !== 0)])
         } else {
             setCurrentData(datas)
             setStorageData(datas)

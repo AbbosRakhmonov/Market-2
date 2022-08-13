@@ -1245,7 +1245,7 @@ const RegisterSelling = () => {
                 )}
                 {returnProducts.length ? (
                     <Table
-                        page={'backproducts'}
+                        page={'backproduct'}
                         data={returnProducts}
                         headers={headerReturn}
                         currency={currencyType}

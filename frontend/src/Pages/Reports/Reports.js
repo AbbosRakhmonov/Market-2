@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import CheckoutCards from '../../Components/CheckoutCard/CheckoutCards'
 import SearchForm from '../../Components/SearchForm/SearchForm.js'
-import { useDispatch, useSelector } from 'react-redux'
-import { universalToast } from '../../Components/ToastMessages/ToastMessages.js'
-import { uniqueId } from 'lodash'
-import { clearErrorReports, getReports } from './reportsSlice.js'
-import { useTranslation } from 'react-i18next'
-import { motion } from "framer-motion"
+import {useDispatch, useSelector} from 'react-redux'
+import {universalToast} from '../../Components/ToastMessages/ToastMessages.js'
+import {uniqueId} from 'lodash'
+import {clearErrorReports, getReports} from './reportsSlice.js'
+import {useTranslation} from 'react-i18next'
+import {motion} from 'framer-motion'
 
 const Reports = () => {
-
-    const { t } = useTranslation(["common"])
+    const {t} = useTranslation(['common'])
 
     const card = [
         {
@@ -53,14 +52,18 @@ const Reports = () => {
     ]
 
     const dispatch = useDispatch()
-    const { reports, clearErrorrReports, errorReports } = useSelector(
+    const {reports, clearErrorrReports, errorReports} = useSelector(
         (state) => state.reports
     )
     const [startDate, setStartDate] = useState(
-        new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+        new Date(
+            new Date().getFullYear(),
+            new Date().getMonth(),
+            new Date().getDate()
+        )
     )
     const [endDate, setEndDate] = useState(new Date())
-    const { currencyType } = useSelector((state) => state.currency)
+    const {currencyType} = useSelector((state) => state.currency)
 
     useEffect(() => {
         const body = {
@@ -87,10 +90,11 @@ const Reports = () => {
             animate='open'
             exit='collapsed'
             variants={{
-                open: { opacity: 1, height: 'auto' },
-                collapsed: { opacity: 0, height: 0 },
+                open: {opacity: 1, height: 'auto'},
+                collapsed: {opacity: 0, height: 0},
             }}
-            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>
+            transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
+        >
             <SearchForm
                 filterBy={['startDate', 'endDate', 'printBtn']}
                 startDate={startDate}

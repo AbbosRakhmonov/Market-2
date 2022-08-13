@@ -119,22 +119,22 @@ export const ReportsTableHeaders = (header) => {
                 title: '№',
             },
             {
+                title: 'Sana',
+            },
+            {
                 title: 'ID',
             },
             {
                 title: 'Mijoz',
             },
             {
-                title: 'Mahsulot',
-            },
-            {
                 title: 'Soni',
             },
             {
-                title: 'Narxi',
+                title: 'Jami',
             },
             {
-                title: 'Jami',
+                title: 'Qaytarilgan',
             },
         ],
         payments: [

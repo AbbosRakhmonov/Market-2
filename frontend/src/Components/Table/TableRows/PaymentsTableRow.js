@@ -18,9 +18,9 @@ export const PaymentsTableRow = ({
                     <td className='text-right td'>
                         {new Date(sale.createdAt).toLocaleDateString()}
                     </td>
-                    <td className='text-right td'>{sale.saleconnector.id}</td>
+                    <td className='text-right td'>{sale.id}</td>
                     <td className='text-left td'>
-                        {sale.client && sale.client.name}
+                        {sale?.client && sale.client?.name}
                     </td>
                     <td className='text-right td py-[0.625rem] font-bold'>
                         {currency === 'USD'
