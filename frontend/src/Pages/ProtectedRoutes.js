@@ -173,11 +173,11 @@ const sellerRoutes = [
 const adminRoutes = [
     {
         path: '/',
-        element: <MainPage />
+        element: <h1 className={'text-center text-black-700 p-[1rem]'}>Bunday sahifa hozircha mavjud emas</h1>
     },
     {
         path: '/dukonlar/*',
-        element: <Shops />
+        element: <h1 className={'text-center text-black-700 p-[1rem]'}>Bunday sahifa hozircha mavjud emas</h1>
     },
     {
         path: '/maxsulotlar',

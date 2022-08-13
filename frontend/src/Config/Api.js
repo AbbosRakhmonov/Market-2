@@ -5,8 +5,8 @@ import {logOut} from '../Pages/Login/loginSlice'
 const instance = axios.create({
     baseURL: `http://localhost:8801/api`,
     headers: {
-        'Content-Type': 'application/json',
-    },
+        'Content-Type': 'application/json'
+    }
 })
 
 instance.interceptors.request.use(
@@ -20,7 +20,7 @@ instance.interceptors.request.use(
         if (market) {
             config.data = {
                 ...config.data,
-                market: market._id,
+                market: market._id
             }
         }
         return config
@@ -32,20 +32,20 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
     (response) => response,
     ({
-        response: {
-            data: {error, message},
-            status,
-        },
-    }) => {
+         response: {
+             data,
+             status
+         }
+     }) => {
         if (!status) {
             return Promise.reject({message: 'Internet mavjud emas'})
         } else if (status === 401) {
             localStorage.removeItem('useData')
-            Store.dispatch(logOut(error || message))
+            Store.dispatch(logOut(data?.error || data?.message))
         } else if (status === 404) {
             return Promise.reject('Bunday manzil mavjud emas !')
         } else {
-            return Promise.reject(error || message)
+            return Promise.reject(data?.error || data?.message)
         }
     }
 )
