@@ -9,7 +9,6 @@ import incomingReducer from '../Pages/Incomings/incomingSlice'
 import inventoryReducer from '../Pages/Inventory/inventorySlice'
 import inventoryConnectorReducer from '../Pages/Inventories/inventorieSlice.js'
 import packmanReducer from '../Pages/Packman/packmanSlice'
-import ExchangerateSlice from '../Pages/Exchangerate/ExchangerateSlice'
 import registerSellingReducer from '../Pages/Sale/Slices/registerSellingSlice.js'
 import savedSellingsReducer from '../Pages/Sale/Slices/savedSellingsSlice.js'
 import clientsReducer from '../Pages/Clients/clientsSlice'
@@ -31,7 +30,6 @@ export default configureStore({
         inventories: inventoryReducer,
         inventoryConnectors: inventoryConnectorReducer,
         packmans: packmanReducer,
-        exchangerate: ExchangerateSlice,
         clients: clientsReducer,
         registerSelling: registerSellingReducer,
         savedSellings: savedSellingsReducer,

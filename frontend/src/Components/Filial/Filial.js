@@ -3,7 +3,7 @@ import FilialButtons from '../FilialButtons/FilialButtons'
 import Avatar from '../Avatar/Avatar.js'
 import {Link, Route, Routes, useLocation, useParams} from 'react-router-dom'
 import ProductReport from '../../Pages/ProductReport/ProductReport'
-import Exchangerate from '../../Pages/Exchangerate/Exchangerate'
+import Currency from '../../Pages/Currency/Currency.js'
 import {AnimatePresence} from 'framer-motion'
 import Sellings from '../../Pages/Sale/Routes/Sellings'
 
@@ -113,7 +113,7 @@ const Filial = ({
                                 ) : tablename === 'sales' ? (
                                     <Sellings id={_id} />
                                 ) : (
-                                    <Exchangerate id={_id} />
+                                    <Currency id={_id} />
                                 )
                             ) : (
                                 ''
