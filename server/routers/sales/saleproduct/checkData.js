@@ -5,8 +5,10 @@ module.exports.checkPayments = (totalprice, payment, discount, debt) => {
     payment.cash +
     payment.card +
     payment.transfer;
-
-  if (Math.round(totalprice * 100) / 100 !== Math.round(prices * 100) / 100) {
+  if (
+    Math.round(totalprice * 1000) / 1000 !==
+    Math.round(prices * 1000) / 1000
+  ) {
     return true;
   }
   return false;
