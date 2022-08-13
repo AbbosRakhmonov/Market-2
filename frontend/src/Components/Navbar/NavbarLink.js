@@ -22,7 +22,7 @@ function NavbarLink({
         return `navbar__link flex items-center ${
             expanded ? 'justify-center' : ''
         } px-[0.9375rem] py-[0.625rem] gap-[0.9375rem] rounded-[1.875rem] transition ease-in-out duration-200 ${
-            active || user.type.toLowerCase() === 'seller' && true
+            active || user.type.toLowerCase() === 'seller'
                 ? 'text-white-900 bg-primary-800'
                 : 'text-black-700 hover:bg-black-100'
         }`

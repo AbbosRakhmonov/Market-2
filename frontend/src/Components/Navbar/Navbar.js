@@ -76,7 +76,10 @@ function Navbar() {
     }, [handleKeyDown])
     useEffect(() => {
         const handleEvent = e => {
-            (e.target.hasOwnProperty('class') && !e.target?.className?.includes('toggle-avatar-menu')) || !e.target.closest('.toggle-avatar-menu') && setIsAvatarMenuOpen(false)
+            let activeClass = e.target.hasOwnProperty('class')
+            let include = !e.target.classList.contains('toggle-avatar-menu')
+            if (activeClass || include) setIsAvatarMenuOpen(false)
+
         }
         document.addEventListener('click', handleEvent)
     }, [])
