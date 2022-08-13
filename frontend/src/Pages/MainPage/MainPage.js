@@ -3,7 +3,8 @@ import LineChart from '../../Components/LineChart/LineChart.js'
 import PieChart from '../../Components/PieChart/PieChart.js'
 import DailyCircle from '../../Components/DailyCircle/DailyCircle.js'
 import {useDispatch, useSelector} from 'react-redux'
-import {getReports} from '../Reports/reportsSlice.js'
+import {clearErrorReports, getReports} from '../Reports/reportsSlice.js'
+import {universalToast} from '../../Components/ToastMessages/ToastMessages.js'
 import {getCurrency} from '../Currency/currencySlice.js'
 
 function MainPage() {
@@ -34,6 +35,12 @@ function MainPage() {
         }
         dispatch(getReports(body))
     }, [dispatch, startDate, endDate])
+    useEffect(() => {
+        if (errorReports) {
+            universalToast(errorReports, 'error')
+            dispatch(clearErrorReports())
+        }
+    }, [dispatch, clearErrorrReports, errorReports])
     return (
         <section
             className={
