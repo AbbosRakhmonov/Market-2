@@ -12,7 +12,7 @@ import {
 } from 'chart.js'
 import {Line} from 'react-chartjs-2'
 
-function LineChart({arr = [], label}) {
+function LineChart({arr, label}) {
     ChartJS.register(
         CategoryScale,
         LinearScale,
@@ -77,7 +77,7 @@ function LineChart({arr = [], label}) {
         ]
     }
     return (
-        <Line options={options} data={data} updateMode={'reset'} />
+        <Line options={options} data={data} />
     )
 }
 
