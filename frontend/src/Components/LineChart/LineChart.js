@@ -12,7 +12,7 @@ import {
 } from 'chart.js'
 import {Line} from 'react-chartjs-2'
 
-function LineChart({arr = []}) {
+function LineChart({arr = [], label}) {
     ChartJS.register(
         CategoryScale,
         LinearScale,
@@ -37,7 +37,7 @@ function LineChart({arr = []}) {
             },
             title: {
                 display: true,
-                text: 'Oylik sotuvlar soni',
+                text: label,
                 padding: {
                     bottom: 30
                 },
