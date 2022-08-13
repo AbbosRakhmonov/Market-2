@@ -30,7 +30,7 @@ export const deleteExpense = createAsyncThunk(
     'expense/deleteExpense',
     async (body, {rejectWithValue}) => {
         try {
-            const {data} = await Api.post('/expense/register', {
+            const {data} = await Api.delete('/expense/delete', {
                 data: body,
             })
             return data
@@ -46,8 +46,13 @@ const expenseSlice = createSlice({
         expenses: [],
         count: 0,
         loading: false,
+        successRegister: false,
     },
-    reducer: {},
+    reducers: {
+        clearSuccessRegister: (state) => {
+            state.successRegister = false
+        },
+    },
     extraReducers: {
         [getExpense.pending]: (state) => {
             state.loading = true
@@ -72,6 +77,8 @@ const expenseSlice = createSlice({
             state.loading = false
             state.expenses = expenses
             state.count = count
+            state.successRegister = true
+            universalToast('Xarajat yaratildi!', 'success')
         },
         [deleteExpense.pending]: (state) => {
             state.loading = true
@@ -84,8 +91,9 @@ const expenseSlice = createSlice({
             state.loading = false
             state.expenses = expenses
             state.count = count
+            universalToast('Xarajat ochirildi!', 'success')
         },
     },
 })
-
+export const {clearSuccessRegister} = expenseSlice.actions
 export default expenseSlice.reducer
