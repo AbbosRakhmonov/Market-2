@@ -264,12 +264,13 @@ module.exports.login = async (req, res) => {
 
     const hashType = await bcrypt.hash(userr.type, 8);
 
+    userr.type = hashType;
+
     res.send({
       token,
       userId: userr._id,
       user: userr,
       market: userr.market,
-      type: hashType,
     });
   } catch (e) {
     res.status(500).json({ message: 'Serverda xatolik yuz berdi' });
