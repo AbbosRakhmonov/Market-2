@@ -1,12 +1,12 @@
 import React, {forwardRef} from 'react'
 import {useSelector} from 'react-redux'
 
-export const SaleCheckPos = forwardRef((props, ref) => {
+export const SaleCheckPosReturn = forwardRef((props, ref) => {
     const {product} = props
     const {user, market} = useSelector((state) => state.login)
     const {currencyType} = useSelector((state) => state.currency)
-    const calculateDebt = (total, payment, discount = 0) => {
-        return (total - payment - discount).toLocaleString('ru-Ru')
+    const totalprice = (datas, property) => {
+        return datas.reduce((summ, data) => summ + data[property], 0)
     }
     return (
         <div
@@ -85,28 +85,12 @@ export const SaleCheckPos = forwardRef((props, ref) => {
                 <li className='flex justify-between text-[7pt] border-b border-b-black-300'>
                     Jami:{' '}
                     <span>
-                        {currencyType === 'USD'
-                            ? product?.payment?.totalprice?.toLocaleString(
-                                  'ru-RU'
-                              )
-                            : product?.payment?.totalpriceuzs?.toLocaleString(
-                                  'ru-RU'
-                              )}{' '}
-                        {currencyType}
-                    </span>
-                </li>
-                <li className='flex justify-between text-[7pt] border-b border-b-black-300'>
-                    Chegirma:{' '}
-                    <span>
-                        {product?.hasOwnProperty('discount')
-                            ? currencyType === 'USD'
-                                ? product?.discount.discount?.toLocaleString(
-                                      'ru-RU'
-                                  )
-                                : product?.discount.discountuzs?.toLocaleString(
-                                      'ru-RU'
-                                  )
-                            : 0}{' '}
+                        {totalprice(
+                            product.products,
+                            currencyType === 'UZS'
+                                ? 'totalpriceuzs'
+                                : 'totalprice'
+                        ).toLocaleString('ru-RU')}{' '}
                         {currencyType}
                     </span>
                 </li>
@@ -114,29 +98,10 @@ export const SaleCheckPos = forwardRef((props, ref) => {
                     {' '}
                     To'langan:{' '}
                     <span>
-                        {currencyType === 'USD'
-                            ? product?.payment?.payment?.toLocaleString('ru-RU')
-                            : product?.payment?.paymentuzs?.toLocaleString(
-                                  'ru-RU'
-                              )}{' '}
-                        {currencyType}
-                    </span>
-                </li>
-                <li className='flex justify-between text-[7pt] border-b border-b-black-300'>
-                    {' '}
-                    Qarz:{' '}
-                    <span>
-                        {currencyType === 'USD'
-                            ? calculateDebt(
-                                  product?.payment?.totalprice,
-                                  product?.payment?.payment,
-                                  product?.discount?.discount
-                              )
-                            : calculateDebt(
-                                  product?.payment?.totalpriceuzs,
-                                  product?.payment?.paymentuzs,
-                                  product?.discount?.discountuzs
-                              )}{' '}
+                        {(currencyType === 'USD'
+                            ? product?.payment?.payment || 0
+                            : product?.payment?.paymentuzs || 0
+                        ).toLocaleString('ru-RU')}{' '}
                         {currencyType}
                     </span>
                 </li>

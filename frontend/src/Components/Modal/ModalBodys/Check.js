@@ -6,6 +6,8 @@ import SmallLoader from '../../Spinner/SmallLoader.js'
 import {SaleCheckReturn} from '../../SaleCheck/SaleCheckReturn.js'
 import {PaymentCheck} from '../../SaleCheck/PaymentCheck.js'
 import {SaleCheckPos} from '../../SaleCheck/SaleCheckPos.js'
+import {SaleCheckPosReturn} from '../../SaleCheck/SaleCheckPosReturn.js'
+import {PaymentCheckPos} from '../../SaleCheck/PaymentCheckPos.js'
 
 function Check({product, returned, isPayment, payment}) {
     const [loadContent, setLoadContent] = useState(false)
@@ -71,9 +73,19 @@ function Check({product, returned, isPayment, payment}) {
                 )}
 
                 {returned ? (
-                    '' // <SaleCheckReturn product={product} ref={saleCheckRef} />
+                    <div className='hidden'>
+                        <SaleCheckPosReturn
+                            product={product}
+                            ref={saleCheckRefPosPrinter}
+                        />
+                    </div>
                 ) : isPayment ? (
-                    '' // <PaymentCheck payment={payment} ref={saleCheckRef} />
+                    <div className='hidden'>
+                        <PaymentCheckPos
+                            payment={payment}
+                            ref={saleCheckRefPosPrinter}
+                        />
+                    </div>
                 ) : (
                     <div className='hidden'>
                         <SaleCheckPos
@@ -83,7 +95,7 @@ function Check({product, returned, isPayment, payment}) {
                     </div>
                 )}
             </div>
-            <div className=' w-[27cm] flex justify-between items-center mt-6 w-full'>
+            <div className='w-[27cm] flex justify-between items-center mt-6'>
                 <PrintBtn onClick={print} isDisabled={loadContent} />
                 <PrintBtn onClick={printPosPrinter} isDisabled={loadContent} />
             </div>
