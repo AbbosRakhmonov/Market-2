@@ -419,15 +419,17 @@ module.exports.getPayment = async (req, res) => {
           saleconnector: payment.saleconnector,
           createdAt: payment.createdAt,
           client:
-            payment.saleconnector?.client && payment.saleconnector?.client,
+            payment.saleconnector &&
+            payment.saleconnector.client &&
+            payment.saleconnector.client,
           cash: payment.cash,
           cashuzs: payment.cashuzs,
           card: payment.card,
           carduzs: payment.carduzs,
           transfer: payment.transfer,
           transferuzs: payment.transferuzs,
-          totalprice: payment?.totalprice || 0,
-          totalpriceuzs: payment?.totalpriceuzs || 0,
+          totalprice: (payment.totalprice && payment.totalprice) || 0,
+          totalpriceuzs: (payment.totalpriceuzs && payment.totalpriceuzs) || 0,
         };
       })
       .filter((product) => product.saleconnector !== null);
@@ -532,10 +534,12 @@ module.exports.getDiscountsReport = async (req, res) => {
       .map((discount) => {
         return {
           createdAt: discount.createdAt,
-          id: discount.saleconnector?.id,
+          id: discount.saleconnector && discount.saleconnector.id,
           saleconnector: discount.saleconnector,
           client:
-            discount.saleconnector?.client && discount.saleconnector?.client,
+            discount.saleconnector &&
+            discount.saleconnector.client &&
+            discount.saleconnector.client,
           totalprice: discount.totalprice,
           totalpriceuzs: discount.totalpriceuzs,
           discount: discount.discount,
@@ -603,22 +607,25 @@ module.exports.getBackProducts = async (req, res) => {
     let filter = dailyconnector
       .filter(
         (sale) =>
-          sale?.saleconnector !== null &&
-          sale?.client !== null &&
-          sale.products[0]?.pieces < 0
+          sale.saleconnector !== null &&
+          sale.client !== null &&
+          sale.products[0] &&
+          sale.products[0].pieces < 0
       )
       .map((connector) => {
         return {
           createdAt: connector.createdAt,
-          id: connector.saleconnector?.id,
+          id: connector.saleconnector && connector.saleconnector.id,
           saleconnector: connector.saleconnector,
           client:
-            connector.saleconnector?.client && connector.saleconnector?.client,
+            connector.saleconnector &&
+            connector.saleconnector.client &&
+            connector.saleconnector.client,
           count: reduce(connector.products, "pieces"),
           totalprice: reduce(connector.products, "totalprice"),
           totalpriceuzs: reduce(connector.products, "totalpriceuzs"),
-          back: connector?.payment?.payment || 0,
-          backuzs: connector?.payment?.paymentuzs || 0,
+          back: (connector.payment && connector.payment.payment) || 0,
+          backuzs: (connector.payment && connector.payment.paymentuzs) || 0,
         };
       });
     const count = filter.length;
@@ -626,7 +633,7 @@ module.exports.getBackProducts = async (req, res) => {
 
     res.status(200).json({ data, count });
   } catch (error) {
-    res.status(400).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -648,8 +655,8 @@ module.exports.getProductsReport = async (req, res) => {
         $lte: endDate,
       },
     })
-      .select('total price')
-      .populate('price', 'incomingprice incomingpriceuzs');
+      .select("total price")
+      .populate("price", "incomingprice incomingpriceuzs");
 
     const productsreport = {
       producttypes: products.length,
@@ -666,7 +673,7 @@ module.exports.getProductsReport = async (req, res) => {
 
     res.status(200).json(productsreport);
   } catch (error) {
-    res.status(400).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -687,7 +694,7 @@ module.exports.getIncomingsReport = async (req, res) => {
         $gte: startDate,
         $lte: endDate,
       },
-    }).select('pieces totalprice totalpriceuzs product');
+    }).select("pieces totalprice totalpriceuzs product");
 
     const incomingsreport = {
       totalincomings: incomings.length,
@@ -710,6 +717,6 @@ module.exports.getIncomingsReport = async (req, res) => {
 
     res.status(200).json(incomingsreport);
   } catch (error) {
-    res.status(400).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };

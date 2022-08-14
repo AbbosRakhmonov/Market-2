@@ -15,7 +15,7 @@ import {
     getClients,
     makePayment,
     returnSaleProducts,
-    savePayment
+    savePayment,
 } from '../Slices/registerSellingSlice.js'
 import {deleteSavedPayment} from '../Slices/savedSellingsSlice.js'
 import {getAllPackmans} from '../../Clients/clientsSlice.js'
@@ -29,7 +29,7 @@ import {
     warningMoreDiscount,
     warningMorePayment,
     warningReturnProductsEmpty,
-    warningSaleProductsEmpty
+    warningSaleProductsEmpty,
 } from '../../../Components/ToastMessages/ToastMessages.js'
 import CustomerPayment from '../../../Components/Payment/CustomerPayment.js'
 import {useLocation, useNavigate} from 'react-router-dom'
@@ -74,7 +74,7 @@ const RegisterSelling = () => {
     const [hasDiscount, setHasDiscount] = useState(false)
     const [discountSelectOption, setDiscountSelectOption] = useState({
         label: '%',
-        value: '%'
+        value: '%',
     })
     const [paymentDebt, setPaymentDebt] = useState(0)
     const [paymentDebtUzs, setPaymentDebtUzs] = useState(0)
@@ -93,7 +93,7 @@ const RegisterSelling = () => {
     const [totalPaymentsUzs, setTotalPaymentsUzs] = useState(0)
     const [totalPaysUsd, setTotalPaysUsd] = useState(0)
     const [totalPaysUzs, setTotalPaysUzs] = useState(0)
-    const [exchangerate, setExchangerate] = useState(0)
+    const [exchangerate, setExchangerate] = useState(currency)
     const headers = [
         {title: '№'},
         {title: 'Kodi'},
@@ -101,7 +101,7 @@ const RegisterSelling = () => {
         {title: 'Soni'},
         {title: 'Narxi'},
         {title: 'Jami', styles: 'w-[10rem]'},
-        {title: ''}
+        {title: ''},
     ]
     const headerReturn = [
         {title: '№'},
@@ -110,7 +110,7 @@ const RegisterSelling = () => {
         {title: 'Soni'},
         {title: 'Jami'},
         {title: 'Soni'},
-        {title: 'Jami'}
+        {title: 'Jami'},
     ]
     const toggleModal = () => {
         setModalBody('')
@@ -140,6 +140,7 @@ const RegisterSelling = () => {
         setModalBody('')
         setModalData(null)
     }
+
     const convertToUsd = (value) => Math.round(value * 1000) / 1000
     const convertToUzs = (value) => Math.round(value)
     const currentEchangerate = (uzs, usd) => {
@@ -475,22 +476,22 @@ const RegisterSelling = () => {
         setOptionPackman([
             {
                 label: 'Tanlang',
-                value: ''
+                value: '',
             },
             ...packmans.map((pack) => ({
                 value: pack._id,
-                label: pack.name
-            }))
+                label: pack.name,
+            })),
         ])
         setOptionClient([
             {
                 label: 'Barchasi',
-                value: ''
+                value: '',
             },
             ...clients.map((client) => ({
                 value: client._id,
-                label: client.name
-            }))
+                label: client.name,
+            })),
         ])
         setUserValue('')
         setChecked(false)
@@ -524,19 +525,19 @@ const RegisterSelling = () => {
             client: {
                 _id: clientValue ? clientValue.value : null,
                 name: clientValue ? clientValue.label : userValue,
-                packman: clientValue?.packman
+                packman: clientValue?.packman,
             },
             packman: packmanValue
                 ? {
-                    _id: packmanValue.value,
-                    name: packmanValue.label
-                }
+                      _id: packmanValue.value,
+                      name: packmanValue.label,
+                  }
                 : null,
             discount: {
                 discount: Number(paymentDiscount),
                 discountuzs: Number(paymentDiscountUzs),
                 procient: Number(paymentDiscountPercent),
-                isProcient: !!paymentDiscountPercent
+                isProcient: !!paymentDiscountPercent,
             },
             payment: {
                 totalprice: Number(allPayment),
@@ -549,15 +550,15 @@ const RegisterSelling = () => {
                 transfer: Number(paymentTransfer),
                 transferuzs: Number(paymentTransferUzs),
                 discount: Number(paymentDiscount),
-                discountuzs: Number(paymentDiscountUzs)
+                discountuzs: Number(paymentDiscountUzs),
             },
             debt: {
                 debt: Number(paymentDebt),
                 debtuzs: Number(paymentDebtUzs),
-                comment: ''
+                comment: '',
             },
             user: user._id,
-            saleconnectorid: saleConnectorId
+            saleconnectorid: saleConnectorId,
         }
         dispatch(saleConnectorId ? addPayment(body) : makePayment(body)).then(
             ({payload, error}) => {
@@ -601,17 +602,17 @@ const RegisterSelling = () => {
                 ),
                 transferuzs: Number(
                     allPayment < 0 ? -1 * paymentTransferUzs : paymentTransfer
-                )
+                ),
             },
             debt: {
                 debt: Number(allPayment < 0 ? -1 * paymentDebt : paymentDebt),
                 debtuzs: Number(
                     allPayment < 0 ? -1 * paymentDebtUzs : paymentDebtUzs
                 ),
-                comment: ''
+                comment: '',
             },
             user: user._id,
-            saleconnectorid: saleConnectorId
+            saleconnectorid: saleConnectorId,
         }
         dispatch(returnSaleProducts(body)).then(({payload, error}) => {
             if (!error) {
@@ -643,8 +644,8 @@ const RegisterSelling = () => {
                     userValue,
                     tableProducts,
                     totalPrice: all,
-                    totalPriceUzs: allUzs
-                }
+                    totalPriceUzs: allUzs,
+                },
             }
             dispatch(savePayment(body)).then(({error}) => {
                 if (!error) {
@@ -658,8 +659,7 @@ const RegisterSelling = () => {
             }
         }
     }
-    const handleClickPrint = () => {
-    }
+    const handleClickPrint = () => {}
     // bu yerda boshqa funksiyalar
     const handleChange = (id, value, key) => {
         // get index of product in tableProducts
@@ -702,7 +702,7 @@ const RegisterSelling = () => {
         const filterData = allcategories.filter((obj) =>
             obj.name
                 ? obj.name.toLowerCase().includes(searchedStr) ||
-                obj.code.includes(searchedStr)
+                  obj.code.includes(searchedStr)
                 : obj.code.includes(searchedStr)
         )
         setFilteredCategories(str !== '' ? filterData : allcategories)
@@ -710,16 +710,16 @@ const RegisterSelling = () => {
     const handleChangeSelectedProduct = (option) => {
         const hasProduct = option.barcode
             ? tableProducts.filter(
-            (obj) => obj.product.barcode === option.barcode
-        ).length > 0
+                  (obj) => obj.product.barcode === option.barcode
+              ).length > 0
             : tableProducts.filter((obj) => obj.product._id === option.value)
-            .length > 0
+                  .length > 0
         if (!hasProduct) {
             !option.barcode && setSelectedProduct(option)
             const product = option.barcode
                 ? allProducts.find(
-                    (obj) => obj.productdata.barcode === option.barcode
-                )
+                      (obj) => obj.productdata.barcode === option.barcode
+                  )
                 : allProducts.find((obj) => obj._id === option.value)
             setCurrentProduct({
                 total: product.total,
@@ -727,7 +727,7 @@ const RegisterSelling = () => {
                     _id: product._id,
                     code: product.productdata.code,
                     name: product.productdata.name,
-                    barcode: product.productdata.barcode
+                    barcode: product.productdata.barcode,
                 },
                 totalprice: product.price.sellingprice,
                 totalpriceuzs: product.price.sellingpriceuzs,
@@ -735,12 +735,12 @@ const RegisterSelling = () => {
                 incomingprice: product.price.incomingprice,
                 incomingpriceuzs: product.price.incomingpriceuzs,
                 unitprice: product.price.sellingprice,
-                unitpriceuzs: product.price.sellingpriceuzs
+                unitpriceuzs: product.price.sellingpriceuzs,
             })
             setModalVisible(true)
             setModalBody('sell')
         } else {
-            universalToast('Maxsulot ro\'yxatda mavjud !', 'error')
+            universalToast("Maxsulot ro'yxatda mavjud !", 'error')
         }
     }
     const handleChangePackmanValue = (option) => {
@@ -751,20 +751,20 @@ const RegisterSelling = () => {
                 pack.clients.map((client) => ({
                     label: client.name,
                     value: client._id,
-                    packman: pack
+                    packman: pack,
                 }))
             )
         } else {
             setOptionClient([
                 {
                     label: 'Tanlang',
-                    value: ''
+                    value: '',
                 },
                 ...clients.map((client) => ({
                     label: client.name,
                     value: client._id,
-                    packman: client?.packman
-                }))
+                    packman: client?.packman,
+                })),
             ])
         }
         setClientValue('')
@@ -778,7 +778,7 @@ const RegisterSelling = () => {
         if (client && client.hasOwnProperty('packman')) {
             setPackmanValue({
                 label: client.packman.name,
-                value: client.packman._id
+                value: client.packman._id,
             })
         }
         option.value ? setUserValue(option.label) : setUserValue('')
@@ -800,7 +800,7 @@ const RegisterSelling = () => {
             totalpriceuzs:
                 currencyType === 'UZS'
                     ? value * currentProduct.pieces
-                    : UsdToUzs(value * currentProduct.pieces, exchangerate)
+                    : UsdToUzs(value * currentProduct.pieces, exchangerate),
         })
     }
     const handleChangeProductNumber = (value) => {
@@ -808,37 +808,37 @@ const RegisterSelling = () => {
             ...currentProduct,
             pieces: value,
             totalprice: value * currentProduct.unitprice,
-            totalpriceuzs: value * currentProduct.unitpriceuzs
+            totalpriceuzs: value * currentProduct.unitpriceuzs,
         })
     }
     const handleChangeProductUnitPriceTable = (id, value) => {
         const newRelease = tableProducts.map((prevProduct) =>
             prevProduct.product._id === id
                 ? {
-                    ...prevProduct,
-                    unitprice:
-                        currencyType === 'USD'
-                            ? value
-                            : UzsToUsd(value, exchangerate),
-                    unitpriceuzs:
-                        currencyType === 'UZS'
-                            ? value
-                            : UsdToUzs(value, exchangerate),
-                    totalprice:
-                        currencyType === 'USD'
-                            ? value * prevProduct.pieces
-                            : UzsToUsd(
-                                value * prevProduct.pieces,
-                                exchangerate
-                            ),
-                    totalpriceuzs:
-                        currencyType === 'UZS'
-                            ? value * prevProduct.pieces
-                            : UsdToUzs(
-                                value * prevProduct.pieces,
-                                exchangerate
-                            )
-                }
+                      ...prevProduct,
+                      unitprice:
+                          currencyType === 'USD'
+                              ? value
+                              : UzsToUsd(value, exchangerate),
+                      unitpriceuzs:
+                          currencyType === 'UZS'
+                              ? value
+                              : UsdToUzs(value, exchangerate),
+                      totalprice:
+                          currencyType === 'USD'
+                              ? value * prevProduct.pieces
+                              : UzsToUsd(
+                                    value * prevProduct.pieces,
+                                    exchangerate
+                                ),
+                      totalpriceuzs:
+                          currencyType === 'UZS'
+                              ? value * prevProduct.pieces
+                              : UsdToUzs(
+                                    value * prevProduct.pieces,
+                                    exchangerate
+                                ),
+                  }
                 : prevProduct
         )
         setTableProducts(newRelease)
@@ -847,13 +847,13 @@ const RegisterSelling = () => {
         const newRelease = tableProducts.map((prevProduct) =>
             prevProduct.product._id === id
                 ? {
-                    ...prevProduct,
-                    pieces: value,
-                    totalprice: convertToUsd(value * prevProduct.unitprice),
-                    totalpriceuzs: convertToUzs(
-                        value * prevProduct.unitpriceuzs
-                    )
-                }
+                      ...prevProduct,
+                      pieces: value,
+                      totalprice: convertToUsd(value * prevProduct.unitprice),
+                      totalpriceuzs: convertToUzs(
+                          value * prevProduct.unitpriceuzs
+                      ),
+                  }
                 : prevProduct
         )
         setTableProducts(newRelease)
@@ -877,7 +877,7 @@ const RegisterSelling = () => {
                     currentProduct.incomingprice < currentProduct.unitprice) ||
                 (currencyType === 'UZS' &&
                     currentProduct.incomingpriceuzs <
-                    currentProduct.unitpriceuzs)
+                        currentProduct.unitpriceuzs)
             ) {
                 setTableProducts([...tableProducts, currentProduct])
                 toggleModal()
@@ -888,7 +888,7 @@ const RegisterSelling = () => {
     }
 
     const handleError = () => {
-        universalToast('Mahsulot kodi o\'qilmadi!', 'warning')
+        universalToast("Mahsulot kodi o'qilmadi!", 'warning')
     }
     const handleScan = (data) => {
         handleChangeSelectedProduct({barcode: data})
@@ -897,19 +897,19 @@ const RegisterSelling = () => {
     const handleChangeReturnProduct = (value, id, index) => {
         if (value > Number(returnProducts[index].product.pieces))
             return universalToast(
-                'Diqqat! Qaytariladigan mahsulot soni sotilgan mahsulot sonidan ortiq bo\'lolmaydi',
+                "Diqqat! Qaytariladigan mahsulot soni sotilgan mahsulot sonidan ortiq bo'lolmaydi",
                 'warning'
             )
         const newRelease = returnProducts.map((prevProduct) =>
             prevProduct._id === id
                 ? {
-                    ...prevProduct,
-                    pieces: value,
-                    totalprice: convertToUsd(value * prevProduct.unitprice),
-                    totalpriceuzs: convertToUzs(
-                        value * prevProduct.unitpriceuzs
-                    )
-                }
+                      ...prevProduct,
+                      pieces: value,
+                      totalprice: convertToUsd(value * prevProduct.unitprice),
+                      totalpriceuzs: convertToUzs(
+                          value * prevProduct.unitpriceuzs
+                      ),
+                  }
                 : prevProduct
         )
         setReturnProducts(newRelease)
@@ -934,22 +934,22 @@ const RegisterSelling = () => {
                             ...discount,
                             discount: convertToUsd(
                                 newDiscount.discount -
-                                (product.totalprice * discount.procient) /
-                                100
+                                    (product.totalprice * discount.procient) /
+                                        100
                             ),
                             discountuzs: convertToUzs(
                                 newDiscount.discountuzs -
-                                (product.totalpriceuzs *
-                                    discount.procient) /
-                                100
+                                    (product.totalpriceuzs *
+                                        discount.procient) /
+                                        100
                             ),
                             totalprice: convertToUsd(
                                 newDiscount.totalprice - product.totalprice
                             ),
                             totalpriceuzs: convertToUzs(
                                 newDiscount.totalpriceuzs -
-                                product.totalpriceuzs
-                            )
+                                    product.totalpriceuzs
+                            ),
                         }
                     }
                     return ''
@@ -992,14 +992,14 @@ const RegisterSelling = () => {
             setFilteredProducts(
                 filteredData.map((product) => ({
                     value: product._id,
-                    label: `${product.category.code}${product.productdata.code} - ${product.productdata.name}`
+                    label: `${product.category.code}${product.productdata.code} - ${product.productdata.name}`,
                 }))
             )
         } else {
             setFilteredProducts(
                 allProducts.map((product) => ({
                     value: product._id,
-                    label: `${product.category.code}${product.productdata.code} - ${product.productdata.name}`
+                    label: `${product.category.code}${product.productdata.code} - ${product.productdata.name}`,
                 }))
             )
         }
@@ -1017,39 +1017,39 @@ const RegisterSelling = () => {
         setOptionPackman([
             {
                 label: 'Tanlang',
-                value: ''
+                value: '',
             },
             ...packmans.map((packman) => ({
                 value: packman._id,
-                label: packman.name
-            }))
+                label: packman.name,
+            })),
         ])
     }, [packmans])
     useEffect(() => {
         setOptionClient([
             {
                 label: 'Barchasi',
-                value: ''
+                value: '',
             },
             ...clients.map((client) => ({
                 value: client._id,
-                label: client.name
-            }))
+                label: client.name,
+            })),
         ])
     }, [clients])
     useEffect(() => {
         const data = location.state
         const setClientData = () => {
             data.saleconnector.client &&
-            setClientValue({
-                label: data.saleconnector.client.name,
-                value: data.saleconnector.client._id
-            })
+                setClientValue({
+                    label: data.saleconnector.client.name,
+                    value: data.saleconnector.client._id,
+                })
             data.saleconnector.packman &&
-            setPackmanValue({
-                label: data.saleconnector.packman.name,
-                value: data.saleconnector.packman._id
-            })
+                setPackmanValue({
+                    label: data.saleconnector.packman.name,
+                    value: data.saleconnector.packman._id,
+                })
             setSaleConnectorId(data.saleconnector._id)
         }
         if (data && data.temporary) {
@@ -1071,7 +1071,7 @@ const RegisterSelling = () => {
                     discount: saleProduct.discount && saleProduct.discount,
                     pieces: saleProduct.pieces,
                     totalprice: saleProduct.totalprice,
-                    totalpriceuzs: saleProduct.totalpriceuzs
+                    totalpriceuzs: saleProduct.totalpriceuzs,
                 }
                 saleProduct.saleproducts.map((product) => {
                     sale.pieces += product.pieces
@@ -1080,16 +1080,16 @@ const RegisterSelling = () => {
                     return ''
                 })
                 saleProduct.pieces > 0 &&
-                returned.push({
-                    pieces: '',
-                    totalpriceuzs: 0,
-                    totalprice: 0,
-                    unitprice: saleProduct.unitprice,
-                    unitpriceuzs: saleProduct.unitpriceuzs,
-                    product: {...sale},
-                    productdata: {...saleProduct.product.productdata},
-                    _id: saleProduct._id
-                })
+                    returned.push({
+                        pieces: '',
+                        totalpriceuzs: 0,
+                        totalprice: 0,
+                        unitprice: saleProduct.unitprice,
+                        unitpriceuzs: saleProduct.unitpriceuzs,
+                        product: {...sale},
+                        productdata: {...saleProduct.product.productdata},
+                        _id: saleProduct._id,
+                    })
                 return ''
             })
 
@@ -1100,11 +1100,11 @@ const RegisterSelling = () => {
             const totalSumm = (datas, property, type) => {
                 return type === 'uzs'
                     ? convertToUzs(
-                        datas.reduce((summ, data) => summ + data[property], 0)
-                    )
+                          datas.reduce((summ, data) => summ + data[property], 0)
+                      )
                     : convertToUsd(
-                        datas.reduce((summ, data) => summ + data[property], 0)
-                    )
+                          datas.reduce((summ, data) => summ + data[property], 0)
+                      )
             }
             setTotalPaymentsUsd(
                 totalSumm(data.saleconnector.products, 'totalprice', 'usd')
@@ -1125,8 +1125,7 @@ const RegisterSelling = () => {
     return (
         <div className={'flex grow relative overflow-auto'}>
             {loadingMakePayment && (
-                <div
-                    className='fixed backdrop-blur-[2px] z-[100] left-0 top-0 right-0 bottom-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
+                <div className='fixed backdrop-blur-[2px] z-[100] left-0 top-0 right-0 bottom-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
                     <SmallLoader />
                 </div>
             )}
@@ -1148,8 +1147,8 @@ const RegisterSelling = () => {
                             ? paymentDiscount
                             : paymentDiscountPercent
                         : discountSelectOption.value === 'UZS'
-                            ? paymentDiscountUzs
-                            : paymentDiscountPercent
+                        ? paymentDiscountUzs
+                        : paymentDiscountPercent
                 }
                 handleChangeDiscount={handleChangeDiscount}
                 hasDiscount={hasDiscount}
@@ -1172,28 +1171,28 @@ const RegisterSelling = () => {
                     modalBody === 'sell'
                         ? toggleModal
                         : modalBody === 'complete'
-                            ? handleClosePay
-                            : toggleCheckModal
+                        ? handleClosePay
+                        : toggleCheckModal
                 }
                 approveFunction={
                     modalBody === 'sell'
                         ? handleAddProduct
                         : modalBody === 'complete'
-                            ? returnProducts.length
-                                ? handleApproveReturn
-                                : handleApprovePay
-                            : handleClickPrint
+                        ? returnProducts.length
+                            ? handleApproveReturn
+                            : handleApprovePay
+                        : handleClickPrint
                 }
                 isOpen={modalVisible}
                 product={modalBody === 'sell' ? currentProduct : modalData}
                 headers={headers}
                 headerText={
                     modalBody === 'complete' &&
-                    'To\'lovni amalga oshirishni tasdiqlaysizmi ?'
+                    "To'lovni amalga oshirishni tasdiqlaysizmi ?"
                 }
                 title={
                     modalBody === 'complete' &&
-                    'To\'lovni amalga oshirgach bu ma`lumotlarni o`zgaritirb bo`lmaydi !'
+                    "To'lovni amalga oshirgach bu ma`lumotlarni o`zgaritirb bo`lmaydi !"
                 }
                 changeProduct={handleChangeProduct}
             />
@@ -1255,7 +1254,7 @@ const RegisterSelling = () => {
                         changeHandler={handleChangeReturnProduct}
                     />
                 ) : !tableProducts.length ? (
-                    <NotFind text={'Sotuvda mahsulotlar qo\'shilmagan!'} />
+                    <NotFind text={"Sotuvda mahsulotlar qo'shilmagan!"} />
                 ) : (
                     <Table
                         page={'registersale'}
@@ -1267,15 +1266,13 @@ const RegisterSelling = () => {
                     />
                 )}
             </div>
-            <div
-                className='register-selling-right min-w-[20.25rem] bg-white-400 backdrop-blur-[3.125rem] rounded-[0.25rem] flex flex-col gap-[1.25rem]'>
+            <div className='register-selling-right min-w-[20.25rem] bg-white-400 backdrop-blur-[3.125rem] rounded-[0.25rem] flex flex-col gap-[1.25rem]'>
                 <div className='flex flex-col grow gap-[1.25rem]'>
                     <SearchInput
                         placeholder={'kategoriyani qidirish...'}
                         value={searchCategory}
                         onChange={handleSearchCategory}
-                        onKeyUp={() => {
-                        }}
+                        onKeyUp={() => {}}
                     />
                     <div className='grow relative overflow-auto'>
                         <div className='cards-container absolute left-0 right-[0.125rem] top-0 bottom-0'>

@@ -400,7 +400,9 @@ module.exports.update = async (req, res) => {
       sellingpriceuzs,
       total,
       productdata,
+      barcode,
     } = req.body.product;
+
     const { currentPage, countPage, search } = req.body;
     const marke = await Market.findById(market);
 
@@ -474,6 +476,7 @@ module.exports.update = async (req, res) => {
 
     productData.name = name;
     productData.code = code;
+    productData.barcode = barcode;
     if (category !== productData.category) {
       await Category.findByIdAndUpdate(productData.category, {
         $pull: {
