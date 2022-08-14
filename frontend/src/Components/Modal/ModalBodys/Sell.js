@@ -102,9 +102,10 @@ function Sell({product, changeProduct, approveFunction, toggleModal}) {
                                     <span>
                                         {showIncomingPrice
                                             ? currencyType === 'UZS'
-                                                ? product.incomingpriceuzs +
+                                                ? product.incomingpriceuzs.toLocaleString() +
                                                   ' UZS'
-                                                : product.incomingprice + ' UZS'
+                                                : product.incomingprice.toLocaleString() +
+                                                  ' UZS'
                                             : ''}
                                     </span>
                                 </div>

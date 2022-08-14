@@ -1,20 +1,22 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const path = require('path');
-const cors = require('cors');
+const path = require("path");
+const cors = require("cors");
 
 app.use(cors());
 
-const { start } = require('./connectDB/db');
+const { start } = require("./connectDB/db");
 start(app);
 
-const { routers } = require('./routers/routers');
+const { routers } = require("./routers/routers");
 routers(app);
 
-if (process.env.NODE_ENV === 'production') {
-  app.use('/', express.static(path.join(__dirname, 'frontend', 'build')));
+if (process.env.NODE_ENV === "production") {
+  app.use("/", express.static(path.join(__dirname, "./../frontend", "build")));
 
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
+  app.get("*", (req, res) => {
+    res.sendFile(
+      path.resolve(__dirname, "./../frontend", "build", "index.html")
+    );
   });
 }

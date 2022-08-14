@@ -5,10 +5,12 @@ import {useReactToPrint} from 'react-to-print'
 import SmallLoader from '../../Spinner/SmallLoader.js'
 import {SaleCheckReturn} from '../../SaleCheck/SaleCheckReturn.js'
 import {PaymentCheck} from '../../SaleCheck/PaymentCheck.js'
+import {SaleCheckPos} from '../../SaleCheck/SaleCheckPos.js'
 
 function Check({product, returned, isPayment, payment}) {
     const [loadContent, setLoadContent] = useState(false)
     const saleCheckRef = useRef(null)
+    const saleCheckRefPosPrinter = useRef(null)
     const onBeforeGetContentResolve = useRef(null)
     const handleOnBeforeGetContent = React.useCallback(() => {
         setLoadContent(true)
@@ -25,11 +27,23 @@ function Check({product, returned, isPayment, payment}) {
         return saleCheckRef.current
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [saleCheckRef.current])
+
+    const reactToPrintContentPosPrinter = React.useCallback(() => {
+        return saleCheckRefPosPrinter.current
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [saleCheckRef.current])
     const print = useReactToPrint({
         content: reactToPrintContent,
         documentTitle: 'Sale Check',
         onBeforeGetContent: handleOnBeforeGetContent,
-        removeAfterPrint: true
+        removeAfterPrint: true,
+    })
+
+    const printPosPrinter = useReactToPrint({
+        content: reactToPrintContentPosPrinter,
+        documentTitle: 'Sale CheckPosPrinter',
+        onBeforeGetContent: handleOnBeforeGetContent,
+        removeAfterPrint: true,
     })
     useEffect(() => {
         if (
@@ -41,22 +55,37 @@ function Check({product, returned, isPayment, payment}) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [onBeforeGetContentResolve.current, loadContent])
     return (
-        <section className='w-[27cm] mt-4 mx-auto'>
-            {loadContent && (
-                <div
-                    className='fixed backdrop-blur-[2px] left-0 top-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
-                    <SmallLoader />
-                </div>
-            )}
-            {returned ? (
-                <SaleCheckReturn product={product} ref={saleCheckRef} />
-            ) : isPayment ? (
-                <PaymentCheck payment={payment} ref={saleCheckRef} />
-            ) : (
-                <SaleCheck product={product} ref={saleCheckRef} />
-            )}
-            <div className='flex justify-center items-center mt-6'>
+        <section>
+            <div className='w-[27cm] mt-4 mx-auto'>
+                {loadContent && (
+                    <div className='fixed backdrop-blur-[2px] left-0 top-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
+                        <SmallLoader />
+                    </div>
+                )}
+                {returned ? (
+                    <SaleCheckReturn product={product} ref={saleCheckRef} />
+                ) : isPayment ? (
+                    <PaymentCheck payment={payment} ref={saleCheckRef} />
+                ) : (
+                    <SaleCheck product={product} ref={saleCheckRef} />
+                )}
+
+                {returned ? (
+                    '' // <SaleCheckReturn product={product} ref={saleCheckRef} />
+                ) : isPayment ? (
+                    '' // <PaymentCheck payment={payment} ref={saleCheckRef} />
+                ) : (
+                    <div className='hidden'>
+                        <SaleCheckPos
+                            product={product}
+                            ref={saleCheckRefPosPrinter}
+                        />
+                    </div>
+                )}
+            </div>
+            <div className=' w-[27cm] flex justify-between items-center mt-6 w-full'>
                 <PrintBtn onClick={print} isDisabled={loadContent} />
+                <PrintBtn onClick={printPosPrinter} isDisabled={loadContent} />
             </div>
         </section>
     )
