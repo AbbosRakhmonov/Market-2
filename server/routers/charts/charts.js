@@ -88,7 +88,7 @@ module.exports.getSalesDataByMonth = async (req, res) => {
           ).toISOString(),
         },
       })
-        .select('payments')
+        .select('payments dailyconnectors')
         .populate('payments', 'totalprice totalpriceuzs');
 
       const reducer = (arr, el) =>
@@ -101,7 +101,11 @@ module.exports.getSalesDataByMonth = async (req, res) => {
         return sum + reducer(payments, 'totalpriceuzs');
       }, 0);
 
-      sales.push(saleconnectors.length);
+      const salespieces = saleconnectors.reduce((prev, sale) => {
+        return prev + sale.dailyconnectors.length;
+      }, 0);
+
+      sales.push(salespieces);
       salesSum.push({
         usd,
         uzs,
