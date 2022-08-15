@@ -8,16 +8,20 @@ import Pagination from '../../Components/Pagination/Pagination'
 import CustomerPayment from '../../Components/Payment/CustomerPayment'
 import SearchForm from '../../Components/SearchForm/SearchForm'
 import Table from '../../Components/Table/Table'
-import {warningMoreDiscount, warningMorePayment} from '../../Components/ToastMessages/ToastMessages'
+import {
+    warningMoreDiscount,
+    warningMorePayment,
+} from '../../Components/ToastMessages/ToastMessages'
 import {
     clearDatas,
     getBackProducts,
     getDebts,
     getDiscounts,
+    getExpensesReport,
     getPaymentReport,
     getProfit,
     getSales,
-    payDebt
+    payDebt,
 } from './reportsSlice'
 import {ReportsTableHeaders} from './ReportsTableHeaders'
 
@@ -43,11 +47,11 @@ const ReportPage = () => {
     const [totalPage, setTotalPage] = useState(1)
     const [sendingSearch, setSendingSearch] = useState({
         id: '',
-        client: ''
+        client: '',
     })
     const [localSearch, setLocalSearch] = useState({
         id: '',
-        client: ''
+        client: '',
     })
     const [storageData, setStorageData] = useState([])
     const [currentData, setCurrentData] = useState([])
@@ -70,7 +74,7 @@ const ReportPage = () => {
     const [userValue, setUserValue] = useState('')
     const [discountSelectOption, setDiscountSelectOption] = useState({
         label: '%',
-        value: '%'
+        value: '%',
     })
     const [paymentDebt, setPaymentDebt] = useState(0)
     const [paymentDebtUzs, setPaymentDebtUzs] = useState(0)
@@ -88,7 +92,7 @@ const ReportPage = () => {
         {title: 'Soni'},
         {title: 'Narxi'},
         {title: 'Jami', styles: 'w-[10rem]'},
-        {title: ''}
+        {title: ''},
     ]
 
     // payment
@@ -448,10 +452,10 @@ const ReportPage = () => {
                 transfer: Number(paymentTransfer),
                 transferuzs: Number(paymentTransferUzs),
                 discount: Number(paymentDiscount),
-                discountuzs: Number(paymentDiscountUzs)
+                discountuzs: Number(paymentDiscountUzs),
             },
             user: user._id,
-            saleconnectorid: saleConnectorId
+            saleconnectorid: saleConnectorId,
         }
         dispatch(payDebt(body)).then(({payload}) => {
             setModalData(payload)
@@ -482,11 +486,11 @@ const ReportPage = () => {
                 item.saleconnector
                     ? item.saleconnector.id.includes(target)
                     : item.id.includes(target)
-            )
+            ),
         ])
         setLocalSearch({
             ...localSearch,
-            id: target
+            id: target,
         })
     }
 
@@ -497,11 +501,11 @@ const ReportPage = () => {
                 (item) =>
                     item.client &&
                     item.client.name.toLowerCase().includes(target)
-            )
+            ),
         ])
         setLocalSearch({
             ...localSearch,
-            client: target
+            client: target,
         })
     }
 
@@ -520,7 +524,7 @@ const ReportPage = () => {
             startDate,
             endDate,
             market: _id,
-            search: sendingSearch
+            search: sendingSearch,
         }
         check('sale') && dispatch(getSales(body))
         check('income') && dispatch(getProfit(body))
@@ -530,6 +534,7 @@ const ReportPage = () => {
         check('debts') && dispatch(getDebts())
         check('discounts') && dispatch(getDiscounts(body))
         check('backproducts') && dispatch(getBackProducts(body))
+        check('expenses') && dispatch(getExpensesReport(body))
 
         return () => {
             dispatch(clearDatas())
@@ -542,7 +547,7 @@ const ReportPage = () => {
         startDate,
         endDate,
         _id,
-        id
+        id,
     ])
     useEffect(() => {
         if (id === 'cash' || id === 'card' || id === 'transfer') {
@@ -581,6 +586,8 @@ const ReportPage = () => {
                     filterBy={
                         id === 'debts'
                             ? ['id', 'clientName']
+                            : id === 'expenses'
+                            ? ['total']
                             : ['total', 'id', 'clientName']
                     }
                     filterByTotal={setCountPage}
@@ -609,6 +616,7 @@ const ReportPage = () => {
                         currency={currencyType}
                         type={id}
                         Pay={handleClickPayment}
+                        reports={true}
                     />
                 )}
             </div>
@@ -633,8 +641,8 @@ const ReportPage = () => {
                                 ? paymentDiscount
                                 : paymentDiscountPercent
                             : discountSelectOption.value === 'UZS'
-                                ? paymentDiscountUzs
-                                : paymentDiscountPercent
+                            ? paymentDiscountUzs
+                            : paymentDiscountPercent
                     }
                     handleChangeDiscount={handleChangeDiscount}
                     hasDiscount={hasDiscount}
@@ -658,8 +666,8 @@ const ReportPage = () => {
                     modalBody === 'sell'
                         ? toggleModal
                         : modalBody === 'complete'
-                            ? handleClosePay
-                            : toggleCheckModal
+                        ? handleClosePay
+                        : toggleCheckModal
                 }
                 approveFunction={handleApprovePay}
                 isOpen={modalVisible}
@@ -667,11 +675,11 @@ const ReportPage = () => {
                 headers={headers}
                 headerText={
                     modalBody === 'complete' &&
-                    'To\'lovni amalga oshirishni tasdiqlaysizmi ?'
+                    "To'lovni amalga oshirishni tasdiqlaysizmi ?"
                 }
                 title={
                     modalBody === 'complete' &&
-                    'To\'lovni amalga oshirgach bu ma`lumotlarni o`zgaritirb bo`lmaydi !'
+                    "To'lovni amalga oshirgach bu ma`lumotlarni o`zgaritirb bo`lmaydi !"
                 }
             />
         </div>
