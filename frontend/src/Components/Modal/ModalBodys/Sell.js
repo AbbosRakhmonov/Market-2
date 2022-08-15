@@ -23,7 +23,6 @@ function Sell({product, changeProduct, approveFunction, toggleModal}) {
             document.removeEventListener('keydown', handleKeyPress)
         }
     }, [handleKeyPress])
-    console.log(product)
     return (
         <div className={'modal-content pt-[1.25rem] text-center'}>
             <div className='text-center'>

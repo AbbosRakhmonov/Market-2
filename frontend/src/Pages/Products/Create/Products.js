@@ -18,9 +18,9 @@ import {
     clearSuccessUpdateProduct,
     deleteProduct,
     getCodeOfCategory,
-    getProducts,
+    getProducts, getProductsAll,
     getProductsByFilter,
-    updateProduct,
+    updateProduct
 } from './productSlice'
 import {clearErrorUnits, getUnits} from '../../Units/unitsSlice'
 import {
@@ -73,6 +73,7 @@ function Products() {
         searchedProducts,
         totalSearched,
         successDeleteProduct,
+        allProducts
     } = useSelector((state) => state.products)
     const {barcode, errorGetBarcode} = useSelector((state) => state.barcode)
     const [data, setData] = useState(products)
@@ -655,6 +656,17 @@ function Products() {
         //    eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage, showByTotal, dispatch])
     useEffect(() => {
+        const body = {
+            search: {
+                name: searchByName.replace(/\s+/g, ' ').trim(),
+                code: searchByCode.replace(/\s+/g, ' ').trim(),
+                category: searchByCategory.replace(/\s+/g, ' ').trim(),
+            },
+        }
+        dispatch(getProductsAll(body))
+        //    eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ dispatch])
+    useEffect(() => {
         dispatch(getUnits())
         dispatch(getAllCategories())
         dispatch(getCurrency())
@@ -816,7 +828,7 @@ function Products() {
             <div className={'flex justify-between items-center mainPadding'}>
                 <div className={'flex gap-[1.5rem]'}>
                     <ExportBtn
-                        datas={data}
+                        datas={allProducts}
                         headers={exportHeader}
                         fileName={'Maxsulotlar'}
                         pagesName='Products'

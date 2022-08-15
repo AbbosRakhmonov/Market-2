@@ -992,14 +992,14 @@ const RegisterSelling = () => {
             setFilteredProducts(
                 filteredData.map((product) => ({
                     value: product._id,
-                    label: `${product.category.code}${product.productdata.code} - ${product.productdata.name}`,
+                    label: `(${product.total}) ${product.category.code}${product.productdata.code} - ${product.productdata.name}`,
                 }))
             )
         } else {
             setFilteredProducts(
                 allProducts.map((product) => ({
                     value: product._id,
-                    label: `${product.category.code}${product.productdata.code} - ${product.productdata.name}`,
+                    label: `(${product.total}) ${product.category.code}${product.productdata.code} - ${product.productdata.name}`,
                 }))
             )
         }
