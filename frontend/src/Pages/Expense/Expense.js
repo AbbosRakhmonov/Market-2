@@ -12,6 +12,7 @@ import SearchForm from '../../Components/SearchForm/SearchForm'
 import Pagination from '../../Components/Pagination/Pagination'
 import Table from '../../Components/Table/Table'
 import {universalToast} from '../../Components/ToastMessages/ToastMessages'
+import {regexForTypeNumber} from '../../Components/RegularExpressions/RegularExpressions'
 
 const Expense = () => {
     const dispatch = useDispatch()
@@ -37,8 +38,8 @@ const Expense = () => {
     )
 
     const [expense, setExpense] = useState({
-        sum: 0,
-        sumuzs: 0,
+        sum: '',
+        sumuzs: '',
         type: '',
         comment: '',
         market: _id,
@@ -70,7 +71,8 @@ const Expense = () => {
                 ...expense,
                 comment: e.target.value,
             })
-        } else {
+        }
+        if (regexForTypeNumber.test(e.target.value)) {
             setExpense({
                 ...expense,
                 sum:
@@ -81,6 +83,13 @@ const Expense = () => {
                     currencyType === 'UZS'
                         ? target
                         : Math.round(target * currency * 1000) / 1000,
+            })
+        }
+        if (key === 'sum' && e.target.value === '') {
+            setExpense({
+                ...expense,
+                sum: '',
+                sumuzs: '',
             })
         }
     }
@@ -98,13 +107,13 @@ const Expense = () => {
 
     const checkExpense = () => {
         if (expense.sum < 0.01) {
-            return universalToast('Xarajat narxini kiritin', 'error')
+            return universalToast('Xarajat narxini kiritin', 'warning')
         }
         if (!expense.comment) {
-            return universalToast('Xarajat izohini kiriting', 'error')
+            return universalToast('Xarajat izohini kiriting', 'warning')
         }
         if (!expense.type) {
-            return universalToast('Xarajat turini kiriting', 'error')
+            return universalToast('Xarajat turini kiriting', 'warning')
         }
         return false
     }
@@ -131,8 +140,8 @@ const Expense = () => {
 
     const clearForm = useCallback(() => {
         setExpense({
-            sum: 0,
-            sumuzs: 0,
+            sum: '',
+            sumuzs: '',
             type: '',
             comment: '',
             market: _id,
@@ -196,7 +205,7 @@ const Expense = () => {
                     label={'Narxi'}
                     placeholder={'misol: 100'}
                     maxWidth={'w-[21.75rem]'}
-                    type={'number'}
+                    type={'text'}
                     border={true}
                 />
                 <FieldContainer
@@ -242,6 +251,8 @@ const Expense = () => {
                     setStartDate={setStartDate}
                     setEndDate={setEndDate}
                     filterByTotal={setCountPage}
+                    startDate={new Date(startDate)}
+                    endDate={new Date(endDate)}
                 />
             </div>
             {expenses && (
