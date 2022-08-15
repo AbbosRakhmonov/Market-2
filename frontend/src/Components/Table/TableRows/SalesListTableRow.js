@@ -79,12 +79,16 @@ export const SalesListTableRow = ({
                         {currency}
                     </td>
                     <td className='text-left td'>
-                        {saleconnector.payments.map((payment, index) => {
-                            if (payment.comment) {
-                                return <p key={index}>{payment.comment}</p>
+                        {saleconnector.dailyconnectors.map(
+                            (connector, index) => {
+                                if (connector.comment) {
+                                    return (
+                                        <p key={index}>{connector.comment}</p>
+                                    )
+                                }
+                                return ''
                             }
-                            return ''
-                        })}
+                        )}
                     </td>
                     <td className='py-[0.375rem] td border-r-0'>
                         <div className='flex items-center justify-center gap-[0.625rem]'>

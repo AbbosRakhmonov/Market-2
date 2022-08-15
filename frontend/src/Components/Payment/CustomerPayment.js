@@ -25,7 +25,8 @@ function CustomerPayment({
                              handleClickDiscountBtn,
                              handleChangeDiscountSelectOption,
                              handleChangeDiscount,
-                             handleClickPay
+                             handleClickPay, saleComment,
+                             changeComment
                          }) {
     const defineLabel = () => {
         switch (type) {
@@ -122,6 +123,16 @@ function CustomerPayment({
                     </div>
                     <ul className='w-full pb-[1.25rem]'>
                         {defineLabel()}
+                        <PaymentInput
+                            value={saleComment}
+                            key={'sale-card'}
+                            keyInput={type}
+                            onChange={changeComment}
+                            onClose={onClose}
+                            label={'Izoh'}
+                            placeholder={'misol: qarzga olindi'}
+                            type={'text'}
+                        />
                         {hasDiscount && (
                             <DiscountInput
                                 value={discount}

@@ -4,6 +4,7 @@ const Joi = require("joi");
 const dailysaleconnector = new Schema(
   {
     id: { type: Number },
+    comment: { type: String },
     saleconnector: { type: Schema.Types.ObjectId, ref: "SaleConnector" },
     payment: { type: Schema.Types.ObjectId, ref: "Payment" },
     products: [{ type: Schema.Types.ObjectId, ref: "SaleProduct" }],
@@ -23,6 +24,7 @@ const dailysaleconnector = new Schema(
 function validateDailySaleConnector(dailysaleconnector) {
   const schema = Joi.object({
     id: Joi.string(),
+    comment: Joi.string(),
     payments: Joi.array(),
     discounts: Joi.array(),
     debts: Joi.string(),

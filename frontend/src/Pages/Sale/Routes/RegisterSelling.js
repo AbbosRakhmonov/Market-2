@@ -94,6 +94,7 @@ const RegisterSelling = () => {
     const [totalPaysUsd, setTotalPaysUsd] = useState(0)
     const [totalPaysUzs, setTotalPaysUzs] = useState(0)
     const [exchangerate, setExchangerate] = useState(currency)
+    const [saleComment, setSaleComment] = useState('')
     const headers = [
         {title: '№'},
         {title: 'Kodi'},
@@ -559,6 +560,7 @@ const RegisterSelling = () => {
             },
             user: user._id,
             saleconnectorid: saleConnectorId,
+            comment: saleComment,
         }
         dispatch(saleConnectorId ? addPayment(body) : makePayment(body)).then(
             ({payload, error}) => {
@@ -613,6 +615,7 @@ const RegisterSelling = () => {
             },
             user: user._id,
             saleconnectorid: saleConnectorId,
+            comment: saleComment,
         }
         dispatch(returnSaleProducts(body)).then(({payload, error}) => {
             if (!error) {
@@ -885,6 +888,10 @@ const RegisterSelling = () => {
                 warningLessSellPayment()
             }
         }
+    }
+
+    const changeComment = (e) => {
+        setSaleComment(e)
     }
 
     const handleError = () => {
@@ -1164,6 +1171,8 @@ const RegisterSelling = () => {
                 }
                 paid={currencyType === 'USD' ? paid : paidUzs}
                 handleClickPay={handleClickPay}
+                changeComment={changeComment}
+                saleComment={saleComment}
             />
             <UniversalModal
                 body={modalBody}

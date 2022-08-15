@@ -31,6 +31,7 @@ module.exports.register = async (req, res) => {
       debt,
       market,
       user,
+      comment,
     } = req.body;
     const marke = await Market.findById(market);
     if (!marke) {
@@ -126,6 +127,7 @@ module.exports.register = async (req, res) => {
       user,
       market,
       saleconnector: saleconnector._id,
+      comment: comment,
     });
 
     await dailysaleconnector.save();
@@ -285,6 +287,7 @@ module.exports.addproducts = async (req, res) => {
       debt,
       market,
       user,
+      comment,
     } = req.body;
 
     const marke = await Market.findById(market);
@@ -379,6 +382,7 @@ module.exports.addproducts = async (req, res) => {
       user,
       market,
       saleconnector: saleconnector._id,
+      comment,
     });
 
     await dailysaleconnector.save();
@@ -579,16 +583,6 @@ module.exports.getsaleconnectors = async (req, res) => {
           populate: { path: "productdata", select: "name code" },
         },
       })
-      .populate({
-        path: "products",
-        select:
-          "totalprice unitprice totalpriceuzs unitpriceuzs pieces createdAt discount saleproducts product",
-        options: { sort: { createdAt: -1 } },
-        populate: {
-          path: "saleproducts",
-          select: "totalprice unitprice totalpriceuzs unitpriceuzs pieces",
-        },
-      })
       .populate(
         "payments",
         "payment paymentuzs comment totalprice totalpriceuzs"
@@ -597,10 +591,10 @@ module.exports.getsaleconnectors = async (req, res) => {
         "discounts",
         "discount discountuzs procient products totalprice totalpriceuzs"
       )
-      .populate("debts", "debt debtuzs")
       .populate({ path: "client", match: { name: name }, select: "name" })
       .populate("packman", "name")
-      .populate("user", "firstname lastname");
+      .populate("user", "firstname lastname")
+      .populate("dailyconnectors", "comment");
 
     const filter = saleconnectors.filter((item) => {
       return (
@@ -686,6 +680,7 @@ module.exports.registeredit = async (req, res) => {
       market,
       user,
       saleconnectorid,
+      comment,
     } = req.body;
 
     const marke = await Market.findById(market);
@@ -773,6 +768,7 @@ module.exports.registeredit = async (req, res) => {
       user,
       market,
       saleconnector: saleconnectorid,
+      comment,
     });
 
     await dailysaleconnector.save();

@@ -6,7 +6,10 @@ export const getSellings = createAsyncThunk(
     'sellings/getSellings',
     async (body = {}, {rejectWithValue}) => {
         try {
-            const {data} = await Api.post('/sales/saleproducts/getconnectors', body)
+            const {data} = await Api.post(
+                '/sales/saleproducts/getconnectors',
+                body
+            )
             return data
         } catch (err) {
             return rejectWithValue(err)
@@ -18,14 +21,16 @@ export const getSellingsByFilter = createAsyncThunk(
     'sellings/getSellingsByFilter',
     async (body = {}, {rejectWithValue}) => {
         try {
-            const {data} = await Api.post('/sales/saleproducts/getconnectors', body)
+            const {data} = await Api.post(
+                '/sales/saleproducts/getconnectors',
+                body
+            )
             return data
         } catch (err) {
             return rejectWithValue(err)
         }
     }
 )
-
 
 const sellingsSlice = createSlice({
     name: 'sellings',
@@ -35,19 +40,22 @@ const sellingsSlice = createSlice({
         totalSearched: 0,
         searchedSellings: [],
         getSellingsLoading: true,
-        getSellingsError: null
+        getSellingsError: null,
     },
     reducers: {
         clearSearchedSellings: (state) => {
             state.searchedSellings = []
             state.totalSearched = 0
-        }
+        },
     },
     extraReducers: {
         [getSellings.pending]: (state) => {
             state.getSellingsLoading = true
         },
-        [getSellings.fulfilled]: (state, {payload: {saleconnectors, count}}) => {
+        [getSellings.fulfilled]: (
+            state,
+            {payload: {saleconnectors, count}}
+        ) => {
             state.getSellingsLoading = false
             state.searchedSellings.length
                 ? (state.searchedSellings = saleconnectors)
@@ -65,7 +73,10 @@ const sellingsSlice = createSlice({
         [getSellingsByFilter.pending]: (state) => {
             state.getSellingsLoading = true
         },
-        [getSellingsByFilter.fulfilled]: (state, {payload: {saleconnectors, count}}) => {
+        [getSellingsByFilter.fulfilled]: (
+            state,
+            {payload: {saleconnectors, count}}
+        ) => {
             state.getSellingsLoading = false
             state.searchedSellings = saleconnectors
             state.totalSearched = count
@@ -75,8 +86,8 @@ const sellingsSlice = createSlice({
             state.getSellingsError = payload
             state.getSellingsLoading = false
             state.getSellingsError = null
-        }
-    }
+        },
+    },
 })
 export const {clearSearchedSellings} = sellingsSlice.actions
 export default sellingsSlice.reducer
