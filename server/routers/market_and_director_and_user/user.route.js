@@ -185,7 +185,8 @@ module.exports.registerAdmin = async (req, res) => {
       });
     }
 
-    const { login, password, confirmPassword } = req.body;
+    const { firstname, lastname, login, password, confirmPassword, image } =
+      req.body;
 
     if (password !== confirmPassword) {
       return res.status(400).json({
@@ -207,6 +208,9 @@ module.exports.registerAdmin = async (req, res) => {
     const hashPasword = await bcrypt.hash(password, 12);
 
     const newAdmin = new User({
+      firstname,
+      lastname,
+      image,
       login,
       password: hashPasword,
       type: 'Admin',
