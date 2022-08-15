@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import Api from '../../Config/Api'
-import {successLoggedIn} from '../../Components/ToastMessages/ToastMessages'
+import {successEditProfile, successLoggedIn, universalToast} from '../../Components/ToastMessages/ToastMessages'
 
 const bcryptjs = require('bcryptjs')
 
@@ -8,7 +8,7 @@ const types = ['Admin', 'Director', 'Seller']
 
 export const signIn = createAsyncThunk(
     'login/signIn',
-    async (body, {rejectWithValue}) => {
+    async (body = {}, {rejectWithValue}) => {
         try {
             const {
                 data: {token, user, market}
@@ -23,6 +23,34 @@ export const signIn = createAsyncThunk(
         }
     }
 )
+
+export const editProfileImage = createAsyncThunk(
+    'login/editProfileImage',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post('/upload', body, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    })
+
+export const editUser = createAsyncThunk(
+    'login/editUser',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {data} = Api.post('/edit', body)
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
 
 const slice = createSlice({
     name: 'login',
@@ -72,6 +100,21 @@ const slice = createSlice({
         [signIn.rejected]: (state, {payload}) => {
             state.loading = false
             state.error = payload
+        },
+        [editProfileImage.rejected]: (state, {payload}) => {
+            universalToast(payload, 'error')
+        },
+        [editUser.pending]: (state) => {
+            state.loading = true
+        },
+        [editUser.fulfilled]: (state, {payload}) => {
+            state.loading = false
+            state.user = payload
+            successEditProfile()
+        },
+        [editUser.rejected]: (state, {payload}) => {
+            state.loading = false
+            universalToast(payload, 'error')
         }
     }
 })

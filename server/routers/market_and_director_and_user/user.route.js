@@ -119,6 +119,8 @@ module.exports.registerDirector = async (req, res) => {
       password,
       market,
       type,
+        administrator
+
     } = req.body;
     const marke = await Market.findById(market);
 
@@ -150,6 +152,7 @@ module.exports.registerDirector = async (req, res) => {
       market,
       type,
       login,
+      administrator
     });
     await newUser.save();
 

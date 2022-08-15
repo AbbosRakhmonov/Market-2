@@ -217,6 +217,9 @@ module.exports.getReport = async (req, res) => {
       let discountuzs = reducecount(sale.discounts, 'discountuzs');
       return prev + (totalpriceuzs - paymentuzs - discountuzs);
     }, 0);
+
+    reports.debts.debts = Math.round(reports.debts.debts * 1000) / 1000
+    reports.debts.debtsuzs = Math.round(reports.debts.debtsuzs * 1) / 1
     // Get debts report functions  END
 
     // Get expenses report functions  START

@@ -32,14 +32,16 @@ const IncomingSuppliers = lazy(() =>
 )
 const ReportPage = lazy(() => import('./Reports/ReportPage.js'))
 const Barcode = lazy(() => import('./Barcode/Barcode.js'))
-const Expense = lazy(() => import('./Expense/Expense.js'))
+const AdminProduct = lazy(()=>import('./AdminProducts/AdminProduct.js'))
+const Expense = lazy(() => import ('./Expense/Expense.js'))
+const EditProfile = lazy(() => import('./EditProfile/EditProfile.js'))
 const PayDebts = lazy(() => import('./PayDebts/PayDebts.js'))
 // <-- pages
 
 const directorRoutes = [
     {
         path: '/',
-        element: <MainPage />,
+        element: <MainPage />
     },
     {
         path: '/maxsulotlar/qabul/',
@@ -47,53 +49,53 @@ const directorRoutes = [
         subRoutes: [
             {
                 path: 'qabulqilish',
-                element: <RegisterIncoming />,
+                element: <RegisterIncoming />
             },
             {
                 path: 'qabullar',
-                element: <Incomings />,
+                element: <Incomings />
             },
             {
                 path: 'qabullar/:id',
-                element: <IncomingSuppliers />,
+                element: <IncomingSuppliers />
             },
             {
                 path: 'saqlanganlar',
-                element: <SavedIncoming />,
+                element: <SavedIncoming />
             },
             {
                 path: 'ruyxat',
-                element: <IncomingsList />,
-            },
-        ],
+                element: <IncomingsList />
+            }
+        ]
     },
     {
         path: '/maxsulotlar/yaratish/maxsulotlar',
-        element: <Products />,
+        element: <Products />
     },
     {
         path: '/maxsulotlar/yaratish/kategoriyalar',
-        element: <Category />,
+        element: <Category />
     },
     {
         path: '/maxsulotlar/yaratish/yetkazuvchilar',
-        element: <Supplier />,
+        element: <Supplier />
     },
     {
         path: '/maxsulotlar/hisobot',
-        element: <ProductReport />,
+        element: <ProductReport />
     },
     {
         path: '/maxsulotlar/inventarizatsiya/inventarizatsiya',
-        element: <Inventory />,
+        element: <Inventory />
     },
     {
         path: '/maxsulotlar/inventarizatsiya/inventarizatsiyalar',
-        element: <Inventories />,
+        element: <Inventories />
     },
     {
         path: '/maxsulotlar/yaratish/ulchov',
-        element: <Unit />,
+        element: <Unit />
     },
     {
         path: '/sotuv/',
@@ -101,45 +103,45 @@ const directorRoutes = [
         subRoutes: [
             {
                 path: 'sotish',
-                element: <RegisterSelling />,
+                element: <RegisterSelling />
             },
             {
                 path: 'saqlanganlar',
-                element: <SavedSellings />,
+                element: <SavedSellings />
             },
             {
                 path: 'ruyxat',
-                element: <Sellings />,
-            },
-        ],
+                element: <Sellings />
+            }
+        ]
     },
     {
         path: '/hamkorlar/agentlar',
-        element: <Packman />,
+        element: <Packman />
     },
     {
         path: '/hamkorlar/mijozlar',
-        element: <ClientsPage />,
+        element: <ClientsPage />
     },
     {
         path: '/hamkorlar/sotuvchilar',
-        element: <Sellers />,
+        element: <Sellers />
     },
     {
         path: '/valyuta',
-        element: <Exchangerate />,
+        element: <Exchangerate />
     },
     {
         path: '/xarajatlar',
-        element: <Expense />,
+        element: <Expense />
     },
     {
         path: '/kassa',
-        element: <Reports />,
+        element: <Reports />
     },
     {
         path: '/kassa/:id',
-        element: <ReportPage />,
+        element: <ReportPage />
     },
     {
         path: '/dukonlar/*',
@@ -147,14 +149,18 @@ const directorRoutes = [
         subRoutes: [
             {
                 path: ':tablename/:_id',
-                element: <Shops />,
+                element: <Shops />
             },
             {
                 path: 'filiallar',
-                element: <Shops />,
-            },
-        ],
+                element: <Shops />
+            }
+        ]
     },
+    {
+        path: '/shaxsiy/parol',
+        element: <EditProfile />
+    }
 ]
 const sellerRoutes = [
     {
@@ -163,11 +169,11 @@ const sellerRoutes = [
         subRoutes: [
             {
                 path: '/',
-                element: <RegisterSelling />,
+                element: <RegisterSelling />
             },
             {
                 path: 'saqlanganlar',
-                element: <SavedSellings />,
+                element: <SavedSellings />
             },
             {
                 path: 'ruyxat',
@@ -187,20 +193,20 @@ const adminRoutes = [
             <h1 className={'text-center text-black-700 p-[1rem]'}>
                 Bunday sahifa hozircha mavjud emas
             </h1>
-        ),
+        )
     },
     {
         path: '/dukonlar/*',
-        element: (
-            <h1 className={'text-center text-black-700 p-[1rem]'}>
-                Bunday sahifa hozircha mavjud emas
-            </h1>
-        ),
+        element: <AdminProduct />
     },
     {
         path: '/maxsulotlar',
-        element: <Barcode />,
+        element: <Barcode />
     },
+    {
+        path: '/shaxsiy/parol',
+        element: <EditProfile />
+    }
 ]
 
 const chooseRoute = (type) => {
@@ -215,8 +221,8 @@ const chooseRoute = (type) => {
             return [
                 {
                     path: '/',
-                    element: <h1>Sahifa mavjud emas</h1>,
-                },
+                    element: <h1>Sahifa mavjud emas</h1>
+                }
             ]
     }
 }

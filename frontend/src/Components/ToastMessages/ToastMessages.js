@@ -82,7 +82,13 @@ export const successDeleteBarcodeMessage = () =>
     toast.success('Shtrix kod muvaffaqiyatli o\'chirildi!')
 export const successRegisterAllBarcodesMessage = () =>
     toast.success('Shtrix kodlarlar muvaffaqiyatli yaratildi!')
+
+export const successUploadImage = () => toast.success('Rasm muvaffaqiyatli yuklandi!')
+export const successEditProfile = () => toast.success('Yangi ma\'lumot muvoffaqiyatli saqlandi!')
+export const successAddDirectory = () => toast.success('Direktor muvaffaqiyatli yaratildi!')
+
 // Warning Messages
+export const warningRepeatPasswordDoesntMatch = () => toast.warn('Takroriy parol no\'to\'g\'ri kiritilgan!')
 export const warningEmptyInput = () =>
     toast.warn('Ma\'lumotlar to\'liq kiritilmagan!')
 export const warningCurrencyRate = () =>

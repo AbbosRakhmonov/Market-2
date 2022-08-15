@@ -63,7 +63,7 @@ function LineChart({arr, label}) {
         'Noyabr',
         'Dekabr'
     ]
-    const labels = months.slice(0, new Date().getMonth())
+    const labels = months.slice(0, new Date().getMonth() + 1)
 
     const data = {
         labels,

@@ -7,42 +7,46 @@ import Complate from './ModalBodys/Complate.js'
 import RegisterIncomingModal from './ModalBodys/RegisterIncomingModal'
 import Check from './ModalBodys/Check.js'
 import AllChecks from './ModalBodys/AllChecks.js'
-import {SavedSalesCheck} from '../SaleCheck/SavedSalesCheck'
+import StepperPage from './ModalBodys/StepperPage.js'
+import AdminMarkets from './ModalBodys/AdminMarkets.js'
+import {SavedSalesCheck} from '../SaleCheck/SavedSalesCheck.js'
 
-function UniversalModal({
-    isOpen,
-    toggleModal,
-    body,
-    approveFunction,
-    closeModal,
-    excelData,
-    headers,
-    setCreatedData,
-    createdData,
-    headerText,
-    title,
-    product,
-    changeProduct,
-    currency,
-    printedSelling,
-    printedInventories,
-    payment,
-}) {
+function UniversalModal(
+    {
+        isOpen,
+        toggleModal,
+        body,
+        approveFunction,
+        closeModal,
+        excelData,
+        headers,
+        setCreatedData,
+        createdData,
+        headerText,
+        title,
+        product,
+        changeProduct,
+        currency,
+        printedSelling,
+        printedInventories,
+        payment,
+        addMarket
+    }) {
     const customStyles = {
         content: {
             width: '90%',
             height: '85%',
             padding: '1.25rem',
-            transform: 'auto',
-        },
+            transform: 'auto'
+        }
     }
     const modalFull = {
         content: {
             width: '100%',
             height: '100%',
             padding: '1rem',
-            transform: 'auto',
-        },
+            transform: 'auto'
+        }
     }
     const switchBody = () => {
         switch (body) {
@@ -101,6 +105,10 @@ function UniversalModal({
                 return <Check payment={payment} isPayment={true} />
             case 'allChecks':
                 return <AllChecks product={printedSelling} />
+            case 'addMarket':
+                return <StepperPage addMarket={addMarket} />
+            case 'filterBranch':
+                return <AdminMarkets product={product} approveFunction={approveFunction} toggleModal={toggleModal} />
             case 'savedsalescheck':
                 return <SavedSalesCheck product={printedSelling} />
             // case 'checkInventory':
@@ -113,11 +121,11 @@ function UniversalModal({
         <Modal
             isOpen={isOpen}
             style={
-                body === 'checkSell' || body === 'allChecks'
+                body === 'checkSell' || body === 'allChecks' || body === 'addMarket' || body === 'filterBranch'
                     ? {...modalFull}
                     : body === 'approve' || body === 'complete'
-                    ? {}
-                    : {...customStyles}
+                        ? {}
+                        : {...customStyles}
             }
             onRequestClose={closeModal || toggleModal}
             closeTimeoutMS={100}
