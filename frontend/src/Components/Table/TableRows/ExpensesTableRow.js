@@ -17,6 +17,8 @@ export const ExpensesTableRow = ({
                 return 'Plastik'
             case 'transfer':
                 return "O'tkazma"
+            default:
+                return ''
         }
     }
 

@@ -9,4 +9,9 @@ router.post('/chart/getincoming', auth, (req, res) => {
 router.post('/chart/getselling', auth, (req, res) => {
   require('./charts').getSellingData(req, res);
 });
+
+router.post('/chart/getmonthsales', auth, (req, res) => {
+  require('./charts').getSalesDataByMonth(req, res);
+});
+
 module.exports = router;
