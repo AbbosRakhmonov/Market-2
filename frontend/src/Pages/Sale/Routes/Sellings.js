@@ -7,38 +7,46 @@ import {useDispatch, useSelector} from 'react-redux'
 import Spinner from '../../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../../Components/NotFind/NotFind.js'
 import {motion} from 'framer-motion'
-import {clearSearchedSellings, getSellings, getSellingsByFilter} from '../Slices/sellingsSlice.js'
+import {
+    clearSearchedSellings,
+    getSellings,
+    getSellingsByFilter,
+} from '../Slices/sellingsSlice.js'
 import {regexForTypeNumber} from '../../../Components/RegularExpressions/RegularExpressions.js'
 import UniversalModal from '../../../Components/Modal/UniversalModal.js'
 
 const Sellings = () => {
     const headers = [
         {
-            title: '№'
+            title: '№',
+        },
+        {
+            title: 'Sana',
+            filter: 'createdAt',
         },
         {
             title: 'ID',
-            filter: 'id'
+            filter: 'id',
         },
         {
-            title: 'Mijoz'
+            title: 'Mijoz',
         },
         {
-            title: 'Jami'
+            title: 'Jami',
         },
         {
-            title: 'Chegirma'
+            title: 'Chegirma',
         },
         {
-            title: 'Qarz'
+            title: 'Qarz',
         },
         {
-            title: 'Izoh'
+            title: 'Izoh',
         },
         {
             title: '',
-            styles: 'w-[7rem]'
-        }
+            styles: 'w-[7rem]',
+        },
     ]
     const dispatch = useDispatch()
     const {currencyType} = useSelector((state) => state.currency)
@@ -47,7 +55,7 @@ const Sellings = () => {
         searchedSellings,
         getSellingsLoading,
         total,
-        totalSearched
+        totalSearched,
     } = useSelector((state) => state.sellings)
     const [data, setData] = useState(sellings)
     const [filteredDataTotal, setFilteredDataTotal] = useState(total)
@@ -56,7 +64,7 @@ const Sellings = () => {
     const [currentPage, setCurrentPage] = useState(0)
     const [search, setSearch] = useState({
         id: '',
-        client: ''
+        client: '',
     })
     const [startDate, setStartDate] = useState(
         new Date(
@@ -81,7 +89,7 @@ const Sellings = () => {
         const valForSearch = val.replace(/\s+/g, ' ').trim()
         regexForTypeNumber.test(val) && setSearch({...search, id: val})
         ;(searchedData.length > 0 || totalSearched > 0) &&
-        dispatch(clearSearchedSellings())
+            dispatch(clearSearchedSellings())
         if (valForSearch === '') {
             setData(sellings)
             setFilteredDataTotal(total)
@@ -98,7 +106,7 @@ const Sellings = () => {
         const valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
         setSearch({...search, client: val})
         ;(searchedData.length > 0 || totalSearched > 0) &&
-        dispatch(clearSearchedSellings())
+            dispatch(clearSearchedSellings())
         if (valForSearch === '') {
             setData(sellings)
             setFilteredDataTotal(total)
@@ -123,7 +131,7 @@ const Sellings = () => {
                 countPage: showByTotal,
                 startDate: startDate.toISOString(),
                 endDate: endDate.toISOString(),
-                search: search
+                search: search,
             }
             dispatch(getSellingsByFilter(body))
         }
@@ -143,7 +151,7 @@ const Sellings = () => {
         'Chegirma UZS',
         'Chegirma USD',
         'Qarz UZS',
-        'Qarz USD'
+        'Qarz USD',
     ]
 
     const handleClickPrint = (selling) => {
@@ -169,8 +177,8 @@ const Sellings = () => {
             endDate: endDate.toISOString(),
             search: {
                 id: '',
-                client: ''
-            }
+                client: '',
+            },
         }
         dispatch(getSellings(body))
     }, [currentPage, showByTotal, startDate, endDate, dispatch])
@@ -182,7 +190,7 @@ const Sellings = () => {
             exit='collapsed'
             variants={{
                 open: {opacity: 1, height: 'auto'},
-                collapsed: {opacity: 0, height: 0}
+                collapsed: {opacity: 0, height: 0},
             }}
             transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
         >
@@ -230,7 +238,7 @@ const Sellings = () => {
                 {getSellingsLoading ? (
                     <Spinner />
                 ) : data.length === 0 && searchedData.length === 0 ? (
-                    <NotFind text={'Ro\'yxat mavjud emas...'} />
+                    <NotFind text={"Ro'yxat mavjud emas..."} />
                 ) : (
                     <Table
                         data={data}

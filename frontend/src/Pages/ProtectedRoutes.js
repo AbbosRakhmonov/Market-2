@@ -114,10 +114,6 @@ const directorRoutes = [
         ],
     },
     {
-        path: '/qarzdorlar',
-        element: <PayDebts />,
-    },
-    {
         path: '/hamkorlar/agentlar',
         element: <Packman />,
     },
@@ -178,6 +174,10 @@ const sellerRoutes = [
                 element: <Sellings />,
             },
         ],
+    },
+    {
+        path: '/qarzdorlar',
+        element: <PayDebts />,
     },
 ]
 const adminRoutes = [

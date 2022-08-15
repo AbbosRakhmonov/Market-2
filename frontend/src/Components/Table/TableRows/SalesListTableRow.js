@@ -4,12 +4,12 @@ import {uniqueId} from 'lodash'
 import {useNavigate} from 'react-router-dom'
 
 export const SalesListTableRow = ({
-                                      data,
-                                      currentPage,
-                                      countPage,
-                                      currency,
-                                      Print
-                                  }) => {
+    data,
+    currentPage,
+    countPage,
+    currency,
+    Print,
+}) => {
     const result = (prev, usd, uzs) => {
         return currency === 'USD' ? prev + usd : prev + uzs
     }
@@ -24,7 +24,7 @@ export const SalesListTableRow = ({
     const linkToSale = (saleconnector, returnProducts) => {
         navigate('/sotuv/sotish', {
             replace: true,
-            state: {saleconnector, returnProducts}
+            state: {saleconnector, returnProducts},
         })
     }
     return (
@@ -33,6 +33,9 @@ export const SalesListTableRow = ({
                 <tr className='tr' key={uniqueId('sales')}>
                     <td className='text-left td'>
                         {currentPage * countPage + 1 + index}
+                    </td>
+                    <td className='text-right td'>
+                        {new Date(saleconnector.createdAt).toLocaleDateString()}
                     </td>
                     <td className='text-left td'>{saleconnector.id}</td>
                     <td className='text-left td'>

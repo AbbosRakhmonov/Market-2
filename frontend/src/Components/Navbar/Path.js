@@ -103,13 +103,6 @@ const navListForDirector = [
     },
     {
         id: 4,
-        label: 'Qarzdorlar',
-        path: 'qarzdorlar',
-        icon: <IoListOutline size={'1.5rem'} />,
-        submenu: false,
-    },
-    {
-        id: 5,
         label: 'Hamkorlar',
         path: 'hamkorlar',
         icon: <IoPeople size={'1.5rem'} />,
@@ -138,7 +131,7 @@ const navListForDirector = [
         ],
     },
     {
-        id: 6,
+        id: 5,
         label: "Do'konlar",
         icon: <IoBusiness size={'1.5rem'} />,
         path: 'dukonlar',
@@ -153,21 +146,21 @@ const navListForDirector = [
         ],
     },
     {
-        id: 7,
+        id: 6,
         label: 'Xarajatlar',
         icon: <FaHandHoldingUsd size={'1.5rem'} />,
         path: 'xarajatlar',
         submenu: false,
     },
     {
-        id: 8,
+        id: 7,
         label: 'Kassa',
         icon: <FaCashRegister size={'1.5rem'} />,
         path: 'kassa',
         submenu: false,
     },
     {
-        id: 9,
+        id: 8,
         label: 'Valyuta kursi',
         icon: <IoCash size={'1.5rem'} />,
         path: 'valyuta',
@@ -180,6 +173,13 @@ export const navListForSeller = [
         label: 'Sotuv',
         path: '/',
         icon: <IoWallet size={'1.5rem'} />,
+        submenu: false,
+    },
+    {
+        id: 2,
+        label: 'Qarzdorlar',
+        path: 'qarzdorlar',
+        icon: <IoListOutline size={'1.5rem'} />,
         submenu: false,
     },
 ]
