@@ -2,18 +2,19 @@ import Input from '../Inputs/Input'
 import SelectInput from '../SelectInput/SelectInput'
 
 function FieldContainer({
-                            maxWidth,
-                            value,
-                            onChange,
-                            label,
-                            placeholder,
-                            type,
-                            select,
-                            disabled,
-                            options,
-                            border,
-                            onKeyUp
-                        }) {
+    star,
+    maxWidth,
+    value,
+    onChange,
+    label,
+    placeholder,
+    type,
+    select,
+    disabled,
+    options,
+    border,
+    onKeyUp,
+}) {
     return (
         <div
             className={
@@ -37,6 +38,7 @@ function FieldContainer({
                 />
             ) : (
                 <Input
+                    star={star}
                     type={type || 'text'}
                     value={value}
                     onChange={onChange}
