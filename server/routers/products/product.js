@@ -20,6 +20,8 @@ const {
   validateExchangerate,
 } = require("../../models/Exchangerate/Exchangerate");
 
+const filter = require('lodash').filter
+
 //Product registerall
 module.exports.registerAll = async (req, res) => {
   try {
@@ -197,14 +199,12 @@ module.exports.registerAll = async (req, res) => {
       })
       .populate("unit", "name");
 
-    let filter = allproducts.filter((product) => {
-      return product.productdata !== null && product.category !== null;
-    });
+    let filtered = filter(allproducts,(product) =>  product.productdata !== null && product.category !== null);
 
-    const count = filter.length;
-    filter = filter.splice(currentPage * countPage, countPage);
+    const count = filtered.length;
+    filtered = filtered.splice(currentPage * countPage, countPage);
     res.status(201).json({
-      products: filter,
+      products: filtered,
       count,
     });
   } catch (error) {
@@ -368,14 +368,14 @@ module.exports.register = async (req, res) => {
       })
       .populate("unit", "name");
 
-    let filter = products.filter(
+    let filtered = filter(products,
       (product) => product.productdata !== null && product.category !== null
     );
 
-    const count = filter.length;
-    filter = filter.splice(currentPage * countPage, countPage);
+    const count = filtered.length;
+    filtered = filtered.splice(currentPage * countPage, countPage);
     res.status(201).json({
-      products: filter,
+      products: filtered,
       count,
     });
   } catch (error) {
@@ -530,14 +530,12 @@ module.exports.update = async (req, res) => {
       })
       .populate("unit", "name");
 
-    let filter = products.filter((product) => {
-      return product.productdata !== null && product.category !== null;
-    });
+    let filtered = filter(products,(product) =>  product.productdata !== null && product.category !== null);
 
-    const count = filter.length;
-    filter = filter.splice(currentPage * countPage, countPage);
+    const count = filtered.length;
+    filtered = filtered.splice(currentPage * countPage, countPage);
     res.status(201).json({
-      products: filter,
+      products: filtered,
       count,
     });
   } catch (error) {
@@ -641,14 +639,12 @@ module.exports.delete = async (req, res) => {
       })
       .populate("unit", "name");
 
-    let filter = products.filter((product) => {
-      return product.productdata !== null;
-    });
+    let filtered = filter(products,(product) =>  product.productdata !== null);
 
-    const count = filter.length;
-    filter = filter.splice(currentPage * countPage, countPage);
+    const count = filtered.length;
+    filtered = filtered.splice(currentPage * countPage, countPage);
     res.status(201).json({
-      products: filter,
+      products: filtered,
       count,
     });
   } catch (error) {
@@ -728,15 +724,11 @@ module.exports.getProducts = async (req, res) => {
       })
       .populate("unit", "name");
 
-    let filter = products.filter((product) => {
-      return product.productdata !== null && product.category !== null;
-    });
-
+    let filtered = filter(products, (product)=> product.productdata !==null && product.caregory !== null)
     const count = filter.length;
-    filter = filter.splice(currentPage * countPage, countPage);
-
+    filtered = filtered.splice(currentPage * countPage, countPage);
     res.status(201).json({
-      products: filter,
+      products: filtered,
       count,
     });
   } catch (error) {
@@ -832,9 +824,7 @@ module.exports.getProductExcel = async (req, res) => {
         match: { code: category },
       });
 
-    const products = allproducts.filter((product) => {
-      return product.productdata !== null && product.category !== null;
-    });
+    const products = filter(allproducts,(product) =>  product.productdata !== null && product.category !== null);
     res.status(201).json(products);
   } catch (error) {
     res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
@@ -869,9 +859,7 @@ module.exports.getAllIncoming = async (req, res) => {
       })
       .populate("unit", "name");
 
-    const products = allproducts.filter((product) => {
-      return product.productdata !== null;
-    });
+    const products = filter(allproducts, (product) =>product.productdata !== null);
 
     res.send(products);
   } catch (error) {
@@ -1058,15 +1046,13 @@ module.exports.getProductsInventory = async (req, res) => {
       })
       .populate("unit", "name");
 
-    let filter = products.filter((product) => {
-      return product.productdata !== null;
-    });
+    let filtered = filter(products,(product) =>  product.productdata !== null);
 
-    const count = filter.length;
+    const count = filtered.length;
 
-    filter = filter.splice(currentPage * countPage, countPage);
+    filtered = filtered.splice(currentPage * countPage, countPage);
     res.status(201).json({
-      products: filter,
+      products: filtered,
       count,
     });
   } catch (error) {
