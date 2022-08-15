@@ -6,7 +6,6 @@ import {useDispatch, useSelector} from 'react-redux'
 import {clearErrorReports, getReports} from '../Reports/reportsSlice.js'
 import {universalToast} from '../../Components/ToastMessages/ToastMessages.js'
 import {getCurrency} from '../Currency/currencySlice.js'
-
 function MainPage() {
     const {reports, clearErrorrReports, errorReports} = useSelector(
         (state) => state.reports
@@ -98,6 +97,7 @@ function MainPage() {
             </div>
         </section>
     )
-}
+                    }
 
 export default MainPage
+

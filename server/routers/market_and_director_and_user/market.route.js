@@ -27,7 +27,7 @@ module.exports.register = async (req, res) => {
       director,
       mfo,
     } = req.body;
-
+    
     const market = await Market.find({ name });
 
     if (market.length > 0) {
