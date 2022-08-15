@@ -2,15 +2,21 @@ import React, {useCallback, useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import FieldContainer from '../../Components/FieldContainer/FieldContainer'
 import Button from '../../Components/Buttons/BtnAddRemove'
-import {clearSuccessRegister, deleteExpense, getExpense, registerExpense} from './expenseSlice'
+import {
+    clearSuccessRegister,
+    deleteExpense,
+    getExpense,
+    registerExpense,
+} from './expenseSlice'
 import SearchForm from '../../Components/SearchForm/SearchForm'
 import Pagination from '../../Components/Pagination/Pagination'
 import Table from '../../Components/Table/Table'
+import {universalToast} from '../../Components/ToastMessages/ToastMessages'
 
 const Expense = () => {
     const dispatch = useDispatch()
     const {
-        market: {_id}
+        market: {_id},
     } = useSelector((state) => state.login)
     const {currencyType, currency} = useSelector((state) => state.currency)
     const {expenses, count, successRegister} = useSelector(
@@ -32,28 +38,29 @@ const Expense = () => {
 
     const [expense, setExpense] = useState({
         sum: 0,
+        sumuzs: 0,
         type: '',
         comment: '',
-        market: _id
+        market: _id,
     })
     const [expenseType, setExpenseType] = useState({
         label: 'Turi',
-        value: ''
+        value: '',
     })
 
     const types = [
         {
             label: 'Naqt',
-            value: 'cash'
+            value: 'cash',
         },
         {
             label: 'Plastik',
-            value: 'card'
+            value: 'card',
         },
         {
-            label: 'O\'tkazma',
-            value: 'transfer'
-        }
+            label: "O'tkazma",
+            value: 'transfer',
+        },
     ]
 
     const handleChangeInput = (e, key) => {
@@ -61,7 +68,7 @@ const Expense = () => {
         if (key === 'comment') {
             setExpense({
                 ...expense,
-                comment: e.target.value
+                comment: e.target.value,
             })
         } else {
             setExpense({
@@ -73,7 +80,7 @@ const Expense = () => {
                 sumuzs:
                     currencyType === 'UZS'
                         ? target
-                        : Math.round(target * currency * 1000) / 1000
+                        : Math.round(target * currency * 1000) / 1000,
             })
         }
     }
@@ -81,42 +88,58 @@ const Expense = () => {
     const handleChangeSelect = (e) => {
         setExpenseType({
             label: e.label,
-            value: e.value
+            value: e.value,
         })
         setExpense({
             ...expense,
-            type: e.value
+            type: e.value,
         })
+    }
+
+    const checkExpense = () => {
+        if (expense.sum < 0.01) {
+            return universalToast('Xarajat narxini kiritin', 'error')
+        }
+        if (!expense.comment) {
+            return universalToast('Xarajat izohini kiriting', 'error')
+        }
+        if (!expense.type) {
+            return universalToast('Xarajat turini kiriting', 'error')
+        }
+        return false
     }
 
     const createExpense = () => {
         let body = {
             currentPage,
             countPage,
-            expense
+            expense,
         }
-        dispatch(registerExpense(body))
+        if (!checkExpense(expense)) {
+            dispatch(registerExpense(body))
+        }
     }
 
     const removeExpense = (expense) => {
         let body = {
             currentPage,
             countPage,
-            _id: expense._id
+            _id: expense._id,
         }
         dispatch(deleteExpense(body))
     }
 
     const clearForm = useCallback(() => {
         setExpense({
-            sum: '',
+            sum: 0,
+            sumuzs: 0,
             type: '',
             comment: '',
-            market: _id
+            market: _id,
         })
         setExpenseType({
             label: 'Turi',
-            value: ''
+            value: '',
         })
     }, [_id])
 
@@ -125,7 +148,7 @@ const Expense = () => {
             currentPage,
             countPage,
             startDate,
-            endDate
+            endDate,
         }
         dispatch(getExpense(body))
     }, [dispatch, currentPage, countPage, startDate, endDate])
@@ -140,26 +163,26 @@ const Expense = () => {
     const headers = [
         {
             title: '№',
-            styles: 'w-[7%]'
+            styles: 'w-[7%]',
         },
         {
             title: 'Sana',
-            styles: 'w-[10%]'
+            styles: 'w-[10%]',
         },
         {
             title: 'Summa',
-            styles: 'w-[20%]'
+            styles: 'w-[20%]',
         },
         {
-            title: 'Izoh'
+            title: 'Izoh',
         },
         {
-            title: 'Turi'
+            title: 'Turi',
         },
         {
             title: '',
-            styles: 'w-[5%]'
-        }
+            styles: 'w-[5%]',
+        },
     ]
 
     return (

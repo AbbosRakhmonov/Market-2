@@ -98,6 +98,18 @@ export const getBackProducts = createAsyncThunk(
     }
 )
 
+export const getExpensesReport = createAsyncThunk(
+    'reports/getExpenses',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post('/reports/expensesreport', body)
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
 const reportSlice = createSlice({
     name: 'cash',
     initialState: {
@@ -105,7 +117,7 @@ const reportSlice = createSlice({
         loading: false,
         errorReports: null,
         datas: [],
-        count: 0
+        count: 0,
     },
     reducers: {
         clearErrorReports: (state) => {
@@ -114,7 +126,7 @@ const reportSlice = createSlice({
         clearDatas: (state) => {
             state.datas = []
             state.count = 0
-        }
+        },
     },
     extraReducers: {
         [getReports.pending]: (state) => {
@@ -209,8 +221,20 @@ const reportSlice = createSlice({
             state.loading = false
             state.datas = data
             state.count = count
-        }
-    }
+        },
+        [getExpensesReport.pending]: (state) => {
+            state.loading = true
+        },
+        [getExpensesReport.rejected]: (state, {payload}) => {
+            state.loading = false
+            universalToast(`${payload}`, 'error')
+        },
+        [getExpensesReport.fulfilled]: (state, {payload: {data, count}}) => {
+            state.loading = true
+            state.datas = data
+            state.count = count
+        },
+    },
 })
 
 export const {clearErrorReports, clearDatas} = reportSlice.actions
