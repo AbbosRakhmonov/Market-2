@@ -590,7 +590,7 @@ const ReportPage = () => {
                             ? ['total']
                             : ['total', 'id', 'clientName']
                     }
-                    filterByTotal={setCountPage}
+                    filterByTotal={(e) => setCountPage(e.value)}
                     filterById={searchId}
                     filterByClientName={searchClientName}
                     filterByIdWhenPressEnter={onKeySearch}
