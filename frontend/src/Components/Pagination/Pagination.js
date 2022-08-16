@@ -9,7 +9,6 @@ const Pagination = ({countPage, totalDatas, setCurrentPage, currentPage}) => {
         pageNumbers.push(i)
     }
 
-
     const pageHandle = (data) => {
         setCurrentPage(data.selected)
     }

@@ -37,11 +37,11 @@ export const ExpensesTableRow = ({
                         <span>{currency}</span>
                     </td>
                     <td className='text-left td'>{expense.comment}</td>
-                    <td className='text-left py-[6px] td'>
+                    <td className='text-left py-[0.625rem] td'>
                         {typeofexpense(expense.type)}
                     </td>
                     {!reports && (
-                        <td className='border-r-0 py-[6px] td'>
+                        <td className='border-r-0 py-[0.625rem] td'>
                             <div className='flex items-center justify-center'>
                                 <TableBtn
                                     type={'delete'}
