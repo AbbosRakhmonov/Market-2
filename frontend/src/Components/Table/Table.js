@@ -207,6 +207,7 @@ function Table({
                         currency={currency}
                         Edit={Edit}
                         Delete={Delete}
+                        Print={Print}
                     />
                 )
             case 'saleslist':
