@@ -107,8 +107,8 @@ module.exports.getSalesDataByMonth = async (req, res) => {
 
       sales.push(salespieces);
       salesSum.push({
-        usd,
-        uzs,
+        usd: Math.round(usd * 1000) / 1000,
+        uzs: Math.round(uzs * 1) / 1,
       });
       count += 1;
     }

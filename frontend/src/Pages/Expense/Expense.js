@@ -65,23 +65,23 @@ const Expense = () => {
     ]
 
     const handleChangeInput = (e, key) => {
-        let target = Number(e.target.value)
+        let target = e.target.value
         if (key === 'comment') {
             setExpense({
                 ...expense,
-                comment: e.target.value,
+                comment: target,
             })
         }
-        if (regexForTypeNumber.test(e.target.value)) {
+        if (key === 'sum') {
             setExpense({
                 ...expense,
                 sum:
                     currencyType === 'USD'
-                        ? target
+                        ? Number(target)
                         : Math.round((target / currency) * 1000) / 1000,
                 sumuzs:
                     currencyType === 'UZS'
-                        ? target
+                        ? Number(target)
                         : Math.round(target * currency * 1000) / 1000,
             })
         }
@@ -152,6 +152,12 @@ const Expense = () => {
         })
     }, [_id])
 
+    const onKeyCreate = (e) => {
+        if (e.key === 'Enter') {
+            createExpense()
+        }
+    }
+
     useEffect(() => {
         let body = {
             currentPage,
@@ -205,8 +211,9 @@ const Expense = () => {
                     label={'Narxi'}
                     placeholder={'misol: 100'}
                     maxWidth={'w-[21.75rem]'}
-                    type={'text'}
+                    type={'number'}
                     border={true}
+                    onKeyUp={onKeyCreate}
                 />
                 <FieldContainer
                     value={expense.comment}
@@ -216,6 +223,7 @@ const Expense = () => {
                     maxWidth={'w-[21.75rem]'}
                     type={'text'}
                     border={true}
+                    onKeyUp={onKeyCreate}
                 />
                 <FieldContainer
                     value={expenseType}
@@ -225,6 +233,7 @@ const Expense = () => {
                     select={true}
                     options={types}
                     maxWidth={'w-[21rem]'}
+                    onKeyUp={onKeyCreate}
                 />
             </div>
             <div className='mainPadding flex justify-end'>
@@ -250,7 +259,7 @@ const Expense = () => {
                     filterBy={['total', 'startDate', 'endDate']}
                     setStartDate={setStartDate}
                     setEndDate={setEndDate}
-                    filterByTotal={setCountPage}
+                    filterByTotal={(e) => setCountPage(e.value)}
                     startDate={new Date(startDate)}
                     endDate={new Date(endDate)}
                 />
