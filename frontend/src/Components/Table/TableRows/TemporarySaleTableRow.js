@@ -3,7 +3,7 @@ import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
 import {useNavigate} from 'react-router-dom'
 
-export const TemporarySaleTableRow = ({data, Delete, currency}) => {
+export const TemporarySaleTableRow = ({data, Delete, currency, Print}) => {
     const navigate = useNavigate()
     const linkToSale = (temporary) => {
         navigate('/sotuv/sotish', {state: {temporary: {...temporary}}})
@@ -36,6 +36,13 @@ export const TemporarySaleTableRow = ({data, Delete, currency}) => {
                     </td>
                     <td className='td py-[6px] border-r-0'>
                         <div className='flex items-center justify-center gap-[0.625rem]'>
+                            <TableBtn
+                                type={'print'}
+                                bgcolor={'bg-primary-800'}
+                                onClick={() =>
+                                    Print({_id, temporary, createdAt})
+                                }
+                            />
                             <TableBtn
                                 type={'edit'}
                                 bgcolor={'bg-warning-500'}
