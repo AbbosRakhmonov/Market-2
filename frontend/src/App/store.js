@@ -17,7 +17,7 @@ import sellingsReducer from '../Pages/Sale/Slices/sellingsSlice.js'
 import sellersReducer from './../Pages/Seller/sellerSlice'
 import barcodeReducer from './../Pages/Barcode/barcodeSlice.js'
 import expenseReducer from '../Pages/Expense/expenseSlice'
-import stepperReducer from '../Pages/StepperPage/stepperSlice'
+import AdminProductsReducer from '../Pages/AdminProducts/adminproductsSlice.js'
 export default configureStore({
     devTools: process.env.NODE_ENV === 'development',
     reducer: {
@@ -39,6 +39,6 @@ export default configureStore({
         sellers: sellersReducer,
         barcode: barcodeReducer,
         expense: expenseReducer,
-        steppers:stepperReducer
+        adminmarkets: AdminProductsReducer
     }
 })

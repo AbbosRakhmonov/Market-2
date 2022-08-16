@@ -11,16 +11,21 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
     (config) => {
-        const {market} = Store.getState().login
+        const {market, user} = Store.getState().login
         const userData = JSON.parse(localStorage.getItem('userData'))
         if (userData) {
             const {token} = userData
             config.headers['Authorization'] = `Bearer ${token}`
         }
-        if (market) {
+        if (market && config.headers['Content-Type'] !== 'multipart/form-data') {
             config.data = {
                 ...config.data,
                 market: market._id
+            }
+        } else if (user?.type === 'Admin' && config.headers['Content-Type'] !== 'multipart/form-data') {
+            config.data = {
+                ...config.data,
+                administrator: user._id
             }
         }
         return config

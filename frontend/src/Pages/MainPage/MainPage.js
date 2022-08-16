@@ -1,45 +1,33 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect} from 'react'
 import LineChart from '../../Components/LineChart/LineChart.js'
 import PieChart from '../../Components/PieChart/PieChart.js'
 import DailyCircle from '../../Components/DailyCircle/DailyCircle.js'
 import {useDispatch, useSelector} from 'react-redux'
-import {clearErrorReports, getReports} from '../Reports/reportsSlice.js'
-import {universalToast} from '../../Components/ToastMessages/ToastMessages.js'
+import {getMonthlyReport, getReports} from '../Reports/reportsSlice.js'
 import {getCurrency} from '../Currency/currencySlice.js'
+
 function MainPage() {
-    const {reports, clearErrorrReports, errorReports} = useSelector(
+    const dispatch = useDispatch()
+    const {reports, monthlyReport} = useSelector(
         (state) => state.reports
     )
-    const dispatch = useDispatch()
-    const [startDate, setStartDate] = useState(
-        new Date(
-            new Date().getFullYear(),
-            new Date().getMonth(),
-            new Date().getDate()
-        )
-    )
-    const [endDate, setEndDate] = useState(new Date())
     const {currencyType} = useSelector((state) => state.currency)
-    useEffect(() => {
-        dispatch(getCurrency())
-    }, [dispatch])
+    const filterMonthlyReport = () => {
+        return monthlyReport ? (currencyType === 'USD' ? monthlyReport.salesSum.map(item => item.usd) : monthlyReport.salesSum.map(item => item.uzs)) : []
+    }
     useEffect(() => {
         const body = {
             startDate: new Date(
-                new Date(startDate).getFullYear(),
-                new Date(startDate).getMonth(),
-                new Date(startDate).getDate()
+                new Date().getFullYear(),
+                new Date().getMonth(),
+                new Date().getDate()
             ).toISOString(),
-            endDate: endDate.toISOString()
+            endDate: new Date().toISOString()
         }
         dispatch(getReports(body))
-    }, [dispatch, startDate, endDate])
-    useEffect(() => {
-        if (errorReports) {
-            universalToast(errorReports, 'error')
-            dispatch(clearErrorReports())
-        }
-    }, [dispatch, clearErrorrReports, errorReports])
+        dispatch(getCurrency())
+        dispatch(getMonthlyReport())
+    }, [dispatch])
     return (
         <section
             className={
@@ -55,8 +43,8 @@ function MainPage() {
                     nth={1}
                     text={
                         currencyType === 'UZS'
-                            ? reports?.sale?.saleuzs?.toLocaleString()
-                            : reports?.sale?.sale?.toLocaleString()
+                            ? reports?.sale?.saleuzs?.toLocaleString("ru-Ru")
+                            : reports?.sale?.sale?.toLocaleString("ru-Ru")
                     }
                     label={'Sotuv summasi'}
                 />
@@ -64,40 +52,44 @@ function MainPage() {
                     nth={2}
                     text={
                         currencyType === 'UZS'
-                            ? reports?.income?.incomeuzs?.toLocaleString()
-                            : reports?.income?.income?.toLocaleString()
+                            ? reports?.income?.incomeuzs?.toLocaleString("ru-Ru")
+                            : reports?.income?.income?.toLocaleString("ru-Ru")
                     }
                     label={'Sof foyda'}
                 />
-                <DailyCircle nth={3} text={0} label={'Xarajatlar'} />
+                <DailyCircle nth={3} text={currencyType === 'UZS'
+                    ? reports?.expenses?.expensesuzs?.toLocaleString("ru-Ru")
+                    : reports?.expenses?.expenses?.toLocaleString("ru-Ru")} label={'Xarajatlar'} />
             </div>
             <div className={'h-[25rem]'}>
                 <LineChart
                     label={'Oylik sotuvlar soni'}
-                    arr={[100, 95, 80, 90, 110]}
+                    arr={monthlyReport?.sales}
                 />
             </div>
             <div className={'flex gap-[5%] h-[25rem]'}>
                 <div className={'w-[65%]'}>
                     <LineChart
                         label={'Oylik sotuvlar summasi'}
-                        arr={[100, 95, 80, 90, 110]}
+                        arr={filterMonthlyReport()}
                     />
                 </div>
                 <div className={'w-[30%]'}>
                     <PieChart
                         arr={[
                             currencyType === 'UZS'
-                                ? reports?.income?.incomeuzs?.toLocaleString()
-                                : reports?.income?.income?.toLocaleString(),
-                            120
+                                ? monthlyReport?.monthExpense?.uzs
+                                : monthlyReport?.monthExpense?.usd,
+                            currencyType === 'UZS'
+                                ? monthlyReport?.monthProfit?.uzs
+                                : monthlyReport?.monthProfit?.usd
                         ]}
                     />
                 </div>
             </div>
         </section>
     )
-                    }
+}
 
 export default MainPage
 

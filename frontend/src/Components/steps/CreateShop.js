@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import FieldContainer from '../../Components/FieldContainer/FieldContainer'
-import BtnCreateShop from '../../Components/Buttons/BtnCreateShop'
+import React, {useState} from 'react'
+import FieldContainer from '../FieldContainer/FieldContainer.js'
+import BtnCreateShop from '../Buttons/BtnCreateShop.js'
 import {motion} from 'framer-motion'
-import {warningEmptyInput} from "./../../Components/ToastMessages/ToastMessages"
-import { checkEmptyString } from '../../App/globalFunctions.js'
+import {warningEmptyInput} from '../ToastMessages/ToastMessages.js'
+import {checkEmptyString} from '../../App/globalFunctions.js'
 
 function CreateShop({handleClickNext}) {
-    
     const [shopName, setShopName] = useState('')
     const [organizationName, setOrganizationName] = useState('')
     const [addressName, setAddressName] = useState('')
@@ -18,32 +17,31 @@ function CreateShop({handleClickNext}) {
     const [phoneNumber2, setPhoneNumber2] = useState('')
     const [phoneNumber3, setPhoneNumber3] = useState('')
 
-    const allData = {
-        shopName : shopName, 
-        organizationName: organizationName,
-        addressName : addressName,
-        targetName : targetName,
-        bankName : bankName,
-        innName : innName,
-        accauntNumber : accauntNumber,
-        phoneNumber1 : phoneNumber1,
-        phoneNumber2 : phoneNumber2,
-        phoneNumber3 : phoneNumber3
+    const handleClick = () => {
+        if (checkEmptyString([shopName, phoneNumber1, organizationName])) {
+            warningEmptyInput()
+        } else {
+            const allData = {
+                name: shopName,
+                organitionName: organizationName,
+                phone1: phoneNumber1,
+                phone2: phoneNumber2,
+                phone3: phoneNumber3,
+                bank: bankName,
+                bankNumber: accauntNumber,
+                inn: Number(innName),
+                address: addressName,
+                orientation: targetName
+            }
+            handleClickNext(allData)
+        }
     }
-
-   const filter = checkEmptyString([shopName,phoneNumber1])
-   
-    const errorFunction = (e) => {
-      e && e.preventDefault()
-      warningEmptyInput()
-    }
-
     return (
         <motion.section
-            transition={{duration:0.5}}
-            initial={{opacity:0, x:0}}
-            animate={{opacity:1, x:0}}
-            exit={{opacity:0, x:20}}
+            transition={{duration: 0.5}}
+            initial={{opacity: 0, x: 0}}
+            animate={{opacity: 1, x: 0}}
+            exit={{opacity: 0, x: 20}}
         >
             <div className='flex gap-[2.5rem] mb-[2.5rem]'>
                 <FieldContainer
@@ -71,7 +69,7 @@ function CreateShop({handleClickNext}) {
                     value={addressName}
                     onChange={(e) => setAddressName(e.target.value)}
                 />
-                 <FieldContainer
+                <FieldContainer
                     label={`Mo'ljal`}
                     maxWidth={'grow'}
                     placeholder={'misol: Guliston paliklinika yonida'}
@@ -87,7 +85,6 @@ function CreateShop({handleClickNext}) {
                     placeholder={'misol: ALO24'}
                     type='text'
                     value={bankName}
-                    star={true}
                     onChange={(e) => setBankName(e.target.value)}
                 />
                 <FieldContainer
@@ -136,12 +133,12 @@ function CreateShop({handleClickNext}) {
             </div>
             <div className='flex justify-center mt-[2.5rem]'>
                 <div>
-                    <BtnCreateShop 
-                        text="Keyingi qadam" 
-                        type={"shop"}    
-                        onClick={(e) => !filter ?  handleClickNext(e,allData) : errorFunction(e)}
-                    />  
-                </div> 
+                    <BtnCreateShop
+                        text='Keyingi qadam'
+                        type={'shop'}
+                        onClick={handleClick}
+                    />
+                </div>
             </div>
         </motion.section>
     )

@@ -28,34 +28,35 @@ import {AdminProductTableRow} from './TableRows/AdminProductTableRow'
 import {ReturnProductsTableRow} from './TableRows/ReturnProductsTableRow.js'
 
 function Table({
-    page,
-    data,
-    headers,
-    currentPage,
-    countPage,
-    Sort,
-    Edit,
-    Delete,
-    currency,
-    changeHandler,
-    addProductCheque,
-    productCheque,
-    Print,
-    inputValue,
-    inputDisabled,
-    Excel,
-    editedIncoming,
-    saveEditIncoming,
-    sortItem,
-    ReturnPayment,
-    Save,
-    onKeyUp,
-    currencyType,
-    type,
-    Pay,
-    isDisabled,
-    reports,
-}) {
+                   page,
+                   data,
+                   headers,
+                   currentPage,
+                   countPage,
+                   Sort,
+                   Edit,
+                   Delete,
+                   currency,
+                   changeHandler,
+                   addProductCheque,
+                   productCheque,
+                   Print,
+                   inputValue,
+                   inputDisabled,
+                   Excel,
+                   editedIncoming,
+                   saveEditIncoming,
+                   sortItem,
+                   ReturnPayment,
+                   Save,
+                   onKeyUp,
+                   currencyType,
+                   type,
+                   Pay,
+                   isDisabled,
+                   reports,
+                   onClickTableRow
+               }) {
     const checkRows = () => {
         switch (page) {
             case 'product':
@@ -73,13 +74,12 @@ function Table({
             case 'adminProduct':
                 return (
                     <AdminProductTableRow
-                        currencyType={currencyType}
                         data={data}
                         currentPage={currentPage}
                         countPage={countPage}
                         Edit={Edit}
                         Delete={Delete}
-                        currency={currency}
+                        onClickTableRow={onClickTableRow}
                     />
                 )
             case 'category':

@@ -1,15 +1,19 @@
 import React, {useEffect, useState} from 'react'
 import {uniqueId} from 'lodash'
 import SelectInput from '../../SelectInput/SelectInput'
+import {useSelector} from 'react-redux'
+import SmallLoader from '../../Spinner/SmallLoader.js'
 
-function UploadExcel({
-                         excelData,
-                         headers,
-                         createdData,
-                         setCreatedData,
-                         approveFunction,
-                         toggleModal
-                     }) {
+function UploadExcel(
+    {
+        excelData,
+        headers,
+        createdData,
+        setCreatedData,
+        approveFunction,
+        toggleModal
+    }) {
+    const {loading} = useSelector(state => state.products)
     const [cols, setCols] = useState([])
     const [values, setValues] = useState([])
     const clone = (obj) => Object.assign({}, obj)
@@ -40,6 +44,11 @@ function UploadExcel({
     }, [excelData])
     return (
         <div className={'modalContent mt-10'}>
+            {loading &&
+                <div
+                    className='fixed backdrop-blur-[2px] z-[50] top-0 left-0 right-0 bottom-0 bg-white-700 flex flex-col items-center justify-center w-full'>
+                    <SmallLoader />
+                </div>}
             <table className='overflow-x-auto w-full'>
                 <thead className='rounded-t-lg'>
                 <tr className='bg-primary-900 rounded-t-lg'>

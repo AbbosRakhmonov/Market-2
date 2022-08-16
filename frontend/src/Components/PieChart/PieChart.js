@@ -20,9 +20,9 @@ function PieChart({arr = [0]}) {
                     font: {
                         size: 20
                     },
-                    color: arr.length > 1 ? '#ffffff' : '#1c1c1c',
+                    color: arr.length > 1 && arr.some(item => item !== 0) ? '#ffffff' : '#1c1c1c',
                     formatter: (value) => {
-                        return value + ' ' + currencyType
+                        return value?.toLocaleString('ru-Ru') + ' ' + currencyType
                     },
                     clamp: true
                 },
@@ -40,7 +40,7 @@ function PieChart({arr = [0]}) {
     }
 
     return (
-        <Pie data={data} options={options} updateMode={'resize'} />
+        <Pie data={data} options={options} />
     )
 }
 

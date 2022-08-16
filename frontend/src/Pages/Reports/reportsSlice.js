@@ -110,6 +110,18 @@ export const getExpensesReport = createAsyncThunk(
     }
 )
 
+export const getMonthlyReport = createAsyncThunk(
+    'reports/getMonthlyReport',
+    async (body = {}, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post('/chart/getmonthsales', body)
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
 const reportSlice = createSlice({
     name: 'cash',
     initialState: {
@@ -118,6 +130,9 @@ const reportSlice = createSlice({
         errorReports: null,
         datas: [],
         count: 0,
+        monthlyReport: null,
+        monthlyReportLoading: true,
+        monthlyReportError: null
     },
     reducers: {
         clearErrorReports: (state) => {
@@ -126,7 +141,7 @@ const reportSlice = createSlice({
         clearDatas: (state) => {
             state.datas = []
             state.count = 0
-        },
+        }
     },
     extraReducers: {
         [getReports.pending]: (state) => {
@@ -139,6 +154,7 @@ const reportSlice = createSlice({
         [getReports.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorReports = payload
+            universalToast(payload, 'error')
         },
         [getSales.pending]: (state) => {
             state.loading = true
@@ -209,7 +225,6 @@ const reportSlice = createSlice({
         [payDebt.fulfilled]: (state) => {
             state.loading = false
         },
-
         [getBackProducts.pending]: (state) => {
             state.loading = true
         },
@@ -234,7 +249,18 @@ const reportSlice = createSlice({
             state.datas = data
             state.count = count
         },
-    },
+        [getMonthlyReport.pending]: (state) => {
+            state.monthlyReportLoading = true
+        },
+        [getMonthlyReport.rejected]: (state, {payload}) => {
+            state.monthlyReportLoading = false
+            universalToast(payload, 'error')
+        },
+        [getMonthlyReport.fulfilled]: (state, {payload}) => {
+            state.monthlyReportLoading = false
+            state.monthlyReport = payload
+        }
+    }
 })
 
 export const {clearErrorReports, clearDatas} = reportSlice.actions

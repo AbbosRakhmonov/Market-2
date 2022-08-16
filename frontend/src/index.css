@@ -620,7 +620,7 @@
     }
 
     .admin-header-paragraf {
-        @apply mt-[-12px] font-semibold text-[.875rem] leading-[1rem] text-[#fff];
+        @apply mt-[-12px] font-bold text-[.875rem] leading-[1rem] text-[#fff];
     }
 
     .admin-users {

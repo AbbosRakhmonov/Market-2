@@ -38,7 +38,13 @@ function SearchForm(
         clickConfirmBtn,
         barcode,
         filterByBarcode,
-        filterByBarcodeWhenPressEnter
+        filterByBarcodeWhenPressEnter,
+        searchByDirectorName,
+        filterByDirectorName,
+        filterByDirectorNameWhenPressEnter,
+        searchByMarketName,
+        filterByMarketName,
+        filterByMarketNameWhenPressEnter
     }) {
     const chooseComponent = (key) => {
         switch (key) {
@@ -220,12 +226,32 @@ function SearchForm(
                         />
                     }
                 />)
+            case 'directorName':
+                return (
+                    <SearchInput
+                        key={'director_name_1'}
+                        value={searchByDirectorName}
+                        onChange={filterByDirectorName}
+                        placeholder={'Direktor ismi yoki familyasi...'}
+                        someClasses={'grow'}
+                        onKeyUp={filterByDirectorNameWhenPressEnter}
+                    />)
+            case 'marketName':
+                return (
+                    <SearchInput
+                        key={'market_name_1'}
+                        value={searchByMarketName}
+                        onChange={filterByMarketName}
+                        placeholder={'Do\'kon nomi...'}
+                        someClasses={'grow'}
+                        onKeyUp={filterByMarketNameWhenPressEnter}
+                    />)
             default:
                 return null
         }
     }
     return (
-        <div className='flex items-end gap-[1.875rem] mainPadding'>
+        <div className='flex items-end gap-[1.875rem] mainPadding grow'>
             {filterBy.map((key) => chooseComponent(key))}
         </div>
     )

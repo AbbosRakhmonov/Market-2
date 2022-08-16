@@ -1,12 +1,10 @@
-const { Administration } = require('../../models/Administration/Administrator');
 const { Market } = require('../../models/MarketAndBranch/Market');
 const { User } = require('../../models/Users');
 
 module.exports.getmarkets = async (req, res) => {
   try {
     const { administrator, currentPage, countPage, search } = req.body;
-
-    const administration = await Administration.findById(administrator);
+    const administration = await User.findById(administrator);
 
     if (!administration) {
       return res.status(400).json({
@@ -34,7 +32,7 @@ module.exports.getmarkets = async (req, res) => {
 
     const count = filter.length;
     filter = filter.splice(currentPage * countPage, countPage);
-    res.status(201).json({
+    res.status(200).json({
       markets: filter,
       count,
     });
@@ -48,7 +46,7 @@ module.exports.getmarketcontrols = async (req, res) => {
     const { administrator, currentPage, countPage, search, marketId } =
       req.body;
 
-    const administration = await Administration.findById(administrator);
+    const administration = await User.findById(administrator);
 
     if (!administration) {
       return res.status(400).json({
@@ -97,7 +95,7 @@ module.exports.updatemarkets = async (req, res) => {
     const { administrator, currentPage, countPage, search, market, filial } =
       req.body;
 
-    const administration = await Administration.findById(administrator);
+    const administration = await User.findById(administrator);
 
     if (!administration) {
       return res.status(400).json({

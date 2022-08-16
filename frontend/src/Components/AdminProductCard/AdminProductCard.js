@@ -4,9 +4,13 @@ import CheckboxCard from '../CheckboxCard/CheckboxCard'
 
 const AdminProductCard = ({image, company, name, phone}) => {
     return (
-        <div className='admin-card'>
+        <div className='admin-card flex-[0_0_31.55555555%]'>
             <div className='admin-card-header'>
-                <img src={image}></img>
+                <div
+                    className={'w-[2.5rem] h-[2.5rem] mb-[0.625rem] bg-white-900 rounded-full border-[2px] border-primary-700 flex items-center justify-center p-[2px] shadow-[0_10px_10px_rgba(0,0,0,0.05)]'}>
+                    {image ? <img src={image} alt={company}
+                                  className={'rounded-full'} /> : company[0].toUpperCase()}
+                </div>
                 <div className='admin-header-paragraf'>
                     <p>{company}</p>
                 </div>
