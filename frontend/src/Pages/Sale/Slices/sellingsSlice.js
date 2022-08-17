@@ -32,9 +32,28 @@ export const getSellingsByFilter = createAsyncThunk(
     }
 )
 
+export const excelAllSellings = createAsyncThunk(
+    'sellings/excelAllSellings',
+    async (
+        body,
+        {rejectWithValue}
+    ) => {
+        try {
+            const {data} = await Api.post(
+                '/sales/saleproducts/getconnectorsexcel',
+                body
+            )
+            return data
+        } catch (error) {
+            rejectWithValue(error)
+        }
+    }
+)
+
 const sellingsSlice = createSlice({
     name: 'sellings',
     initialState: {
+        excelAllData: [],
         sellings: [],
         total: 0,
         totalSearched: 0,
@@ -86,6 +105,17 @@ const sellingsSlice = createSlice({
             state.getSellingsError = payload
             state.getSellingsLoading = false
             state.getSellingsError = null
+        },
+        [excelAllSellings.pending]: (state) => {
+            state.getSellingsLoading = true
+        },
+        [excelAllSellings.fulfilled]: (state, {payload : {saleconnectors}}) => {
+            state.getSellingsLoading = false
+            state.excelAllData = saleconnectors
+        },
+        [excelAllSellings.rejected]: (state, {payload}) => {
+            state.getSellingsLoading = false
+            state.getSellingsError = payload
         },
     },
 })

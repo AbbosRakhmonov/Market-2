@@ -8,7 +8,7 @@ import Pagination from '../../../Components/Pagination/Pagination'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
 import Table from '../../../Components/Table/Table'
 
-import {clearSuccesDelete, clearSuccessUpdate, deleteIncoming, getIncomings, updateIncoming} from '../incomingSlice'
+import {clearSuccesDelete, clearSuccessUpdate, deleteIncoming, getIncomings, updateIncoming,excelIncomings} from '../incomingSlice'
 
 const IncomingsList = () => {
     const dispatch = useDispatch()
@@ -16,7 +16,7 @@ const IncomingsList = () => {
     const {
         market: {_id}
     } = useSelector((state) => state.login)
-    const {incomings, incomingscount, successUpdate, successDelete} =
+    const {incomings, incomingscount, successUpdate, successDelete,allIncomingsData} =
         useSelector((state) => state.incoming)
     const {currencyType, currency} = useSelector((state) => state.currency)
 
@@ -27,6 +27,7 @@ const IncomingsList = () => {
             1
         ).toISOString()
     )
+
     const [endDay, setEndDay] = useState(
         new Date(new Date().setHours(23, 59, 59, 0)).toISOString()
     )
@@ -320,6 +321,13 @@ const IncomingsList = () => {
         }
     }, [dispatch, getIncomingsData, successDelete])
 
+    useEffect(() => {
+      const body = {
+            beginDay, 
+            endDay ,
+        }
+        dispatch(excelIncomings(body))
+    }, [dispatch])
     const headers = [
         {
             title: '№'
@@ -370,8 +378,6 @@ const IncomingsList = () => {
         'Kelish USD',
         'Jami UZS',
         'Jami USD',
-        'Sotish UZS',
-        'Sotish USD'
     ]
 
     return (
@@ -383,7 +389,7 @@ const IncomingsList = () => {
                 <ExportBtn
                     fileName={`Maxsulotlar-qabul-${new Date().toLocaleDateString()}`}
                     headers={incomingHeaders}
-                    datas={currentIncoming}
+                    datas={allIncomingsData}
                     pagesName='IncomingList'
                 />
                 <div className='flex gap-[10px]'>

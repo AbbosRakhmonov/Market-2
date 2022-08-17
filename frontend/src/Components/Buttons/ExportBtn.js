@@ -97,16 +97,14 @@ function ExportBtn({headers, fileName, datas, pagesName}) {
                 case 'IncomingList' :
                     const IncomingData = datas.map((item, index) => ({
                         nth: index + 1,
-                        supplier: item.supplier.name,
-                        code: item.product.productdata.code,
-                        name: item.product.productdata.name,
-                        count: item.pieces + ' ' + item.unit.name,
+                        supplier: item.supplier?.name,
+                        code: item.product?.productdata?.code,
+                        name: item.product?.productdata?.name,
+                        count: item.pieces + ' ' + item.unit?.name,
                         unit: item.unitpriceuzs,
                         unitusd: item.unitprice,
                         all: item.totalpriceuzs,
                         allusd: item.totalprice,
-                        sell: item.sellingpriceuzs,
-                        sellusd: item.sellingprice
                     }))
                     continueHandleClick(IncomingData)
                     break
@@ -122,8 +120,6 @@ function ExportBtn({headers, fileName, datas, pagesName}) {
                         unitusd: item.unitprice,
                         all: item.totalpriceuzs,
                         allusd: item.totalprice,
-                        sell: item.sellingpriceuzs,
-                        sellusd: item.sellingprice
                     }))
                     continueHandleClick(IncomingSupplierData)
                     break
