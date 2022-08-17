@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import {changeCurrencyType, clearError, getCurrency, getCurrencyType} from './Currency/currencySlice'
 import {universalToast, warningCurrencyRate} from '../Components/ToastMessages/ToastMessages.js'
 import protectedRoutes from './ProtectedRoutes.js'
+import Loader from './../Components/Loader/Loader';
 
 const PageRoutes = () => {
     const dispatch = useDispatch()
@@ -39,7 +40,7 @@ const PageRoutes = () => {
             {user.type !== 'Admin' && <Currency currency={currencyType} onClick={changeCurrency} />}
             <Navbar />
             <div className={'grow h-screen overflow-y-auto'}>
-                <Suspense fallback={'loading'}>
+                <Suspense fallback={<Loader />}>
                     <Routes>
                         {protectedRoutes(user.type)}
                         <Route path={'*'} element={<Navigate to={'/'} replace={true} />} />
