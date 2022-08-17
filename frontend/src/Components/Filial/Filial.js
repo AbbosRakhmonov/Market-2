@@ -24,6 +24,27 @@ const Filial = ({
     const [salesOpen, setSalesOpen] = useState(true)
     const [paymentOpen, setPaymentOpen] = useState(true)
 
+    const handleReportOpen = (e) => {
+        e && e.preventDefault()
+        setReprotOpen(!reportOpen)
+        setSalesOpen(true)
+        setPaymentOpen(true)
+    }
+
+    const handleSalesOpen = (e) => {
+        e && e.preventDefault()
+        setSalesOpen(!salesOpen)
+         setReprotOpen(true)
+         setPaymentOpen(true)
+    }
+
+    const handlePaymentOpen = (e) => {
+        e && e.preventDefault()
+        setPaymentOpen(!paymentOpen)
+         setReprotOpen(true)
+         setSalesOpen(true)
+    }
+
     return (
         <section>
             <div
@@ -65,7 +86,7 @@ const Filial = ({
                                     ? `/dukonlar/report/${id}`
                                     : '/dukonlar'
                             }`}
-                            onClick={() => setReprotOpen(!reportOpen)}
+                            onClick={() => handleReportOpen()}
                         >
                             <FilialButtons
                                 type={'product'}
@@ -79,7 +100,7 @@ const Filial = ({
                                     ? `/dukonlar/sales/${id}`
                                     : '/dukonlar'
                             } `}
-                            onClick={() => setSalesOpen(!salesOpen)}
+                            onClick={() => handleSalesOpen()}
                         >
                             <FilialButtons
                                 type={'selling'}
@@ -92,7 +113,7 @@ const Filial = ({
                                     ? `/dukonlar/payment/${id}`
                                     : '/dukonlar'
                             }`}
-                            onClick={() => setPaymentOpen(!paymentOpen)}
+                            onClick={() => handlePaymentOpen()}
                         >
                             <FilialButtons
                                 type={'payments'}
