@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
+import {universalToast} from '../../Components/ToastMessages/ToastMessages'
 import Api from '../../Config/Api'
-
 
 export const getSellers = createAsyncThunk(
     'sellers/getSellers',
@@ -38,6 +38,17 @@ export const updateSeller = createAsyncThunk(
     }
 )
 
+export const getSellerReports = createAsyncThunk(
+    'sellers/getsellersreport',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post('/sales/sellers/getreports', body)
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
 
 const sellerSlice = createSlice({
     name: 'sellers',
@@ -47,7 +58,9 @@ const sellerSlice = createSlice({
         loading: false,
         errorSellings: null,
         successAddSelling: false,
-        successUpdateSelling: false
+        successUpdateSelling: false,
+        sellersreport: [],
+        count: 0,
     },
     reducers: {
         clearErrorSellers: (state) => {
@@ -58,7 +71,7 @@ const sellerSlice = createSlice({
         },
         clearSuccessUpdateSeller: (state) => {
             state.successUpdateSelling = false
-        }
+        },
     },
     extraReducers: {
         [getSellers.pending]: (state) => {
@@ -95,14 +108,29 @@ const sellerSlice = createSlice({
         [updateSeller.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorSellings = payload
-        }
-    }
+        },
+        [getSellerReports.pending]: (state) => {
+            state.loading = true
+        },
+        [getSellerReports.rejected]: (state, {payload}) => {
+            state.loading = false
+            universalToast(`${payload}`, 'error')
+        },
+        [getSellerReports.fulfilled]: (
+            state,
+            {payload: {saleconnectors, count}}
+        ) => {
+            state.loading = false
+            state.sellersreport = saleconnectors
+            state.count = count
+        },
+    },
 })
 
 export const {
     clearErrorSellers,
     clearSuccessAddSeller,
     clearSuccessDeleteSeller,
-    clearSuccessUpdateSeller
+    clearSuccessUpdateSeller,
 } = sellerSlice.actions
 export default sellerSlice.reducer

@@ -11,7 +11,7 @@ import {
     successAddSellerMessage,
     successUpdateSellerMessage,
     universalToast,
-    warningEmptyInput
+    warningEmptyInput,
 } from './../../Components/ToastMessages/ToastMessages'
 import {
     addSeller,
@@ -19,24 +19,23 @@ import {
     clearSuccessAddSeller,
     clearSuccessUpdateSeller,
     getSellers,
-    updateSeller
+    updateSeller,
 } from './sellerSlice'
+import {useNavigate} from 'react-router-dom'
 
 function Sellers() {
-
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const {
         errorSellings,
         sellers,
         loading,
         successAddSelling,
-        successUpdateSelling
+        successUpdateSelling,
     } = useSelector((state) => state.sellers)
 
-    const {
-        user
-    } = useSelector((state) => state.login)
+    const {user} = useSelector((state) => state.login)
 
     const headers = [
         {title: '№', styles: 'w-[8%] text-left'},
@@ -44,7 +43,7 @@ function Sellers() {
         {title: 'Familiyasi', styles: 'w-[21%]'},
         {title: 'Telefon raqami', styles: 'w-[21%]'},
         {title: 'Login', styles: 'w-[21%]'},
-        {title: '', styles: 'w-[8%]'}
+        {title: '', styles: 'w-[8%]'},
     ]
 
     const [stickyForm, setStickForm] = useState(false)
@@ -57,15 +56,25 @@ function Sellers() {
     const [sellerAgainPassword, setSellerAgainPassword] = useState('')
     const [currentSeller, setCurrentSeller] = useState('')
 
-    // handle Changed inputs 
+    // handle Changed inputs
     const addNewSeller = (e) => {
         e && e.preventDefault()
-        const filter = checkEmptyString([sellerName, sellerSurname, sellerNumber, sellerLogin, sellerPassword, sellerAgainPassword])
+        const filter = checkEmptyString([
+            sellerName,
+            sellerSurname,
+            sellerNumber,
+            sellerLogin,
+            sellerPassword,
+            sellerAgainPassword,
+        ])
         if (filter) {
             warningEmptyInput()
         }
         if (sellerPassword !== sellerAgainPassword) {
-            universalToast('Sotuvchining paroli bilan tasdiqlash paroli mos kelmadi', 'warning')
+            universalToast(
+                'Sotuvchining paroli bilan tasdiqlash paroli mos kelmadi',
+                'warning'
+            )
         }
         if (!filter && sellerPassword === sellerAgainPassword) {
             const body = {
@@ -76,22 +85,28 @@ function Sellers() {
                 phone: sellerNumber,
                 password: sellerPassword,
                 type: 'Seller',
-                user: user._id
+                user: user._id,
             }
             dispatch(addSeller(body))
         }
-
-
     }
 
     const handleEdit = (e) => {
         e && e.preventDefault()
-        const filter = checkEmptyString([sellerName, sellerSurname, sellerNumber, sellerLogin])
+        const filter = checkEmptyString([
+            sellerName,
+            sellerSurname,
+            sellerNumber,
+            sellerLogin,
+        ])
         if (filter) {
             warningEmptyInput()
         }
         if (sellerPassword !== sellerAgainPassword) {
-            universalToast('Sotuvchining paroli bilan tasdiqlash paroli mos kelmadi', 'warning')
+            universalToast(
+                'Sotuvchining paroli bilan tasdiqlash paroli mos kelmadi',
+                'warning'
+            )
         }
         if (!filter && sellerPassword === sellerAgainPassword) {
             const body = {
@@ -102,7 +117,7 @@ function Sellers() {
                 fathername: user.lastname,
                 phone: sellerNumber,
                 type: 'Seller',
-                user: user._id
+                user: user._id,
             }
             dispatch(updateSeller(body))
         }
@@ -128,6 +143,10 @@ function Sellers() {
         setSellerLogin(seller.login)
     }
 
+    const linkToSellerReports = (id) => {
+        navigate(`/hamkorlar/sotuvchilar/${id}`)
+    }
+
     useEffect(() => {
         if (errorSellings) {
             universalToast(errorSellings, 'error')
@@ -145,12 +164,7 @@ function Sellers() {
             clearForm()
             setCurrentSeller('')
         }
-    }, [
-        dispatch,
-        errorSellings,
-        successAddSelling,
-        successUpdateSelling
-    ])
+    }, [dispatch, errorSellings, successAddSelling, successUpdateSelling])
 
     useEffect(() => {
         dispatch(getSellers())
@@ -160,7 +174,6 @@ function Sellers() {
         setData(sellers)
     }, [sellers])
 
-
     return (
         <motion.section
             key='content'
@@ -169,11 +182,13 @@ function Sellers() {
             exit='collapsed'
             variants={{
                 open: {opacity: 1, height: 'auto'},
-                collapsed: {opacity: 0, height: 0}
+                collapsed: {opacity: 0, height: 0},
             }}
-            transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}>
+            transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
+        >
             <form
-                className={`unitFormStyle  ${stickyForm && 'stickyForm'
+                className={`unitFormStyle  ${
+                    stickyForm && 'stickyForm'
                 } flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200`}
             >
                 <div className='exchangerate-style w-full'>
@@ -199,8 +214,7 @@ function Sellers() {
                         maxWidth={'w-[21.75rem]'}
                         type={'text'}
                         border={true}
-                        onKeyPress={() => {
-                        }}
+                        onKeyPress={() => {}}
                     />
                     <FieldContainer
                         value={sellerNumber}
@@ -211,12 +225,9 @@ function Sellers() {
                         placeholder={'+998 99 123 45 67'}
                         type={'number'}
                         border={false}
-                        onKeyPress={() => {
-                        }}
+                        onKeyPress={() => {}}
                     />
-
                 </div>
-
 
                 <div className='exchangerate-style mt-[1.25rem]'>
                     <FieldContainer
@@ -229,8 +240,7 @@ function Sellers() {
                         maxWidth={'12.75rem'}
                         type={'text'}
                         border={true}
-                        onKeyPress={() => {
-                        }}
+                        onKeyPress={() => {}}
                     />
                     <FieldContainer
                         value={sellerPassword}
@@ -242,8 +252,7 @@ function Sellers() {
                         maxWidth={'12.75rem'}
                         type={'text'}
                         border={true}
-                        onKeyPress={() => {
-                        }}
+                        onKeyPress={() => {}}
                     />
                     <FieldContainer
                         value={sellerAgainPassword}
@@ -255,12 +264,9 @@ function Sellers() {
                         maxWidth={'12.75rem'}
                         type={'text'}
                         border={false}
-                        onKeyPress={() => {
-                        }}
+                        onKeyPress={() => {}}
                     />
-                    <div
-                        className={'flex gap-[1.25rem] grow w-[19.5rem]'}
-                    >
+                    <div className={'flex gap-[1.25rem] grow w-[19.5rem]'}>
                         <Button
                             onClick={stickyForm ? handleEdit : addNewSeller}
                             add={!stickyForm}
@@ -292,10 +298,10 @@ function Sellers() {
                         countPage={10}
                         headers={headers}
                         Edit={handleEditSeller}
+                        linkToSellerReports={linkToSellerReports}
                     />
                 )}
             </div>
-
         </motion.section>
     )
 }

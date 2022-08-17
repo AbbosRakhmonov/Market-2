@@ -9,6 +9,7 @@ export const SalesListTableRow = ({
     countPage,
     currency,
     Print,
+    sellers,
 }) => {
     const result = (prev, usd, uzs) => {
         return currency === 'USD' ? prev + usd : prev + uzs
@@ -78,7 +79,7 @@ export const SalesListTableRow = ({
                         ).toLocaleString('ru-Ru')}{' '}
                         {currency}
                     </td>
-                    <td className='text-left td'>
+                    <td className='text-left td py-[1rem] '>
                         {saleconnector.dailyconnectors.map(
                             (connector, index) => {
                                 if (connector.comment) {
@@ -90,25 +91,29 @@ export const SalesListTableRow = ({
                             }
                         )}
                     </td>
-                    <td className='py-[0.375rem] td border-r-0'>
-                        <div className='flex items-center justify-center gap-[0.625rem]'>
-                            <TableBtn
-                                type={'print'}
-                                bgcolor={'bg-primary-800'}
-                                onClick={() => Print(saleconnector)}
-                            />
-                            <TableBtn
-                                type={'add'}
-                                bgcolor={'bg-success-500'}
-                                onClick={() => linkToSale(saleconnector)}
-                            />
-                            <TableBtn
-                                type={'return'}
-                                bgcolor={'bg-error-500'}
-                                onClick={() => linkToSale(saleconnector, true)}
-                            />
-                        </div>
-                    </td>
+                    {!sellers && (
+                        <td className='py-[0.375rem] td border-r-0'>
+                            <div className='flex items-center justify-center gap-[0.625rem]'>
+                                <TableBtn
+                                    type={'print'}
+                                    bgcolor={'bg-primary-800'}
+                                    onClick={() => Print(saleconnector)}
+                                />
+                                <TableBtn
+                                    type={'add'}
+                                    bgcolor={'bg-success-500'}
+                                    onClick={() => linkToSale(saleconnector)}
+                                />
+                                <TableBtn
+                                    type={'return'}
+                                    bgcolor={'bg-error-500'}
+                                    onClick={() =>
+                                        linkToSale(saleconnector, true)
+                                    }
+                                />
+                            </div>
+                        </td>
+                    )}
                 </tr>
             ))}
         </>

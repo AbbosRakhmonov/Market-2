@@ -1,119 +1,125 @@
-const { Router } = require("express");
+const { Router } = require('express');
 const router = Router();
+const auth = require('../../middleware/auth.middleware');
 
 // Packman CRUD
-router.post("/packman/register", (req, res) => {
-  require("./packman").register(req, res);
+router.post('/packman/register', auth, auth, (req, res) => {
+  require('./packman').register(req, res);
 });
 
-router.post("/packman/getall", (req, res) => {
-  require("./packman").getAll(req, res);
+router.post('/packman/getall', auth, (req, res) => {
+  require('./packman').getAll(req, res);
 });
 
-router.put("/packman/update", (req, res) => {
-  require("./packman").updatePackman(req, res);
+router.put('/packman/update', (req, res) => {
+  require('./packman').updatePackman(req, res);
 });
 
-router.delete("/packman/delete", (req, res) => {
-  require("./packman").deletePackman(req, res);
+router.delete('/packman/delete', auth, (req, res) => {
+  require('./packman').deletePackman(req, res);
 });
 
-router.post("/packman/getpackmans", (req, res) => {
-  require("./packman").getPackmans(req, res);
+router.post('/packman/getpackmans', auth, (req, res) => {
+  require('./packman').getPackmans(req, res);
 });
 
 // Client CRUD
-router.post("/client/register", (req, res) => {
-  require("./client").register(req, res);
+router.post('/client/register', auth, (req, res) => {
+  require('./client').register(req, res);
 });
 
-router.post("/client/getall", (req, res) => {
-  require("./client").getAll(req, res);
+router.post('/client/getall', auth, (req, res) => {
+  require('./client').getAll(req, res);
 });
 
-router.put("/client/update", (req, res) => {
-  require("./client").updateClient(req, res);
+router.put('/client/update', auth, (req, res) => {
+  require('./client').updateClient(req, res);
 });
 
-router.delete("/client/delete", (req, res) => {
-  require("./client").deleteClient(req, res);
+router.delete('/client/delete', auth, (req, res) => {
+  require('./client').deleteClient(req, res);
 });
 
-router.post("/client/getclients", (req, res) => {
-  require("./client").getClients(req, res);
+router.post('/client/getclients', auth, (req, res) => {
+  require('./client').getClients(req, res);
 });
 
 // CRUD sale product
-router.post("/saleproducts/register", (req, res) => {
-  require("./saleproduct").register(req, res);
+router.post('/saleproducts/register', auth, (req, res) => {
+  require('./saleproduct').register(req, res);
 });
 
-router.post("/saleproducts/returnproducts", (req, res) => {
-  require("./saleproduct").registeredit(req, res);
+router.post('/saleproducts/returnproducts', auth, (req, res) => {
+  require('./saleproduct').registeredit(req, res);
 });
 
-router.post("/saleproducts/addproducts", (req, res) => {
-  require("./saleproduct").addproducts(req, res);
+router.post('/saleproducts/addproducts', auth, (req, res) => {
+  require('./saleproduct').addproducts(req, res);
 });
 
-router.post("/saleproducts/checknumber", (req, res) => {
-  require("./saleproduct").check(req, res);
+router.post('/saleproducts/checknumber', auth, (req, res) => {
+  require('./saleproduct').check(req, res);
 });
 
-router.post("/saleproducts/getconnectors", (req, res) => {
-  require("./saleproduct").getsaleconnectors(req, res);
+router.post('/saleproducts/getconnectors', auth, (req, res) => {
+  require('./saleproduct').getsaleconnectors(req, res);
 });
 
-router.post("/saleproducts/getconnectorsexcel", (req, res) => {
-  require("./saleproduct").getsaleconnectorsexcel(req, res);
+router.post('/saleproducts/getconnectorsexcel', auth, (req, res) => {
+  require('./saleproduct').getsaleconnectorsexcel(req, res);
 });
 
-router.post("/saleproducts/payment", (req, res) => {
-  require("./saleproduct").payment(req, res);
+router.post('/saleproducts/payment', auth, (req, res) => {
+  require('./saleproduct').payment(req, res);
 });
 
 // Discounts
-router.post("/discounts/get", (req, res) => {
-  require("./discount").get(req, res);
+router.post('/discounts/get', auth, (req, res) => {
+  require('./discount').get(req, res);
 });
 
-router.post("/discounts/getexcel", (req, res) => {
-  require("./discount").getexcel(req, res);
+router.post('/discounts/getexcel', auth, (req, res) => {
+  require('./discount').getexcel(req, res);
 });
 
 // Payments
-router.post("/payments/get", (req, res) => {
-  require("./payment").get(req, res);
+router.post('/payments/get', auth, (req, res) => {
+  require('./payment').get(req, res);
 });
 
-router.post("/payments/getexcel", (req, res) => {
-  require("./payment").getexcel(req, res);
+router.post('/payments/getexcel', auth, (req, res) => {
+  require('./payment').getexcel(req, res);
 });
 
 // Debt
-router.post("/debts/get", (req, res) => {
-  require("./debt").get(req, res);
+router.post('/debts/get', auth, (req, res) => {
+  require('./debt').get(req, res);
 });
 
-router.post("/payments/getexcel", (req, res) => {
-  require("./payment").getexcel(req, res);
+router.post('/payments/getexcel', auth, (req, res) => {
+  require('./payment').getexcel(req, res);
 });
 
 //Temporary
-router.post("/temporary/register", (req, res) => {
-  require("./temporary").register(req, res);
+router.post('/temporary/register', auth, (req, res) => {
+  require('./temporary').register(req, res);
 });
 
-router.post("/temporary/get", (req, res) => {
-  require("./temporary").getAll(req, res);
+router.post('/temporary/get', auth, (req, res) => {
+  require('./temporary').getAll(req, res);
 });
 
-router.post("/temporary/getbyid", (req, res) => {
-  require("./temporary").getbById(req, res);
+router.post('/temporary/getbyid', auth, (req, res) => {
+  require('./temporary').getbById(req, res);
 });
 
-router.post("/temporary/delete", (req, res) => {
-  require("./temporary").deleteTemporary(req, res);
+router.post('/temporary/delete', auth, (req, res) => {
+  require('./temporary').deleteTemporary(req, res);
+});
+
+// Seller Reports
+router.post('/sellers/getreports', auth, (req, res) => {
+  require('./sellersreport').getSellersReport(req, res);
 });
 
 module.exports = router;

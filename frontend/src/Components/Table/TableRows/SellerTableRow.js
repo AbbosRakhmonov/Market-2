@@ -3,11 +3,12 @@ import TableBtn from '../../Buttons/TableBtn'
 import {uniqueId} from 'lodash'
 
 export const SellerTableRow = ({
-                                   data,
-                                   currentPage,
-                                   countPage,
-                                   Edit
-                               }) => {
+    data,
+    currentPage,
+    countPage,
+    Edit,
+    linkToSellerReports,
+}) => {
     return (
         <>
             {data.map((seller, index) => (
@@ -25,6 +26,11 @@ export const SellerTableRow = ({
                                 type={'edit'}
                                 bgcolor={'bg-warning-500'}
                                 onClick={() => Edit(seller)}
+                            />
+                            <TableBtn
+                                type={'info'}
+                                bgcolor={'bg-primary-800'}
+                                onClick={() => linkToSellerReports(seller._id)}
                             />
                         </div>
                     </td>

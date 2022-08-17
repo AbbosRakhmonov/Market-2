@@ -28,35 +28,37 @@ import {AdminProductTableRow} from './TableRows/AdminProductTableRow'
 import {ReturnProductsTableRow} from './TableRows/ReturnProductsTableRow.js'
 
 function Table({
-                   page,
-                   data,
-                   headers,
-                   currentPage,
-                   countPage,
-                   Sort,
-                   Edit,
-                   Delete,
-                   currency,
-                   changeHandler,
-                   addProductCheque,
-                   productCheque,
-                   Print,
-                   inputValue,
-                   inputDisabled,
-                   Excel,
-                   editedIncoming,
-                   saveEditIncoming,
-                   sortItem,
-                   ReturnPayment,
-                   Save,
-                   onKeyUp,
-                   currencyType,
-                   type,
-                   Pay,
-                   isDisabled,
-                   reports,
-                   onClickTableRow
-               }) {
+    page,
+    data,
+    headers,
+    currentPage,
+    countPage,
+    Sort,
+    Edit,
+    Delete,
+    currency,
+    changeHandler,
+    addProductCheque,
+    productCheque,
+    Print,
+    inputValue,
+    inputDisabled,
+    Excel,
+    editedIncoming,
+    saveEditIncoming,
+    sortItem,
+    ReturnPayment,
+    Save,
+    onKeyUp,
+    currencyType,
+    type,
+    Pay,
+    isDisabled,
+    reports,
+    onClickTableRow,
+    linkToSellerReports,
+    sellers,
+}) {
     const checkRows = () => {
         switch (page) {
             case 'product':
@@ -219,6 +221,7 @@ function Table({
                         countPage={countPage}
                         Print={Print}
                         ReturnPayment={ReturnPayment}
+                        sellers={sellers}
                     />
                 )
             case 'client':
@@ -248,6 +251,7 @@ function Table({
                         currentPage={currentPage}
                         countPage={countPage}
                         Edit={Edit}
+                        linkToSellerReports={linkToSellerReports}
                     />
                 )
             case 'exchange':
