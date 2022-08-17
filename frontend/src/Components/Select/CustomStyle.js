@@ -30,6 +30,7 @@ const IndicatorsContainer = (styles) => ({
 })
 const Menu = (styles) => ({
     ...styles,
+    width:"5rem",
     overflow: 'hidden'
 })
 const Option = (styles, {isFocused, isSelected}) => ({
