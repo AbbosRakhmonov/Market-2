@@ -30,7 +30,9 @@ const IncomingSuppliers = () => {
         incomingscount,
         incomingconnectors,
         successUpdate,
-        successDelete
+        successDelete,
+        allIncomingsData,
+        excelIncomings
     } = useSelector((state) => state.incoming)
     const {currencyType, currency} = useSelector((state) => state.currency)
 
@@ -384,6 +386,14 @@ const IncomingSuppliers = () => {
         getCurrentData(incomings)
     }, [incomings])
 
+    useEffect(() => {
+        const body = {
+              beginDay, 
+              endDay ,
+          }
+          dispatch(excelIncomings(body))
+      }, [dispatch])
+
     const headers = [
         {
             title: '№'
@@ -433,8 +443,6 @@ const IncomingSuppliers = () => {
         'Kelish USD',
         'Jami UZS',
         'Jami USD',
-        'Sotish UZS',
-        'Sotish USD'
     ]
 
     return (
@@ -465,7 +473,7 @@ const IncomingSuppliers = () => {
                 <ExportBtn
                     fileName={`Maxsulotlar-qabul-qabullar-${new Date().toLocaleDateString()}`}
                     headers={incomingSupplierHeaders}
-                    datas={currentData}
+                    datas={allIncomingsData}
                     pagesName='IncomingSuppliers'
                 />
                 <span>Ro`yxat</span>

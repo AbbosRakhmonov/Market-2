@@ -11,6 +11,7 @@ import {
     clearSearchedSellings,
     getSellings,
     getSellingsByFilter,
+    excelAllSellings
 } from '../Slices/sellingsSlice.js'
 import {regexForTypeNumber} from '../../../Components/RegularExpressions/RegularExpressions.js'
 import UniversalModal from '../../../Components/Modal/UniversalModal.js'
@@ -56,6 +57,7 @@ const Sellings = () => {
         getSellingsLoading,
         total,
         totalSearched,
+        excelAllData
     } = useSelector((state) => state.sellings)
     const [data, setData] = useState(sellings)
     const [filteredDataTotal, setFilteredDataTotal] = useState(total)
@@ -182,6 +184,16 @@ const Sellings = () => {
         }
         dispatch(getSellings(body))
     }, [currentPage, showByTotal, startDate, endDate, dispatch])
+
+    useEffect(() => {
+      const body = {
+        startDate,
+        endDate,
+        search
+      }
+      dispatch(excelAllSellings(body))
+    }, [dispatch])
+
     return (
         <motion.section
             key='content'
@@ -204,7 +216,7 @@ const Sellings = () => {
             <div className='pagination mainPadding'>
                 <ExportBtn
                     headers={sellingHeaders}
-                    datas={data}
+                    datas={excelAllData}
                     fileName={`Sotuvlar-${new Date().toLocaleDateString()}`}
                     pagesName='Sellings'
                 />

@@ -132,9 +132,22 @@ export const deleteTemporary = createAsyncThunk(
     }
 )
 
+export const excelIncomings = createAsyncThunk(
+    'incoming/excelIncomings',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post("/products/incoming/getexcel", body)
+            return data
+        } catch(error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
 const incomingSlice = createSlice({
     name: 'incoming',
     initialState: {
+        allIncomingsData : [],
         suppliers: [],
         products: [],
         loading: false,
@@ -295,6 +308,17 @@ const incomingSlice = createSlice({
         [updateIncoming.rejected]: (state, {payload}) => {
             state.loading = false
             universalToast(`${payload}`, 'error')
+        },
+        [excelIncomings.pending] : (state) => {
+            state.loading = true
+        },
+        [excelIncomings.fulfilled] : (state, {payload}) => {
+            state.loading = false
+            state.allIncomingsData = payload;
+        },
+        [excelIncomings.rejected] : (state, {payload}) => {
+            state.loading = false
+            state.error = payload
         }
     }
 })

@@ -7,7 +7,11 @@ import SearchForm from '../../Components/SearchForm/SearchForm.js'
 import {useDispatch, useSelector} from 'react-redux'
 import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
-import {clearSearchedProducts, getProducts, getProductsByFilter} from '../Products/Create/productSlice.js'
+import { clearSearchedProducts,
+         getProducts,
+         getProductsByFilter,
+         getProductsAll
+       } from '../Products/Create/productSlice.js'
 import {useReactToPrint} from 'react-to-print'
 import {BarCode} from '../../Components/BarCode/BarCode.js'
 import {universalSort} from '../../App/globalFunctions.js'
@@ -52,7 +56,7 @@ const ProductReport = () => {
     ]
 
     const dispatch = useDispatch()
-    const {products, total, loading, searchedProducts, totalSearched} =
+        const {products, total, loading, searchedProducts, totalSearched,allProducts} =
         useSelector((state) => state.products)
     const {currencyType} = useSelector((state) => state.currency)
     const {
@@ -94,6 +98,7 @@ const ProductReport = () => {
             setFilteredDataTotal(filteredProducts.length)
         }
     }
+  
     const filterByName = (e) => {
         let val = e.target.value
         let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
@@ -263,6 +268,10 @@ const ProductReport = () => {
         setSearchedData(searchedProducts)
     }, [searchedProducts])
 
+    useEffect(() => {
+        dispatch(getProductsAll())
+    }, [ dispatch])
+
     return (
         <motion.section
             key='content'
@@ -277,7 +286,7 @@ const ProductReport = () => {
         >
             <div className='pagination mainPadding'>
                 <ExportBtn
-                    datas={data}
+                    datas={allProducts}
                     headers={exportProductHead}
                     fileName={'Maxsulotlar hisoboti'}
                     pagesName='ProductReport'

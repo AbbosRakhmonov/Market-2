@@ -364,7 +364,7 @@ function Barcode() {
             <div className={'flex justify-between items-center mainPadding'}>
                 <div className={'flex gap-[1.5rem]'}>
                     <ExportBtn
-                        datas={data}
+                        datas={products}
                         headers={exportHeader}
                         fileName={'Shtrix Kodlar'}
                         pagesName='barcode'
@@ -408,7 +408,7 @@ function Barcode() {
                         Edit={edit}
                         Delete={deleteProduct}
                     />)}
-            < /div>
+            </div>
             <BarcodeReader onError={handleError} onScan={handleScan} stopPropagation={true} preventDefault={true}
                            onKeyDetect={onKeyDetect} />
         </section>
