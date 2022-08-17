@@ -3,6 +3,7 @@ const {
   validateUser,
   validateUserLogin,
   validateAdministration,
+  validateSeller,
 } = require('../../models/Users');
 const bcrypt = require('bcryptjs');
 const { Market } = require('../../models/MarketAndBranch/Market');
@@ -119,8 +120,7 @@ module.exports.registerDirector = async (req, res) => {
       password,
       market,
       type,
-        administrator
-
+      administrator,
     } = req.body;
     const marke = await Market.findById(market);
 
@@ -152,7 +152,7 @@ module.exports.registerDirector = async (req, res) => {
       market,
       type,
       login,
-      administrator
+      administrator,
     });
     await newUser.save();
 
@@ -381,7 +381,7 @@ module.exports.removeUser = async (req, res) => {
 
 module.exports.createseller = async (req, res) => {
   try {
-    const { error } = validateUser(req.body);
+    const { error } = validateSeller(req.body);
     if (error) {
       return res.status(400).json({
         error: error.message,

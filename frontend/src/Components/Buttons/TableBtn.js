@@ -1,5 +1,13 @@
 import React from 'react'
-import {IoAdd, IoCreateOutline, IoPrint, IoSave, IoSwapHorizontal, IoTrashOutline} from 'react-icons/io5'
+import {
+    IoAdd,
+    IoCreateOutline,
+    IoInformation,
+    IoPrint,
+    IoSave,
+    IoSwapHorizontal,
+    IoTrashOutline,
+} from 'react-icons/io5'
 import {SiMicrosoftexcel} from 'react-icons/si'
 import {FaMoneyBill} from 'react-icons/fa'
 
@@ -22,6 +30,8 @@ const TableBtn = ({type, onClick, bgcolor, isDisabled}) => {
                 return <IoSwapHorizontal color='white' size={14} />
             case 'pay':
                 return <FaMoneyBill color='white' size={14} />
+            case 'info':
+                return <IoInformation color='white' size={14} />
             default:
                 return ''
         }
