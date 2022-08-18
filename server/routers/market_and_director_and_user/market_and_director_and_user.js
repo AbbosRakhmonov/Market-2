@@ -72,6 +72,10 @@ router.post('/user/register', auth, (req, res) => {
   require('./user.route').register(req, res);
 });
 
+router.post('/user/edit', auth, (req, res) => {
+  require('./user.route').editUser(req, res);
+});
+
 router.post('/director/register', (req, res) => {
   require('./user.route').registerDirector(req, res);
 });

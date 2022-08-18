@@ -43,6 +43,19 @@ function validateUser(user) {
   return schema.validate(user);
 }
 
+function validateEditUser(user) {
+  const schema = Joi.object({
+    _id: Joi.string().required(),
+    login: Joi.string().required(),
+    firstname: Joi.string().required(),
+    lastname: Joi.string().required(),
+    password: Joi.string().required(),
+    market: Joi.string().required(),
+  });
+
+  return schema.validate(user);
+}
+
 function validateSeller(user) {
   const schema = Joi.object({
     login: Joi.string().required(),
@@ -84,6 +97,7 @@ function validateAdministration(administration) {
   return schema.validate(administration);
 }
 
+module.exports.validateEditUser = validateEditUser;
 module.exports.validateSeller = validateSeller;
 module.exports.validateAdministration = validateAdministration;
 module.exports.validateUser = validateUser;
