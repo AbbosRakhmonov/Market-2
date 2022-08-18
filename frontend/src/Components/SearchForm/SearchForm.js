@@ -78,7 +78,7 @@ function SearchForm(
                             <FieldContainer
                                 placeholder={'misol: 1234'}
                                 type={'text'}
-                                maxWidth={'w-[6.8125rem]'}
+                                maxWidth={'flex-1'}
                                 value={searchByCode}
                                 onChange={filterByCode}
                                 onKeyUp={
@@ -147,7 +147,7 @@ function SearchForm(
                             <FieldContainer
                                 placeholder={'misol: 10'}
                                 type={'text'}
-                                maxWidth={'w-[4.8125rem]'}
+                                maxWidth={'flex-1'}
                                 value={numberOfChecks}
                                 onChange={setNumberOfChecks}
                             />
@@ -219,7 +219,7 @@ function SearchForm(
                             type={'text'}
                             value={barcode}
                             onChange={filterByBarcode}
-                            maxWidth={'w-[6rem]'}
+                            maxWidth={'flex-1'}
                             onKeyUp={
                                 filterByBarcodeWhenPressEnter
                             }

@@ -12,6 +12,7 @@ export const DropdownIcon = (props) => {
 const Container = (styles) => ({
     ...styles,
     height: '100%',
+    width: 'max-content',
     marginLeft: '0.75rem'
 })
 const DropdownIndicator = (styles, {isFocused, isDisabled}) => ({
