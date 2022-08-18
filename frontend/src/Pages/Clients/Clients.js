@@ -9,6 +9,7 @@ import NotFind from '../../Components/NotFind/NotFind.js'
 import SearchForm from '../../Components/SearchForm/SearchForm'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
 import {motion} from 'framer-motion'
+import {map} from 'lodash'
 import {
     successAddSupplierMessage,
     successDeleteSupplierMessage,
@@ -257,7 +258,7 @@ const ClientsPage = () => {
         setSearchedData(searchedClients)
     }, [searchedClients])
     useEffect(() => {
-        const options = packmans.map((packman) => {
+        const options = map(packmans,(packman) => {
             return {label: packman.name, value: packman._id}
         })
         setPackmanOptions(options)

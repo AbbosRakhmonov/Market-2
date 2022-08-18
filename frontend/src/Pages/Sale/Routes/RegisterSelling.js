@@ -35,6 +35,7 @@ import CustomerPayment from '../../../Components/Payment/CustomerPayment.js'
 import { useLocation, useNavigate } from 'react-router-dom'
 import BarcodeReader from 'react-barcode-reader'
 import { useTranslation } from 'react-i18next';
+import {map} from 'lodash'
 
 const RegisterSelling = () => {
     const { t } = useTranslation(['common'])
@@ -753,7 +754,7 @@ const RegisterSelling = () => {
         const pack = packmans.filter((pack) => pack._id === option.value)[0]
         if (pack && pack.hasOwnProperty('clients')) {
             setOptionClient(
-                pack.clients.map((client) => ({
+                map(pack.clients,(client) => ({
                     label: client.name,
                     value: client._id,
                     packman: pack,
@@ -817,7 +818,7 @@ const RegisterSelling = () => {
         })
     }
     const handleChangeProductUnitPriceTable = (id, value) => {
-        const newRelease = tableProducts.map((prevProduct) =>
+        const newRelease = map(tableProducts,(prevProduct) =>
             prevProduct.product._id === id
                 ? {
                     ...prevProduct,
@@ -849,7 +850,7 @@ const RegisterSelling = () => {
         setTableProducts(newRelease)
     }
     const handleChangeProductNumberTable = (id, value) => {
-        const newRelease = tableProducts.map((prevProduct) =>
+        const newRelease = map(tableProducts,(prevProduct) =>
             prevProduct.product._id === id
                 ? {
                     ...prevProduct,
@@ -909,7 +910,7 @@ const RegisterSelling = () => {
                 t("Diqqat! Qaytariladigan mahsulot soni sotilgan mahsulot sonidan ortiq bo'lolmaydi"),
                 'warning'
             )
-        const newRelease = returnProducts.map((prevProduct) =>
+        const newRelease = map(returnProducts,(prevProduct) =>
             prevProduct._id === id
                 ? {
                     ...prevProduct,
@@ -936,8 +937,8 @@ const RegisterSelling = () => {
             )
 
             const newRelease = discounts.map((discount) => {
-                let newDiscount = { ...discount }
-                returnProducts.map((product) => {
+                let newDiscount = {...discount}
+                map(returnProducts,(product) => {
                     if (discount._id === product.product?.discount) {
                         newDiscount = {
                             ...discount,
@@ -999,14 +1000,14 @@ const RegisterSelling = () => {
                 (product) => product.category._id === activeCategory
             )
             setFilteredProducts(
-                filteredData.map((product) => ({
+                map(filteredData,(product) => ({
                     value: product._id,
                     label: `(${product.total}) ${product.category.code}${product.productdata.code} - ${product.productdata.name}`,
                 }))
             )
         } else {
             setFilteredProducts(
-                allProducts.map((product) => ({
+                map(allProducts,(product) => ({
                     value: product._id,
                     label: `(${product.total}) ${product.category.code}${product.productdata.code} - ${product.productdata.name}`,
                 }))
@@ -1074,7 +1075,7 @@ const RegisterSelling = () => {
         if (data && data.saleconnector && data.returnProducts) {
             setClientData()
             let returned = []
-            data.saleconnector.products.map((saleProduct) => {
+            map(data.saleconnector.products,(saleProduct) => {
                 const sale = {
                     _id: saleProduct.product._id,
                     discount: saleProduct.discount && saleProduct.discount,
@@ -1082,7 +1083,7 @@ const RegisterSelling = () => {
                     totalprice: saleProduct.totalprice,
                     totalpriceuzs: saleProduct.totalpriceuzs,
                 }
-                saleProduct.saleproducts.map((product) => {
+                map(saleProduct.saleproducts,(product) => {
                     sale.pieces += product.pieces
                     sale.totalprice += product.totalprice
                     sale.totalpriceuzs += product.totalpriceuzs
@@ -1292,7 +1293,7 @@ const RegisterSelling = () => {
                                     <Spinner />
                                 </div>
                             ) : filteredCategories.length > 0 ? (
-                                filteredCategories.map((category) => (
+                                map(filteredCategories,(category) => (
                                     <CategoryCard
                                         key={category._id}
                                         id={category._id}

@@ -2,6 +2,7 @@ import React, {forwardRef, useEffect, useRef, useState} from 'react'
 import {useSelector} from 'react-redux'
 import {useReactToPrint} from 'react-to-print'
 import PrintBtn from '../Buttons/PrintBtn'
+import {uniqueId, map} from 'lodash'
 
 export const SavedSalesCheck = forwardRef((props, ref) => {
     const {product} = props
@@ -110,9 +111,9 @@ export const SavedSalesCheck = forwardRef((props, ref) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {product?.products.map((item, index) => {
+                            {map(product?.products,(item, index) => {
                                 return (
-                                    <tr key={index}>
+                                    <tr key={uniqueId('saved-table-row')}>
                                         <td className='p-1 border text-center text-[0.875rem] font-bold'>
                                             {index + 1}
                                         </td>

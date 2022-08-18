@@ -1,10 +1,10 @@
 import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
-
+import {map} from 'lodash'
 export const UnitTableRow = ({data, currentPage, countPage, Edit, Delete}) => {
     return (
         <>
-            {data.map((unit, index) => (
+            {map(data,(unit, index) => (
                 <tr key={unit._id} className='tr'>
                     <td className='td'>
                         {currentPage * countPage + 1 + index}

@@ -1,10 +1,11 @@
 import {IoCheckmark} from 'react-icons/io5'
 import {motion} from 'framer-motion'
+import {uniqueId, map} from 'lodash'
 const Stepper = ({steps, currentStep, bgActive}) => {
-    const displaySteps = steps.map((step, index) => {
+    const displaySteps = map(steps,(step, index) => {
         return (
             <div
-                key={index}
+                key={uniqueId('stepper')}
                 className={
                     index !== steps.length - 1
                         ? 'w-full flex items-center'
@@ -55,10 +56,10 @@ const Stepper = ({steps, currentStep, bgActive}) => {
                 </div>
             </div>
             <div className='flex justify-between'>
-                {steps.map((step, index) => {
+                {map(steps,(step) => {
                     return (
                         <div
-                            key={index}
+                            key={uniqueId('stepper-2')}
                             className={`font-[25rem] text-[0.875rem] ${
                                step.stepIndex !== currentStep && bgActive ? 'text-[#039855]' : step.stepIndex === currentStep ? ' text-primary-900' : " text-[#111] opacity-50"
                             }`}

@@ -18,6 +18,7 @@ import UniversalModal from '../../../Components/Modal/UniversalModal'
 import {UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
 import {useNavigate} from 'react-router-dom'
 import { useTranslation } from 'react-i18next';
+import {map} from 'lodash'
 
 const RegisterIncoming = () => {
     const {t} = useTranslation(['common'])
@@ -57,7 +58,7 @@ const RegisterIncoming = () => {
         setSupplier(...suppliers.filter((supplier) => supplier._id === e.value))
         if (incomings.length > 0) {
             setIncomings([
-                ...incomings.map((product) => {
+                map(...incomings,(product) => {
                     return {
                         ...product,
                         supplier: {
@@ -168,7 +169,7 @@ const RegisterIncoming = () => {
 
         if (id) {
             setIncomings([
-                ...incomings.map((incoming) => {
+                map(...incomings,(incoming) => {
                     if (incoming._id === id) {
                         return product
                     }
@@ -182,7 +183,7 @@ const RegisterIncoming = () => {
 
     // change datas for react-select //
     const changeSuppliersData = (data) => {
-        const suppliers = data.map((supplier) => {
+        const suppliers = map(data,(supplier) => {
             return {
                 label: supplier.name,
                 value: supplier._id
@@ -192,7 +193,7 @@ const RegisterIncoming = () => {
     }
 
     const changeProductsData = (data) => {
-        const products = data.map((product) => {
+        const products = map(data,(product) => {
             return {
                 label: product.productdata.name,
                 value: product._id
@@ -217,7 +218,7 @@ const RegisterIncoming = () => {
 
     // request functions
     const createIncoming = () => {
-        const postincoming = incomings.map((incoming) => {
+        const postincoming = map(incomings,(incoming) => {
             let obj = {...incoming}
             delete obj._id
             delete obj.procient

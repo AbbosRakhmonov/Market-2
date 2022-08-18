@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react'
-import {uniqueId} from 'lodash'
 import SelectInput from '../../SelectInput/SelectInput'
 import {useSelector} from 'react-redux'
 import SmallLoader from '../../Spinner/SmallLoader.js'
 import { useTranslation } from 'react-i18next';
+import {uniqueId, map} from 'lodash'
 
 function UploadExcel(
     {
@@ -27,7 +27,7 @@ function UploadExcel(
         values[idx] = {label: option.label, value: option.value}
         setValues([...values])
         setCols([...cols])
-        const newData = createdData.map((item) =>
+        const newData = map(createdData, (item) =>
             renameKey(item, option.value, key)
         )
         setCreatedData([...newData])
@@ -36,7 +36,7 @@ function UploadExcel(
         values.fill({}, 0, headers.length)
         setValues(values)
         setCreatedData([...excelData])
-        const newOptions = Object.keys(excelData[0]).map((obj) => ({
+        const newOptions = map(Object.keys(excelData[0]),(obj) => ({
             label: obj,
             value: obj
         }))
@@ -54,7 +54,7 @@ function UploadExcel(
             <table className='overflow-x-auto w-full'>
                 <thead className='rounded-t-lg'>
                 <tr className='bg-primary-900 rounded-t-lg'>
-                    {headers.map((header, index) => (
+                    {map(headers,(header, index) => (
                         <th
                             key={uniqueId('header')}
                             scope='col'
@@ -83,7 +83,7 @@ function UploadExcel(
                 </thead>
                 <tbody>
                 <tr className='tr'>
-                    {values.map((option, index) => (
+                    {map(values,(option, index) => (
                         <td
                             key={uniqueId('column')}
                             className='td text-center py-4'

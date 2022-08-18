@@ -1,6 +1,6 @@
 import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
-import {uniqueId} from 'lodash'
+import {uniqueId, map} from 'lodash'
 import {useNavigate} from 'react-router-dom'
 
 export const SalesListTableRow = ({
@@ -30,7 +30,7 @@ export const SalesListTableRow = ({
     }
     return (
         <>
-            {data.map((saleconnector, index) => (
+            {map(data,(saleconnector, index) => (
                 <tr className='tr' key={uniqueId('sales')}>
                     <td className='text-left td'>
                         {currentPage * countPage + 1 + index}
@@ -80,11 +80,11 @@ export const SalesListTableRow = ({
                         {currency}
                     </td>
                     <td className='text-left td py-[1rem] '>
-                        {saleconnector.dailyconnectors.map(
+                        {map(saleconnector.dailyconnectors,
                             (connector, index) => {
                                 if (connector.comment) {
                                     return (
-                                        <p key={index}>{connector.comment}</p>
+                                        <p key={uniqueId('sale-list-table')}>{connector.comment}</p>
                                     )
                                 }
                                 return ''

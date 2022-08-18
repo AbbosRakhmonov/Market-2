@@ -3,7 +3,7 @@ import CheckoutCards from '../../Components/CheckoutCard/CheckoutCards'
 import SearchForm from '../../Components/SearchForm/SearchForm.js'
 import { useDispatch, useSelector } from 'react-redux'
 import { universalToast } from '../../Components/ToastMessages/ToastMessages.js'
-import { uniqueId } from 'lodash'
+import { uniqueId,map } from 'lodash'
 import { clearErrorReports, getReports } from './reportsSlice.js'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
@@ -104,7 +104,7 @@ const Reports = () => {
             />
             <div className='checkout-card mainPadding'>
                 {reports &&
-                    card.map((i) => (
+                    map(card,(i) => (
                         <CheckoutCards
                             key={uniqueId('card')}
                             path={i.type}

@@ -4,6 +4,7 @@ import {universalToast} from '../ToastMessages/ToastMessages'
 import * as XLSX from 'xlsx'
 import { useTranslation } from 'react-i18next';
 
+import {map} from 'lodash'
 function ExportBtn({headers, fileName, datas, pagesName}) {
 
     const {t} = useTranslation(['common'])
@@ -13,7 +14,7 @@ function ExportBtn({headers, fileName, datas, pagesName}) {
         const maxLength = cols.reduce((acc, curr) => {
             return acc > curr.length ? acc : curr.length
         }, 0)
-        return cols.map(() => ({
+        return map(cols, () => ({
             wch: maxLength
         }))
     }
@@ -41,41 +42,41 @@ function ExportBtn({headers, fileName, datas, pagesName}) {
         if (datas.length > 0) {
             switch (pagesName) {
                 case 'Products' :
-                    const newData = datas.map((item, index) => ({
+                    const newData = map(datas, (item,index) => ({
                         nth: index + 1,
                         category: item.category.code,
                         code: item.productdata.code,
                         name: item.productdata.name,
                         total: item.total,
-                        unit: item.unit.name,
-                        incomingprice: item.price.incomingprice,
-                        incomingpriceuzs: item.price.incomingpriceuzs,
-                        sellingprice: item.price.sellingprice,
-                        sellingpriceuzs: item.price.sellingpriceuzs
+                        unit: item?.unit?.name,
+                        incomingprice: item?.price?.incomingprice,
+                        incomingpriceuzs: item?.price?.incomingpriceuzs,
+                        sellingprice: item?.price?.sellingprice,
+                        sellingpriceuzs: item?.price?.sellingpriceuzs
                     }))
                     continueHandleClick(newData)
                     break
 
                 case 'ProductReport' :
-                    const ReportData = datas.map((item, index) => ({
+                    const ReportData =map(datas, (item,index) => ({
                         nth: index + 1,
-                        code: item.productdata.code,
-                        name: item.productdata.name,
-                        total: item.total + item.unit.name,
-                        incomingprice: item.price.incomingprice,
-                        incomingpriceuzs: item.price.incomingpriceuzs,
-                        incomingpricealluzs: item.price.incomingpriceuzs * item.total,
-                        incomingpriceallusd: item.price.incomingprice * item.total,
-                        sellingprice: item.price.sellingprice,
-                        sellingpriceuzs: item.price.sellingpriceuzs,
-                        sellingalluzs: item.price.sellingpriceuzs * item.total,
-                        sellingallusd: item.price.sellingprice * item.total
+                        code: item?.productdata?.code,
+                        name: item?.productdata?.name,
+                        total: item.total + item?.unit?.name,
+                        incomingprice: item?.price?.incomingprice,
+                        incomingpriceuzs: item?.price?.incomingpriceuzs,
+                        incomingpricealluzs: item?.price?.incomingpriceuzs * item.total,
+                        incomingpriceallusd: item?.price?.incomingprice * item.total,
+                        sellingprice: item?.price?.sellingprice,
+                        sellingpriceuzs: item?.price?.sellingpriceuzs,
+                        sellingalluzs: item?.price?.sellingpriceuzs * item.total,
+                        sellingallusd: item?.price?.sellingprice * item.total
                     }))
                     continueHandleClick(ReportData)
                     break
 
                 case 'Sellings' :
-                    const SellingData = datas.map((item, index) => ({
+                    const SellingData = map(datas, (item,index) => ({
                         nth: index + 1,
                         id: item.id,
                         client: item?.client?.name || item?.packman?.name,
@@ -98,7 +99,7 @@ function ExportBtn({headers, fileName, datas, pagesName}) {
                     break
 
                 case 'IncomingList' :
-                    const IncomingData = datas.map((item, index) => ({
+                    const IncomingData = map(datas, (item,index) => ({
                         nth: index + 1,
                         supplier: item.supplier?.name,
                         code: item.product?.productdata?.code,
@@ -113,7 +114,7 @@ function ExportBtn({headers, fileName, datas, pagesName}) {
                     break
 
                 case 'IncomingSuppliers' :
-                    const IncomingSupplierData = datas.map((item, index) => ({
+                    const IncomingSupplierData = map(datas, (item,index) => ({
                         nth: index + 1,
                         supplier: item.supplier.name,
                         code: item.product.productdata.code,
@@ -128,7 +129,7 @@ function ExportBtn({headers, fileName, datas, pagesName}) {
                     break
 
                 case 'barcode':
-                    const BarcodeData = datas.map((item, index) => ({
+                    const BarcodeData = map(datas, (item,index) => ({
                         nth: index + 1,
                         code: item.barcode,
                         name: item.name

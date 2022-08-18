@@ -18,7 +18,7 @@ import {
 import Table from '../../../Components/Table/Table'
 import { universalSort, UsdToUzs, UzsToUsd } from '../../../App/globalFunctions'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
-import { uniqueId } from 'lodash'
+import {uniqueId,map} from 'lodash'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
 import { useTranslation } from 'react-i18next';
 
@@ -139,7 +139,7 @@ const IncomingSuppliers = () => {
     }
 
     const getCurrentData = (data) => {
-        let current = data.map((incoming) => {
+        let current = map(data,(incoming) => {
             return {
                 ...incoming,
                 sellingprice: incoming.product.price.sellingprice,
@@ -462,7 +462,7 @@ const IncomingSuppliers = () => {
             </div>
             <div className='flex flex-wrap gap-[1%] mainPadding'>
                 {incomingCard.length > 0 &&
-                    incomingCard.map((incoming) => (
+                    map(incomingCard,(incoming) => (
                         <CardBtn
                             date={incoming.createdAt}
                             deliver={incoming.supplier.name}

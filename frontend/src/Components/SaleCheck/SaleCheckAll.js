@@ -1,5 +1,5 @@
 import React, {forwardRef} from 'react'
-import {uniqueId} from 'lodash'
+import {uniqueId,map} from 'lodash'
 import {useSelector} from 'react-redux'
 
 export const SaleCheckAll = forwardRef((props, ref) => {
@@ -68,7 +68,7 @@ export const SaleCheckAll = forwardRef((props, ref) => {
                     </thead>
                     <tbody>
                     {
-                        selled.map((item, index) => {
+                        map(selled,(item, index) => {
                             return (
                                 <tr key={uniqueId('selled-row')}>
                                     <td className='p-1 border text-center text-[0.875rem] font-bold'>{index + 1}</td>
@@ -106,7 +106,7 @@ export const SaleCheckAll = forwardRef((props, ref) => {
                         </thead>
                         <tbody>
                         {
-                            returned.map((item, index) => {
+                            map(returned,(item, index) => {
                                 return (
                                     <tr key={uniqueId('selled-row')}>
                                         <td className='p-1 border text-center text-[0.875rem] font-bold'>{index + 1}</td>

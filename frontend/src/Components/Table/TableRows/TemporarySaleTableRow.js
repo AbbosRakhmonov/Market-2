@@ -1,4 +1,4 @@
-import {uniqueId} from 'lodash'
+import {uniqueId,map} from 'lodash'
 import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
 import {useNavigate} from 'react-router-dom'
@@ -10,7 +10,7 @@ export const TemporarySaleTableRow = ({data, Delete, currency, Print}) => {
     }
     return (
         <>
-            {data.map(({_id, temporary, createdAt}, index) => (
+            {map(data,({_id, temporary, createdAt}, index) => (
                 <tr className='tr' key={uniqueId('sale')}>
                     <td className='td'>{1 + index}</td>
                     <td className='td text-left'>

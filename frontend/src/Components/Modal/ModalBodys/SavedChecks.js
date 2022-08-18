@@ -2,7 +2,7 @@ import React from 'react'
 import PrintBtn from '../../Buttons/PrintBtn'
 import BtnAddRemove from '../../Buttons/BtnAddRemove'
 import { useTranslation } from 'react-i18next';
-
+import {uniqueId, map} from 'lodash'
 function SavedChecks() {
 
     const { t } = useTranslation(['common'])
@@ -48,20 +48,20 @@ function SavedChecks() {
                         </tr>
                     </thead>
                     <tbody>
-                        {
-                            data.map((item, index) => {
-                                return (
-                                    <tr key={index}>
-                                        <td className='p-1 border text-center text-[0.875rem] font-bold'>{item.id}</td>
-                                        <td className='check-table-body'>{item.kodi}</td>
-                                        <td className='check-table-body'>{item.maxsulot}</td>
-                                        <td className='check-table-body'>{item.soni}</td>
-                                        <td className='check-table-body'>{item.narxi}</td>
-                                        <td className='check-table-body'>{item.jami}</td>
-                                    </tr>
-                                )
-                            })
-                        }
+                    {
+                        map(data, (item) => {
+                            return (
+                                <tr key={uniqueId('savedCheck')}>
+                                    <td className='p-1 border text-center text-[0.875rem] font-bold'>{item.id}</td>
+                                    <td className='check-table-body'>{item.kodi}</td>
+                                    <td className='check-table-body'>{item.maxsulot}</td>
+                                    <td className='check-table-body'>{item.soni}</td>
+                                    <td className='check-table-body'>{item.narxi}</td>
+                                    <td className='check-table-body'>{item.jami}</td>
+                                </tr>
+                            )
+                        })
+                    }
 
                     </tbody>
                 </table>

@@ -1,5 +1,5 @@
 import React from 'react'
-import {uniqueId} from 'lodash'
+import {uniqueId, map} from 'lodash'
 import TableBtn from '../../Buttons/TableBtn.js'
 
 export const BarcodeTableRow = (
@@ -12,7 +12,7 @@ export const BarcodeTableRow = (
     }) => {
     return (<>
         {
-            data.map((item, index) =>
+            map(data,(item, index) =>
                 <tr className='tr' key={uniqueId('sales')}>
                     <td className='text-left td'>
                         {currentPage * countPage + 1 + index}

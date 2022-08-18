@@ -1,6 +1,6 @@
 import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
-
+import {map} from 'lodash'
 export const AdminProductTableRow = (
     {
         currentPage,
@@ -11,7 +11,7 @@ export const AdminProductTableRow = (
     }) => {
     return (
         <>
-            {data.map((market, index) => (
+            {map(data,(market, index) => (
                 <tr key={market._id} className='tr cursor-pointer' onClick={() => onClickTableRow(market)}>
                     <td className='td text-left'>
                         {currentPage * countPage + 1 + index}

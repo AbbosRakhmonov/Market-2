@@ -51,6 +51,7 @@ import BarcodeReader from 'react-barcode-reader'
 import {clearErrorGetBarcode, getBarcode} from '../../Barcode/barcodeSlice.js'
 import {getCurrency} from '../../Currency/currencySlice.js'
 import {useTranslation} from 'react-i18next'
+import {map} from 'lodash'
 
 function Products() {
     const {t} = useTranslation(['common'])
@@ -538,7 +539,7 @@ function Products() {
     }
     const handleClickApproveToImport = () => {
         const oldKeys = Object.keys(excelData[0])
-        const newData = createdData.map((item) => {
+        const newData = map(createdData,(item) => {
             const newItem = {}
             for (const key in item) {
                 newItem[key] = item[key]
@@ -758,7 +759,7 @@ function Products() {
     }, [currentProduct, currencyType])
     useEffect(() => {
         setUnitOptions(
-            units.map((unit) => ({
+            map(units,(unit) => ({
                 value: unit._id,
                 label: unit.name,
             }))
@@ -766,7 +767,7 @@ function Products() {
     }, [units])
     useEffect(() => {
         setCategoryOptions(
-            allcategories.map((category) => ({
+            map(allcategories,(category) => ({
                 value: category._id,
                 label:
                     category.code +

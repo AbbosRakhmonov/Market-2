@@ -1,6 +1,6 @@
 import React, {forwardRef} from 'react'
 import {useSelector} from 'react-redux'
-
+import {uniqueId, map} from 'lodash'
 const InventoriesCheck = forwardRef((props, ref) => {
 
     const {currencyType} = useSelector(state => state.currency)
@@ -11,14 +11,14 @@ const InventoriesCheck = forwardRef((props, ref) => {
     let differencescurrent = 0
 
     {
-        data?.map((item) => {
+        data? map(data, (item) => {
             initial += item?.productcount
             count += item?.inventorycount
             differences += (item?.inventorycount - item?.productcount)
             currencyType === 'UZS' ?
                 differencescurrent += (item?.inventorycount * item?.price.incomingpriceuzs - item?.productcount * item?.price.incomingpriceuzs) :
                 differencescurrent += (item?.inventorycount * item?.price.incomingprice - item?.productcount * item?.price.incomingprice)
-        })
+        }) : []
     }
 
     return (
@@ -50,9 +50,9 @@ const InventoriesCheck = forwardRef((props, ref) => {
                 </thead>
                 <tbody>
                 {data ?
-                    data.map((item, index) => {
+                    map(data, (item, index) => {
                         return (
-                            <tr key={index}>
+                            <tr key={uniqueId('inventoriesCheck')}>
                                 <td className='p-1 border text-center text-[0.875rem] font-bold'>{index + 1}</td>
                                 <td className='check-table-body'>{new Date(item?.createdAt).toLocaleDateString()}</td>
                                 <td className='check-table-body text-center'>{item?.productdata?.code}</td>

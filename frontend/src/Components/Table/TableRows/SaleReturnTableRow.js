@@ -1,6 +1,6 @@
 import React from 'react'
 import TableInput from '../../Inputs/TableInput'
-
+import {map} from 'lodash'
 export const SaleReturnTableRow = ({
                                        data,
                                        changeHandler,
@@ -9,7 +9,7 @@ export const SaleReturnTableRow = ({
                                    }) => {
     return (
         <>
-            {data.map((salereturn, index) => (
+            {map(data,(salereturn, index) => (
                 <tr className='tr' key={salereturn._id}>
                     <td className='text-left td'>{index + 1}</td>
                     <td className='text-right td'>
