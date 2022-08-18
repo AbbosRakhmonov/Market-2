@@ -710,7 +710,6 @@ module.exports.getProducts = async (req, res) => {
         .status(401)
         .json({ message: "Diqqat! Do'kon malumotlari topilmadi" });
     }
-    console.log(search);
     const code = new RegExp(".*" + search ? search.code : "" + ".*", "i");
     const name = new RegExp(".*" + search ? search.name : "" + ".*", "i");
     const category = new RegExp(
@@ -745,7 +744,6 @@ module.exports.getProducts = async (req, res) => {
       (product) => product.productdata !== null && product.category !== null
     );
     const count = filtered.length;
-    console.log(filtered);
     filtered = filtered.splice(currentPage * countPage, countPage);
     res.status(201).json({
       products: filtered,
