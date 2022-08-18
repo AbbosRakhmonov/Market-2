@@ -20,7 +20,7 @@ const {
   validateExchangerate,
 } = require("../../models/Exchangerate/Exchangerate");
 
-const filter = require('lodash').filter
+const filter = require("lodash").filter;
 
 //Product registerall
 module.exports.registerAll = async (req, res) => {
@@ -199,7 +199,10 @@ module.exports.registerAll = async (req, res) => {
       })
       .populate("unit", "name");
 
-    let filtered = filter(allproducts,(product) =>  product.productdata !== null && product.category !== null);
+    let filtered = filter(
+      allproducts,
+      (product) => product.productdata !== null && product.category !== null
+    );
 
     const count = filtered.length;
     filtered = filtered.splice(currentPage * countPage, countPage);
@@ -251,7 +254,7 @@ module.exports.register = async (req, res) => {
 
     const productBarcode = await ProductData.findOne({
       barcode,
-      market
+      market,
     });
 
     if (product) {
@@ -369,7 +372,8 @@ module.exports.register = async (req, res) => {
       })
       .populate("unit", "name");
 
-    let filtered = filter(products,
+    let filtered = filter(
+      products,
       (product) => product.productdata !== null && product.category !== null
     );
 
@@ -416,7 +420,7 @@ module.exports.update = async (req, res) => {
     const product = await Product.findById(_id)
       .populate({
         path: "productdata",
-        select: "code",
+        select: "code barcode",
       })
       .populate({
         path: "category",
@@ -430,7 +434,7 @@ module.exports.update = async (req, res) => {
     }
 
     if (product.category._id.toString() !== category) {
-      const check = await ProductData.findOne({ category, code });
+      const check = await ProductData.findOne({ category, code, market });
       if (check) {
         return res.status(400).json({
           message: `Diqqat! ${code} kodli mahsulot avval yaratilgan.`,
@@ -442,12 +446,20 @@ module.exports.update = async (req, res) => {
       product.category._id.toString() === category &&
       code !== product.productdata.code
     ) {
-      const check = await ProductData.findOne({ category, code });
+      const check = await ProductData.findOne({ category, code, market });
       if (check) {
         return res.status(400).json({
           message: `Diqqat! ${code} kodli mahsulot avval yaratilgan.`,
         });
       }
+    }
+
+    const barCode = await ProductData.findOne({ barcode, market });
+
+    if (barCode && product.productdata.barcode !== barCode) {
+      return res.status(400).json({
+        message: `Diqqat! ${barcode} shtrix kodli mahsulot avval yaratilgan.`,
+      });
     }
 
     const exchangerate = await Exchangerate.findOne({ market })
@@ -531,7 +543,10 @@ module.exports.update = async (req, res) => {
       })
       .populate("unit", "name");
 
-    let filtered = filter(products,(product) =>  product.productdata !== null && product.category !== null);
+    let filtered = filter(
+      products,
+      (product) => product.productdata !== null && product.category !== null
+    );
 
     const count = filtered.length;
     filtered = filtered.splice(currentPage * countPage, countPage);
@@ -640,7 +655,7 @@ module.exports.delete = async (req, res) => {
       })
       .populate("unit", "name");
 
-    let filtered = filter(products,(product) =>  product.productdata !== null);
+    let filtered = filter(products, (product) => product.productdata !== null);
 
     const count = filtered.length;
     filtered = filtered.splice(currentPage * countPage, countPage);
@@ -703,6 +718,7 @@ module.exports.getProducts = async (req, res) => {
       ".*" + search ? search.category : "" + ".*",
       "i"
     );
+    const barcode = new RegExp(".*" + search ? search.barcode : "" + ".*", "i");
 
     const products = await Product.find({
       market,
@@ -716,7 +732,7 @@ module.exports.getProducts = async (req, res) => {
       .populate({
         path: "productdata",
         select: "name code barcode",
-        match: { name: name, code: code },
+        match: { name: name, code: code, barcode: barcode },
       })
       .populate({
         path: "category",
@@ -725,7 +741,10 @@ module.exports.getProducts = async (req, res) => {
       })
       .populate("unit", "name");
 
-    let filtered = filter(products, (product)=> product.productdata !==null && product.caregory !== null)
+    let filtered = filter(
+      products,
+      (product) => product.productdata !== null && product.caregory !== null
+    );
     const count = filter.length;
     filtered = filtered.splice(currentPage * countPage, countPage);
     res.status(201).json({
@@ -825,7 +844,10 @@ module.exports.getProductExcel = async (req, res) => {
         match: { code: category },
       });
 
-    const products = filter(allproducts,(product) =>  product.productdata !== null && product.category !== null);
+    const products = filter(
+      allproducts,
+      (product) => product.productdata !== null && product.category !== null
+    );
     res.status(201).json(products);
   } catch (error) {
     res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
@@ -860,7 +882,10 @@ module.exports.getAllIncoming = async (req, res) => {
       })
       .populate("unit", "name");
 
-    const products = filter(allproducts, (product) =>product.productdata !== null);
+    const products = filter(
+      allproducts,
+      (product) => product.productdata !== null
+    );
 
     res.send(products);
   } catch (error) {
@@ -1047,7 +1072,7 @@ module.exports.getProductsInventory = async (req, res) => {
       })
       .populate("unit", "name");
 
-    let filtered = filter(products,(product) =>  product.productdata !== null);
+    let filtered = filter(products, (product) => product.productdata !== null);
 
     const count = filtered.length;
 
