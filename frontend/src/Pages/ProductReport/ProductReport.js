@@ -15,40 +15,42 @@ import { clearSearchedProducts,
 import {useReactToPrint} from 'react-to-print'
 import {BarCode} from '../../Components/BarCode/BarCode.js'
 import {universalSort} from '../../App/globalFunctions.js'
+import { useTranslation } from 'react-i18next';
 
 const ProductReport = () => {
+    const {t} = useTranslation(['common'])
     const headers = [
         {
-            title: '№'
+            title: t('№')
         },
         {
-            title: 'Maxsulot kodi',
+            title: t('Maxsulot kodi'),
             filter: 'productdata.code'
         },
         {
-            title: 'Maxsulot nomi',
+            title: t('Maxsulot nomi'),
             filter: 'productdata.name'
         },
         {
-            title: 'Soni(dona)',
+            title: t('Soni(dona)'),
             filter: 'product.total'
         },
         {
-            title: 'Olish',
+            title: t('Olish'),
             filter: 'price.incomingprice'
         },
         {
-            title: 'Olish jami'
+            title: t('Olish jami')
         },
         {
-            title: 'Sotish',
+            title: t('Sotish'),
             filter: 'price.sellingprice'
         },
         {
-            title: 'Sotish jami'
+            title: t('Sotish jami')
         },
         {
-            title: 'Cheklar soni'
+            title: t('Cheklar soni')
         },
         {
             title: ''
@@ -291,7 +293,7 @@ const ProductReport = () => {
                     fileName={'Maxsulotlar hisoboti'}
                     pagesName='ProductReport'
                 />
-                <p className='product_name'>Maxsulot hisoboti</p>
+                <p className='product_name'>{t("Maxsulot hisoboti")}</p>
                 {(filteredDataTotal !== 0 || totalSearched !== 0) && (
                     <Pagination
                         countPage={Number(showByTotal)}
@@ -318,7 +320,7 @@ const ProductReport = () => {
                 {loading ? (
                     <Spinner />
                 ) : data.length === 0 && searchedData.length === 0 ? (
-                    <NotFind text={'Maxsulotlar mavjud emas'} />
+                    <NotFind text={t('Maxsulotlar mavjud emas')} />
                 ) : (
                     <Table
                         page={'productreport'}

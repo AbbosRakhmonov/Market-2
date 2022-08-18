@@ -1,5 +1,6 @@
 import React from 'react'
 import TableInput from '../../Inputs/TableInput'
+import { useTranslation } from 'react-i18next';
 
 const RegisterproductModal = ({
                                   product,
@@ -8,6 +9,7 @@ const RegisterproductModal = ({
                                   currency
                               }) => {
     const current = (usd, uzs) => (currency === 'USD' ? usd : uzs)
+    const {t} = useTranslation(['common'])
     return (
         <div className='pt-[1.25rem] text-center'>
             <div className='text-center'>
@@ -23,22 +25,22 @@ const RegisterproductModal = ({
                     <thead className='rounded-t-lg'>
                     <tr className='bg-primary-900 rounded-t-lg'>
                         <th scope='col' className='th w-[15%]'>
-                            <span>Soni</span>
+                            <span>{t("Soni")}</span>
                         </th>
                         <th scope='col' className='th w-[15%]'>
-                            <span>Kelish</span>
+                            <span>{t("Kelish")}</span>
                         </th>
                         <th scope='col' className='th'>
-                            <span>Avvalgi</span>
+                            <span>{t("Avvalgi")}</span>
                         </th>
                         <th scope='col' className='th'>
-                            <span>Jami</span>
+                            <span>{t("Jami")}</span>
                         </th>
                         <th scope='col' className='th w-[15%]'>
-                            <span>Sotish</span>
+                            <span>{t("Sotish")}</span>
                         </th>
                         <th scope='col' className='th w-[15%]'>
-                            <span>Sotish %</span>
+                            <span>{t("Sotish")} %</span>
                         </th>
                     </tr>
                     </thead>
@@ -104,7 +106,7 @@ const RegisterproductModal = ({
                     onClick={approveFunction}
                     className={'approveBtn bg-black-500 hover:bg-black-700'}
                 >
-                    Qo'shish
+                    {t("Qo'shish")}
                 </button>
             </div>
         </div>

@@ -1,17 +1,19 @@
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import LineChart from '../../Components/LineChart/LineChart.js'
 import PieChart from '../../Components/PieChart/PieChart.js'
 import DailyCircle from '../../Components/DailyCircle/DailyCircle.js'
-import {useDispatch, useSelector} from 'react-redux'
-import {getMonthlyReport, getReports} from '../Reports/reportsSlice.js'
-import {getCurrency} from '../Currency/currencySlice.js'
-
+import { useDispatch, useSelector } from 'react-redux'
+import { getMonthlyReport, getReports } from '../Reports/reportsSlice.js'
+import { getCurrency } from '../Currency/currencySlice.js'
+import { useTranslation } from 'react-i18next';
+import { universalToast } from '../../Components/ToastMessages/ToastMessages.js'
 function MainPage() {
+    const { t } = useTranslation(['common'])
     const dispatch = useDispatch()
-    const {reports, monthlyReport} = useSelector(
+    const { reports, monthlyReport } = useSelector(
         (state) => state.reports
     )
-    const {currencyType} = useSelector((state) => state.currency)
+    const { currencyType } = useSelector((state) => state.currency)
     const filterMonthlyReport = () => {
         return monthlyReport ? (currencyType === 'USD' ? monthlyReport.salesSum.map(item => item.usd) : monthlyReport.salesSum.map(item => item.uzs)) : []
     }
@@ -37,7 +39,7 @@ function MainPage() {
             <div className={'flex items-center justify-around gap-[3.1rem]'}>
                 <DailyCircle
                     text={reports?.sale?.salecount}
-                    label={'Sotuvlar soni'}
+                    label={t('Sotuvlar soni')}
                 />
                 <DailyCircle
                     nth={1}
@@ -46,7 +48,7 @@ function MainPage() {
                             ? reports?.sale?.saleuzs?.toLocaleString("ru-Ru")
                             : reports?.sale?.sale?.toLocaleString("ru-Ru")
                     }
-                    label={'Sotuv summasi'}
+                    label={t('Sotuv summasi')}
                 />
                 <DailyCircle
                     nth={2}
@@ -55,23 +57,21 @@ function MainPage() {
                             ? reports?.income?.incomeuzs?.toLocaleString("ru-Ru")
                             : reports?.income?.income?.toLocaleString("ru-Ru")
                     }
-                    label={'Sof foyda'}
+                    label={t('Sof foyda')}
                 />
-                <DailyCircle nth={3} text={currencyType === 'UZS'
-                    ? reports?.expenses?.expensesuzs?.toLocaleString("ru-Ru")
-                    : reports?.expenses?.expenses?.toLocaleString("ru-Ru")} label={'Xarajatlar'} />
+                <DailyCircle nth={3} text={0} label={t('Xarajatlar')} />
             </div>
             <div className={'h-[25rem]'}>
                 <LineChart
-                    label={'Oylik sotuvlar soni'}
-                    arr={monthlyReport?.sales}
+                    label={t('Oylik sotuvlar soni')}
+                    arr={[100, 95, 80, 90, 110]}
                 />
             </div>
             <div className={'flex gap-[5%] h-[25rem]'}>
                 <div className={'w-[65%]'}>
                     <LineChart
-                        label={'Oylik sotuvlar summasi'}
-                        arr={filterMonthlyReport()}
+                        label={t('Oylik sotuvlar summasi')}
+                        arr={[100, 95, 80, 90, 110]}
                     />
                 </div>
                 <div className={'w-[30%]'}>

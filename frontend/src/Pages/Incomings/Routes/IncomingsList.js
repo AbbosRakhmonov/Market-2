@@ -1,6 +1,6 @@
-import React, {useCallback, useEffect, useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
-import {universalSort, UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { universalSort, UsdToUzs, UzsToUsd } from '../../../App/globalFunctions'
 import ExportBtn from '../../../Components/Buttons/ExportBtn'
 import Dates from '../../../Components/Dates/Dates'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
@@ -8,17 +8,20 @@ import Pagination from '../../../Components/Pagination/Pagination'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
 import Table from '../../../Components/Table/Table'
 
+
 import {clearSuccesDelete, clearSuccessUpdate, deleteIncoming, getIncomings, updateIncoming,excelIncomings} from '../incomingSlice'
+import { useTranslation } from 'react-i18next';
+
 
 const IncomingsList = () => {
     const dispatch = useDispatch()
-
+    const { t } = useTranslation(['common'])
     const {
-        market: {_id}
+        market: { _id }
     } = useSelector((state) => state.login)
     const {incomings, incomingscount, successUpdate, successDelete,allIncomingsData} =
         useSelector((state) => state.incoming)
-    const {currencyType, currency} = useSelector((state) => state.currency)
+    const { currencyType, currency } = useSelector((state) => state.currency)
 
     const [beginDay, setBeginDay] = useState(
         new Date(
@@ -123,7 +126,7 @@ const IncomingsList = () => {
                     market: _id,
                     startDate: beginDay,
                     endDate: endDay,
-                    product: {...editedIncoming}
+                    product: { ...editedIncoming }
                 })
             )
         } else {
@@ -148,7 +151,7 @@ const IncomingsList = () => {
     const searchName = (e) => {
         let target = e.target.value.toLowerCase()
         setCurrentIncoming([
-            ...storageCurrentIncoming.filter(({product}) =>
+            ...storageCurrentIncoming.filter(({ product }) =>
                 product.productdata.name.toLowerCase().includes(target)
             )
         ])
@@ -162,7 +165,7 @@ const IncomingsList = () => {
     const searchCode = (e) => {
         let target = e.target.value.toLowerCase()
         setCurrentIncoming([
-            ...storageCurrentIncoming.filter(({product}) =>
+            ...storageCurrentIncoming.filter(({ product }) =>
                 product.productdata.code.includes(target)
             )
         ])
@@ -271,7 +274,7 @@ const IncomingsList = () => {
                 market: _id,
                 beginDay,
                 endDay,
-                product: {...deletedIncoming}
+                product: { ...deletedIncoming }
             })
         )
         setModal(false)
@@ -333,33 +336,33 @@ const IncomingsList = () => {
             title: '№'
         },
         {
-            title: 'Yetkazuvchi',
+            title: t('Yetkazuvchi'),
             filter: 'supplier.name',
             styles: 'w-[10%]'
         },
         {
-            title: 'Kodi',
+            title: t('Kodi'),
             filter: 'product.productdata.code',
             styles: 'w-[7%]'
         },
         {
-            title: 'Nomi',
+            title: t('Nomi'),
             filter: 'product.productdata.name'
         },
         {
-            title: 'Soni',
+            title: t('Soni'),
             styles: 'w-[10%]'
         },
         {
-            title: 'Kelish',
+            title: t('Kelish'),
             styles: 'w-[10%]'
         },
         {
-            title: 'Jami',
+            title: t('Jami'),
             styles: 'w-[15%]'
         },
         {
-            title: 'Sotish',
+            title: t('Sotish'),
             styles: 'w-[10%]'
         },
         {
@@ -370,37 +373,39 @@ const IncomingsList = () => {
 
     const incomingHeaders = [
         '№',
-        'Yetkazuvchi',
-        'Kodi',
-        'Nomi',
-        'Soni',
-        'Kelish UZS',
-        'Kelish USD',
-        'Jami UZS',
-        'Jami USD',
+        t('Yetkazuvchi'),
+        t('Kodi'),
+        t('Nomi'),
+        t('Soni'),
+        t('Kelish UZS'),
+        t('Kelish USD'),
+        t('Jami UZS'),
+        t('Jami USD'),
+        t('Sotish UZS'),
+        t('Sotish USD')
     ]
 
     return (
         <div className=''>
             <div className='mainPadding text-center'>
-                <p>Ro'yxat</p>
+                <p>{t("Ro'yxat")}</p>
             </div>
             <div className='mainPadding flex items-center justify-between'>
                 <ExportBtn
-                    fileName={`Maxsulotlar-qabul-${new Date().toLocaleDateString()}`}
+                    fileName={`${t("Maxsulotlar-qabul")}-${new Date().toLocaleDateString()}`}
                     headers={incomingHeaders}
                     datas={allIncomingsData}
                     pagesName='IncomingList'
                 />
                 <div className='flex gap-[10px]'>
                     <Dates
-                        label={'dan'}
+                        label={t('dan')}
                         value={new Date(beginDay)}
                         onChange={(value) => changeDate(value, 'beginDay')}
                         maxWidth={'max-w-[9.6875rem]'}
                     />
                     <Dates
-                        label={'gacha'}
+                        label={t('gacha')}
                         value={new Date(endDay)}
                         onChange={(value) => changeDate(value, 'endDay')}
                         maxWidth={'max-w-[9.6875rem]'}
@@ -444,8 +449,8 @@ const IncomingsList = () => {
             <UniversalModal
                 body={'approve'}
                 isOpen={modal}
-                headerText={'Mahsulotni o\'chirishni tasdiqlaysizmi?'}
-                title={'O\'chirilgan mahsulotni tiklashning imkoni mavjud emas!'}
+                headerText={t('Mahsulotni o`chirishni tasdiqlaysizmi?')}
+                title={t('O`chirilgan mahsulotni tiklashning imkoni mavjud emas!')}
                 approveFunction={removeIncoming}
                 closeModal={closeModal}
                 toggleModal={closeModal}

@@ -1,15 +1,17 @@
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from 'react'
 import Logo from '../../Images/logo-lg.svg'
 import Input from '../../Components/Inputs/Input'
-import {clearError, signIn} from './loginSlice'
-import {useDispatch, useSelector} from 'react-redux'
+import { clearError, signIn } from './loginSlice'
+import { useDispatch, useSelector } from 'react-redux'
 import Timebar from '../../Components/TimeBar/Timebar'
-import {universalToast} from '../../Components/ToastMessages/ToastMessages'
-import {reset} from '../Currency/currencySlice.js'
+import { universalToast } from '../../Components/ToastMessages/ToastMessages'
+import { reset } from '../Currency/currencySlice.js'
+import { useTranslation } from 'react-i18next';
 
 function Login() {
+    const { t } = useTranslation(['common'])
     const dispatch = useDispatch()
-    const {loading, error} = useSelector((state) => state.login)
+    const { loading, error } = useSelector((state) => state.login)
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
     const handleChangeLogin = (e) => {
@@ -54,7 +56,7 @@ function Login() {
                     <form className={'w-full px-[20%]'}>
                         <div className={'mb-[1.25rem]'}>
                             <Input
-                                label={'Login'}
+                                label={t('Login')}
                                 type={'text'}
                                 value={login}
                                 placeholder={'Loginni kiriting...'}
@@ -63,7 +65,7 @@ function Login() {
                         </div>
                         <div className={'mb-[1.25rem]'}>
                             <Input
-                                label={'Parol'}
+                                label={t('Parol')}
                                 type={'password'}
                                 value={password}
                                 placeholder={'Parolni kiriting...'}
@@ -84,7 +86,7 @@ function Login() {
                                     className={'animate-spin spinner mr-1'}
                                 ></span>
                             ) : (
-                                'Kirish'
+                                t('Kirish')
                             )}
                         </button>
                     </form>

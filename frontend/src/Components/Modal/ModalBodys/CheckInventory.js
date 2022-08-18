@@ -38,24 +38,24 @@ function CheckInventory() {
         <section className='w-[63.78rem] bg-white-900'>
             <div className='check-inventory-head'>
                 <div className='flex text-[0.875rem] font-bold'>
-                    Sana:
+                    {t("Sana")}:
                     <span className='check-ul-li-span ml-2'>07.08.2022</span>
                 </div>
-                <h3 className='text-[1.2rem] font-bold'>Inventarizatsiya : <span>INV-4</span></h3>
+                <h3 className='text-[1.2rem] font-bold'>{t("Inventarizatsiya")} : <span>INV-4</span></h3>
                 <h2 className='text-[1.4rem] font-bold'>PIPE HOUSE</h2>
             </div>
             <table className='border-collapse border border-slate-400 w-full'>
                 <thead>
                 <tr>
-                    <td className='check-table-rtr'>№</td>
-                    <td className='check-table-rtr'>Sana</td>
-                    <td className='check-table-rtr'>Kodi</td>
-                    <td className='check-table-rtr'>Maxsulot</td>
-                    <td className='check-table-rtr'>Dastlabki</td>
-                    <td className='check-table-rtr'>Sanoq</td>
-                    <td className='check-table-rtr'>Farqi</td>
-                    <td className='check-table-rtr'>Farqi USD</td>
-                    <td className='check-table-rtr'>Izoh</td>
+                    <td className='check-table-rtr'>{t("№")}</td>
+                    <td className='check-table-rtr'>{t("Sana")}</td>
+                    <td className='check-table-rtr'>{t("Kodi")}</td>
+                    <td className='check-table-rtr'>{t("Maxsulot")}</td>
+                    <td className='check-table-rtr'>{t("Dastlabki")}</td>
+                    <td className='check-table-rtr'>{t("Sanoq")}</td>
+                    <td className='check-table-rtr'>{t("Farqi")}</td>
+                    <td className='check-table-rtr'>{t("Farqi USD")}</td>
+                    <td className='check-table-rtr'>{t("Izoh")}</td>
                 </tr>
                 </thead>
                 <tbody>
@@ -80,7 +80,7 @@ function CheckInventory() {
                     data2.map((item, index) => {
                         return (
                             <tr>
-                                <td className='p-1 border text-end text-[0.875rem] font-bold' colSpan={3}>Jami:</td>
+                                <td className='p-1 border text-end text-[0.875rem] font-bold' colSpan={3}>{t("Jami")}:</td>
                                 <td className='check-table-body text-start'>{item.product}</td>
                                 <td className='check-table-body'>{item.initial}</td>
                                 <td className='check-table-body'>{item.count}</td>

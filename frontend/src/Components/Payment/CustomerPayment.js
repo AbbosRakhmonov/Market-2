@@ -3,6 +3,7 @@ import {DiscountBtn, Payment, SaleBtn} from '../Buttons/SaleBtns.js'
 import {DiscountInput} from '../Inputs/DiscountInputs.js'
 import {useSelector} from 'react-redux'
 import PaymentInput from './PaymentInput/PaymentInput.js'
+import { t } from 'i18next'
 
 function CustomerPayment({
                              returned,
@@ -38,7 +39,7 @@ function CustomerPayment({
                         keyInput={type}
                         onChange={onChange}
                         onClose={onClose}
-                        label={'Plastik'}
+                        label={t('Plastik')}
                     />
                 )
             case 'transfer':
@@ -49,15 +50,15 @@ function CustomerPayment({
                         keyInput={type}
                         onChange={onChange}
                         onClose={onClose}
-                        label={'O\'tkazma'}
+                        label={t('O`tkazma')}
                     />
                 )
             case 'mixed':
                 return [
-                    {label: 'Naqd', key: 'cash', value: cash},
-                    {label: 'Plastik', key: 'card', value: card},
+                    {label: t('Naqd'), key: 'cash', value: cash},
+                    {label: t('Plastik'), key: 'card', value: card},
                     {
-                        label: 'O\'tkazma',
+                        label: t('O`tkazma'),
                         key: 'transfer',
                         value: transfer
                     }
@@ -68,7 +69,7 @@ function CustomerPayment({
                         keyInput={obj.key}
                         onChange={onChange}
                         onClose={onClose}
-                        label={obj.label}
+                        label={t(obj.label)}
                     />
                 ))
             default:
@@ -79,7 +80,7 @@ function CustomerPayment({
                         onChange={onChange}
                         keyInput={type}
                         onClose={onClose}
-                        label={'Naqd'}
+                        label={t('Naqd')}
                     />
                 )
         }
@@ -99,7 +100,7 @@ function CustomerPayment({
                     'text-white-900 text-lg leading-[1.875rem absolute top-[50%] left-[35%] -translate-x-[50%]'
                 }
             >
-                Oynani yopish uchun bu yerga bosing !
+                {t("Oynani yopish uchun bu yerga bosing !")}
             </h3>
             <div
                 className={`customerPay-head-style transition-all duration-200 ease-linear h-full overflow-auto absolute top-0 bottom-0 right-0 ${
@@ -113,7 +114,7 @@ function CustomerPayment({
                         <div className='customer-head-icon'>
                             <div className='flex items-center custom-payment-text-style'>
                                 <IoPerson className='mr-[0.75rem]' />
-                                <span>Mijoz : </span>
+                                <span>{t("Mijoz")} : </span>
                             </div>
                             <h3 className='text-[0.875rem]'>{client}</h3>
                         </div>
@@ -143,7 +144,7 @@ function CustomerPayment({
                         )}
                         <li className='custom-payment-ul-li'>
                             <span className='custom-payment-text-style'>
-                                Qarzlar :{' '}
+                                {t("Qarzlar")} :{' '}
                             </span>
                             <h3 className='text-error-500 text-[1rem]'>
                                 {debt.toLocaleString('ru-Ru')} {currencyType}
@@ -152,8 +153,8 @@ function CustomerPayment({
                         <li className='custom-payment-ul-li'>
                             <span className='custom-payment-text-style'>
                                 {allPayment < 0
-                                    ? 'Qaytarilayotgan'
-                                    : 'To\'lanayotgan'}{' '}
+                                    ? t('Qaytarilayotgan')
+                                    : t('To`lanayotgan')}{' '}
                                 :{' '}
                             </span>
                             <h3 className='text-[1rem] text-loginButton'>
@@ -166,25 +167,25 @@ function CustomerPayment({
                     className='bottom-payment w-full flex flex-col gap-[1.25rem] border-t-[1px] border-black-200 pt-[1.25rem]'>
                     <div className='custom-paymet-btn'>
                         <SaleBtn
-                            text={`Naqd`}
+                            text={t(`Naqd`)}
                             type='cash'
                             active={type === 'cash'}
                             onClick={changePaymentType}
                         />
                         <SaleBtn
-                            text={`Plastik`}
+                            text={t(`Plastik`)}
                             type='card'
                             active={type === 'card'}
                             onClick={changePaymentType}
                         />
                         <SaleBtn
-                            text={`O'tkazma`}
+                            text={t(`O'tkazma`)}
                             type='transfer'
                             active={type === 'transfer'}
                             onClick={changePaymentType}
                         />
                         <SaleBtn
-                            text={`Aralash`}
+                            text={t(`Aralash`)}
                             type='mixed'
                             active={type === 'mixed'}
                             onClick={changePaymentType}
@@ -192,11 +193,11 @@ function CustomerPayment({
                     </div>
                     {!returned && (
                         <DiscountBtn
-                            text={`Chegirma`}
+                            text={t(`Chegirma`)}
                             onClick={handleClickDiscountBtn}
                         />
                     )}
-                    <Payment text={`To'lash`} onClick={handleClickPay} />
+                    <Payment text={t(`To'lash`)} onClick={handleClickPay} />
                 </div>
             </div>
         </section>

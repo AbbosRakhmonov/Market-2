@@ -1,23 +1,24 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import FilialButtons from '../FilialButtons/FilialButtons'
 import Avatar from '../Avatar/Avatar.js'
-import {Link, Route, Routes, useLocation, useParams} from 'react-router-dom'
+import { Link, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import ProductReport from '../../Pages/ProductReport/ProductReport'
 import Currency from '../../Pages/Currency/Currency.js'
-import {AnimatePresence} from 'framer-motion'
+import { AnimatePresence } from 'framer-motion'
 import Sellings from '../../Pages/Sale/Routes/Sellings'
+import { useTranslation } from 'react-i18next';
 
 const Filial = ({
-                    typecount,
-                    productcount,
-                    totalPrice,
-                    shopname,
-                    active,
-                    currency,
-                    director,
-                    id
-                }) => {
-    const {tablename, _id} = useParams()
+    typecount,
+    productcount,
+    totalPrice,
+    shopname,
+    active,
+    currency,
+    director,
+    id
+}) => {
+    const { tablename, _id } = useParams()
     const location = useLocation()
 
     const [reportOpen, setReprotOpen] = useState(true)
@@ -45,31 +46,33 @@ const Filial = ({
          setSalesOpen(true)
     }
 
+
+    const { t } = useTranslation(['common'])
+
     return (
         <section>
             <div
-                className={`shops_card flex gap-[1.25rem] ${
-                    active ? 'active_shop' : ''
-                }`}
+                className={`shops_card flex gap-[1.25rem] ${active ? 'active_shop' : ''
+                    }`}
             >
                 <Avatar border={true} director={director} />
                 <div className='product-cost'>
                     <div
                         className={'flex flex-col items-center justify-center'}
                     >
-                        <p className='product'>Maxsulotlar turi</p>
+                        <p className='product'>{t("Maxsulotlar turi")}</p>
                         <p className='product-number'>{typecount}</p>
                     </div>
                     <div
                         className={'flex flex-col items-center justify-center'}
                     >
-                        <p className='product'>Maxsulotlar soni</p>
+                        <p className='product'>{t("Maxsulotlar soni")}</p>
                         <p className='product-number'>{productcount}</p>
                     </div>
                     <div
                         className={'flex flex-col items-center justify-center'}
                     >
-                        <p className='product'>Jami</p>
+                        <p className='product'>{t("Jami")}</p>
                         <p className='product-total'>
                             {totalPrice.toLocaleString('ru-Ru')} {currency}
                         </p>
@@ -77,16 +80,16 @@ const Filial = ({
                 </div>
                 <div className='shop-name flex flex-col w-[13.4375rem]'>
                     <div className='shop-title'>
-                        <p>{shopname}</p>
+                        <p>{t(shopname)}</p>
                     </div>
                     <div className={'filial-btn'}>
                         <Link
-                            to={`${
-                                reportOpen
+                            to={`${reportOpen
                                     ? `/dukonlar/report/${id}`
                                     : '/dukonlar'
                             }`}
                             onClick={() => handleReportOpen()}
+
                         >
                             <FilialButtons
                                 type={'product'}
@@ -95,12 +98,12 @@ const Filial = ({
                         </Link>
 
                         <Link
-                            to={`${
-                                salesOpen
+                            to={`${salesOpen
                                     ? `/dukonlar/sales/${id}`
                                     : '/dukonlar'
                             } `}
                             onClick={() => handleSalesOpen()}
+
                         >
                             <FilialButtons
                                 type={'selling'}
@@ -108,12 +111,12 @@ const Filial = ({
                             />
                         </Link>
                         <Link
-                            to={`${
-                                paymentOpen
+                            to={`${paymentOpen
                                     ? `/dukonlar/payment/${id}`
                                     : '/dukonlar'
                             }`}
                             onClick={() => handlePaymentOpen()}
+
                         >
                             <FilialButtons
                                 type={'payments'}

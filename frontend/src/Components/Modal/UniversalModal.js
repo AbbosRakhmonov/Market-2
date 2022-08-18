@@ -10,28 +10,31 @@ import AllChecks from './ModalBodys/AllChecks.js'
 import StepperPage from './ModalBodys/StepperPage.js'
 import AdminMarkets from './ModalBodys/AdminMarkets.js'
 import {SavedSalesCheck} from '../SaleCheck/SavedSalesCheck.js'
+import { useTranslation } from 'react-i18next';
 
-function UniversalModal(
-    {
-        isOpen,
-        toggleModal,
-        body,
-        approveFunction,
-        closeModal,
-        excelData,
-        headers,
-        setCreatedData,
-        createdData,
-        headerText,
-        title,
-        product,
-        changeProduct,
-        currency,
-        printedSelling,
-        printedInventories,
-        payment,
-        addMarket
-    }) {
+function UniversalModal({
+    isOpen,
+    toggleModal,
+    body,
+    approveFunction,
+    closeModal,
+    excelData,
+    headers,
+    setCreatedData,
+    createdData,
+    headerText,
+    title,
+    product,
+    changeProduct,
+    currency,
+    printedSelling,
+    printedInventories,
+    payment,
+    addMarket
+}) {
+
+   const {t} = useTranslation(['common'])
+
     const customStyles = {
         content: {
             width: '90%',
@@ -114,7 +117,7 @@ function UniversalModal(
             // case 'checkInventory':
             //     return <AllCheckInventories product={printedInventories} />
             default:
-                return 'Bunday jadval topilmadi'
+                return t('Bunday jadval topilmadi')
         }
     }
     return (
@@ -123,9 +126,10 @@ function UniversalModal(
             style={
                 body === 'checkSell' || body === 'allChecks' || body === 'addMarket' || body === 'filterBranch'
                     ? {...modalFull}
+
                     : body === 'approve' || body === 'complete'
                         ? {}
-                        : {...customStyles}
+                        : { ...customStyles }
             }
             onRequestClose={closeModal || toggleModal}
             closeTimeoutMS={100}
