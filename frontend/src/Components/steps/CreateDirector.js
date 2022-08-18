@@ -1,11 +1,11 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import FieldContainer from '../FieldContainer/FieldContainer.js'
 import {motion} from 'framer-motion'
 import BtnAddRemove from '../Buttons/BtnAddRemove.js'
 import {checkEmptyString} from '../../App/globalFunctions.js'
 import {warningEmptyInput, warningRepeatPasswordDoesntMatch} from '../ToastMessages/ToastMessages.js'
 
-function CreateDirector({handleClickFinish}) {
+function CreateDirector({handleClickFinish, director}) {
     const [directorName, setDirectorName] = useState('')
     const [directorSurname, setDirectorSurname] = useState('')
     const [directorFatherName, setDirectorFatherName] = useState('')
@@ -34,6 +34,14 @@ function CreateDirector({handleClickFinish}) {
             }
         }
     }
+    useEffect(() => {
+        if (director) {
+            setDirectorName(director.firstname ? director?.firstname : '')
+            setDirectorSurname(director.lastname ? director?.lastname : '')
+            setDirectorFatherName(director.fathername ? director?.fathername : '')
+            setDirectorPhone(director.phone ? director?.phone : '')
+        }
+    }, [director])
     return (
         <motion.form
             transition={{duration: 0.5}}
@@ -92,19 +100,21 @@ function CreateDirector({handleClickFinish}) {
                     label={'Parol'}
                     maxWidth={'grow'}
                     placeholder={'misol: Jas12345'}
-                    type='text'
+                    type='password'
                     value={password}
                     star={true}
                     onChange={e => setPassword(e.target.value)}
+                    autoComplete={'new-password'}
                 />
                 <FieldContainer
                     label={'Parol takroriy'}
                     maxWidth={'grow'}
                     placeholder={'misol: Jas12345'}
-                    type='text'
+                    type='password'
                     value={repeatPassword}
                     star={true}
                     onChange={e => setRepeatPassword(e.target.value)}
+                    autoComplete={'new-password'}
                 />
             </div>
             <div className='flex justify-center mt-[2.5rem]'>

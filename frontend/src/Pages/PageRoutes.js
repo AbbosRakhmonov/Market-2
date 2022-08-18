@@ -21,7 +21,7 @@ const PageRoutes = () => {
             dispatch(getCurrency())
             dispatch(getCurrencyType())
         }
-    }, [dispatch, user.type])
+    }, [dispatch, user?.type])
     useEffect(() => {
         if (!currency && !getCurrencyLoading) {
             warningCurrencyRate()

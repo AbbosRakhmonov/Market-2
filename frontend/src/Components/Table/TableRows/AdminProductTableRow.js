@@ -7,7 +7,6 @@ export const AdminProductTableRow = (
         countPage,
         data,
         Edit,
-        Delete,
         onClickTableRow
     }) => {
     return (
@@ -41,12 +40,10 @@ export const AdminProductTableRow = (
                             <TableBtn
                                 type={'edit'}
                                 bgcolor='bg-warning-500'
-                                onClick={() => Edit(market)}
-                            />
-                            <TableBtn
-                                type={'delete'}
-                                bgcolor='bg-error-500 ml-2.5'
-                                onClick={() => Delete(market)}
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    Edit(market)
+                                }}
                             />
                         </div>
                     </td>

@@ -1,11 +1,11 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import FieldContainer from '../FieldContainer/FieldContainer.js'
 import BtnCreateShop from '../Buttons/BtnCreateShop.js'
 import {motion} from 'framer-motion'
 import {warningEmptyInput} from '../ToastMessages/ToastMessages.js'
 import {checkEmptyString} from '../../App/globalFunctions.js'
 
-function CreateShop({handleClickNext}) {
+function CreateShop({handleClickNext, editedMarket}) {
     const [shopName, setShopName] = useState('')
     const [organizationName, setOrganizationName] = useState('')
     const [addressName, setAddressName] = useState('')
@@ -36,6 +36,20 @@ function CreateShop({handleClickNext}) {
             handleClickNext(allData)
         }
     }
+    useEffect(() => {
+        if (editedMarket) {
+            setShopName(editedMarket?.name ? editedMarket?.name : '')
+            setOrganizationName(editedMarket?.organitionName ? editedMarket?.organitionName : '')
+            setAddressName(editedMarket?.address ? editedMarket?.address : '')
+            setTargetName(editedMarket?.orientation ? editedMarket?.orientation : '')
+            setBankName(editedMarket?.bank ? editedMarket?.bank : '')
+            setInnName(editedMarket?.inn ? editedMarket?.inn : '')
+            setAccauntNumber(editedMarket?.bankNumber ? editedMarket?.bankNumber : '')
+            setPhoneNumber1(editedMarket?.phone1 ? editedMarket?.phone1 : '')
+            setPhoneNumber2(editedMarket?.phone2 ? editedMarket?.phone2 : '')
+            setPhoneNumber3(editedMarket?.phone3 ? editedMarket?.phone3 : '')
+        }
+    }, [editedMarket])
     return (
         <motion.section
             transition={{duration: 0.5}}

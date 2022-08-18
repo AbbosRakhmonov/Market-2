@@ -1,20 +1,22 @@
 import Input from '../Inputs/Input'
 import SelectInput from '../SelectInput/SelectInput'
 
-function FieldContainer({
-    star,
-    maxWidth,
-    value,
-    onChange,
-    label,
-    placeholder,
-    type,
-    select,
-    disabled,
-    options,
-    border,
-    onKeyUp,
-}) {
+function FieldContainer(
+    {
+        star,
+        maxWidth,
+        value,
+        onChange,
+        label,
+        placeholder,
+        type,
+        select,
+        disabled,
+        options,
+        border,
+        onKeyUp,
+        autoComplete
+    }) {
     return (
         <div
             className={
@@ -46,6 +48,7 @@ function FieldContainer({
                     placeholder={placeholder}
                     onKeyUp={onKeyUp}
                     disabled={disabled}
+                    autoComplete={autoComplete}
                 />
             )}
         </div>
