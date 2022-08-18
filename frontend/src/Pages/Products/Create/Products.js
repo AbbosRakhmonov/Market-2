@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react'
+import {useEffect, useState} from 'react'
 import ExportBtn from '../../../Components/Buttons/ExportBtn'
 import ImportBtn from '../../../Components/Buttons/ImportBtn'
 import * as XLSX from 'xlsx'
 import Pagination from '../../../Components/Pagination/Pagination'
 import Table from '../../../Components/Table/Table'
-import { useDispatch, useSelector } from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import Spinner from '../../../Components/Spinner/SmallLoader'
 import NotFind from '../../../Components/NotFind/NotFind'
-import { motion } from 'framer-motion'
+import {motion} from 'framer-motion'
 import {
     addProduct,
     addProductsFromExcel,
@@ -23,7 +23,7 @@ import {
     getProductsByFilter,
     updateProduct,
 } from './productSlice'
-import { clearErrorUnits, getUnits } from '../../Units/unitsSlice'
+import {clearErrorUnits, getUnits} from '../../Units/unitsSlice'
 import {
     successAddProductMessage,
     successDeleteProductMessage,
@@ -33,7 +33,7 @@ import {
     warningCurrencyRate,
     warningEmptyInput,
 } from '../../../Components/ToastMessages/ToastMessages'
-import { regexForTypeNumber } from '../../../Components/RegularExpressions/RegularExpressions'
+import {regexForTypeNumber} from '../../../Components/RegularExpressions/RegularExpressions'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
 import CreateProductForm from '../../../Components/CreateProductForm/CreateProductForm'
 import {
@@ -48,21 +48,21 @@ import {
 } from '../../../App/globalFunctions'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
 import BarcodeReader from 'react-barcode-reader'
-import { clearErrorGetBarcode, getBarcode } from '../../Barcode/barcodeSlice.js'
-import { getCurrency } from '../../Currency/currencySlice.js'
-import { useTranslation } from 'react-i18next'
+import {clearErrorGetBarcode, getBarcode} from '../../Barcode/barcodeSlice.js'
+import {getCurrency} from '../../Currency/currencySlice.js'
+import {useTranslation} from 'react-i18next'
 
 function Products() {
-    const { t } = useTranslation(['common'])
+    const {t} = useTranslation(['common'])
     const dispatch = useDispatch()
     const {
-        market: { _id },
+        market: {_id},
     } = useSelector((state) => state.login)
-    const { errorUnits, units } = useSelector((state) => state.units)
-    const { allcategories, errorGetCategories } = useSelector(
+    const {errorUnits, units} = useSelector((state) => state.units)
+    const {allcategories, errorGetCategories} = useSelector(
         (state) => state.category
     )
-    const { currency, currencyType, currencyError } = useSelector(
+    const {currency, currencyType, currencyError} = useSelector(
         (state) => state.currency
     )
     const {
@@ -78,7 +78,7 @@ function Products() {
         successDeleteProduct,
         allProducts,
     } = useSelector((state) => state.products)
-    const { barcode, errorGetBarcode } = useSelector((state) => state.barcode)
+    const {barcode, errorGetBarcode} = useSelector((state) => state.barcode)
     const [data, setData] = useState(products)
     const [searchedData, setSearchedData] = useState(searchedProducts)
     const [checkOfProduct, setCheckOfProduct] = useState('')
@@ -112,24 +112,23 @@ function Products() {
         sort: '',
         count: 0,
     })
-    
+
     // modal toggle
     const toggleModal = () => setModalVisible(!modalVisible)
 
     // table headers
     const headers = [
-        { title: t('№') },
+        {title: t('№')},
         {
-            filter: 'productdata.barcode'
+            filter: 'productdata.barcode',
             title: t('Shtrix kodi'),
         },
         {
             title: t('Kategoriyasi'),
             filter: t('category.code'),
-
-        },   
-        { title: t('Kodi'), filter: 'productdata.code' },
-        { title: t('Nomi'), filter: 'productdata.name' },
+        },
+        {title: t('Kodi'), filter: 'productdata.code'},
+        {title: t('Nomi'), filter: 'productdata.name'},
         {
             title: t('Soni'),
             filter: 'total',
@@ -148,7 +147,7 @@ function Products() {
                     ? 'price.sellingpriceuzs'
                     : 'price.sellingprice',
         },
-        { title: '' },
+        {title: ''},
     ]
     const exportHeader = [
         t('№'),
@@ -163,15 +162,15 @@ function Products() {
         t('Sotish narxi UZS'),
     ]
     const importHeaders = [
-        { name: 'Kategoriyasi', value: 'category' },
-        { name: 'Kodi', value: 'code' },
-        { name: 'Nomi', value: 'name' },
-        { name: "O'lchov birligi", value: 'unit' },
-        { name: 'Soni', value: 'total' },
-        { name: 'Kelish narxi USD', value: 'incomingprice' },
-        { name: 'Kelish narxi UZS', value: 'incomingpriceuzs' },
-        { name: 'Sotish narxi USD', value: 'sellingprice' },
-        { name: 'Sotish narxi UZS', value: 'sellingpriceuzs' },
+        {name: 'Kategoriyasi', value: 'category'},
+        {name: 'Kodi', value: 'code'},
+        {name: 'Nomi', value: 'name'},
+        {name: "O'lchov birligi", value: 'unit'},
+        {name: 'Soni', value: 'total'},
+        {name: 'Kelish narxi USD', value: 'incomingprice'},
+        {name: 'Kelish narxi UZS', value: 'incomingpriceuzs'},
+        {name: 'Sotish narxi USD', value: 'sellingprice'},
+        {name: 'Sotish narxi UZS', value: 'sellingpriceuzs'},
     ]
 
     // handle change of inputs
@@ -236,8 +235,8 @@ function Products() {
         let val = e.target.value
         let valForSearch = val.replace(/\s+/g, ' ').trim()
         setSearchByCode(val)
-            ; (searchedData.length > 0 || totalSearched > 0) &&
-                dispatch(clearSearchedProducts())
+        ;(searchedData.length > 0 || totalSearched > 0) &&
+            dispatch(clearSearchedProducts())
         if (valForSearch === '') {
             setData(products)
             setFilteredDataTotal(total)
@@ -254,8 +253,8 @@ function Products() {
         let val = e.target.value
         let valForSearch = val.replace(/\s+/g, ' ').trim()
         setBarCode(val)
-            ; (searchedData.length > 0 || totalSearched > 0) &&
-                dispatch(clearSearchedProducts())
+        ;(searchedData.length > 0 || totalSearched > 0) &&
+            dispatch(clearSearchedProducts())
         if (valForSearch === '') {
             setData(products)
             setFilteredDataTotal(total)
@@ -272,8 +271,8 @@ function Products() {
         let val = e.target.value
         let valForSearch = val.replace(/\s+/g, ' ').trim()
         setSearchByCategory(val)
-            ; (searchedData.length > 0 || totalSearched > 0) &&
-                dispatch(clearSearchedProducts())
+        ;(searchedData.length > 0 || totalSearched > 0) &&
+            dispatch(clearSearchedProducts())
         if (valForSearch === '') {
             setData(products)
             setFilteredDataTotal(total)
@@ -289,8 +288,8 @@ function Products() {
         let val = e.target.value
         let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
         setSearchByName(val)
-            ; (searchedData.length > 0 || totalSearched > 0) &&
-                dispatch(clearSearchedProducts())
+        ;(searchedData.length > 0 || totalSearched > 0) &&
+            dispatch(clearSearchedProducts())
         if (valForSearch === '') {
             setData(products)
             setFilteredDataTotal(total)
@@ -332,8 +331,8 @@ function Products() {
             const body = {
                 currentPage: 0,
                 countPage: showByTotal,
-                search: {  
-                  barcode: barCode.replace(/\s+/g, ' ').trim(),
+                search: {
+                    barcode: barCode.replace(/\s+/g, ' ').trim(),
                 },
                 product: {
                     code: codeOfProduct,
@@ -347,7 +346,7 @@ function Products() {
     }
 
     // filter by total
-    const filterByTotal = ({ value }) => {
+    const filterByTotal = ({value}) => {
         setShowByTotal(value)
         setCurrentPage(0)
     }
@@ -728,7 +727,7 @@ function Products() {
     useEffect(() => {
         if (currentProduct) {
             const {
-                productdata: { name, code, barcode },
+                productdata: {name, code, barcode},
                 unit,
                 total,
                 category,
@@ -782,8 +781,8 @@ function Products() {
                 categoryOfProduct?.label &&
                     setCheckOfProduct(
                         '47800' +
-                        categoryOfProduct.label.slice(0, 3) +
-                        lastProductCode
+                            categoryOfProduct.label.slice(0, 3) +
+                            lastProductCode
                     )
         }
         //    eslint-disable-next-line react-hooks/exhaustive-deps
@@ -804,10 +803,10 @@ function Products() {
             animate='open'
             exit='collapsed'
             variants={{
-                open: { opacity: 1, height: 'auto' },
-                collapsed: { opacity: 0, height: 0 },
+                open: {opacity: 1, height: 'auto'},
+                collapsed: {opacity: 0, height: 0},
             }}
-            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
+            transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
         >
             {/* Modal */}
             <UniversalModal
@@ -815,11 +814,11 @@ function Products() {
                 body={modalBody}
                 headerText={
                     modalBody === 'approve' &&
-                    t("Mahsulotni o`chirishni tasdiqlaysizmi?")
+                    t('Mahsulotni o`chirishni tasdiqlaysizmi?')
                 }
                 title={
                     modalBody === 'approve' &&
-                    t("O`chirilgan mahsulotni tiklashning imkoni mavjud emas!")
+                    t('O`chirilgan mahsulotni tiklashning imkoni mavjud emas!')
                 }
                 approveFunction={
                     modalBody === 'approve'
@@ -884,7 +883,7 @@ function Products() {
                     <ImportBtn readExcel={readExcel} />
                 </div>
                 <h3 className={'text-blue-900 text-[xl] leading-[1.875rem]'}>
-                    {t("Maxsulotlar")}
+                    {t('Maxsulotlar')}
                 </h3>
                 {(filteredDataTotal !== 0 || totalSearched !== 0) && (
                     <Pagination
