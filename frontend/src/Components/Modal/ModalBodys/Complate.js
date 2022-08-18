@@ -1,6 +1,8 @@
 import {IoCheckmarkCircleOutline} from 'react-icons/io5'
+import { useTranslation } from 'react-i18next';
 
 function Complate({toggleModal, approveFunction, headerText, title}) {
+    const {t} = useTranslation(['common'])
     return (
         <div className={'modalContent text-center'}>
             <div className='flex items-center justify-center'>
@@ -10,10 +12,10 @@ function Complate({toggleModal, approveFunction, headerText, title}) {
                 />
             </div>
             <p className={'text-[1.125rem] text-black-700 font-medium mt-5'}>
-                {headerText}
+                {t(headerText)}
             </p>
             <p className={'text-black-700 font-light mt-3 text-[0.8rem]'}>
-                {title}
+                {t(title)}
             </p>
             <div
                 className={'flex mt-7 items-center justify-center gap-[1.5rem]'}
@@ -22,13 +24,13 @@ function Complate({toggleModal, approveFunction, headerText, title}) {
                     className={'approveBtn bg-black-500 hover:bg-black-700'}
                     onClick={toggleModal}
                 >
-                    Bekor qilish
+                    {t("Bekor qilish")}
                 </button>
                 <button
                     className={'approveBtn bg-primary-800 hover:bg-primary-900'}
                     onClick={approveFunction}
                 >
-                    Tasdiqlash
+                    {t("Tasdiqlash")}
                 </button>
             </div>
         </div>

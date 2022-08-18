@@ -2,6 +2,7 @@ import {useEffect} from 'react'
 import {IoChevronForward} from 'react-icons/io5'
 import {GoPrimitiveDot} from 'react-icons/go'
 import {NavLink} from 'react-router-dom'
+import { useTranslation } from 'react-i18next';
 
 function SubAccordionLink({
                               submenu,
@@ -23,6 +24,8 @@ function SubAccordionLink({
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [path, id])
+    const {t} = useTranslation(['common'])
+
     return (
         <>
             <button
@@ -40,7 +43,7 @@ function SubAccordionLink({
                 >
                     <IoChevronForward size={'0.875rem'} />
                 </span>
-                <span className={'text-base leading-[1.1875rem]'}>{label}</span>
+                <span className={'text-base leading-[1.1875rem]'}>{t(label)}</span>
             </button>
             <div
                 className={`transition-all ease-in-out duration-300 overflow-hidden flex flex-col border-b-[1px] border-b-[rgba(184,186,185,1)] pl-[1.875rem] ${
@@ -58,7 +61,7 @@ function SubAccordionLink({
                         <span>
                             <GoPrimitiveDot opacity={0.5} size={'0.8rem'} />
                         </span>
-                        <span>{subitem.label}</span>
+                        <span>{t(subitem.label)}</span>
                     </NavLink>
                 ))}
             </div>

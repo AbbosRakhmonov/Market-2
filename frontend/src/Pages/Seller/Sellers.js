@@ -1,20 +1,22 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import FieldContainer from './../../Components/FieldContainer/FieldContainer'
 import Button from './../../Components/Buttons/BtnAddRemove'
 import Table from './../../Components/Table/Table'
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Spinner from './../../Components/Spinner/SmallLoader'
 import NotFind from './../../Components/NotFind/NotFind'
-import {checkEmptyString} from '../../App/globalFunctions.js'
-import {motion} from 'framer-motion'
+import { checkEmptyString } from '../../App/globalFunctions.js'
+import { motion } from 'framer-motion'
 import {
     successAddSellerMessage,
     successUpdateSellerMessage,
     universalToast,
     warningEmptyInput,
 } from './../../Components/ToastMessages/ToastMessages'
+import { useTranslation } from 'react-i18next';
 import {
-    addSeller,
+
+addSeller,
     clearErrorSellers,
     clearSuccessAddSeller,
     clearSuccessUpdateSeller,
@@ -24,6 +26,7 @@ import {
 import {useNavigate} from 'react-router-dom'
 
 function Sellers() {
+    const { t } = useTranslation(['common'])
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -38,12 +41,12 @@ function Sellers() {
     const {user} = useSelector((state) => state.login)
 
     const headers = [
-        {title: '№', styles: 'w-[8%] text-left'},
-        {title: 'Ismi', styles: 'w-[21%]'},
-        {title: 'Familiyasi', styles: 'w-[21%]'},
-        {title: 'Telefon raqami', styles: 'w-[21%]'},
-        {title: 'Login', styles: 'w-[21%]'},
-        {title: '', styles: 'w-[8%]'},
+        { title: '№', styles: 'w-[8%] text-left' },
+        { title: t('Ismi'), styles: 'w-[21%]' },
+        { title: t('Familiyasi'), styles: 'w-[21%]' },
+        { title: t('Telefon raqami'), styles: 'w-[21%]' },
+        { title: t('Login'), styles: 'w-[21%]' },
+        { title: '', styles: 'w-[8%]' }
     ]
 
     const [stickyForm, setStickForm] = useState(false)
@@ -71,10 +74,7 @@ function Sellers() {
             warningEmptyInput()
         }
         if (sellerPassword !== sellerAgainPassword) {
-            universalToast(
-                'Sotuvchining paroli bilan tasdiqlash paroli mos kelmadi',
-                'warning'
-            )
+            universalToast(t('Sotuvchining paroli bilan tasdiqlash paroli mos kelmadi'), 'warning')
         }
         if (!filter && sellerPassword === sellerAgainPassword) {
             const body = {
@@ -103,10 +103,8 @@ function Sellers() {
             warningEmptyInput()
         }
         if (sellerPassword !== sellerAgainPassword) {
-            universalToast(
-                'Sotuvchining paroli bilan tasdiqlash paroli mos kelmadi',
-                'warning'
-            )
+            universalToast(t('Sotuvchining paroli bilan tasdiqlash paroli mos kelmadi'), 'warning')
+
         }
         if (!filter && sellerPassword === sellerAgainPassword) {
             const body = {
@@ -197,8 +195,8 @@ function Sellers() {
                         onChange={(e) => {
                             setSellerName(e.target.value)
                         }}
-                        label={'Ismi'}
-                        placeholder={'misol: Jasurbek'}
+                        label={t('Ismi')}
+                        placeholder={t('misol: Jasurbek')}
                         maxWidth={'w-[21.75rem]'}
                         type={'text'}
                         border={true}
@@ -209,8 +207,8 @@ function Sellers() {
                         onChange={(e) => {
                             setSellerSurname(e.target.value)
                         }}
-                        label={'Familiyasi'}
-                        placeholder={'Toshev'}
+                        label={t('Familiyasi')}
+                        placeholder={t('Toshev')}
                         maxWidth={'w-[21.75rem]'}
                         type={'text'}
                         border={true}
@@ -221,7 +219,7 @@ function Sellers() {
                         onChange={(e) => {
                             setSellerNumber(e.target.value)
                         }}
-                        label={'Telefon raqami'}
+                        label={t('Telefon raqami')}
                         placeholder={'+998 99 123 45 67'}
                         type={'number'}
                         border={false}
@@ -235,7 +233,7 @@ function Sellers() {
                         onChange={(e) => {
                             setSellerLogin(e.target.value)
                         }}
-                        label={'Login'}
+                        label={t('Login')}
                         placeholder={'123456'}
                         maxWidth={'12.75rem'}
                         type={'text'}
@@ -247,7 +245,7 @@ function Sellers() {
                         onChange={(e) => {
                             setSellerPassword(e.target.value)
                         }}
-                        label={'Parol'}
+                        label={t('Parol')}
                         placeholder={'123456'}
                         maxWidth={'12.75rem'}
                         type={'text'}
@@ -259,7 +257,7 @@ function Sellers() {
                         onChange={(e) => {
                             setSellerAgainPassword(e.target.value)
                         }}
-                        label={'Parolni tasdiqlash'}
+                        label={t('Parolni tasdiqlash')}
                         placeholder={'123456'}
                         maxWidth={'12.75rem'}
                         type={'text'}
@@ -273,16 +271,16 @@ function Sellers() {
                             edit={stickyForm}
                             text={
                                 stickyForm
-                                    ? `Saqlash`
-                                    : `Yangi sotuvchi qo'shish`
+                                    ? t(`Saqlash`)
+                                    : t("Yangi sotuvchi qo`shish")
                             }
                         />
-                        <Button onClick={clearForm} text={'Tozalash'} />
+                        <Button onClick={clearForm} text={t('Tozalash')} />
                     </div>
                 </div>
             </form>
             <div className='font-normal text-[1.25rem] leading-[1.875rem] text-blue-900 mainPadding'>
-                <p>Sotuvchilar</p>
+                <p>{t("Sotuvchilar")}</p>
             </div>
 
             <div className='tableContainerPadding'>

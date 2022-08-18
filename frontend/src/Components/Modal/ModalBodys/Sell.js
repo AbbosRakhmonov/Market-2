@@ -1,10 +1,12 @@
-import React, {useCallback, useEffect, useState} from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import TableInput from '../../Inputs/TableInput.js'
-import {useSelector} from 'react-redux'
-import {IoEye, IoEyeOff} from 'react-icons/io5'
+import { useSelector } from 'react-redux'
+import { IoEye, IoEyeOff } from 'react-icons/io5'
+import { useTranslation } from 'react-i18next';
 
-function Sell({product, changeProduct, approveFunction, toggleModal}) {
-    const {currencyType} = useSelector((state) => state.currency)
+function Sell({ product, changeProduct, approveFunction, toggleModal }) {
+    const { t } = useTranslation(['common'])
+    const { currencyType } = useSelector((state) => state.currency)
     // submit form when user press enter
     const handleKeyPress = useCallback(
         (e) => {
@@ -38,14 +40,14 @@ function Sell({product, changeProduct, approveFunction, toggleModal}) {
                     <thead className='rounded-t-lg'>
                         <tr className='bg-primary-900 rounded-t-lg'>
                             <th scope='col' className='th w-[20%]'>
-                                <span>Soni</span>
+                                <span>{t("Soni")}</span>
                             </th>
                             <th scope='col' className='th w-[30%]'>
-                                <span>Narxi</span>
+                                <span>{t("Narxi")}</span>
                             </th>
 
                             <th scope='col' className='th'>
-                                <span>Jami</span>
+                                <span>{t("Jami")}</span>
                             </th>
                             <th scope='col' className='th'>
                                 <span></span>
@@ -82,11 +84,11 @@ function Sell({product, changeProduct, approveFunction, toggleModal}) {
                             <td className='py-0 td text-right text-success-600 font-medium'>
                                 {currencyType !== 'UZS'
                                     ? product?.totalprice.toLocaleString(
-                                          'ru-Ru'
-                                      )
+                                        'ru-Ru'
+                                    )
                                     : product?.totalpriceuzs.toLocaleString(
-                                          'ru-Ru'
-                                      )}{' '}
+                                        'ru-Ru'
+                                    )}{' '}
                                 {currencyType}
                             </td>
                             <td className='py-0 td text-right text-success-600 font-medium border-r-0 '>
@@ -102,9 +104,9 @@ function Sell({product, changeProduct, approveFunction, toggleModal}) {
                                         {showIncomingPrice
                                             ? currencyType === 'UZS'
                                                 ? product.incomingpriceuzs.toLocaleString() +
-                                                  ' UZS'
+                                                ' UZS'
                                                 : product.incomingprice.toLocaleString() +
-                                                  ' UZS'
+                                                ' UZS'
                                             : ''}
                                     </span>
                                 </div>
@@ -122,13 +124,13 @@ function Sell({product, changeProduct, approveFunction, toggleModal}) {
                     className={'approveBtn bg-black-500 hover:bg-black-700'}
                     onClick={toggleModal}
                 >
-                    Bekor qilish
+                    {t("Bekor qilish")}
                 </button>
                 <button
                     className={'approveBtn bg-success-500 hover:bg-success-700'}
                     onClick={approveFunction}
                 >
-                    Tasdiqlash
+                    {t("Tasdiqlash")}
                 </button>
             </div>
         </div>

@@ -7,6 +7,7 @@ import {
     clearSearchedMarkets,
     createDirector,
     createMarket,
+    editMarket,
     getMarkets,
     getMarketsByFilter
 } from './adminproductsSlice.js'
@@ -33,6 +34,7 @@ const AdminProduct = () => {
     const [createdMarketId, setCreatedMarketId] = useState(null)
     const [image, setImage] = useState('')
     const [currentMarket, setCurrentMarket] = useState(null)
+    const [editedMarket, setEditedMarket] = useState(null)
 
     const headers = [
         {title: '№', styles: 'text-center'},
@@ -41,7 +43,7 @@ const AdminProduct = () => {
         {title: 'Director', styles: 'text-center'},
         {title: 'Telefon', styles: 'w-[7.875rem]'},
         {title: 'Turi', styles: 'text-center w-[3.1875rem]'},
-        {title: '', styles: 'w-[4.875rem]'}
+        {title: '', styles: 'w-[3rem]'}
     ]
 
     const toggleModal = () => {
@@ -49,6 +51,11 @@ const AdminProduct = () => {
         setTimeout(() => {
             setModalBody('')
             setCurrentMarket(null)
+            setEditedMarket(null)
+            setImage('')
+            setCreatedMarketId(null)
+            setCurrentStep(1)
+            setBgActive(false)
         }, 100)
     }
     const filterByTotal = ({value}) => {
@@ -143,10 +150,55 @@ const AdminProduct = () => {
             }
         })
     }
+    const handleEditNext = (body) => {
+        const sendingBody = {
+            market: {
+                ...body,
+                _id: editedMarket._id
+            }
+        }
+        dispatch(editMarket(sendingBody)).then(({error, payload}) => {
+            if (!error) {
+                setCurrentStep(currentStep + 1)
+                setBgActive(true)
+                setImage(editedMarket?.director?.image || '')
+                setCreatedMarketId(payload._id)
+                const body = {
+                    currentPage,
+                    countPage: showByTotal,
+                    search: {
+                        name: name.replace(/\s+/g, ' ').trim(),
+                        director: director.replace(/\s+/g, ' ').trim()
+                    }
+                }
+                dispatch(getMarkets(body))
+            }
+        })
+    }
 
     const handleClickRow = (market) => {
-        setCurrentMarket(market)
-        setModalBody('filterBranch')
+        if (!market?.mainmarket) {
+            setCurrentMarket(market)
+            setModalBody('filterBranch')
+            setModalVisible(true)
+        }
+    }
+    const handleClickSave = () => {
+        const body = {
+            currentPage,
+            countPage: showByTotal,
+            search: {
+                name: name.replace(/\s+/g, ' ').trim(),
+                director: director.replace(/\s+/g, ' ').trim()
+            }
+        }
+        dispatch(getMarkets(body))
+        toggleModal()
+    }
+    const handleClickEdit = (market) => {
+        setEditedMarket(market)
+        setImage(market?.image ? market?.image : '')
+        setModalBody('addMarket')
         setModalVisible(true)
     }
 
@@ -177,17 +229,19 @@ const AdminProduct = () => {
             <UniversalModal
                 body={modalBody}
                 isOpen={modalVisible}
-                toggleModal={currentStep === 1 ? toggleModal : () => {
-                }}
+                toggleModal={!editedMarket ? currentStep === 1 ? toggleModal : () => {
+                } : toggleModal}
                 addMarket={{
                     currentStep,
                     bgActive,
-                    handleNext: handleAddNext,
+                    handleNext: !editedMarket ? handleAddNext : handleEditNext,
                     handleFinish: handleAddFinish,
-                    image,
-                    setImage
+                    image: image,
+                    setImage: setImage,
+                    editedMarket
                 }}
                 product={currentMarket}
+                approveFunction={handleClickSave}
             />
             <div className='mainPadding'>
                 <BtnAddRemove text={'Yangi do\'kon qo`shish'} add={true} onClick={() => {
@@ -231,6 +285,7 @@ const AdminProduct = () => {
                         currentPage={currentPage}
                         countPage={showByTotal}
                         onClickTableRow={handleClickRow}
+                        Edit={handleClickEdit}
                     />}
             </div>
         </section>

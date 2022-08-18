@@ -17,8 +17,10 @@ import {CheckIncoming} from '../Functions/CheckIncoming'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
 import {UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
 import {useNavigate} from 'react-router-dom'
+import { useTranslation } from 'react-i18next';
 
 const RegisterIncoming = () => {
+    const {t} = useTranslation(['common'])
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const {
@@ -38,11 +40,11 @@ const RegisterIncoming = () => {
     const [modal, setModal] = useState(false)
     const [temporaryIncomings, setTemporaryIncomings] = useState([])
     const [selectSupplierValue, setSelectSupplierValue] = useState({
-        label: 'Yetkazib beruvchi',
+        label: t('Yetkazib beruvchi'),
         value: ''
     })
     const [selectProductValue, setSelectProductValue] = useState({
-        label: 'Mahsulotlar',
+        label: t('Maxsulotlar'),
         value: ''
     })
 
@@ -259,11 +261,11 @@ const RegisterIncoming = () => {
             })
         ).then(() => {
             setSelectSupplierValue({
-                label: 'Yetkazib beruvchi',
+                label: t('Yetkazib beruvchi'),
                 value: ''
             })
             setSelectProductValue({
-                label: 'Mahsulotlar',
+                label: t('Mahsulotlar'),
                 value: ''
             })
         })
@@ -272,34 +274,34 @@ const RegisterIncoming = () => {
     // Tableheader
     const headers = [
         {
-            title: '№',
+            title: t('№'),
             styles: 'w-[8%]'
         },
         {
-            title: 'Kodi',
+            title: t('Kodi'),
             styles: 'w-[10%]'
         },
         {
-            title: 'Nomi'
+            title: t('Nomi')
         },
         {
-            title: 'Soni',
+            title: t('Soni'),
             styles: 'w-[10%]'
         },
         {
-            title: 'Narxi',
+            title: t('Narxi'),
             styles: 'w-[10%]'
         },
         {
-            title: 'Avvalgi narxi',
+            title: t('Avvalgi narxi'),
             styles: 'w-[15%]'
         },
         {
-            title: 'Jami',
+            title: t('Jami'),
             styles: 'w-[15%]'
         },
         {
-            title: 'Sotish',
+            title: t('Sotish'),
             styles: 'w-[15%]'
         },
         {
@@ -373,7 +375,7 @@ const RegisterIncoming = () => {
                 </div>
             </div>
             <p className='text-[1.25rem] text-blue-900 mainPadding'>
-                Yetkazib beruvchi: {supplier.name}
+                {t("Yetkazib beruvchi")}: {supplier.name}
             </p>
             <div
                 className={`${incomings.length > 0 ? 'mainPadding' : 'hidden'}`}
@@ -388,11 +390,11 @@ const RegisterIncoming = () => {
                 />
                 <div className='flex items-center justify-end gap-[0.625rem] pt-[1.25rem]'>
                     <SaveBtn
-                        text={'Saqlash'}
+                        text={t('Saqlash')}
                         onClick={() => createTemporary()}
                     />
                     <ConfirmBtn
-                        text={'Tasdiqlash'}
+                        text={t('Tasdiqlash')}
                         onClick={() => {
                             createIncoming()
                         }}

@@ -43,7 +43,7 @@ export const editUser = createAsyncThunk(
     'login/editUser',
     async (body, {rejectWithValue}) => {
         try {
-            const {data} = Api.post('/edit', body)
+            const {data} = await Api.post('/user/edit', body)
             return data
         } catch (error) {
             return rejectWithValue(error)
@@ -108,6 +108,12 @@ const slice = createSlice({
             state.loading = true
         },
         [editUser.fulfilled]: (state, {payload}) => {
+            const prevUser = JSON.parse(localStorage.getItem('userData'))
+            const newUser = {
+                ...prevUser,
+                user: payload
+            }
+            localStorage.setItem('userData', JSON.stringify(newUser))
             state.loading = false
             state.user = payload
             successEditProfile()

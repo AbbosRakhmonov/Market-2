@@ -2,8 +2,11 @@ import React, {useCallback} from 'react'
 import Excel from '../../Images/Excel.svg'
 import {universalToast} from '../ToastMessages/ToastMessages'
 import * as XLSX from 'xlsx'
+import { useTranslation } from 'react-i18next';
 
 function ExportBtn({headers, fileName, datas, pagesName}) {
+
+    const {t} = useTranslation(['common'])
 
     const autoFillColumnWidth = (json) => {
         const cols = Object.keys(json[0])
@@ -143,7 +146,7 @@ function ExportBtn({headers, fileName, datas, pagesName}) {
 
     return (
         <button className={'exportButton'} onClick={handleClick}>
-            Eksport
+            {t('Eksport')}
             <span className={'btn-icon bg-white-900 p-[8px]'}>
                 <img src={Excel} alt='excel icon' />
             </span>

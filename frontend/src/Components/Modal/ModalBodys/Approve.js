@@ -1,6 +1,8 @@
-import {IoCloseCircleOutline} from 'react-icons/io5'
+import { IoCloseCircleOutline } from 'react-icons/io5'
+import { useTranslation } from 'react-i18next';
 
-function Approve({toggleModal, approveFunction, headerText, title}) {
+function Approve({ toggleModal, approveFunction, headerText, title }) {
+    const { t } = useTranslation(['common'])
     return (
         <div className={'modalContent text-center'}>
             <div className='flex items-center justify-center'>
@@ -13,7 +15,7 @@ function Approve({toggleModal, approveFunction, headerText, title}) {
                 {headerText}
             </p>
             <p className={'text-black-700 font-light mt-3 text-[0.8rem]'}>
-                {title}
+                {t(title)}
             </p>
             <div
                 className={'flex mt-7 items-center justify-center gap-[1.5rem]'}
@@ -22,13 +24,13 @@ function Approve({toggleModal, approveFunction, headerText, title}) {
                     className={'approveBtn bg-black-500 hover:bg-black-700'}
                     onClick={toggleModal}
                 >
-                    Bekor qilish
+                    {t("Bekor qilish")}
                 </button>
                 <button
                     className={'approveBtn bg-error-500 hover:bg-error-700'}
                     onClick={approveFunction}
                 >
-                    O'chirish
+                    {t("O`chirish")}
                 </button>
             </div>
         </div>

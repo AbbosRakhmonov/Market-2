@@ -2,16 +2,17 @@ import {useState} from 'react'
 import {IoEye, IoEyeOff} from 'react-icons/io5'
 
 function Input({
-    star,
-    placeholder,
-    type,
-    value,
-    onChange,
-    password,
-    label,
-    onKeyUp,
-    disabled,
-}) {
+                   star,
+                   placeholder,
+                   type,
+                   value,
+                   onChange,
+                   password,
+                   label,
+                   onKeyUp,
+                   disabled,
+                   autoComplete
+               }) {
     const [currentShow, setCurrentShow] = useState(false)
     const changeType = () => {
         setCurrentShow(!currentShow)
@@ -20,7 +21,8 @@ function Input({
     return (
         <div className={'input-container'}>
             {label && (
-                <label className={`labelClass leading-[1.125rem] ${star ? " after:content-['*'] after:text-[#F04438] after:pl-[0.25rem]" : ""}`}>
+                <label
+                    className={`labelClass leading-[1.125rem] ${star ? ' after:content-[\'*\'] after:text-[#F04438] after:pl-[0.25rem]' : ''}`}>
                     {label}
                 </label>
             )}
@@ -37,6 +39,7 @@ function Input({
                     } inputClass shadow-[0_10px_10px_rgba(0,0,0,0.05)] leading-[1.125rem]`}
                     onWheel={(e) => e.target.blur()}
                     min={0}
+                    autoComplete={autoComplete || 'off'}
                 />
                 {password && (
                     <button

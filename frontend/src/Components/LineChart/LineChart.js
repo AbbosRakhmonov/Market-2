@@ -10,9 +10,13 @@ import {
     Title,
     Tooltip
 } from 'chart.js'
-import {Line} from 'react-chartjs-2'
+import { Line } from 'react-chartjs-2'
+import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react'
 
-function LineChart({arr, label}) {
+function LineChart({ arr, label }) {
+    const { t } = useTranslation(['common'])
+   
     ChartJS.register(
         CategoryScale,
         LinearScale,
@@ -50,18 +54,18 @@ function LineChart({arr, label}) {
     }
 
     const months = [
-        'Yanvar',
-        'Fevral',
-        'Mart',
-        'Aprel',
-        'May',
-        'Iyun',
-        'Iyul',
-        'Avgust',
-        'Sentabr',
-        'Oktabr',
-        'Noyabr',
-        'Dekabr'
+        t('Yanvar'),
+        t('Fevral'),
+        t('Mart'),
+        t('Aprel'),
+        t('May'),
+        t('Iyun'),
+        t('Iyul'),
+        t('Avgust'),
+        t('Sentabr'),
+        t('Oktabr'),
+        t('Noyabr'),
+        t('Dekabr')
     ]
     const labels = months.slice(0, new Date().getMonth() + 1)
 

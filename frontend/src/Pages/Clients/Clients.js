@@ -30,8 +30,10 @@ import {
     updateClients
 } from './clientsSlice'
 import {checkEmptyString} from '../../App/globalFunctions.js'
+import { useTranslation } from 'react-i18next';
 
 const ClientsPage = () => {
+    const {t} = useTranslation(['common'])
     const dispatch = useDispatch()
 
     const {
@@ -49,8 +51,8 @@ const ClientsPage = () => {
 
     const headers = [
         {title: '№', styles: 'w-[8%] text-left'},
-        {title: 'Agent', styles: 'w-[41%] text-left'},
-        {title: 'Mijoz', styles: 'w-[41%] text-left'},
+        {title: t('Agent'), styles: 'w-[41%] text-left'},
+        {title: t('Mijoz'), styles: 'w-[41%] text-left'},
         {title: '', styles: 'w-[8%] text-left'}
     ]
 
@@ -275,8 +277,8 @@ const ClientsPage = () => {
         >
             <UniversalModal
                 headerText={`${deletedCLients && deletedCLients.name
-                } ismli mijozni o'chirishni tasdiqlaysizmi?`}
-                title="O'chirilgan mijozni tiklashning imkoni mavjud emas!"
+                } ${t("ismli mijozni o`chirishni tasdiqlaysizmi?")}`}
+                title={t("O`chirilgan mijozni tiklashning imkoni mavjud emas!")}
                 toggleModal={toggleModal}
                 body={'approve'}
                 approveFunction={handleClickApproveToDelete}
@@ -291,8 +293,8 @@ const ClientsPage = () => {
                     <FieldContainer
                         value={packman}
                         onChange={handleChangeOptions}
-                        label={'Agentni tanlang'}
-                        placeholder={'misol: Dilso`z'}
+                        label={t('Agentni tanlang')}
+                        placeholder={t('misol: Dilso`z')}
                         select={true}
                         options={packmanOptions}
                         maxWidth={'w-[21rem]'}
@@ -301,8 +303,8 @@ const ClientsPage = () => {
 
                     <FieldContainer
                         value={clientName}
-                        label={'Mijoz ismi'}
-                        placeholder={'misol: Navro`z'}
+                        label={t('Mijoz ismi')}
+                        placeholder={t('misol: Navro`z')}
                         maxWidth={'w-[21rem]'}
                         type={'string'}
                         onChange={handleChangeClientName}
@@ -312,17 +314,17 @@ const ClientsPage = () => {
                             add={!stickyForm}
                             edit={stickyForm}
                             text={
-                                stickyForm ? `Saqlash` : `Yangi agent qo\`shish`
+                                stickyForm ? t(`Saqlash`) : t("Yangi agent qo`shish")
                             }
                             onClick={stickyForm ? handleEdit : addNewClients}
                         />
-                        <Button onClick={clearForm} text={'Tozalash'} />
+                        <Button onClick={clearForm} text={t('Tozalash')} />
                     </div>
                 </div>
             </form>
 
             <div className='pagination-supplier mainPadding'>
-                <p className='supplier-title'>Mijozlar</p>
+                <p className='supplier-title'>{t("Mijozlar")}</p>
                 {(filteredDataTotal !== 0 || totalSearched !== 0) && (
                     <Pagination
                         countPage={Number(showByTotal)}
@@ -344,7 +346,7 @@ const ClientsPage = () => {
                 {loading ? (
                     <Spinner />
                 ) : data.length === 0 ? (
-                    <NotFind text={'Mijozlar mavjud emas'} />
+                    <NotFind text={t('Mijozlar mavjud emas')} />
                 ) : (
                     <Table
                         data={searchedData.length > 0 ? searchedData : data}

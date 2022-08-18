@@ -29,8 +29,10 @@ import {
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
 import SearchForm from '../../Components/SearchForm/SearchForm.js'
 import {checkEmptyString} from '../../App/globalFunctions.js'
+import { useTranslation } from 'react-i18next';
 
 const Supplier = () => {
+    const {t} = useTranslation(['common'])
     const dispatch = useDispatch()
     const {
         errorSuppliers,
@@ -45,8 +47,8 @@ const Supplier = () => {
     } = useSelector((state) => state.suppliers)
 
     const headers = [
-        {title: '№', styles: 'w-[8%] text-left'},
-        {title: 'Yetkazuvchi', styles: 'w-[84%] text-left'},
+        {title: t('№'), styles: 'w-[8%] text-left'},
+        {title: t('Yetkazuvchi'), styles: 'w-[84%] text-left'},
         {title: '', styles: 'w-[8%] text-left'}
     ]
 
@@ -249,8 +251,8 @@ const Supplier = () => {
         >
             <UniversalModal
                 headerText={`${deletedSupplier && deletedSupplier.name
-                } yetkazib beruvchini o'chirishni tasdiqlaysizmi?`}
-                title="O'chirilgan yetkazib beruvchini tiklashning imkoni mavjud emas!"
+                } ${t("yetkazib beruvchini o`chirishni tasdiqlaysizmi?")}`}
+                title={t("O`chirilgan yetkazib beruvchini tiklashning imkoni mavjud emas!")}
                 toggleModal={toggleModal}
                 body={'approve'}
                 approveFunction={handleClickApproveToDelete}
@@ -263,8 +265,8 @@ const Supplier = () => {
             >
                 <div className='supplier-style'>
                     <FieldContainer
-                        label={'Yetkazuvchi ismi'}
-                        placeholder={'misol: Alo24'}
+                        label={t('Yetkazuvchi ismi')}
+                        placeholder={t('misol: Alo24')}
                         maxWidth={'w-[41rem]'}
                         type={'string'}
                         value={supplierName}
@@ -276,17 +278,17 @@ const Supplier = () => {
                             edit={stickyForm}
                             text={
                                 stickyForm
-                                    ? `Saqlash`
-                                    : `Yangi yetkazuvchi qo\`shish`
+                                    ? t(`Saqlash`)
+                                    : t("Yangi yetkazuvchi qo`shish")
                             }
                             onClick={stickyForm ? handleEdit : addNewSupplier}
                         />
-                        <Button onClick={clearForm} text={'Tozalash'} />
+                        <Button onClick={clearForm} text={t('Tozalash')} />
                     </div>
                 </div>
             </form>
             <div className='pagination-supplier mainPadding'>
-                <p className='supplier-title'>Yetkazuvchilar</p>
+                <p className='supplier-title'>{t("Yetkazuvchilar")}</p>
                 {(filteredDataTotal !== 0 || totalSearched !== 0) && (
                     <Pagination
                         countPage={Number(showByTotal)}
@@ -310,7 +312,7 @@ const Supplier = () => {
                 {loading ? (
                     <Spinner />
                 ) : data.length === 0 && searchedData.length === 0 ? (
-                    <NotFind text={'Yetkazib beruvchilar mavjud emas'} />
+                    <NotFind text={t('Yetkazib beruvchilar mavjud emas')} />
                 ) : (
                     <Table
                         data={searchedData.length > 0 ? searchedData : data}

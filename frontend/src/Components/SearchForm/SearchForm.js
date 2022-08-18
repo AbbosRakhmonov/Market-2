@@ -3,10 +3,12 @@ import SelectForm from '../Select/SelectForm.js'
 import FilterButtons from '../FilterButtons/FilterButtons.js'
 import FieldContainer from '../FieldContainer/FieldContainer.js'
 import PrintBtn from '../Buttons/PrintBtn.js'
-import {ConfirmBtn} from '../Buttons/SaveConfirmBtn.js'
+import { ConfirmBtn } from '../Buttons/SaveConfirmBtn.js'
 import Dates from '../Dates/Dates.js'
+import { useTranslation } from 'react-i18next';
 
 function SearchForm(
+
     {
         filterByTotal,
         searchByCode,
@@ -46,6 +48,8 @@ function SearchForm(
         filterByMarketName,
         filterByMarketNameWhenPressEnter,
     }) {
+
+    const { t } = useTranslation(['common'])
     const chooseComponent = (key) => {
         switch (key) {
             case 'total':
@@ -54,10 +58,10 @@ function SearchForm(
                 return (
                     <FilterButtons
                         key={'category_1'}
-                        label={'Kategoriya'}
+                        label={t('Kategoriya')}
                         element={
                             <FieldContainer
-                                placeholder={'misol: 101'}
+                                placeholder={(`${t('misol')}: 000000`)}
                                 type={'text'}
                                 value={searchByCategory}
                                 onChange={filterByCategory}
@@ -73,12 +77,12 @@ function SearchForm(
                 return (
                     <FilterButtons
                         key={'code_1'}
-                        label={'Maxsulot kodi'}
+                        label={t('Maxsulot kodi')}
                         element={
                             <FieldContainer
-                                placeholder={'misol: 1234'}
+                                placeholder={(`${t('misol')}: 000000`)}
                                 type={'text'}
-                                maxWidth={'w-[6.8125rem]'}
+                                maxWidth={'flex-1'}
                                 value={searchByCode}
                                 onChange={filterByCode}
                                 onKeyUp={
@@ -92,10 +96,10 @@ function SearchForm(
                 return (
                     <FilterButtons
                         key={'id_1'}
-                        label={'ID'}
+                        label={t('ID')}
                         element={
                             <FieldContainer
-                                placeholder={'misol: 1234'}
+                                placeholder={t('misol: 101')}
                                 type={'text'}
                                 maxWidth={'w-[6.8125rem]'}
                                 value={searchById}
@@ -109,7 +113,7 @@ function SearchForm(
                 return (
                     <SearchInput
                         key={'search_1'}
-                        placeholder={'qidirish...'}
+                        placeholder={t('qidirish...')}
                         someClasses={'grow'}
                         value={searchByName}
                         onChange={filterByName}
@@ -120,7 +124,7 @@ function SearchForm(
                 return (
                     <SearchInput
                         key={'yetkazuvchi_ismi_1'}
-                        placeholder={'yetkazuchi ismi...'}
+                        placeholder={t('yetkazuchi ismi...')}
                         someClasses={'grow'}
                         value={searchByDelivererName}
                         onChange={filterByDelivererName}
@@ -131,7 +135,7 @@ function SearchForm(
                 return (
                     <SearchInput
                         key={'mijoz_ismi_1'}
-                        placeholder={'mijoz ismi...'}
+                        placeholder={t('mijoz ismi...')}
                         someClasses={'grow basis-1/6'}
                         value={searchByClientName}
                         onChange={filterByClientName}
@@ -142,12 +146,12 @@ function SearchForm(
                 return (
                     <FilterButtons
                         key={'cheklar_soni_1'}
-                        label={'Cheklar soni'}
+                        label={t('Cheklar soni')}
                         element={
                             <FieldContainer
-                                placeholder={'misol: 10'}
+                                placeholder={t('misol: 101')}
                                 type={'text'}
-                                maxWidth={'w-[4.8125rem]'}
+                                maxWidth={'flex-1'}
                                 value={numberOfChecks}
                                 onChange={setNumberOfChecks}
                             />
@@ -160,7 +164,7 @@ function SearchForm(
                 return (
                     <FilterButtons
                         key={'start_date_1'}
-                        label={'Boshlang\'ich sana'}
+                        label={t('Boshlang`ich sana')}
                         element={
                             <Dates
                                 value={startDate}
@@ -175,7 +179,7 @@ function SearchForm(
                 return (
                     <FilterButtons
                         key={'end_date_1'}
-                        label={'Tugash sana'}
+                        label={t('Tugash sana')}
                         element={
                             <Dates
                                 value={endDate}
@@ -190,12 +194,12 @@ function SearchForm(
                 return (
                     <FilterButtons
                         key={'single_date_1'}
-                        label={'Sanani tanlang'}
+                        label={t('Sanani tanlang')}
                         element={
                             <Dates
                                 value={date}
                                 onChange={setDate}
-                                placeholder={'misol: 02.02.2022'}
+                                placeholder={t('misol: 02.02.2022')}
                                 maxWidth={'w-[9.6875rem]'}
                             />
                         }
@@ -205,21 +209,21 @@ function SearchForm(
                 return (
                     <ConfirmBtn
                         key={'confirm_btn_1'}
-                        text={'Yakunlash'}
+                        text={t('Yakunlash')}
                         onClick={clickConfirmBtn}
                     />
                 )
             case 'barcode':
                 return (<FilterButtons
                     key={'barcode_1'}
-                    label={'Shtrix kodi'}
+                    label={t('Shtrix kodi')}
                     element={
                         <FieldContainer
-                            placeholder={'misol: 10156678'}
+                            placeholder={t('misol: 101')}
                             type={'text'}
                             value={barcode}
                             onChange={filterByBarcode}
-                            maxWidth={'w-[6rem]'}
+                            maxWidth={'flex-1'}
                             onKeyUp={
                                 filterByBarcodeWhenPressEnter
                             }

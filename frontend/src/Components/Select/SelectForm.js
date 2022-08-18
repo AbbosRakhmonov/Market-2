@@ -1,8 +1,10 @@
 import React from 'react'
 import Select from 'react-select'
 import CustomStyle, {DropdownIcon} from './CustomStyle'
+import { useTranslation } from 'react-i18next';
 
 const SelectForm = ({onSelect, isDisabled}) => {
+    const {t} = useTranslation(['common'])
     const options = [
         {value: 10, label: 10},
         {value: 20, label: 20},
@@ -18,7 +20,7 @@ const SelectForm = ({onSelect, isDisabled}) => {
                     'text-[0.875rem] font-light text-blue-700 leading-[1rem]'
                 }
             >
-                Ko'rsatish:
+                {t(`Korsatish`)}
             </label>
             <Select
                 onChange={onSelect}

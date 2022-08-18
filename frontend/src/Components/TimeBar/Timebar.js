@@ -1,34 +1,36 @@
-import {useState} from 'react'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next';
 
 function Timebar() {
+    const { t } = useTranslation(['common'])
     const [hour, setHour] = useState(
-        new Date().toLocaleTimeString('uz-UZ', {hour12: false})
+        new Date().toLocaleTimeString('uz-UZ', { hour12: false })
     )
     const weekDays = [
-        'Yakshanba',
-        'Dushanba',
-        'Seshanba',
-        'Chorshanba',
-        'Payshanba',
-        'Juma',
-        'Shanba'
+        t('Yakshanba'),
+        t('Dushanba'),
+        t('Seshanba'),
+        t('Chorshanba'),
+        t('Payshanba'),
+        t('Juma'),
+        t('Shanba')
     ]
     const monthNames = [
-        'Yanvar',
-        'Fevral',
-        'Mart',
-        'Aprel',
-        'May',
-        'Iyun',
-        'Iyul',
-        'Avgust',
-        'Sentabr',
-        'Oktabr',
-        'Noyabr',
-        'Dekabr'
+        t('Yanvar'),
+        t('Fevral'),
+        t('Mart'),
+        t('Aprel'),
+        t('May'),
+        t('Iyun'),
+        t('Iyul'),
+        t('Avgust'),
+        t('Sentabr'),
+        t('Oktabr'),
+        t('Noyabr'),
+        t('Dekabr')
     ]
     setTimeout(() => {
-        setHour(new Date().toLocaleTimeString('uz-UZ', {hour12: false}))
+        setHour(new Date().toLocaleTimeString('uz-UZ', { hour12: false }))
     }, 1000)
     return (
         <div
@@ -39,7 +41,7 @@ function Timebar() {
             <h5 className={'font-bold text-[1.25rem] leading-[1.4375rem]'}>
                 {weekDays[new Date().getDay()]}, {new Date().getDate()}{' '}
                 {monthNames[new Date().getMonth()]}, {new Date().getFullYear()}{' '}
-                yil
+                {t("yil")}
             </h5>
             <span
                 className={'time-line block border-[1px] border-b-white-900'}

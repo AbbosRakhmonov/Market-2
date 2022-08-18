@@ -25,9 +25,9 @@ const Pagination = ({countPage, totalDatas, setCurrentPage, currentPage}) => {
                 pageRangeDisplayed={3}
                 onPageChange={pageHandle}
                 containerClassName={'flex justify-between items-center'}
-                pageClassName={'mr-[15px]'}
+                pageClassName={'mr-[15px] text-primary-800'}
                 pageLinkClassName={
-                    'w-[35px] h-[35px] border border-primary-800 rounded-lg text-sm text-primary-800 flex justify-center items-center hover:bg-primary-700 hover:border-primary-700 hover:text-white-900 transition ease-in-out duration-100'
+                    'w-[35px] h-[35px] border border-primary-800 rounded-lg text-sm flex justify-center items-center hover:bg-primary-700 hover:border-primary-700 hover:text-white-900 transition ease-in-out duration-100'
                 }
                 previousClassName={'mr-[15px]'}
                 previousLinkClassName={

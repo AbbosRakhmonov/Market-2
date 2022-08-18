@@ -3,8 +3,12 @@ import {ArcElement, Chart as ChartJS, Legend, Tooltip} from 'chart.js'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import {Pie} from 'react-chartjs-2'
 import {useSelector} from 'react-redux'
+import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 function PieChart({arr = [0]}) {
+    const { t } = useTranslation(['common'])
+  
     const {currencyType} = useSelector(state => state.currency)
     ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels)
     const options = {
@@ -12,7 +16,7 @@ function PieChart({arr = [0]}) {
         maintainAspectRatio: false
     }
     const data = {
-        labels: ['Xarajatlar', 'Sof foyda'],
+        labels: [t('Xarajatlar'), t('Sof foyda')],
         datasets: [
             {
                 data: arr,
