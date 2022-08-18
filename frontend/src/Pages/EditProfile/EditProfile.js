@@ -63,10 +63,19 @@ function EditProfile() {
         })
     }
     const handleSubmit = () => {
-        if (checkEmptyString([currentUser.firstname, currentUser.lastname, currentUser.newPassword, currentUser.newPassword, currentUser.newLogin])) {
+        if (checkEmptyString([currentUser.firstname, currentUser.lastname, currentUser.newPassword, currentUser.repeatPassword, currentUser.newLogin])) {
             warningEmptyInput()
         } else {
-            dispatch(editUser(currentUser))
+            const body = {
+                _id: currentUser._id,
+                market: currentUser.market,
+                password: currentUser.newPassword.replace(/\s+/g, ' ').trim(),
+                login: currentUser.newLogin.replace(/\s+/g, ' ').trim(),
+                image: currentUser.image.replace(/\s+/g, ' ').trim(),
+                firstname: currentUser.firstname.replace(/\s+/g, ' ').trim(),
+                lastname: currentUser.lastname.replace(/\s+/g, ' ').trim()
+            }
+            dispatch(editUser(body))
         }
     }
     useEffect(() => {
@@ -120,7 +129,7 @@ function EditProfile() {
                     label={`Parol`}
                     maxWidth={'grow'}
                     placeholder={'yangi parol'}
-                    type='text'
+                    type='password'
                     value={currentUser.newPassword}
                     star={true}
                     onChange={handleChangeNewPassword}
@@ -129,7 +138,7 @@ function EditProfile() {
                     label={`Parol takroriy`}
                     maxWidth={'grow'}
                     placeholder={'yangi parolni takror kiriting'}
-                    type='text'
+                    type='password'
                     value={currentUser.repeatPassword}
                     star={true}
                     onChange={handleChangeConfirmPassword}

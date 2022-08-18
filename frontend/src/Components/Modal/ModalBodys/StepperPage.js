@@ -8,7 +8,7 @@ import {editProfileImage} from '../../../Pages/Login/loginSlice.js'
 import {successUploadImage} from '../../ToastMessages/ToastMessages.js'
 
 function StepperPage({addMarket}) {
-    const {currentStep, bgActive, handleNext, handleFinish, image, setImage} = addMarket
+    const {currentStep, bgActive, handleNext, handleFinish, image, setImage, editedMarket} = addMarket
     const dispatch = useDispatch()
     const [modalIsOpen, setIsOpen] = useState(false)
     const steps = [
@@ -37,9 +37,9 @@ function StepperPage({addMarket}) {
     const displayStep = (step) => {
         switch (step) {
             case 1:
-                return <CreateShop handleClickNext={handleClickNext} />
+                return <CreateShop editedMarket={editedMarket} handleClickNext={handleClickNext} />
             case 2:
-                return <CreateDirector handleClickFinish={handleFinish} />
+                return <CreateDirector director={editedMarket?.director} handleClickFinish={handleFinish} />
             default:
         }
     }

@@ -1,18 +1,23 @@
 import React, {useEffect, useState} from 'react'
 import SearchForm from '../../SearchForm/SearchForm.js'
-import {clearSearchedBranches, getBranchesByFilter} from '../../../Pages/AdminProducts/adminproductsSlice.js'
+import {
+    clearSearchedBranches,
+    getBranches,
+    getBranchesByFilter,
+    updateMarkets
+} from '../../../Pages/AdminProducts/adminproductsSlice.js'
 import {useDispatch, useSelector} from 'react-redux'
 import Spinner from '../../Spinner/SmallLoader.js'
 import NotFind from '../../NotFind/NotFind.js'
-import BtnAddRemove from '../../Buttons/BtnAddRemove.js'
 import Pagination from '../../Pagination/Pagination.js'
 import AdminProductCard from '../../AdminProductCard/AdminProductCard.js'
+import BtnAddRemove from '../../Buttons/BtnAddRemove.js'
 
-function AdminMarkets({product}) {
+function AdminMarkets({product, approveFunction}) {
     const dispatch = useDispatch()
     const {
-        markets,
-        total,
+        branches,
+        totalBranches,
         searchedBranches,
         totalSearchedBranches,
         loadingGetBranches
@@ -23,8 +28,11 @@ function AdminMarkets({product}) {
     const [showByTotal, setShowByTotal] = useState('10')
     const [currentPage, setCurrentPage] = useState(0)
     const [searchedData, setSearchedData] = useState(searchedBranches)
-    const [filteredDataTotal, setFilteredDataTotal] = useState(total - 1)
-
+    const [filteredDataTotal, setFilteredDataTotal] = useState(totalBranches)
+    const [newBranches, setNewBranches] = useState({
+        filials: [],
+        connections: []
+    })
     const filterByTotal = ({value}) => {
         setShowByTotal(value)
         setCurrentPage(0)
@@ -36,10 +44,10 @@ function AdminMarkets({product}) {
         ;(searchedData.length > 0 || totalSearchedBranches > 0) &&
         dispatch(clearSearchedBranches())
         if (valForSearch === '') {
-            setData([...markets.filter(item => item._id !== product?._id)])
-            setFilteredDataTotal(total - 1)
+            setData(branches)
+            setFilteredDataTotal(totalBranches)
         } else {
-            const filteredProducts = markets.filter((market) => {
+            const filteredProducts = branches.filter((market) => {
                 return market.name
                     .toLowerCase()
                     .includes(valForSearch)
@@ -55,10 +63,10 @@ function AdminMarkets({product}) {
         ;(searchedData.length > 0 || totalSearchedBranches > 0) &&
         dispatch(clearSearchedBranches())
         if (valForSearch === '') {
-            setData([...markets.filter(item => item._id !== product?._id)])
-            setFilteredDataTotal(total - 1)
+            setData(branches)
+            setFilteredDataTotal(totalBranches)
         } else {
-            const filteredProducts = markets.filter((market) => {
+            const filteredProducts = branches.filter((market) => {
                 return market.director.firstname
                     .toLowerCase()
                     .includes(valForSearch) || market.director.lastname.toLowerCase().includes(valForSearch)
@@ -82,16 +90,84 @@ function AdminMarkets({product}) {
             dispatch(getBranchesByFilter(body))
         }
     }
+    const handleChangeCheckbox = (market, type, checked) => {
+        if (type === 1) {
+            return false
+        } else {
+            if (checked) {
+                const newFilials = [...newBranches.filials, market._id]
+                const body = {
+                    currentPage: currentPage,
+                    countPage: showByTotal,
+                    market: {
+                        ...product,
+                        filials: newFilials
+                    },
+                    search: {
+                        name: market.name,
+                        director: ''
+                    },
+                    filial: {
+                        ...market,
+                        mainmarket: product._id
+                    }
+                }
+                dispatch(updateMarkets(body)).then(({error}) => {
+                    if (!error) {
+                        setNewBranches({...newBranches, filials: newFilials})
+                    }
+                })
+            } else {
+                const newFilials = newBranches.filials.filter((id) => id !== market._id)
+                let filial = {...market}
+                delete filial.mainmarket
+                const body = {
+                    currentPage: currentPage,
+                    countPage: showByTotal,
+                    market: {
+                        ...product,
+                        filials: [...newFilials]
+                    },
+                    search: {
+                        name: market.name,
+                        director: ''
+                    },
+                    filial: {...filial}
+                }
+                dispatch(updateMarkets(body)).then(({error}) => {
+                    if (!error) {
+                        setNewBranches({...newBranches, filials: newFilials})
+                    }
+                })
+            }
+        }
+    }
     useEffect(() => {
-        setData([...markets.filter(item => item._id !== product?._id)])
-    }, [markets])
+        setData(branches)
+    }, [branches])
     useEffect(() => {
-        setFilteredDataTotal(total - 1)
-    }, [total])
+        setFilteredDataTotal(totalBranches)
+    }, [totalBranches])
     useEffect(() => {
         setSearchedData(searchedBranches)
     }, [searchedBranches])
-    console.log(data)
+    useEffect(() => {
+        const body = {
+            currentPage: currentPage,
+            countPage: showByTotal,
+            marketId: product?._id,
+            search: {
+                name: name.replace(/\s+/g, ' ').trim(),
+                director: director.replace(/\s+/g, ' ').trim()
+            }
+        }
+        dispatch(getBranches(body))
+        setNewBranches({
+            filials: product.filials,
+            connections: product.connections
+        })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, showByTotal, product, currentPage])
     return (
         <section className={'mt-4'}>
             <div className={'flex justify-between items-center mainPadding'}>
@@ -118,8 +194,8 @@ function AdminMarkets({product}) {
                     filterByMarketNameWhenPressEnter={filterByMarketNameAndDirectorNameWhenPressEnter}
                     filterByTotal={filterByTotal}
                 />
-                <div className='min-w-[18rem]'>
-                    <BtnAddRemove edit={true} text={'Saqlash'} />
+                <div className={'min-w-[18rem]'}>
+                    <BtnAddRemove text={'Saqlash'} edit={true} onClick={approveFunction} />
                 </div>
             </div>
             {loadingGetBranches ? (
@@ -128,19 +204,18 @@ function AdminMarkets({product}) {
                 <NotFind text={'Do\'konlar mavjud emas'} />
             ) : <div className={'flex flex-wrap gap-[2rem] pl-[2.5rem] py-[1.25rem]'}>
                 {searchedData.length > 0 ? searchedData.map(item =>
-                        <AdminProductCard name={item?.director?.firstname}
-                                          company={item?.name}
-                                          image={item?.image}
-                                          phone={item?.phone1}
-                                          key={item._id}
+                        <AdminProductCard
+                            market={item} key={item._id}
+                            isBranch={newBranches.filials.filter(br => br === item._id).length > 0}
+                            isConnected={newBranches.connections.filter(br => br === item._id).length > 0}
+                            onchange={handleChangeCheckbox}
                         />) :
                     data.map(item =>
-                        <AdminProductCard name={item?.director?.firstname}
-                                          company={item?.name}
-                                          image={item?.image}
-                                          phone={item?.phone1}
-                                          key={item._id}
-                        />)}
+                        <AdminProductCard
+                            market={item} key={item._id}
+                            isBranch={newBranches.filials.filter(br => br === item._id).length > 0}
+                            isConnected={newBranches.connections.filter(br => br === item._id).length > 0}
+                            onchange={handleChangeCheckbox} />)}
             </div>}
         </section>
     )
