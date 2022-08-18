@@ -10,12 +10,16 @@ export const ProductTableRow = ({
                                     currency,
                                     currencyType
                                 }) => {
+
     return (
         <>
             {data.map((product, index) => (
                 <tr key={product._id} className='tr'>
                     <td className='td text-center '>
                         {currentPage * countPage + 1 + index}
+                    </td>
+                    <td className='td text-center'>
+                       {product.productdata?.barcode}
                     </td>
                     <td className='td text-center'>
                         {product.category.code}{' '}

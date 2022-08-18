@@ -103,6 +103,7 @@ function Products() {
     const [categoryOptions, setCategoryOptions] = useState([])
     const [excelData, setExcelData] = useState([])
     const [createdData, setCreatedData] = useState([])
+    const [barCode, setBarCode] = useState('')
     const [sorItem, setSorItem] = useState({
         filter: '',
         sort: '',
@@ -115,6 +116,9 @@ function Products() {
     // table headers
     const headers = [
         {title: '№'},
+        {
+            title: 'Shtrix kodi',
+        },
         {
             title: 'Kategoriyasi',
             filter: 'category.code',
@@ -240,6 +244,25 @@ function Products() {
             setFilteredDataTotal(filteredProducts.length)
         }
     }
+   
+    const filterByBarcode = (e) => {
+         let val = e.target.value
+         let valForSearch = val.replace(/\s+/g, ' ').trim()
+         setBarCode(val)
+         ;(searchedData.length > 0 || totalSearched > 0) &&
+          dispatch(clearSearchedProducts())
+         if (valForSearch === '') {
+         setData(products)
+         setFilteredDataTotal(total)
+          } else {
+         const filteredProducts = products.filter((product) => {
+             return product.productdata?.barcode.includes(valForSearch)
+         })
+         setData(filteredProducts)
+         setFilteredDataTotal(filteredProducts.length)
+     }
+    }
+
     const filterByCategory = (e) => {
         let val = e.target.value
         let valForSearch = val.replace(/\s+/g, ' ').trim()
@@ -285,6 +308,29 @@ function Products() {
                 search: {
                     name: searchByName.replace(/\s+/g, ' ').trim(),
                     code: searchByCode.replace(/\s+/g, ' ').trim(),
+                    category: searchByCategory.replace(/\s+/g, ' ').trim(),
+                },
+                product: {
+                    code: codeOfProduct,
+                    name: nameOfProduct.replace(/\s+/g, ' ').trim(),
+                    unit: unitOfProduct.value,
+                    market: _id,
+                },
+            }
+            dispatch(getProductsByFilter(body))
+        }
+    }
+
+    
+    const filterByBarcodeWhenPressEnter = (e) => {
+        if (e.key === 'Enter') {
+            setCurrentPage(0)
+            const body = {
+                currentPage: 0,
+                countPage: showByTotal,
+                search: {
+                    name: searchByName.replace(/\s+/g, ' ').trim(),
+                    code: barCode.replace(/\s+/g, ' ').trim(),
                     category: searchByCategory.replace(/\s+/g, ' ').trim(),
                 },
                 product: {
@@ -848,7 +894,7 @@ function Products() {
                 )}
             </div>
             <SearchForm
-                filterBy={['total', 'category', 'code', 'name', 'doubleDate']}
+                filterBy={['total', 'barcode', 'category', 'code', 'name', 'doubleDate']}
                 filterByCode={filterByCode}
                 filterByCodeAndNameAndCategoryWhenPressEnter={
                     filterByCodeAndNameAndCategoryWhenPressEnter
@@ -859,6 +905,9 @@ function Products() {
                 searchByName={searchByName}
                 searchByCategory={searchByCategory}
                 filterByCategory={filterByCategory}
+                barCode={barCode}
+                filterByBarcode={filterByBarcode}
+                filterByBarcodeWhenPressEnter={filterByBarcodeWhenPressEnter}
             />
             <div className='tableContainerPadding'>
                 {loading ? (

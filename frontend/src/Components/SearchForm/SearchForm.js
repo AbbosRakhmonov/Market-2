@@ -44,7 +44,7 @@ function SearchForm(
         filterByDirectorNameWhenPressEnter,
         searchByMarketName,
         filterByMarketName,
-        filterByMarketNameWhenPressEnter
+        filterByMarketNameWhenPressEnter,
     }) {
     const chooseComponent = (key) => {
         switch (key) {
@@ -219,7 +219,7 @@ function SearchForm(
                             type={'text'}
                             value={barcode}
                             onChange={filterByBarcode}
-                            maxWidth={'w-[10rem]'}
+                            maxWidth={'w-[6rem]'}
                             onKeyUp={
                                 filterByBarcodeWhenPressEnter
                             }
