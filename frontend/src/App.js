@@ -1,5 +1,6 @@
 import {lazy, Suspense, useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
+import Loader from './Components/Loader/Loader'
 import {logIn} from './Pages/Login/loginSlice'
 
 // pages
@@ -17,7 +18,7 @@ function App() {
     }, [dispatch])
     return (
         <div className='App'>
-            <Suspense fallback={'loading'}>
+            <Suspense fallback={<Loader />}>
                 {logged ? <PageRoutes /> : <Login />}
             </Suspense>
         </div>
