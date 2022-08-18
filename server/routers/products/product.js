@@ -737,14 +737,15 @@ module.exports.getProducts = async (req, res) => {
         select: "name code",
         match: { code: category },
       })
-      .populate("unit", "name");
-
-    let filtered = filter(
-      products,
-      (product) => product.productdata !== null && product.category !== null
-    );
-    const count = filtered.length;
-    filtered = filtered.splice(currentPage * countPage, countPage);
+      .populate("unit", "name")
+      .then((products) =>
+        filter(
+          products,
+          (product) => product.productdata !== null && product.category !== null
+        )
+      );
+    const count = products.length;
+    const filtered = products.splice(currentPage * countPage, countPage);
     res.status(201).json({
       products: filtered,
       count,
