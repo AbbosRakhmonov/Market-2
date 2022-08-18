@@ -455,8 +455,9 @@ module.exports.update = async (req, res) => {
     }
 
     const barCode = await ProductData.findOne({ barcode, market });
-
-    if (barCode && product.productdata.barcode !== barCode) {
+    console.log(product.productdata.barcode);
+    console.log(barCode);
+    if (barCode && product.productdata.barcode !== barCode.barcode) {
       return res.status(400).json({
         message: `Diqqat! ${barcode} shtrix kodli mahsulot avval yaratilgan.`,
       });
