@@ -4,6 +4,7 @@ const {
   validateUserLogin,
   validateAdministration,
   validateSeller,
+  validateEditUser,
 } = require('../../models/Users');
 const bcrypt = require('bcryptjs');
 const { Market } = require('../../models/MarketAndBranch/Market');
@@ -22,7 +23,6 @@ module.exports.register = async (req, res) => {
     }
 
     const {
-      _id,
       login,
       firstname,
       lastname,
@@ -35,18 +35,6 @@ module.exports.register = async (req, res) => {
       user,
       type,
     } = req.body;
-
-    if (_id) {
-      if (password) {
-        const hash = await bcrypt.hash(password, 8);
-        req.body.password = hash;
-      }
-      const update = await User.findByIdAndUpdate(_id, req.body);
-
-      return res.status(201).send({
-        message: "Foydalanuvchi ma'lumotlari muvaffaqqiyatli o'zgartirildi!",
-      });
-    }
 
     const marke = await Market.findById(market);
 
@@ -96,6 +84,46 @@ module.exports.register = async (req, res) => {
     res
       .status(201)
       .send({ message: 'Foydalanuvchi muvaffaqqiyatli yaratildi!' });
+  } catch (error) {
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+  }
+};
+
+module.exports.editUser = async (req, res) => {
+  try {
+    const { error } = validateEditUser(req.body);
+    if (error) {
+      return res.status(400).json({
+        error: error.message,
+      });
+    }
+
+    const { _id, firstname, lastname, login, password, market } = req.body;
+
+    const marke = await Market.findById(market);
+    if (!marke) {
+      return res.status(400).json({
+        message:
+          "Diqqat! Foydalanuvchi ro'yxatga olinayotgan do'kon dasturda ro'yxatga olinmagan.",
+      });
+    }
+
+    const oldUser = await User.findById(_id);
+
+    const isOldPassword = await bcrypt.compare(password, oldUser.password);
+    if (isOldPassword) {
+      await User.findByIdAndUpdate(_id, req.body);
+    } else {
+      const hashPasword = await bcrypt.hash(password, 8);
+      await User.findByIdAndUpdate(_id, {
+        ...req.body,
+        password: hashPasword,
+      });
+    }
+
+    const updatedUser = await User.findById(_id);
+
+    return res.status(200).json(updatedUser);
   } catch (error) {
     res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
