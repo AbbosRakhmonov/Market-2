@@ -732,7 +732,7 @@ module.exports.getProducts = async (req, res) => {
       .populate({
         path: "productdata",
         select: "name code barcode",
-        match: { name: name, code: code, barcode: barcode },
+        match: { name: name, code: code },
       })
       .populate({
         path: "category",
@@ -745,7 +745,7 @@ module.exports.getProducts = async (req, res) => {
       products,
       (product) => product.productdata !== null && product.caregory !== null
     );
-    const count = filter.length;
+    const count = filtered.length;
     filtered = filtered.splice(currentPage * countPage, countPage);
     res.status(201).json({
       products: filtered,

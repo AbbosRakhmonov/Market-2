@@ -18,9 +18,10 @@ import {
     clearSuccessUpdateProduct,
     deleteProduct,
     getCodeOfCategory,
-    getProducts, getProductsAll,
+    getProducts,
+    getProductsAll,
     getProductsByFilter,
-    updateProduct
+    updateProduct,
 } from './productSlice'
 import {clearErrorUnits, getUnits} from '../../Units/unitsSlice'
 import {
@@ -73,7 +74,7 @@ function Products() {
         searchedProducts,
         totalSearched,
         successDeleteProduct,
-        allProducts
+        allProducts,
     } = useSelector((state) => state.products)
     const {barcode, errorGetBarcode} = useSelector((state) => state.barcode)
     const [data, setData] = useState(products)
@@ -244,23 +245,23 @@ function Products() {
             setFilteredDataTotal(filteredProducts.length)
         }
     }
-   
+
     const filterByBarcode = (e) => {
-         let val = e.target.value
-         let valForSearch = val.replace(/\s+/g, ' ').trim()
-         setBarCode(val)
-         ;(searchedData.length > 0 || totalSearched > 0) &&
-          dispatch(clearSearchedProducts())
-         if (valForSearch === '') {
-         setData(products)
-         setFilteredDataTotal(total)
-          } else {
-         const filteredProducts = products.filter((product) => {
-             return product.productdata?.barcode.includes(valForSearch)
-         })
-         setData(filteredProducts)
-         setFilteredDataTotal(filteredProducts.length)
-     }
+        let val = e.target.value
+        let valForSearch = val.replace(/\s+/g, ' ').trim()
+        setBarCode(val)
+        ;(searchedData.length > 0 || totalSearched > 0) &&
+            dispatch(clearSearchedProducts())
+        if (valForSearch === '') {
+            setData(products)
+            setFilteredDataTotal(total)
+        } else {
+            const filteredProducts = products.filter((product) => {
+                return product.productdata?.barcode.includes(valForSearch)
+            })
+            setData(filteredProducts)
+            setFilteredDataTotal(filteredProducts.length)
+        }
     }
 
     const filterByCategory = (e) => {
@@ -321,7 +322,6 @@ function Products() {
         }
     }
 
-    
     const filterByBarcodeWhenPressEnter = (e) => {
         if (e.key === 'Enter') {
             setCurrentPage(0)
@@ -711,7 +711,7 @@ function Products() {
         }
         dispatch(getProductsAll(body))
         //    eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [ dispatch])
+    }, [dispatch])
     useEffect(() => {
         dispatch(getUnits())
         dispatch(getAllCategories())
@@ -894,7 +894,14 @@ function Products() {
                 )}
             </div>
             <SearchForm
-                filterBy={['total', 'barcode', 'category', 'code', 'name', 'doubleDate']}
+                filterBy={[
+                    'total',
+                    'barcode',
+                    'category',
+                    'code',
+                    'name',
+                    'doubleDate',
+                ]}
                 filterByCode={filterByCode}
                 filterByCodeAndNameAndCategoryWhenPressEnter={
                     filterByCodeAndNameAndCategoryWhenPressEnter
