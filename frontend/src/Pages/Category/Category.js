@@ -1,15 +1,15 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import FieldContainer from '../../Components/FieldContainer/FieldContainer.js'
 import Button from '../../Components/Buttons/BtnAddRemove.js'
 import SearchForm from '../../Components/SearchForm/SearchForm.js'
 import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
 import Table from '../../Components/Table/Table.js'
-import {useDispatch, useSelector} from 'react-redux'
-import {regexForTypeNumber} from '../../Components/RegularExpressions/RegularExpressions.js'
-import {checkEmptyString, universalSort} from '../../App/globalFunctions.js'
+import { useDispatch, useSelector } from 'react-redux'
+import { regexForTypeNumber } from '../../Components/RegularExpressions/RegularExpressions.js'
+import { checkEmptyString, universalSort } from '../../App/globalFunctions.js'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
-import {motion} from 'framer-motion'
+import { motion } from 'framer-motion'
 import {
     successAddCategoryMessage,
     successDeleteCategoryMessage,
@@ -34,20 +34,23 @@ import {
     updateCategory
 } from './categorySlice.js'
 import Pagination from '../../Components/Pagination/Pagination.js'
+import { useTranslation } from 'react-i18next';
 
 const Category = () => {
+    const { t } = useTranslation(['common'])
+  
     const headers = [
         {
-            title: '№',
+            title: t('№'),
             styles: 'w-[10%]'
         },
         {
-            title: 'Kategoriya kodi',
+            title: t('Kategoriya kodi'),
             filter: 'code',
             styles: 'w-[16%]'
         },
         {
-            title: 'Kategoriya nomi',
+            title: t('Kategoriya nomi'),
             filter: 'name',
             styles: 'w-[64%]'
         },
@@ -104,7 +107,7 @@ const Category = () => {
     }
 
     // filter by total
-    const filterByTotal = ({value}) => {
+    const filterByTotal = ({ value }) => {
         setShowByTotal(value)
         setCurrentPage(0)
     }
@@ -193,8 +196,8 @@ const Category = () => {
         let val = e.target.value
         let valForSearch = val.replace(/\s+/g, ' ').trim()
         setSearchByCode(val)
-        ;(searchedData.length > 0 || totalSearched > 0) &&
-        dispatch(clearSearchedCategories())
+            ; (searchedData.length > 0 || totalSearched > 0) &&
+                dispatch(clearSearchedCategories())
         if (valForSearch === '') {
             setData(categories)
             setFilteredDataTotal(total)
@@ -210,8 +213,8 @@ const Category = () => {
         let val = e.target.value
         let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
         setSearchByName(val)
-        ;(searchedData.length > 0 || totalSearched > 0) &&
-        dispatch(clearSearchedCategories())
+            ; (searchedData.length > 0 || totalSearched > 0) &&
+                dispatch(clearSearchedCategories())
         if (valForSearch === '') {
             setData(categories)
             setFilteredDataTotal(total)
@@ -374,6 +377,7 @@ const Category = () => {
         setSearchedData(searchedCategories)
     }, [searchedCategories])
 
+
     return (
         <motion.section
             key='content'
@@ -381,17 +385,17 @@ const Category = () => {
             animate='open'
             exit='collapsed'
             variants={{
-                open: {opacity: 1, height: 'auto'},
-                collapsed: {opacity: 0, height: 0}
+                open: { opacity: 1, height: 'auto' },
+                collapsed: { opacity: 0, height: 0 }
             }}
-            transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}>
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>
             <UniversalModal
                 body='approve'
                 toggleModal={toggleModal}
                 headerText={`${deletedCategory && deletedCategory.code
-                } - kategoriyani o'chirishni tasdiqlaysizmi?`}
+                    } - ${t("kategoriyani o`chirishni tasdiqlaysizmi?")}`}
                 title={
-                    'O\'chirilgan kategoriyalarni tiklashning imkoni mavjud emas!'
+                    t('O`chirilgan kategoriyalarni tiklashning imkoni mavjud emas!')
                 }
                 approveFunction={handleClickApproveToDelete}
                 closeModal={handleClickCancelToDelete}
@@ -399,21 +403,21 @@ const Category = () => {
             />
             <form
                 className={`flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200 ${stickyForm ? 'stickyForm' : ''
-                }`}
+                    }`}g
             >
                 <div className='supplier-style'>
                     <FieldContainer
                         value={codeOfCategory}
                         onChange={handleChangeCodeOfCategory}
-                        label={'Kategoriya kodi'}
-                        placeholder={'misol: 101'}
+                        label={t('Kategoriya kodi')}
+                        placeholder={(`${t('misol')}: 000000`)}
                         maxWidth={'w-[9rem]'}
                         border={true}
                     />
                     <FieldContainer
                         value={nameOfCategory}
-                        label={'Kategoriya nomi'}
-                        placeholder={'misol: Alo24'}
+                        label={t('Kategoriya nomi')}
+                        placeholder={t('misol: Alo24')}
                         maxWidth={'w-[29rem]'}
                         type={'string'}
                         onChange={handleChangeNameOfCategory}
@@ -425,16 +429,16 @@ const Category = () => {
                             edit={stickyForm}
                             text={
                                 stickyForm
-                                    ? 'Saqlash'
-                                    : 'Yangi kategoriya qo\'shish'
+                                    ? t('Saqlash')
+                                    : t('Yangi kategoriya qo`shish')
                             }
                         />
-                        <Button onClick={clearForm} text={'Tozalash'} />
+                        <Button onClick={clearForm} text={t('Tozalash')} />
                     </div>
                 </div>
             </form>
             <div className='pagination-supplier mainPadding'>
-                <p className='supplier-title'>Kategoriyalar</p>
+                <p className='supplier-title'>{(t("Kategoriyalar"))}</p>
                 {(filteredDataTotal !== 0 || totalSearched !== 0) && (
                     <Pagination
                         countPage={Number(showByTotal)}
@@ -459,7 +463,7 @@ const Category = () => {
                 {loading ? (
                     <Spinner />
                 ) : data.length === 0 && searchedData.length === 0 ? (
-                    <NotFind text={'Maxsulot mavjud emas'} />
+                    <NotFind text={t('Maxsulot mavjud emas')} />
                 ) : (
                     <Table
                         headers={headers}

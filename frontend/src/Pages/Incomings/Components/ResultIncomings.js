@@ -1,6 +1,10 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next';
 
-const ResultIncomings = ({connectors, styles, currencyType}) => {
+const ResultIncomings = ({ connectors, styles, currencyType }) => {
+
+    const { t } = useTranslation(['common'])
+
     const price = () => {
         if (connectors.length > 0) {
             return currencyType === 'USD'
@@ -17,7 +21,7 @@ const ResultIncomings = ({connectors, styles, currencyType}) => {
     return (
         <div className={`productTypeBlock ${styles}`}>
             <div className='productType'>
-                Maxsulotlar soni:{' '}
+                {t("Maxsulotlar soni:")}{' '}
                 <span className='ml-[0.5rem] font-[400] text-black-900'>
                     {connectors
                         .reduce((prev, item) => prev + item.products, 0)
@@ -25,7 +29,7 @@ const ResultIncomings = ({connectors, styles, currencyType}) => {
                 </span>
             </div>
             <div className='productSumAll'>
-                Jami :{' '}
+                {t("Jami")} :{' '}
                 <span className='ml-[0.5rem] font-[400] text-black-900'>
                     {price()} {currencyType}
                 </span>

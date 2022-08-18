@@ -8,8 +8,11 @@ import NavbarLink from './NavbarLink'
 import {logOut} from '../../Pages/Login/loginSlice'
 import {useDispatch, useSelector} from 'react-redux'
 import Language from './../Languages/Language'
+import { useTranslation } from 'react-i18next';
 
 function Navbar() {
+    const { t } = useTranslation(['common'])
+
     const dispatch = useDispatch()
     const {user} = useSelector((state) => state.login)
     const [navbarExpended, setNavbarExpended] = useState(false)
@@ -118,9 +121,10 @@ function Navbar() {
                         }
                     >
                         {chooseRouteArray().map((item) => (
+
                             <NavbarLink
                                 icon={item.icon}
-                                label={item.label}
+                                label={t(item.label)}
                                 path={item.path}
                                 submenu={item.submenu}
                                 id={item.id}
@@ -166,7 +170,7 @@ function Navbar() {
                             <ProfileMenuLink
                                 path={item.path}
                                 icon={item.icon}
-                                label={item.label}
+                                label={t(item.label)}
                                 key={index + 1}
                             />
                         ) : (
@@ -178,7 +182,7 @@ function Navbar() {
                                 onClick={handleClickLogout}
                             >
                                 <span>{item.icon}</span>
-                                <span className={'text-xs'}>{item.label}</span>
+                                <span className={'text-xs'}>{t(item.label)}</span>
                             </button>
                         )
                     )}

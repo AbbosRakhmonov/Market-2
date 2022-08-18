@@ -3,6 +3,7 @@ import {uniqueId} from 'lodash'
 import SelectInput from '../../SelectInput/SelectInput'
 import {useSelector} from 'react-redux'
 import SmallLoader from '../../Spinner/SmallLoader.js'
+import { useTranslation } from 'react-i18next';
 
 function UploadExcel(
     {
@@ -42,6 +43,7 @@ function UploadExcel(
         setCols(newOptions)
         //    eslint-disable-next-line react-hooks/exhaustive-deps
     }, [excelData])
+    const {t} = useTranslation(['coomon'])
     return (
         <div className={'modalContent mt-10'}>
             {loading &&
@@ -72,7 +74,7 @@ function UploadExcel(
                                     }
                                     options={cols}
                                     value={values[index]}
-                                    placeholder={'Bo\'limni tanlang ...'}
+                                    placeholder={'Bo`limni tanlang ...'}
                                 />
                             </div>
                         </th>
@@ -101,13 +103,13 @@ function UploadExcel(
                     className={'approveBtn bg-black-500 hover:bg-black-700'}
                     onClick={toggleModal}
                 >
-                    Bekor qilish
+                    {t("Bekor qilish")}
                 </button>
                 <button
                     className={'approveBtn bg-success-500 hover:bg-success-700'}
                     onClick={approveFunction}
                 >
-                    Tasdiqlash
+                    {t("Tasdiqlash")}
                 </button>
             </div>
         </div>

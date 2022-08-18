@@ -8,18 +8,17 @@ i18n.use(Backend)
     .use(initReactI18next)
     .init({
         backend: {
-            loadPath: 'assets/i18n/{{ns}}/{{lng}}.json'
+            loadPath: '/assets/i18n/{{ns}}/{{lng}}.json'
         },
         fallbackLng: 'lot',
         debug: false,
         ns: ['common'],
         interpolation: {
-            escapeValue: false,
-            formatSeparator: ','
+            escapeValue:true,
         },
         react: {
-            wait: true
-        }
+            useSuspense: true,
+        },
 
     })
 

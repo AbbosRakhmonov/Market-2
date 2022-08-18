@@ -1,14 +1,14 @@
-import React, {useEffect} from 'react'
-import Select from 'react-select'
-import {useTranslation} from 'react-i18next'
+import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
-import CustomStyle, {DropdownIcon} from './CustomStyled'
-import {BsGlobe2} from 'react-icons/bs'
+import Select from 'react-select'
+import CustomStyle, { DropdownIcon } from './CustomStyled'
+import { BsGlobe2 } from 'react-icons/bs'
 import UZBflag from '../../Images/yes.svg'
 import RUFlag from '../../Images/Russia.svg'
 
 const Language = () => {
-    const {i18n} = useTranslation(['report'])
+    const { i18n, t } = useTranslation(['common'])
     useEffect(() => {
         if (localStorage.getItem('i18nextLng')?.length > 1) {
             i18next.changeLanguage('lot')
@@ -19,7 +19,6 @@ const Language = () => {
 
     const handleLanguageChange = (e) => {
         i18n.changeLanguage(e.value)
-
     }
 
 
@@ -44,7 +43,7 @@ const Language = () => {
         <div className='relative'>
             <div>
                 <BsGlobe2 className='absolute z-10 translate-y-[-50%] top-[50%] ml-[.75rem]'
-                          color='rgba(28, 28, 28, 0.5)' size={'1.25rem'} />
+                    color='rgba(28, 28, 28, 0.5)' size={'1.25rem'} />
             </div>
             <Select
                 options={options}

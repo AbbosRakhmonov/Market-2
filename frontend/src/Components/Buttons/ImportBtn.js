@@ -1,7 +1,9 @@
 import React from 'react'
 import {IoDownloadOutline} from 'react-icons/io5'
+import {useTranslation} from 'react-i18next'
 
 function ImportBtn({readExcel}) {
+    const {t} = useTranslation(['common'])
     const handleChange = (e) => {
         const file = e.target.files[0]
         readExcel(file)
@@ -10,7 +12,7 @@ function ImportBtn({readExcel}) {
         <>
             <button>
                 <label htmlFor='import-field' className='importButton'>
-                    Import
+                    {t('Import')}
                     <span
                         className={
                             'btn-icon bg-white-900 p-[8px] text-primary-800'

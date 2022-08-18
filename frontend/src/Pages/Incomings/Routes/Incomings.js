@@ -1,20 +1,22 @@
-import React, {useCallback, useEffect, useState} from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import CardLink from '../../../Components/Card/CardLink'
-import {useDispatch, useSelector} from 'react-redux'
-import {uniqueId} from 'lodash'
-import {getIncomingConnectors, getSuppliers} from '../incomingSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { uniqueId } from 'lodash'
+import { getIncomingConnectors, getSuppliers } from '../incomingSlice'
 import Dates from '../../../Components/Dates/Dates'
 import SelectInput from '../../../Components/SelectInput/SelectInput'
 import FilterButtons from '../../../Components/FilterButtons/FilterButtons'
 import ResultIncomings from '../Components/ResultIncomings'
+import { useTranslation } from 'react-i18next';
 
 function Incomings() {
+    const { t } = useTranslation(['common'])
     const dispatch = useDispatch()
     const {
-        market: {_id}
+        market: { _id }
     } = useSelector((state) => state.login)
-    const {currencyType} = useSelector((state) => state.currency)
-    const {incomingconnectors, suppliers} = useSelector(
+    const { currencyType } = useSelector((state) => state.currency)
+    const { incomingconnectors, suppliers } = useSelector(
         (state) => state.incoming
     )
 
@@ -64,7 +66,7 @@ function Incomings() {
     const addChnagedIncomings = (groups) => {
         const sumSupplier = (arr) => {
             let repeat = []
-            return arr.reduce((prev, {_id}) => {
+            return arr.reduce((prev, { _id }) => {
                 if (!repeat.includes(_id)) {
                     repeat.push(_id)
                     return prev + 1
@@ -115,7 +117,7 @@ function Incomings() {
             setSupplierSearch('')
         } else {
             const connectorsForSupplier = incomingconnectors.filter(
-                ({supplier}) => {
+                ({ supplier }) => {
                     return supplier._id === target
                 }
             )
@@ -149,20 +151,20 @@ function Incomings() {
     }, [dispatch, _id, beginDay, endDay])
 
     useEffect(() => {
-        dispatch(getSuppliers({_id}))
+        dispatch(getSuppliers({ _id }))
     }, [dispatch, _id])
 
     return (
         <section>
             <div className='flex items-center gap-[1.25rem] mainPadding'>
                 <Dates
-                    label={'dan'}
+                    label={t('dan')}
                     value={new Date(beginDay)}
                     onChange={(value) => changeDate(value, 'beginDay')}
                     maxWidth={'max-w-[9.6875rem]'}
                 />
                 <Dates
-                    label={'gacha'}
+                    label={t('gacha')}
                     value={new Date(endDay)}
                     onChange={(value) => changeDate(value, 'endDay')}
                     maxWidth={'max-w-[9.6875rem]'}
@@ -173,7 +175,7 @@ function Incomings() {
                             isSearchable={true}
                             options={[
                                 {
-                                    label: 'Yetkazib beruvchilar',
+                                    label: t('Yetkazib beruvchilar'),
                                     value: 'all'
                                 },
                                 ...suppliersData
@@ -182,7 +184,7 @@ function Incomings() {
                         />
                     }
                     grow={true}
-                    label={'Yetkazuvchini tanlang'}
+                    label={t('Yetkazuvchini tanlang')}
                 />
             </div>
             <ResultIncomings

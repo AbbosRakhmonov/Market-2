@@ -1,58 +1,58 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import CheckoutCards from '../../Components/CheckoutCard/CheckoutCards'
 import SearchForm from '../../Components/SearchForm/SearchForm.js'
-import {useDispatch, useSelector} from 'react-redux'
-import {universalToast} from '../../Components/ToastMessages/ToastMessages.js'
-import {uniqueId} from 'lodash'
-import {clearErrorReports, getReports} from './reportsSlice.js'
-import {useTranslation} from 'react-i18next'
-import {motion} from 'framer-motion'
+import { useDispatch, useSelector } from 'react-redux'
+import { universalToast } from '../../Components/ToastMessages/ToastMessages.js'
+import { uniqueId } from 'lodash'
+import { clearErrorReports, getReports } from './reportsSlice.js'
+import { useTranslation } from 'react-i18next'
+import { motion } from 'framer-motion'
 
 const Reports = () => {
-    const {t} = useTranslation(['common'])
+    const { t } = useTranslation(['common'])
 
     const card = [
         {
-            name: `${t('Savdo')}`,
+            name: 'Savdo',
             type: 'sale',
             percentage: 99
         },
         {
-            name: `${t('Sof foyda')}`,
+            name: 'Sof foyda',
             type: 'income'
         },
         {
-            name: `${t('Xarajatlar')}`,
+            name: 'Xarajatlar',
             type: 'expenses'
         },
         {
-            name: `${t('Naqd')}`,
+            name: 'Naqd',
             type: 'cash'
         },
         {
-            name: `${t('Plastik')}`,
+            name: 'Plastik',
             type: 'card'
         },
         {
-            name: `${t('O`tkazmalar')}`,
+            name: 'O`tkazmalar',
             type: 'transfer'
         },
         {
-            name: `${t('Qaytarilgan')}`,
+            name: 'Qaytarilgan',
             type: 'backproducts'
         },
         {
-            name: `${t('Chegirmalar')}`,
+            name: 'Chegirmalar',
             type: 'discounts'
         },
         {
-            name: `${t('Qarzlar')}`,
+            name: 'Qarzlar',
             type: 'debts'
         }
     ]
 
     const dispatch = useDispatch()
-    const {reports, clearErrorrReports, errorReports} = useSelector(
+    const { reports, clearErrorrReports, errorReports } = useSelector(
         (state) => state.reports
     )
     const [startDate, setStartDate] = useState(
@@ -63,7 +63,7 @@ const Reports = () => {
         )
     )
     const [endDate, setEndDate] = useState(new Date())
-    const {currencyType} = useSelector((state) => state.currency)
+    const { currencyType } = useSelector((state) => state.currency)
 
     useEffect(() => {
         const body = {
@@ -90,10 +90,10 @@ const Reports = () => {
             animate='open'
             exit='collapsed'
             variants={{
-                open: {opacity: 1, height: 'auto'},
-                collapsed: {opacity: 0, height: 0}
+                open: { opacity: 1, height: 'auto' },
+                collapsed: { opacity: 0, height: 0 }
             }}
-            transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
         >
             <SearchForm
                 filterBy={['startDate', 'endDate', 'printBtn']}
@@ -108,7 +108,7 @@ const Reports = () => {
                         <CheckoutCards
                             key={uniqueId('card')}
                             path={i.type}
-                            name={i.name}
+                            name={t(i.name)}
                             type={i.type}
                             percentage={i.percentage}
                             cost={i.cost}

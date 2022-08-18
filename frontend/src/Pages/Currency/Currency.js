@@ -1,17 +1,20 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import FieldContainer from '../../Components/FieldContainer/FieldContainer.js'
 import Button from '../../Components/Buttons/BtnAddRemove.js'
 import Table from '../../Components/Table/Table.js'
-import {useDispatch, useSelector} from 'react-redux'
-import {motion} from 'framer-motion'
-import {addExchangerate, deleteExchangerate, getCurrencies, updateExchangerate} from './currencySlice.js'
+import { useDispatch, useSelector } from 'react-redux'
+import { motion } from 'framer-motion'
+import { addExchangerate, deleteExchangerate, getCurrencies, updateExchangerate } from './currencySlice.js'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
 import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
-import {checkEmptyString} from '../../App/globalFunctions.js'
-import {universalToast} from '../../Components/ToastMessages/ToastMessages.js'
+import { checkEmptyString } from '../../App/globalFunctions.js'
+import { universalToast } from '../../Components/ToastMessages/ToastMessages.js'
+import { t } from 'i18next'
+import { useTranslation } from 'react-i18next';
 
 const Currency = () => {
+    const { t } = useTranslation(['common'])
     const dispatch = useDispatch()
     const {
         currencies,
@@ -19,10 +22,10 @@ const Currency = () => {
     } = useSelector((state) => state.currency)
 
     const headers = [
-        {title: '№', styles: 'w-[8%] text-left'},
-        {title: 'Sana', styles: 'w-[17%] text-center'},
-        {title: 'Kurs', styles: 'w-[67%] text-center'},
-        {title: '', styles: 'w-[8%] text-center'}
+        { title: '№', styles: 'w-[8%] text-left' },
+        { title: t('Sana'), styles: 'w-[17%] text-center' },
+        { title: t('Kurs'), styles: 'w-[67%] text-center' },
+        { title: '', styles: 'w-[8%] text-center' }
     ]
 
     const [data, setData] = useState(currencies)
@@ -48,7 +51,7 @@ const Currency = () => {
         toggleModal()
     }
     const handleClickApproveToDelete = () => {
-        const body = {_id: deletedExchange._id}
+        const body = { _id: deletedExchange._id }
         dispatch(deleteExchangerate(body))
         handleClickCancelToDelete()
     }
@@ -59,11 +62,11 @@ const Currency = () => {
 
     const addNewExchange = (e) => {
         e.preventDefault()
-        const body = {exchangerate: exchangeName}
+        const body = { exchangerate: exchangeName }
         if (checkEmptyString([exchangeName])) {
-            return universalToast('Valyuta kursini kiriting!', 'error')
+            return universalToast(t('Valyuta kursini kiriting!'), 'error')
         }
-        dispatch(addExchangerate(body)).then(({error}) => {
+        dispatch(addExchangerate(body)).then(({ error }) => {
             if (!error) {
                 clearForm()
             }
@@ -77,7 +80,7 @@ const Currency = () => {
             exchangerate: exchangeName,
             _id: currentExchange._id
         }
-        dispatch(updateExchangerate(body)).then(({error}) => {
+        dispatch(updateExchangerate(body)).then(({ error }) => {
             if (!error) {
                 clearForm()
             }
@@ -113,15 +116,15 @@ const Currency = () => {
             animate='open'
             exit='collapsed'
             variants={{
-                open: {opacity: 1, height: 'auto'},
-                collapsed: {opacity: 0, height: 0}
+                open: { opacity: 1, height: 'auto' },
+                collapsed: { opacity: 0, height: 0 }
             }}
-            transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
         >
             <UniversalModal
                 headerText={`${deletedExchange && deletedExchange.exchangerate
-                } kurs narxini o'chirishni tasdiqlaysizmi?`}
-                title="O'chirilgan kurs narxini tiklashning imkoni mavjud emas!"
+                    } ${t("kurs narxini o'chirishni tasdiqlaysizmi?")}`}
+                title={t("O'chirilgan kurs narxini tiklashning imkoni mavjud emas!")}
                 toggleModal={toggleModal}
                 body={'approve'}
                 approveFunction={handleClickApproveToDelete}
@@ -130,14 +133,14 @@ const Currency = () => {
             />
             <form
                 className={`unitFormStyle ${stickyForm && 'stickyForm'
-                } flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200`}
+                    } flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200`}
             >
                 <div className='exchangerate-style'>
                     <FieldContainer
                         value={exchangeName}
                         onChange={handleChangeExchangeName}
-                        label={'Kurs narxi'}
-                        placeholder={'misol: 11 000 UZS'}
+                        label={t('Kurs narxi')}
+                        placeholder={t('misol: 11 000 UZS')}
                         maxWidth={'w-[30.75rem]'}
                         type={'number'}
                         border={true}
@@ -152,11 +155,11 @@ const Currency = () => {
                             edit={stickyForm}
                             text={
                                 stickyForm
-                                    ? `Saqlash`
-                                    : `Yangi o'lchov qo'shish`
+                                    ? t(`Saqlash`)
+                                    : t(`Yangi o'lchov qo'shish`)
                             }
                         />
-                        <Button onClick={clearForm} text={'Tozalash'} />
+                        <Button onClick={clearForm} text={t('Tozalash')} />
                     </div>
                 </div>
             </form>
@@ -165,7 +168,7 @@ const Currency = () => {
                 {getCurrenciesLoading ? (
                     <Spinner />
                 ) : currencies.length === 0 ? (
-                    <NotFind text={'Valyuta kursi mavjud emas'} />
+                    <NotFind text={t('Valyuta kursi mavjud emas')} />
                 ) : (
                     <Table
                         page={'exchange'}

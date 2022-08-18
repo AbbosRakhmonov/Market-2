@@ -1,18 +1,20 @@
-import React, {useCallback, useEffect, useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
-import {useNavigate} from 'react-router-dom'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import Table from '../../../Components/Table/Table'
-import {deleteTemporary, getTemporary, setTemporaryRegister} from '../incomingSlice'
+import { deleteTemporary, getTemporary, setTemporaryRegister } from '../incomingSlice'
+import { useTranslation } from 'react-i18next';
 
 const SavedIncomings = () => {
+    const { t } = useTranslation(['common'])
     const dispatch = useDispatch()
     let navigate = useNavigate()
 
     const {
-        market: {_id}
+        market: { _id }
     } = useSelector((state) => state.login)
-    const {currencyType} = useSelector((state) => state.currency)
-    const {temporaries} = useSelector((state) => state.incoming)
+    const { currencyType } = useSelector((state) => state.currency)
+    const { temporaries } = useSelector((state) => state.incoming)
 
     const [currentTemporaryData, setCurrentTemporaryData] = useState([])
 
@@ -23,7 +25,7 @@ const SavedIncomings = () => {
             let {
                 _id,
                 createdAt,
-                temporaryincoming: {supplier, incomings}
+                temporaryincoming: { supplier, incomings }
             } = temp
             return {
                 _id,
@@ -80,27 +82,27 @@ const SavedIncomings = () => {
             styles: 'w-[8%]'
         },
         {
-            title: 'Yetkazib beruvchi',
+            title: t('Yetkazib beruvchi'),
             filter: 'supplier.name',
             styles: ''
         },
         {
-            title: 'Maxsulotlar',
+            title: t('Maxsulotlar'),
             filter: 'incomings.pieces',
             styles: 'w-[10%]'
         },
         {
-            title: 'Jami',
+            title: t('Jami'),
             filter: 'incomings.totalprice',
             styles: 'w-[10%]'
         },
         {
-            title: 'Sana',
+            title: t('Sana'),
             filter: 'createdAt',
             styles: 'w-[10%]'
         },
         {
-            title: 'Vaqti',
+            title: t('Vaqti'),
             filter: 'createdAt',
             styles: 'w-[10%]'
         },
@@ -122,7 +124,7 @@ const SavedIncomings = () => {
                     Delete={removeTemporary}
                 />
             ) : (
-                <div>Saqlangan qabullar mavjud emas</div>
+                <div>{t("Saqlangan qabullar mavjud emas")}</div>
             )}
         </div>
     )

@@ -25,8 +25,10 @@ import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
 import {checkEmptyString} from '../../App/globalFunctions.js'
 import {motion} from 'framer-motion'
+import { useTranslation } from 'react-i18next';
 
 function Unit() {
+    const {t} = useTranslation(['common'])
     const dispatch = useDispatch()
     const {
         errorUnits,
@@ -37,11 +39,11 @@ function Unit() {
         loading
     } = useSelector((state) => state.units)
     const headers = [
-        {styles: 'w-[10%] text-start', filter: '', title: '№'},
+        {styles: 'w-[10%] text-start', filter: '', title: t('№')},
         {
             styles: 'w-[80%] text-start',
             filter: '',
-            title: 'O\'lchov birligi nomi'
+            title: t("O`lchov birligi nomi")
         },
         {styles: 'w-[10%]', filter: '', title: ' '}
     ]
@@ -168,8 +170,8 @@ function Unit() {
             transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}>
             <UniversalModal
                 headerText={`${deletedUnit && deletedUnit.name
-                } o'lchov birligini o'chirishni tasdiqlaysizmi?`}
-                title="O'chirilgan o'lchov birligini tklashning imkoni mavjud emas!"
+                } ${t("o`lchov birligini o`chirishni tasdiqlaysizmi?")}`}
+                title={t("O`chirilgan o`lchov birligini tiklashning imkoni mavjud emas!")}
                 toggleModal={toggleModal}
                 body={'approve'}
                 approveFunction={handleClickApproveToDelete}
@@ -180,8 +182,8 @@ function Unit() {
                 <FieldContainer
                     onChange={handleChangeUnitName}
                     value={unitName}
-                    label={'O\'lchov birligini kiriting'}
-                    placeholder={'misol: kg'}
+                    label={t('O`lchov birligini kiriting')}
+                    placeholder={t('misol: kg')}
                     maxWidth={'w-[43.75rem]'}
                 />
 
@@ -189,22 +191,22 @@ function Unit() {
                     <Button
                         add={!stickyForm}
                         edit={stickyForm}
-                        text={stickyForm ? `Saqlash` : `Yangi o'lchov qo'shish`}
+                        text={stickyForm ? t(`Saqlash`) : t("Yangi o`lchov qo`shish")}
                         onClick={stickyForm ? handleEdit : addNewUnit}
                     />
-                    <Button text={'Tozalash'} onClick={clearForm} />
+                    <Button text={t('Tozalash')} onClick={clearForm} />
                 </div>
             </form>
 
             <div className='mainPadding text-[1.25rem] text-blue-900'>
-                O'lchov birliklari
+                {t("O'lchov birliklari")}
             </div>
 
             <div className='tableContainerPadding'>
                 {loading ? (
                     <Spinner />
                 ) : data.length === 0 ? (
-                    <NotFind text={'O\'lchov birliklari mavjud emas'} />
+                    <NotFind text={t('O`lchov birliklari mavjud emas')}/>
                 ) : (
                     <Table
                         page='unit'
