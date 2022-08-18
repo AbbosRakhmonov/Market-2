@@ -110,7 +110,7 @@ function Products() {
         sort: '',
         count: 0,
     })
-
+    
     // modal toggle
     const toggleModal = () => setModalVisible(!modalVisible)
 
@@ -119,6 +119,7 @@ function Products() {
         {title: '№'},
         {
             title: 'Shtrix kodi',
+            filter: 'productdata.barcode'
         },
         {
             title: 'Kategoriyasi',
@@ -328,10 +329,8 @@ function Products() {
             const body = {
                 currentPage: 0,
                 countPage: showByTotal,
-                search: {
-                    name: searchByName.replace(/\s+/g, ' ').trim(),
-                    code: barCode.replace(/\s+/g, ' ').trim(),
-                    category: searchByCategory.replace(/\s+/g, ' ').trim(),
+                search: {  
+                  barcode: barCode.replace(/\s+/g, ' ').trim(),
                 },
                 product: {
                     code: codeOfProduct,
