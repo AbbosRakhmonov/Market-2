@@ -163,6 +163,15 @@ const AdminProduct = () => {
                 setBgActive(true)
                 setImage(editedMarket?.director?.image || '')
                 setCreatedMarketId(payload._id)
+                const body = {
+                    currentPage,
+                    countPage: showByTotal,
+                    search: {
+                        name: name.replace(/\s+/g, ' ').trim(),
+                        director: director.replace(/\s+/g, ' ').trim()
+                    }
+                }
+                dispatch(getMarkets(body))
             }
         })
     }
