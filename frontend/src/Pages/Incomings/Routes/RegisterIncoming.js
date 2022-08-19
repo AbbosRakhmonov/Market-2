@@ -58,7 +58,7 @@ const RegisterIncoming = () => {
         setSupplier(...suppliers.filter((supplier) => supplier._id === e.value))
         if (incomings.length > 0) {
             setIncomings([
-                map(...incomings,(product) => {
+                ...incomings.map((product) => {
                     return {
                         ...product,
                         supplier: {
@@ -169,7 +169,7 @@ const RegisterIncoming = () => {
 
         if (id) {
             setIncomings([
-                map(...incomings,(incoming) => {
+                ...incomings.map((incoming) => {
                     if (incoming._id === id) {
                         return product
                     }
