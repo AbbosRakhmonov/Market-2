@@ -13,7 +13,6 @@ import {
     getSuppliers,
 } from '../incomingSlice'
 import {ConfirmBtn, SaveBtn} from '../../../Components/Buttons/SaveConfirmBtn'
-import {CheckIncoming} from '../Functions/CheckIncoming'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
 import {UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
 import {useNavigate} from 'react-router-dom'
