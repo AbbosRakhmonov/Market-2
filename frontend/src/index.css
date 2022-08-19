@@ -687,7 +687,7 @@
     /* Loader style start */
 
     .loader {
-        @apply w-full h-full flex justify-center items-center
+        @apply w-full h-full flex justify-center items-center absolute z-[10000] top-[0] left-[0]
     }
     .animation {
         @apply flex items-center justify-between gap-[15px]
