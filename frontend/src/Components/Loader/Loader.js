@@ -20,7 +20,7 @@ const Loader = () => {
                         animate={{
                             rotate: [0, 360, 360, 0],
                         }}
-                        transition={{ repeat: Infinity, duration: 3 }}
+                        transition={{ repeat: Infinity, duration: 4 }}
                     >
                     </motion.div>
                     <div className='animation-block'

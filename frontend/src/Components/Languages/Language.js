@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import i18next from 'i18next'
 import Select from 'react-select'
 import CustomStyle, { DropdownIcon } from './CustomStyled'
 import { BsGlobe2 } from 'react-icons/bs'
@@ -8,19 +7,8 @@ import UZBflag from '../../Images/yes.svg'
 import RUFlag from '../../Images/Russia.svg'
 
 const Language = () => {
-    const { i18n, t } = useTranslation(['common'])
-    useEffect(() => {
-        if (localStorage.getItem('i18nextLng')?.length > 1) {
-            i18next.changeLanguage('lot')
-        }
-    }, [])
-
-    // select language function
-
-    const handleLanguageChange = (e) => {
-        i18n.changeLanguage(e.value)
-    }
-
+    const { i18n } = useTranslation(['common'])
+    const [selected, setSelected] = useState('')
 
     const options = [
         {
@@ -39,6 +27,18 @@ const Language = () => {
                 className='p-[2px] rounded-[2px] bg-white-900'><img src={RUFlag} alt={'russian'} /></div>RU</span>
         }
     ]
+    useEffect(() => {
+        const l = localStorage.getItem("i18nextLng")
+        setSelected(options.find(item => item.value === l))
+    }, []);
+
+    // select language function
+
+    const handleLanguageChange = (e) => {
+        i18n.changeLanguage(e.value)
+        setSelected(e)
+    }
+
     return (
         <div className='relative'>
             <div>
@@ -47,10 +47,10 @@ const Language = () => {
             </div>
             <Select
                 options={options}
-                defaultValue={options[0]}
                 isSearchable={false}
                 styles={CustomStyle}
                 onChange={handleLanguageChange}
+                value={selected || options[0]}
                 components={{
                     IndicatorSeparator: () => null,
                     DropdownIndicator: DropdownIcon
