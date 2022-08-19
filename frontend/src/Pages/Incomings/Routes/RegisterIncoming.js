@@ -16,8 +16,8 @@ import {ConfirmBtn, SaveBtn} from '../../../Components/Buttons/SaveConfirmBtn'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
 import {UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
 import {useNavigate} from 'react-router-dom'
-import {useTranslation} from 'react-i18next'
-import {map} from 'lodash'
+import { useTranslation } from 'react-i18next';
+import {map,filter} from 'lodash'
 import {universalToast} from '../../../Components/ToastMessages/ToastMessages'
 
 const RegisterIncoming = () => {
@@ -58,7 +58,8 @@ const RegisterIncoming = () => {
         setSupplier(...suppliers.filter((supplier) => supplier._id === e.value))
         if (incomings.length > 0) {
             setIncomings([
-                map(...incomings, (product) => {
+                ...incomings.map((product) => {
+
                     return {
                         ...product,
                         supplier: {
@@ -169,7 +170,7 @@ const RegisterIncoming = () => {
 
         if (id) {
             setIncomings([
-                map(...incomings, (incoming) => {
+                ...incomings.map((incoming) => {
                     if (incoming._id === id) {
                         return product
                     }
@@ -203,11 +204,11 @@ const RegisterIncoming = () => {
     }
 
     const deleteIncoming = (product) => {
-        const filter = incomings.filter(
+        const filter = filter(incomings,
             (incoming) => incoming._id !== product._id
         )
         setIncomings(filter)
-        const temps = temporaryIncomings.filter(
+        const temps = filter(temporaryIncomings,
             (temp) => temp._id !== product._id
         )
         setTemporaryIncomings(temporary)

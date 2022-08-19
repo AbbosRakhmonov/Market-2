@@ -16,7 +16,7 @@ import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
 import {successAddDirectory} from '../../Components/ToastMessages/ToastMessages.js'
-
+import {filter} from "lodash"
 const AdminProduct = () => {
     const dispatch = useDispatch()
     const {markets, total, searchedMarkets, totalSearched, loadingGetMarkets} = useSelector(state => state.adminmarkets)
@@ -72,7 +72,7 @@ const AdminProduct = () => {
             setData(markets)
             setFilteredDataTotal(total)
         } else {
-            const filteredProducts = markets.filter((market) => {
+            const filteredProducts = filter(markets,(market) => {
                 return market.name
                     .toLowerCase()
                     .includes(valForSearch)
@@ -91,7 +91,7 @@ const AdminProduct = () => {
             setData(markets)
             setFilteredDataTotal(total)
         } else {
-            const filteredProducts = markets.filter((market) => {
+            const filteredProducts = filter(markets,(market) => {
                 return market.director.firstname
                     .toLowerCase()
                     .includes(valForSearch) || market.director.lastname.toLowerCase().includes(valForSearch)

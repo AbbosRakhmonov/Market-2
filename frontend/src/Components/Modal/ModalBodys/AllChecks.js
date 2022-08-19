@@ -3,7 +3,7 @@ import PrintBtn from '../../Buttons/PrintBtn'
 import {useReactToPrint} from 'react-to-print'
 import {SaleCheckAll} from '../../SaleCheck/SaleCheckAll.js'
 import SmallLoader from '../../Spinner/SmallLoader.js'
-
+import {filter} from "lodash"
 function AllCheck({product}) {
     const [loadContent, setLoadContent] = useState(false)
     const [selled, setSelled] = useState([])
@@ -42,12 +42,12 @@ function AllCheck({product}) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [onBeforeGetContentResolve.current, loadContent])
     useEffect(() => {
-        setSelled(product?.products.filter(item => item.pieces > 0))
-        setReturned(product?.products.filter(item => item.pieces < 0))
-        setSelledDiscounts(product?.discounts.filter(item => item.discount > 0))
-        setReturnedDiscounts(product?.discounts.filter(item => item.discount < 0))
-        setSelledPayments(product?.payments.filter(item => item.payment > 0))
-        setReturnedPayments(product?.payments.filter(item => item.payment < 0))
+        setSelled(filter(product?.products, (item) => item.pieces > 0))
+        setReturned(filter(product?.products,(item) => item.pieces < 0))
+        setSelledDiscounts(filter(product?.discounts,(item) => item.discount > 0))
+        setReturnedDiscounts(filter(product?.discounts,(item) => item.discount < 0))
+        setSelledPayments(filter(product?.payments,(item) => item.payment > 0))
+        setReturnedPayments(filter(product?.payments,(item) => item.payment < 0))
     }, [product])
     return (
         <section className='w-[27cm] mt-4 mx-auto'>

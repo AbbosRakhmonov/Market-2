@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import CardLink from '../../../Components/Card/CardLink'
 import {useDispatch, useSelector} from 'react-redux'
-import {uniqueId,map} from 'lodash'
+import {uniqueId,map, filter} from 'lodash'
 import {getIncomingConnectors, getSuppliers} from '../incomingSlice'
 import Dates from '../../../Components/Dates/Dates'
 import SelectInput from '../../../Components/SelectInput/SelectInput'
@@ -51,7 +51,7 @@ function Incomings() {
         let groups = []
         const convert = (el) => new Date(el.createdAt).toLocaleDateString()
         for (let element of data) {
-            let existingGroups = groups.filter(
+            let existingGroups = filter(groups,
                 (group) => convert(group) === convert(element)
             )
             if (existingGroups.length > 0) {
@@ -116,7 +116,7 @@ function Incomings() {
             changeConnectorsData(incomingconnectors)
             setSupplierSearch('')
         } else {
-            const connectorsForSupplier = incomingconnectors.filter(
+            const connectorsForSupplier = filter(incomingconnectors,
                 ({ supplier }) => {
                     return supplier._id === target
                 }

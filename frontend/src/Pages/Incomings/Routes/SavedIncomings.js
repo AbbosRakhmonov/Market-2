@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import Table from '../../../Components/Table/Table'
 import { useTranslation } from 'react-i18next';
 import {deleteTemporary, getTemporary, setTemporaryRegister} from '../incomingSlice'
-import {map} from 'lodash'
+import {map,filter} from 'lodash'
 
 const SavedIncomings = () => {
     const { t } = useTranslation(['common'])
@@ -43,7 +43,7 @@ const SavedIncomings = () => {
     }, [])
 
     const sendTemporayToRegister = (temporary) => {
-        const incomings = temporaries.filter(
+        const incomings = filter(temporaries,
             (temp) => temp._id === temporary._id
         )[0]
         dispatch(

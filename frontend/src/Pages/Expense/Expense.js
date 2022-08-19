@@ -49,7 +49,7 @@ const Expense = () => {
     })
     const [expenseType, setExpenseType] = useState({
 
-        label: '',
+        label: t('Turi'),
         value: ''
     })
 

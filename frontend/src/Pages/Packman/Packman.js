@@ -30,7 +30,7 @@ import {
 } from './packmanSlice'
 import { checkEmptyString } from '../../App/globalFunctions.js'
 import { useTranslation } from 'react-i18next';
-
+import {filter} from "lodash"
 function Packman() {
     const { t } = useTranslation(['common'])
     const dispatch = useDispatch()
@@ -168,7 +168,7 @@ function Packman() {
             setData(packmans)
             setFilteredDataTotal(total)
         } else {
-            const filteredPackmans = packmans.filter((packman) => {
+            const filteredPackmans = filter(packmans,(packman) => {
                 return packman.name.toLowerCase().includes(valForSearch)
             })
             setData(filteredPackmans)

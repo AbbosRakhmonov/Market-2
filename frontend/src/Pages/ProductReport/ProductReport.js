@@ -16,7 +16,7 @@ import {useReactToPrint} from 'react-to-print'
 import {BarCode} from '../../Components/BarCode/BarCode.js'
 import {universalSort} from '../../App/globalFunctions.js'
 import { useTranslation } from 'react-i18next';
-
+import {filter} from "lodash"
 const ProductReport = () => {
     const {t} = useTranslation(['common'])
     const headers = [
@@ -93,7 +93,7 @@ const ProductReport = () => {
             setData(products)
             setFilteredDataTotal(total)
         } else {
-            const filteredProducts = products.filter((product) => {
+            const filteredProducts = filter(products,(product) => {
                 return product.productdata.code.includes(valForSearch)
             })
             setData(filteredProducts)
@@ -111,7 +111,7 @@ const ProductReport = () => {
             setData(products)
             setFilteredDataTotal(total)
         } else {
-            const filteredProducts = products.filter((product) => {
+            const filteredProducts = filter(products,(product) => {
                 return product.productdata.name
                     .toLowerCase()
                     .includes(valForSearch)

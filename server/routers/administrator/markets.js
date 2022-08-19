@@ -1,6 +1,6 @@
 const {Market} = require('../../models/MarketAndBranch/Market')
 const {User} = require('../../models/Users')
-
+import {filter} from "lodash"
 module.exports.getmarkets = async (req, res) => {
     try {
         const {administrator, currentPage, countPage, search} = req.body
@@ -26,7 +26,7 @@ module.exports.getmarkets = async (req, res) => {
                 match: {$or: [{firstname: director}, {lastname: director}]}
             })
 
-        let filter = markets.filter((market) => {
+        let filter = filter(markets,(market) => {
             return market.director !== null
         })
 
@@ -129,7 +129,7 @@ module.exports.updatemarkets = async (req, res) => {
                 match: {$or: [{firstname: director}, {lastname: director}]}
             })
 
-        let filter = markets.filter((market) => {
+        let filter = filter(markets,(market) => {
             return market.director !== null
         })
 

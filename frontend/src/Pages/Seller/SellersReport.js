@@ -6,7 +6,7 @@ import Pagination from '../../Components/Pagination/Pagination'
 import SearchForm from '../../Components/SearchForm/SearchForm'
 import Table from '../../Components/Table/Table'
 import {getSellerReports} from './sellerSlice'
-
+import {filter} from "lodash"
 const SellersReport = () => {
     const {id} = useParams()
 
@@ -68,7 +68,7 @@ const SellersReport = () => {
     const handleChangeId = (e) => {
         const val = e.target.value
         const valForSearch = val.replace(/\s+/g, ' ').trim()
-        const filteredProducts = sellersreport.filter((selling) => {
+        const filteredProducts = filter(sellersreport,(selling) => {
             return selling.id.includes(valForSearch)
         })
         setData(filteredProducts)
@@ -79,7 +79,7 @@ const SellersReport = () => {
     }
     const handleChangeClient = (e) => {
         const val = e.target.value.toLowerCase()
-        const filteredProducts = sellersreport.filter((selling) => {
+        const filteredProducts = filter(sellersreport,(selling) => {
             return selling?.client?.name
                 ? selling?.client?.name.toLowerCase().includes(val)
                 : selling
