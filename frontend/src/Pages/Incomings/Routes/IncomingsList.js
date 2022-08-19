@@ -7,7 +7,7 @@ import UniversalModal from '../../../Components/Modal/UniversalModal'
 import Pagination from '../../../Components/Pagination/Pagination'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
 import Table from '../../../Components/Table/Table'
-import {map} from 'lodash'
+import {map,filter} from 'lodash'
 import {clearSuccesDelete, clearSuccessUpdate, deleteIncoming, getIncomings, updateIncoming,excelIncomings} from '../incomingSlice'
 import { useTranslation } from 'react-i18next';
 
@@ -150,7 +150,7 @@ const IncomingsList = () => {
     const searchName = (e) => {
         let target = e.target.value.toLowerCase()
         setCurrentIncoming([
-            ...storageCurrentIncoming.filter(({ product }) =>
+            ...filter([...storageCurrentIncoming],({ product }) =>
                 product.productdata.name.toLowerCase().includes(target)
             )
         ])
@@ -164,7 +164,7 @@ const IncomingsList = () => {
     const searchCode = (e) => {
         let target = e.target.value.toLowerCase()
         setCurrentIncoming([
-            ...storageCurrentIncoming.filter(({ product }) =>
+            ...filter([...storageCurrentIncoming],({ product }) =>
                 product.productdata.code.includes(target)
             )
         ])
@@ -178,7 +178,7 @@ const IncomingsList = () => {
     const searchSupplier = (e) => {
         let target = e.target.value.toLowerCase()
         setCurrentIncoming([
-            ...storageCurrentIncoming.filter((product) =>
+            ...filter([...storageCurrentIncoming],(product) =>
                 product.supplier.name.toLowerCase().includes(target)
             )
         ])

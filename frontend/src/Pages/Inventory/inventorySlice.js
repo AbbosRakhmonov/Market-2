@@ -59,7 +59,7 @@ const inventorySlice = createSlice({
         loading: false,
         errorInventories: null,
         successUpdateInventory: false,
-        successComplateInventory: false
+        successComplateInventory: false,
     },
     reducers: {
         clearErrorInventories: (state) => {
@@ -74,7 +74,7 @@ const inventorySlice = createSlice({
         },
         clearCompleteSuccessInventory: (state) => {
             state.successComplateInventory = false
-        }
+        },
     },
     extraReducers: {
         [getInventories.pending]: (state) => {
@@ -144,14 +144,14 @@ const inventorySlice = createSlice({
         [complateInventory.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorInventories = payload
-        }
-    }
+        },
+    },
 })
 
 export const {
     clearErrorInventories,
     clearSuccessUpdateInventory,
     clearSearchedInventories,
-    clearCompleteSuccessInventory
+    clearCompleteSuccessInventory,
 } = inventorySlice.actions
 export default inventorySlice.reducer

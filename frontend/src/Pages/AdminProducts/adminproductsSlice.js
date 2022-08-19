@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import Api from '../../Config/Api.js'
 import {universalToast} from '../../Components/ToastMessages/ToastMessages.js'
-
+import {map} from 'lodash'
 export const getMarkets = createAsyncThunk(
     'adminproducts/getMarkets',
     async (body, {rejectWithValue}) => {
@@ -209,10 +209,10 @@ const adminproductsSlice = createSlice({
             if (state.searchedBranches.length > 0) {
                 state.searchedBranches = state.searchedBranches.map(sb => sb._id === markets[0]._id ? markets[0] : sb)
             }
-            state.branches = state.branches.map(sb => sb._id === markets[0]._id ? markets[0] : sb)
-            state.markets = state.markets.map((m) => m._id === market._id ? market : m)
+            state.branches = map(state.branches,(sb) => sb._id === markets[0]._id ? markets[0] : sb)
+            state.markets = map(state.markets, (m) => m._id === market._id ? market : m)
             if (state.searchedMarkets.length > 0) {
-                state.searchedMarkets = state.searchedMarkets.map((m) => m._id === market._id ? market : m)
+                state.searchedMarkets = map(state.searchedMarkets,(m) => m._id === market._id ? market : m)
             }
         },
         [updateMarkets.rejected]: (state, {payload}) => {
@@ -225,9 +225,9 @@ const adminproductsSlice = createSlice({
         },
         [editMarket.fulfilled]: (state, {payload}) => {
             state.loadingGetMarkets = false
-            state.markets = state.markets.map((m) => m._id === payload._id ? payload : m)
+            state.markets = map(state.markets,(m) => m._id === payload._id ? payload : m)
             if (state.searchedMarkets.length > 0) {
-                state.searchedMarkets = state.searchedMarkets.map((m) => m._id === payload._id ? payload : m)
+                state.searchedMarkets = map(state.searchedMarkets,(m) => m._id === payload._id ? payload : m)
             }
         },
         [editMarket.rejected]: (state, {payload}) => {

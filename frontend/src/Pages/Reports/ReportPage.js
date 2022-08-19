@@ -24,7 +24,7 @@ import {
     payDebt,
 } from './reportsSlice'
 import {ReportsTableHeaders} from './ReportsTableHeaders'
-
+import {filter} from "lodash"
 const ReportPage = () => {
     const {id} = useParams()
 
@@ -482,7 +482,7 @@ const ReportPage = () => {
     const searchId = (e) => {
         let target = e.target.value
         setCurrentData([
-            ...storageData.filter((item) =>
+            ...filter([...storageData],(item) =>
                 item.saleconnector
                     ? item.saleconnector.id.includes(target)
                     : item.id.includes(target)
@@ -497,7 +497,7 @@ const ReportPage = () => {
     const searchClientName = (e) => {
         let target = e.target.value.toLowerCase()
         setCurrentData([
-            ...storageData.filter(
+            ...filter([...storageData],
                 (item) =>
                     item.client &&
                     item.client.name.toLowerCase().includes(target)

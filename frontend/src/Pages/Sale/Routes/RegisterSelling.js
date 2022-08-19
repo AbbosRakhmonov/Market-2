@@ -482,7 +482,7 @@ const RegisterSelling = () => {
                 label: t('Tanlang'),
                 value: '',
             },
-            ...packmans.map((pack) => ({
+            ...map([...packmans],(pack) => ({
                 value: pack._id,
                 label: pack.name,
             })),
@@ -492,7 +492,7 @@ const RegisterSelling = () => {
                 label: t('Barchasi'),
                 value: '',
             },
-            ...clients.map((client) => ({
+            ...map([...clients],(client) => ({
                 value: client._id,
                 label: client.name,
             })),
@@ -766,7 +766,7 @@ const RegisterSelling = () => {
                     label: t('Tanlang'),
                     value: '',
                 },
-                ...clients.map((client) => ({
+                ...map([...clients],(client) => ({
                     label: client.name,
                     value: client._id,
                     packman: client?.packman,
@@ -1029,7 +1029,7 @@ const RegisterSelling = () => {
                 label: t('Tanlang'),
                 value: '',
             },
-            ...packmans.map((packman) => ({
+            ...map([...packmans],(packman) => ({
                 value: packman._id,
                 label: packman.name,
             })),
@@ -1041,7 +1041,7 @@ const RegisterSelling = () => {
                 label: t('Barchasi'),
                 value: '',
             },
-            ...clients.map((client) => ({
+            ...map([...clients],(client) => ({
                 value: client._id,
                 label: client.name,
             })),

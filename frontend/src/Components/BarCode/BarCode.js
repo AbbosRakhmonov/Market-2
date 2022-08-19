@@ -1,6 +1,6 @@
 import React from 'react'
 import {Body} from './Body.js'
-import {uniqueId} from 'lodash'
+import {uniqueId,map} from 'lodash'
 import {range} from 'lodash/util.js'
 
 export const BarCode = ({
@@ -29,7 +29,7 @@ export const BarCode = ({
                     })}
                 {productForCheques &&
                     countOfCheques &&
-                    productForCheques.map((productForCheque) =>
+                    map(productForCheques,(productForCheque) =>
                         range(0, countOfCheques).map(() => {
                             return (
                                 <Body
