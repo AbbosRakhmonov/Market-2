@@ -215,7 +215,7 @@ export const profileList = [
     {
         id: 2,
         path: 'shaxsiy/parol',
-        label: 'Parolni o\'zgartirish',
+        label: 'Parolni o`zgartirish',
         icon: <IoKeyOutline size={'1rem'} />
     },
     {
