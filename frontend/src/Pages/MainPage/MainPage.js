@@ -1,22 +1,22 @@
-import React, { useEffect } from 'react'
+import React, {useEffect} from 'react'
 import LineChart from '../../Components/LineChart/LineChart.js'
 import PieChart from '../../Components/PieChart/PieChart.js'
 import DailyCircle from '../../Components/DailyCircle/DailyCircle.js'
-import { useDispatch, useSelector } from 'react-redux'
-import { getMonthlyReport, getReports } from '../Reports/reportsSlice.js'
-import { getCurrency } from '../Currency/currencySlice.js'
-import { useTranslation } from 'react-i18next';
+import {useDispatch, useSelector} from 'react-redux'
+import {getMonthlyReport, getReports} from '../Reports/reportsSlice.js'
+import {getCurrency} from '../Currency/currencySlice.js'
+import {useTranslation} from 'react-i18next'
 import {map} from 'lodash'
 
 function MainPage() {
-    const { t } = useTranslation(['common'])
+    const {t} = useTranslation(['common'])
     const dispatch = useDispatch()
-    const { reports, monthlyReport } = useSelector(
+    const {reports, monthlyReport} = useSelector(
         (state) => state.reports
     )
-    const { currencyType } = useSelector((state) => state.currency)
+    const {currencyType} = useSelector((state) => state.currency)
     const filterMonthlyReport = () => {
-        return monthlyReport ? (currencyType === 'USD' ? map(monthlyReport.salesSum,(item) => item.usd) : map(monthlyReport.salesSum,(item) => item.uzs)) : []
+        return monthlyReport ? (currencyType === 'USD' ? map(monthlyReport.salesSum, (item) => item.usd) : map(monthlyReport.salesSum, (item) => item.uzs)) : []
     }
     useEffect(() => {
         const body = {
@@ -46,8 +46,8 @@ function MainPage() {
                     nth={1}
                     text={
                         currencyType === 'UZS'
-                            ? reports?.sale?.saleuzs?.toLocaleString("ru-Ru")
-                            : reports?.sale?.sale?.toLocaleString("ru-Ru")
+                            ? reports?.sale?.saleuzs?.toLocaleString('ru-Ru')
+                            : reports?.sale?.sale?.toLocaleString('ru-Ru')
                     }
                     label={t('Sotuv summasi')}
                 />
@@ -55,24 +55,26 @@ function MainPage() {
                     nth={2}
                     text={
                         currencyType === 'UZS'
-                            ? reports?.income?.incomeuzs?.toLocaleString("ru-Ru")
-                            : reports?.income?.income?.toLocaleString("ru-Ru")
+                            ? reports?.income?.incomeuzs?.toLocaleString('ru-Ru')
+                            : reports?.income?.income?.toLocaleString('ru-Ru')
                     }
                     label={t('Sof foyda')}
                 />
-                <DailyCircle nth={3} text={0} label={t('Xarajatlar')} />
+                <DailyCircle nth={3} text={currencyType === 'UZS'
+                    ? reports?.expenses?.expensesuzs?.toLocaleString('ru-Ru')
+                    : reports?.expenses?.expenses?.toLocaleString('ru-Ru')} label={t('Xarajatlar')} />
             </div>
             <div className={'h-[25rem]'}>
                 <LineChart
                     label={t('Oylik sotuvlar soni')}
-                    arr={[100, 95, 80, 90, 110]}
+                    arr={monthlyReport?.sales}
                 />
             </div>
             <div className={'flex gap-[5%] h-[25rem]'}>
                 <div className={'w-[65%]'}>
                     <LineChart
                         label={t('Oylik sotuvlar summasi')}
-                        arr={[100, 95, 80, 90, 110]}
+                        arr={filterMonthlyReport()}
                     />
                 </div>
                 <div className={'w-[30%]'}>
