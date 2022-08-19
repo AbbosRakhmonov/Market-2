@@ -130,8 +130,8 @@ function CustomerPayment({
                             keyInput={type}
                             onChange={changeComment}
                             onClose={onClose}
-                            label={'Izoh'}
-                            placeholder={'misol: qarzga olindi'}
+                            label={t('Izoh')}
+                            placeholder={t('misol: qarzga olindi')}
                             type={'text'}
                         />
                         {hasDiscount && (

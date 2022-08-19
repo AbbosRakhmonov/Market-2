@@ -5,6 +5,7 @@
     "Naqd":"Нақд",
     "Plastik":"Пластик",
     "O`tkazmalar":"Ўтказмалар",
+    "O`tkazma":"Ўтказма",
     "Qaytarilgan":"Қайтарилган",
     "Chegirmalar":"Чегирмалар",
     "Qarzlar": "Қарзлар",
@@ -164,7 +165,7 @@
     "Mahsulot kodi o'qilmadi!":"Маҳсулот коди ўқилмади!",
     "Diqqat! Qaytariladigan mahsulot soni sotilgan mahsulot sonidan ortiq bo'lolmaydi":"Диққат! Қайтариладиган маҳсулот сони сотилган маҳсулот сонидан ортиқ бўлолмайди",
     "To'lovni amalga oshirishni tasdiqlaysizmi ?":"Тўловни амалга оширишни тасдиқлайсизми ?",
-    "To'lovni amalga oshirgach bu ma`lumotlarni o`zgaritirb bo`lmaydi !":"Тўловни амалга оширгач бу ма`лумотларни о`згаритирб бо`лмайди !",
+    "To'lovni amalga oshirgach bu ma`lumotlarni o`zgaritirb bo`lmaydi !":"Тўловни амалга оширгач бу малумотларни ўзгартириб бўлмайди !",
     "Sotuvda mahsulotlar qo'shilmagan!":"Сотувда маҳсулотлар қўшилмаган!",
     "kategoriyani qidirish...":"категорияни қидириш...",
     "Kategoriya mavjud emas":"Категория мавжуд емас",
@@ -210,6 +211,10 @@
     "Valyuta kursi mavjud emas":"Валюта курси мавжуд емас",
     "Yangi o'lchov qo'shish":"Янги ўлчов қўшиш",
     "misol":"мисол",
+    "Tahrirlash":"Таҳрирлаш",
+    "Parolni o`zgartirish":"Паролни ўзгартириш",
+    "Chiqish":"Чиқиш",
+    "misol: qarzga olindi":"мисол: қарзга олинди",
 
 
     "Santexniklar":"Сантехниклар",
