@@ -35,7 +35,7 @@ import CustomerPayment from '../../../Components/Payment/CustomerPayment.js'
 import { useLocation, useNavigate } from 'react-router-dom'
 import BarcodeReader from 'react-barcode-reader'
 import { useTranslation } from 'react-i18next';
-import {map} from 'lodash'
+import {map,filter} from 'lodash'
 
 const RegisterSelling = () => {
     const { t } = useTranslation(['common'])
@@ -586,7 +586,7 @@ const RegisterSelling = () => {
     const handleApproveReturn = () => {
         handleClosePay()
         const body = {
-            saleproducts: returnProducts.filter(
+            saleproducts: filter(returnProducts,
                 (product) => Number(product.pieces) > 0
             ),
             discounts: returnDiscounts,
@@ -705,7 +705,7 @@ const RegisterSelling = () => {
         const str = e.target.value
         setSearchCategory(str)
         const searchedStr = str.replace(/\s+/g, ' ').trim()
-        const filterData = allcategories.filter((obj) =>
+        const filterData = filter(allcategories,(obj) =>
             obj.name
                 ? obj.name.toLowerCase().includes(searchedStr) ||
                 obj.code.includes(searchedStr)
@@ -715,10 +715,10 @@ const RegisterSelling = () => {
     }
     const handleChangeSelectedProduct = (option) => {
         const hasProduct = option.barcode
-            ? tableProducts.filter(
+            ? filter(tableProducts,
                 (obj) => obj.product.barcode === option.barcode
             ).length > 0
-            : tableProducts.filter((obj) => obj.product._id === option.value)
+            : filter(tableProducts,(obj) => obj.product._id === option.value)
                 .length > 0
         if (!hasProduct) {
             !option.barcode && setSelectedProduct(option)
@@ -751,7 +751,7 @@ const RegisterSelling = () => {
     }
     const handleChangePackmanValue = (option) => {
         setPackmanValue(option)
-        const pack = packmans.filter((pack) => pack._id === option.value)[0]
+        const pack = filter(packmans,(pack) => pack._id === option.value)[0]
         if (pack && pack.hasOwnProperty('clients')) {
             setOptionClient(
                 map(pack.clients,(client) => ({
@@ -778,7 +778,7 @@ const RegisterSelling = () => {
     }
     const handleChangeClientValue = (option) => {
         setClientValue(option)
-        const client = clients.filter(
+        const client = filter(clients,
             (client) => client._id === option.value
         )[0]
         if (client && client.hasOwnProperty('packman')) {
@@ -996,7 +996,7 @@ const RegisterSelling = () => {
 
     useEffect(() => {
         if (activeCategory) {
-            const filteredData = allProducts.filter(
+            const filteredData = filter(allProducts,
                 (product) => product.category._id === activeCategory
             )
             setFilteredProducts(
@@ -1104,7 +1104,7 @@ const RegisterSelling = () => {
             })
 
             setReturnProducts(
-                returned.filter((product) => product.product.pieces > 0)
+                filter(returned,(product) => product.product.pieces > 0)
             )
             setDiscounts([...data.saleconnector.discounts])
             const totalSumm = (datas, property, type) => {

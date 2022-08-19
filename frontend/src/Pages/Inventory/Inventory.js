@@ -25,7 +25,7 @@ import NotFind from '../../Components/NotFind/NotFind.js'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next';
-
+import {filter} from "lodash"   
 function Inventory() {
     const { t } = useTranslation(['common'])
     const headers = [
@@ -81,7 +81,7 @@ function Inventory() {
             setData(inventories)
             setFilteredDataTotal(total)
         } else {
-            const filteredInventories = inventories.filter((inventory) => {
+            const filteredInventories = filter(inventories,(inventory) => {
                 return inventory.category.code.includes(valForSearch)
             })
             setData(filteredInventories)
@@ -98,7 +98,7 @@ function Inventory() {
             setData(inventories)
             setFilteredDataTotal(total)
         } else {
-            const filteredInventories = inventories.filter((inventory) => {
+            const filteredInventories = filter(inventories,(inventory) => {
                 return inventory.productdata.code.includes(valForSearch)
             })
             setData(filteredInventories)
@@ -115,7 +115,7 @@ function Inventory() {
             setData(inventories)
             setFilteredDataTotal(total)
         } else {
-            const filteredInventories = inventories.filter((inventory) => {
+            const filteredInventories = filter(inventories,(inventory) => {
                 return inventory.productdata.name
                     .toLowerCase()
                     .includes(valForSearch)

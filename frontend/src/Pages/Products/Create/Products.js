@@ -51,7 +51,7 @@ import BarcodeReader from 'react-barcode-reader'
 import {clearErrorGetBarcode, getBarcode} from '../../Barcode/barcodeSlice.js'
 import {getCurrency} from '../../Currency/currencySlice.js'
 import {useTranslation} from 'react-i18next'
-import {map} from 'lodash'
+import {map,filter} from 'lodash'
 
 function Products() {
     const {t} = useTranslation(['common'])
@@ -242,7 +242,7 @@ function Products() {
             setData(products)
             setFilteredDataTotal(total)
         } else {
-            const filteredProducts = products.filter((product) => {
+            const filteredProducts = filter(products,(product) => {
                 return product.productdata.code.includes(valForSearch)
             })
             setData(filteredProducts)
@@ -260,7 +260,7 @@ function Products() {
             setData(products)
             setFilteredDataTotal(total)
         } else {
-            const filteredProducts = products.filter((product) => {
+            const filteredProducts = filter(products,(product) => {
                 return product.productdata?.barcode.includes(valForSearch)
             })
             setData(filteredProducts)
@@ -278,7 +278,7 @@ function Products() {
             setData(products)
             setFilteredDataTotal(total)
         } else {
-            const filteredProducts = products.filter((product) => {
+            const filteredProducts = filter(products,(product) => {
                 return product.category.code.includes(valForSearch)
             })
             setData(filteredProducts)
@@ -295,7 +295,7 @@ function Products() {
             setData(products)
             setFilteredDataTotal(total)
         } else {
-            const filteredProducts = products.filter((product) => {
+            const filteredProducts = filter(products,(product) => {
                 return product.productdata.name
                     .toLowerCase()
                     .includes(valForSearch)

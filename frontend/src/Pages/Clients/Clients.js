@@ -9,7 +9,7 @@ import NotFind from '../../Components/NotFind/NotFind.js'
 import SearchForm from '../../Components/SearchForm/SearchForm'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
 import {motion} from 'framer-motion'
-import {map} from 'lodash'
+import {map, filter} from 'lodash'
 import {
     successAddSupplierMessage,
     successDeleteSupplierMessage,
@@ -177,7 +177,7 @@ const ClientsPage = () => {
             setData(clients)
             setFilteredDataTotal(total)
         } else {
-            const filteredClients = clients.filter((client) => {
+            const filteredClients = filter(clients,(client) => {
                 return client.name.toLowerCase().includes(valForSearch)
             })
             setData(filteredClients)

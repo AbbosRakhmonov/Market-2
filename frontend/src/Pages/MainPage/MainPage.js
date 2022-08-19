@@ -7,7 +7,6 @@ import {getMonthlyReport, getReports} from '../Reports/reportsSlice.js'
 import {getCurrency} from '../Currency/currencySlice.js'
 import {useTranslation} from 'react-i18next'
 import {map} from 'lodash'
-
 function MainPage() {
     const {t} = useTranslation(['common'])
     const dispatch = useDispatch()

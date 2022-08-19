@@ -18,7 +18,7 @@ import UniversalModal from '../../../Components/Modal/UniversalModal'
 import {UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
 import {useNavigate} from 'react-router-dom'
 import { useTranslation } from 'react-i18next';
-import {map} from 'lodash'
+import {map,filter} from 'lodash'
 
 const RegisterIncoming = () => {
     const {t} = useTranslation(['common'])
@@ -203,11 +203,11 @@ const RegisterIncoming = () => {
     }
 
     const deleteIncoming = (product) => {
-        const filter = incomings.filter(
+        const filter = filter(incomings,
             (incoming) => incoming._id !== product._id
         )
         setIncomings(filter)
-        const temps = temporaryIncomings.filter(
+        const temps = filter(temporaryIncomings,
             (temp) => temp._id !== product._id
         )
         setTemporaryIncomings(temporary)

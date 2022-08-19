@@ -17,7 +17,7 @@ import {
 import {regexForTypeNumber} from '../../../Components/RegularExpressions/RegularExpressions.js'
 import UniversalModal from '../../../Components/Modal/UniversalModal.js'
 import { useTranslation } from 'react-i18next';
-
+import {filter} from "lodash"
 const Sellings = () => {
     const { t } = useTranslation(['common'])
     const headers = [
@@ -100,7 +100,7 @@ const Sellings = () => {
             setData(sellings)
             setFilteredDataTotal(total)
         } else {
-            const filteredProducts = sellings.filter((selling) => {
+            const filteredProducts = filter(sellings,(selling) => {
                 return selling.id.includes(valForSearch)
             })
             setData(filteredProducts)
@@ -117,7 +117,7 @@ const Sellings = () => {
             setData(sellings)
             setFilteredDataTotal(total)
         } else {
-            const filteredProducts = sellings.filter((selling) => {
+            const filteredProducts = filter(sellings,(selling) => {
                 return (
                     selling?.client?.name
                         .toLowerCase()

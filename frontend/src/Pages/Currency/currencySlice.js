@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import Api from '../../Config/Api'
-import {map} from 'lodash'
+import {map, filter } from 'lodash'
 import {
     successAddExchangeMessage,
     successDeleteExchangeMessage,
@@ -195,7 +195,7 @@ const currencySlice = createSlice({
         },
         [deleteExchangerate.fulfilled]: (state, {payload}) => {
             state.getCurrenciesLoading = false
-            state.currencies = state.currencies.filter((item) => item._id !== payload._id)
+            state.currencies = filter(state.currencies,(item) => item._id !== payload._id)
             successDeleteExchangeMessage()
         },
         [deleteExchangerate.rejected]: (state, {payload}) => {

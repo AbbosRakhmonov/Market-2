@@ -30,7 +30,7 @@ import UniversalModal from '../../Components/Modal/UniversalModal.js'
 import SearchForm from '../../Components/SearchForm/SearchForm.js'
 import {checkEmptyString} from '../../App/globalFunctions.js'
 import { useTranslation } from 'react-i18next';
-
+import {filter} from "lodash"
 const Supplier = () => {
     const {t} = useTranslation(['common'])
     const dispatch = useDispatch()
@@ -163,7 +163,7 @@ const Supplier = () => {
             setData(suppliers)
             setFilteredDataTotal(total)
         } else {
-            const filteredSuppliers = suppliers.filter((supplier) => {
+            const filteredSuppliers = filter(suppliers,(supplier) => {
                 return supplier.name.toLowerCase().includes(valForSearch)
             })
             setData(filteredSuppliers)

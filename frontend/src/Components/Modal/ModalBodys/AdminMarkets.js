@@ -12,7 +12,7 @@ import NotFind from '../../NotFind/NotFind.js'
 import Pagination from '../../Pagination/Pagination.js'
 import AdminProductCard from '../../AdminProductCard/AdminProductCard.js'
 import BtnAddRemove from '../../Buttons/BtnAddRemove.js'
-import {map} from 'lodash'
+import {map, filter} from 'lodash'
 
 function AdminMarkets({product, approveFunction}) {
     const dispatch = useDispatch()
@@ -48,7 +48,7 @@ function AdminMarkets({product, approveFunction}) {
             setData(branches)
             setFilteredDataTotal(totalBranches)
         } else {
-            const filteredProducts = branches.filter((market) => {
+            const filteredProducts = filter(branches,(market) => {
                 return market.name
                     .toLowerCase()
                     .includes(valForSearch)
@@ -67,7 +67,7 @@ function AdminMarkets({product, approveFunction}) {
             setData(branches)
             setFilteredDataTotal(totalBranches)
         } else {
-            const filteredProducts = branches.filter((market) => {
+            const filteredProducts = filter(branches,(market) => {
                 return market.director.firstname
                     .toLowerCase()
                     .includes(valForSearch) || market.director.lastname.toLowerCase().includes(valForSearch)
@@ -119,7 +119,7 @@ function AdminMarkets({product, approveFunction}) {
                     }
                 })
             } else {
-                const newFilials = newBranches.filials.filter((id) => id !== market._id)
+                const newFilials = filter(newBranches.filials,(id) => id !== market._id)
                 let filial = {...market}
                 delete filial.mainmarket
                 const body = {
@@ -208,15 +208,15 @@ function AdminMarkets({product, approveFunction}) {
                 {searchedData.length > 0 ? map(searchedData, (item) =>
                         <AdminProductCard
                             market={item} key={item._id}
-                            isBranch={newBranches.filials.filter(br => br === item._id).length > 0}
-                            isConnected={newBranches.connections.filter(br => br === item._id).length > 0}
+                            isBranch={filter(newBranches.filials,(br) => br === item._id).length > 0}
+                            isConnected={filter(newBranches.connections,(br) => br === item._id).length > 0}
                             onchange={handleChangeCheckbox}
                         />) :
                     map(data, (item) =>
                         <AdminProductCard
                             market={item} key={item._id}
-                            isBranch={newBranches.filials.filter(br => br === item._id).length > 0}
-                            isConnected={newBranches.connections.filter(br => br === item._id).length > 0}
+                            isBranch={filter(newBranches.filials,(br) => br === item._id).length > 0}
+                            isConnected={filter(newBranches.connections,(br) => br === item._id).length > 0}
                             onchange={handleChangeCheckbox} />)}
 
             </div>}

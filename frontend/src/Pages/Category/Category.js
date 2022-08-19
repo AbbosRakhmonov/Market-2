@@ -35,7 +35,7 @@ import {
 } from './categorySlice.js'
 import Pagination from '../../Components/Pagination/Pagination.js'
 import { useTranslation } from 'react-i18next';
-
+import {filter} from "lodash"
 const Category = () => {
     const { t } = useTranslation(['common'])
   
@@ -202,7 +202,7 @@ const Category = () => {
             setData(categories)
             setFilteredDataTotal(total)
         } else {
-            const filteredCategories = categories.filter((category) => {
+            const filteredCategories = filter(categories,(category) => {
                 return category.code.includes(valForSearch)
             })
             setData(filteredCategories)
@@ -219,7 +219,7 @@ const Category = () => {
             setData(categories)
             setFilteredDataTotal(total)
         } else {
-            const filteredCategories = categories.filter((category) => {
+            const filteredCategories = filter(categories,(category) => {
                 return (
                     category.name &&
                     category.name.toLowerCase().includes(valForSearch)

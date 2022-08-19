@@ -24,7 +24,7 @@ import BarcodeReader from 'react-barcode-reader'
 import {checkEmptyString} from '../../App/globalFunctions.js'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
 import * as XLSX from 'xlsx'
-import {map} from 'lodash'
+import {map, filter} from 'lodash'
 function Barcode() {
     const dispatch = useDispatch()
     const {products, searchedProducts, totalSearched, total, loadingGetAll} = useSelector((state) => state.barcode)
@@ -168,7 +168,7 @@ function Barcode() {
             setData(products)
             setFilteredDataTotal(total)
         } else {
-            const filteredProducts = products.filter((product) => {
+            const filteredProducts = filter(products,(product) => {
                 return product.name
                     .toLowerCase()
                     .includes(valForSearch)
@@ -187,7 +187,7 @@ function Barcode() {
             setData(products)
             setFilteredDataTotal(total)
         } else {
-            const filteredProducts = products.filter((product) => {
+            const filteredProducts = filter(products,(product) => {
                 return product.barcode.includes(valForSearch)
             })
             setData(filteredProducts)
