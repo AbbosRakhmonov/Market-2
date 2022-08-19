@@ -3,6 +3,7 @@ import { IoChevronDown } from 'react-icons/io5'
 import { NavLink, useLocation } from 'react-router-dom'
 import SubAccordionLink from './SubAccordionLink'
 import { useTranslation } from 'react-i18next';
+import {map} from 'lodash'
 
 function AccordionLink({
     label,
@@ -64,7 +65,7 @@ function AccordionLink({
                     : 'max-h-0 opacity-0'
                     }`}
             >
-                {submenu.map((item) => (
+                {map(submenu,(item) => (
                     <div key={item.id}>
                         {item.submenu ? (
                             <SubAccordionLink

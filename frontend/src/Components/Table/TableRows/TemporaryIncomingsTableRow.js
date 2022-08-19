@@ -1,5 +1,5 @@
 import React from 'react'
-import {uniqueId} from 'lodash'
+import {uniqueId, map} from 'lodash'
 import TableBtn from '../../Buttons/TableBtn'
 
 export const TemporaryIncomingsTableRow = ({
@@ -11,7 +11,7 @@ export const TemporaryIncomingsTableRow = ({
                                            }) => {
     return (
         <>
-            {data.map((temporary, index) => (
+            {map(data,(temporary, index) => (
                 <tr className='tr' key={uniqueId('temporary')}>
                     <td className='td'>{1 + index}</td>
                     <td className='td text-left'>{temporary.supplier.name}</td>

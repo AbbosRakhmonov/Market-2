@@ -12,6 +12,7 @@ import NotFind from '../../NotFind/NotFind.js'
 import Pagination from '../../Pagination/Pagination.js'
 import AdminProductCard from '../../AdminProductCard/AdminProductCard.js'
 import BtnAddRemove from '../../Buttons/BtnAddRemove.js'
+import {map} from 'lodash'
 
 function AdminMarkets({product, approveFunction}) {
     const dispatch = useDispatch()
@@ -203,19 +204,21 @@ function AdminMarkets({product, approveFunction}) {
             ) : data.length === 0 && searchedData.length === 0 ? (
                 <NotFind text={'Do\'konlar mavjud emas'} />
             ) : <div className={'flex flex-wrap gap-[2rem] pl-[2.5rem] py-[1.25rem]'}>
-                {searchedData.length > 0 ? searchedData.map(item =>
+
+                {searchedData.length > 0 ? map(searchedData, (item) =>
                         <AdminProductCard
                             market={item} key={item._id}
                             isBranch={newBranches.filials.filter(br => br === item._id).length > 0}
                             isConnected={newBranches.connections.filter(br => br === item._id).length > 0}
                             onchange={handleChangeCheckbox}
                         />) :
-                    data.map(item =>
+                    map(data, (item) =>
                         <AdminProductCard
                             market={item} key={item._id}
                             isBranch={newBranches.filials.filter(br => br === item._id).length > 0}
                             isConnected={newBranches.connections.filter(br => br === item._id).length > 0}
                             onchange={handleChangeCheckbox} />)}
+
             </div>}
         </section>
     )

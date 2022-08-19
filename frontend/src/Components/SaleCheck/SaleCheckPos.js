@@ -1,5 +1,6 @@
 import React, {forwardRef} from 'react'
 import {useSelector} from 'react-redux'
+import {uniqueId,map} from 'lodash'
 
 export const SaleCheckPos = forwardRef((props, ref) => {
     const {product} = props
@@ -50,9 +51,9 @@ export const SaleCheckPos = forwardRef((props, ref) => {
             <br />
             <hr className='text-opacity-50' />
             <br />
-            {product?.products.map((item, index) => {
+            {map(product?.products,(item, index) => {
                 return (
-                    <div key={index}>
+                    <div key={uniqueId('sale-check-pos')}>
                         <div className='text-[7pt] font-bold'>
                             {index + 1}. {item?.product?.category?.code}{' '}
                             {item?.product?.productdata?.code}{' '}

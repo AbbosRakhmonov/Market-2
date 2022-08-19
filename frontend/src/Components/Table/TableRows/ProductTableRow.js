@@ -1,6 +1,6 @@
 import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
-
+import {map} from 'lodash'
 export const ProductTableRow = ({
                                     currentPage,
                                     countPage,
@@ -13,7 +13,7 @@ export const ProductTableRow = ({
 
     return (
         <>
-            {data.map((product, index) => (
+            {map(data,(product, index) => (
                 <tr key={product._id} className='tr'>
                     <td className='td text-center '>
                         {currentPage * countPage + 1 + index}

@@ -1,6 +1,7 @@
 import React from 'react'
 import PrintBtn from '../../Buttons/PrintBtn'
 import BtnAddRemove from '../../Buttons/BtnAddRemove'
+import {uniqueId, map} from 'lodash'
 
 function CheckInventory() {
 
@@ -60,9 +61,9 @@ function CheckInventory() {
                 </thead>
                 <tbody>
                 {
-                    data.map((item, index) => {
+                    map(data, (item, index) => {
                         return (
-                            <tr key={index}>
+                            <tr key={uniqueId('checkInventory')}>
                                 <td className='p-1 border text-center text-[0.875rem] font-bold'>{item.id}</td>
                                 <td className='check-table-body'>{item.date}</td>
                                 <td className='check-table-body'>{item.code}</td>
@@ -77,9 +78,9 @@ function CheckInventory() {
                     })
                 }
                 {
-                    data2.map((item, index) => {
+                    map(data2, (item) => {
                         return (
-                            <tr>
+                            <tr key={uniqueId('checkData2')}>
                                 <td className='p-1 border text-end text-[0.875rem] font-bold' colSpan={3}>{t("Jami")}:</td>
                                 <td className='check-table-body text-start'>{item.product}</td>
                                 <td className='check-table-body'>{item.initial}</td>

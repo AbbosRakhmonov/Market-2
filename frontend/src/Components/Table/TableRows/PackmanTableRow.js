@@ -1,6 +1,6 @@
 import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
-import {uniqueId} from 'lodash'
+import {uniqueId,map} from 'lodash'
 
 export const PackmanTableRow = ({
                                     data,
@@ -11,7 +11,7 @@ export const PackmanTableRow = ({
                                 }) => {
     return (
         <>
-            {data.map((packman, index) => (
+            {map(data,(packman, index) => (
                 <tr className='tr' key={uniqueId('card')}>
                     <td className='text-left td'>
                         {currentPage * countPage + 1 + index}

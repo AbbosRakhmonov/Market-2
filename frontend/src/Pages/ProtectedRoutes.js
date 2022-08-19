@@ -1,5 +1,5 @@
 import {lazy} from 'react'
-import {uniqueId} from 'lodash'
+import {uniqueId,map} from 'lodash'
 import {Route} from 'react-router-dom'
 import SellersReport from './Seller/SellersReport.js'
 // pages -->
@@ -234,7 +234,7 @@ const chooseRoute = (type) => {
 
 const protectedRoutes = (type) => {
     const catchRoutes = chooseRoute(type.toLowerCase())
-    return catchRoutes.map((route) =>
+    return map(catchRoutes,(route) =>
         route.subRoutes ? (
             <Route
                 exact
@@ -242,7 +242,7 @@ const protectedRoutes = (type) => {
                 path={route.path}
                 element={route.element}
             >
-                {route.subRoutes.map((subRoute) => (
+                {map(route.subRoutes,(subRoute) => (
                     <Route
                         key={uniqueId('sub-route')}
                         path={subRoute.path}

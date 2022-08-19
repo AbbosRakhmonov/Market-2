@@ -1,6 +1,6 @@
 import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
-import {uniqueId} from 'lodash'
+import {uniqueId, map} from 'lodash'
 
 export const SellerTableRow = ({
     data,
@@ -11,7 +11,7 @@ export const SellerTableRow = ({
 }) => {
     return (
         <>
-            {data.map((seller, index) => (
+            {map(data,(seller, index) => (
                 <tr className='tr' key={uniqueId('filial')}>
                     <td className='text-left td'>
                         {currentPage * countPage + index + 1}

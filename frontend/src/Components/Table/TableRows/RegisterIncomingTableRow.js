@@ -1,7 +1,7 @@
 import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
 import TableInput from '../../Inputs/TableInput'
-
+import {map} from 'lodash'
 export const RegisterIncomingTableRow = ({
                                              changeHandler,
                                              data,
@@ -10,7 +10,7 @@ export const RegisterIncomingTableRow = ({
                                          }) => {
     return (
         <>
-            {data.map((product, index) => (
+            {map(data,(product, index) => (
                 <tr key={product._id} className='tr'>
                     <td className='py-0 td text-left'>{index + 1}</td>
                     <td className='py-0 td text-right'>

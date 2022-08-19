@@ -24,7 +24,7 @@ import BarcodeReader from 'react-barcode-reader'
 import {checkEmptyString} from '../../App/globalFunctions.js'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
 import * as XLSX from 'xlsx'
-
+import {map} from 'lodash'
 function Barcode() {
     const dispatch = useDispatch()
     const {products, searchedProducts, totalSearched, total, loadingGetAll} = useSelector((state) => state.barcode)
@@ -275,7 +275,7 @@ function Barcode() {
     }
     const handleClickApproveToImport = () => {
         const oldKeys = Object.keys(excelData[0])
-        const newData = createdData.map((item) => {
+        const newData =map(createdData,(item) => {
             const newItem = {}
             for (const key in item) {
                 newItem[key] = item[key].toString().replace(/\s+/g, ' ').trim()

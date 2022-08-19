@@ -1,4 +1,4 @@
-import {uniqueId} from 'lodash'
+import {uniqueId,map} from 'lodash'
 import React from 'react'
 
 export const PaymentsTableRow = ({
@@ -10,7 +10,7 @@ export const PaymentsTableRow = ({
                                  }) => {
     return (
         <>
-            {data.map((sale, index) => (
+            {map(data,(sale, index) => (
                 <tr className='tr' key={uniqueId('sale')}>
                     <td className='text-left td'>
                         {currentPage * countPage + 1 + index}

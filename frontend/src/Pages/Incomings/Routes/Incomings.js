@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import CardLink from '../../../Components/Card/CardLink'
-import { useDispatch, useSelector } from 'react-redux'
-import { uniqueId } from 'lodash'
-import { getIncomingConnectors, getSuppliers } from '../incomingSlice'
+import {useDispatch, useSelector} from 'react-redux'
+import {uniqueId,map} from 'lodash'
+import {getIncomingConnectors, getSuppliers} from '../incomingSlice'
 import Dates from '../../../Components/Dates/Dates'
 import SelectInput from '../../../Components/SelectInput/SelectInput'
 import FilterButtons from '../../../Components/FilterButtons/FilterButtons'
@@ -37,7 +37,7 @@ function Incomings() {
 
     // change suppliers data
     const changeSuppliersData = (data) => {
-        const suppliers = data.map((supplier) => {
+        const suppliers = map(data,(supplier) => {
             return {
                 label: supplier.name,
                 value: supplier._id
@@ -77,7 +77,7 @@ function Incomings() {
         const sumTotal = (arr) => {
             return arr.reduce((prev, total) => prev + total, 0)
         }
-        const data = groups.map((income) => {
+        const data = map(groups,(income) => {
             return {
                 createdAt: income.createdAt,
                 products: income.incoming.length,
@@ -193,7 +193,7 @@ function Incomings() {
                 styles={'mainPadding'}
             />
             <div className='flex flex-wrap gap-[1.25rem] mainPadding'>
-                {cardConnectors.map((item) => {
+                {map(cardConnectors,(item) => {
                     return (
                         <CardLink
                             key={uniqueId('card')}

@@ -1,5 +1,6 @@
 import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
+import {map} from 'lodash'
 
 export const ExchangenerateTableRow = ({
                                            data,
@@ -10,7 +11,7 @@ export const ExchangenerateTableRow = ({
                                        }) => {
     return (
         <>
-            {data.map((exchange, index) => (
+            {map(data,(exchange, index) => (
                 <tr className='tr' key={exchange._id}>
                     <td className='text-left td'>
                         {currentPage * countPage + 1 + index}

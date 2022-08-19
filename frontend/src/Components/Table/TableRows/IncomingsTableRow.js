@@ -1,6 +1,7 @@
 import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
 import TableInput from '../../Inputs/TableInput'
+import {map} from 'lodash'
 
 export const IncomingsTableRow = ({
                                       editedIncoming,
@@ -18,7 +19,7 @@ export const IncomingsTableRow = ({
 
     return (
         <>
-            {data.map((incoming, index) => (
+            {map(data,(incoming, index) => (
                 <tr className='tr' key={incoming._id}>
                     <td className='text-left td'>
                         {currentPage * countPage + 1 + index}
@@ -41,7 +42,7 @@ export const IncomingsTableRow = ({
                             <span>
                                 {incoming.pieces}{' '}
                                 <span className='text-warning-500 font-medium'>
-                                    {incoming.unit.name}
+                                    {incoming?.unit?.name}
                                 </span>
                             </span>
                         )}

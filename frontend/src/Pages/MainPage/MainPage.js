@@ -6,7 +6,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getMonthlyReport, getReports } from '../Reports/reportsSlice.js'
 import { getCurrency } from '../Currency/currencySlice.js'
 import { useTranslation } from 'react-i18next';
-import { universalToast } from '../../Components/ToastMessages/ToastMessages.js'
+import {map} from 'lodash'
+
 function MainPage() {
     const { t } = useTranslation(['common'])
     const dispatch = useDispatch()
@@ -15,7 +16,7 @@ function MainPage() {
     )
     const { currencyType } = useSelector((state) => state.currency)
     const filterMonthlyReport = () => {
-        return monthlyReport ? (currencyType === 'USD' ? monthlyReport.salesSum.map(item => item.usd) : monthlyReport.salesSum.map(item => item.uzs)) : []
+        return monthlyReport ? (currencyType === 'USD' ? map(monthlyReport.salesSum,(item) => item.usd) : map(monthlyReport.salesSum,(item) => item.uzs)) : []
     }
     useEffect(() => {
         const body = {

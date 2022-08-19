@@ -1,11 +1,11 @@
-import {uniqueId} from 'lodash'
+import {uniqueId, map} from 'lodash'
 import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
 
 export const DebtsTableRow = ({data, currency, Pay}) => {
     return (
         <>
-            {data.map((debt, index) => (
+            {map(data,(debt, index) => (
                 <tr className='tr' key={uniqueId('debt')}>
                     <td className='text-left td'>{1 + index}</td>
                     <td className='text-right td'>

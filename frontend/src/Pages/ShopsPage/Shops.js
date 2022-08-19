@@ -1,6 +1,6 @@
 import React from 'react'
 import Filial from '../../Components/Filial/Filial'
-import {uniqueId} from 'lodash'
+import {uniqueId, map} from 'lodash'
 import {motion} from 'framer-motion'
 
 function Shops() {
@@ -72,7 +72,7 @@ function Shops() {
                         }}
                         transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}>
             {
-                data.map((value, index) => {
+                map(data,(value) => {
                     return (
                         <div className='pb-[1.25rem]' key={uniqueId('filial')}>
                             <Filial

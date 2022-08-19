@@ -2,8 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import Table from '../../../Components/Table/Table'
-import { deleteTemporary, getTemporary, setTemporaryRegister } from '../incomingSlice'
 import { useTranslation } from 'react-i18next';
+import {deleteTemporary, getTemporary, setTemporaryRegister} from '../incomingSlice'
+import {map} from 'lodash'
 
 const SavedIncomings = () => {
     const { t } = useTranslation(['common'])
@@ -21,7 +22,7 @@ const SavedIncomings = () => {
     const changeTemporaryData = useCallback((data) => {
         const count = (arr, key) =>
             arr.reduce((prev, item) => prev + item[key], 0)
-        const temporary = data.map((temp) => {
+        const temporary = map(data,(temp) => {
             let {
                 _id,
                 createdAt,

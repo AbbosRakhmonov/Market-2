@@ -1,5 +1,5 @@
 import {FaSortDown, FaSortUp} from 'react-icons/fa'
-import {uniqueId} from 'lodash'
+import {uniqueId, map} from 'lodash'
 
 function Thead({headers, Sort, sortItem}) {
     const sort = (filter, pos) => {
@@ -17,7 +17,7 @@ function Thead({headers, Sort, sortItem}) {
 
     return (
         <tr className='bg-primary-900 rounded-t-lg'>
-            {headers.map((header, index) => {
+            {map(headers,(header, index) => {
                 return (
                     <th
                         key={uniqueId('header')}

@@ -6,6 +6,7 @@ import PrintBtn from '../Buttons/PrintBtn.js'
 import { ConfirmBtn } from '../Buttons/SaveConfirmBtn.js'
 import Dates from '../Dates/Dates.js'
 import { useTranslation } from 'react-i18next';
+import {map} from 'lodash'
 
 function SearchForm(
 
@@ -256,7 +257,7 @@ function SearchForm(
     }
     return (
         <div className='flex items-end gap-[1.875rem] mainPadding grow'>
-            {filterBy.map((key) => chooseComponent(key))}
+            {map(filterBy,(key) => chooseComponent(key))}
         </div>
     )
 }

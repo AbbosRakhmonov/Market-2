@@ -7,8 +7,7 @@ import UniversalModal from '../../../Components/Modal/UniversalModal'
 import Pagination from '../../../Components/Pagination/Pagination'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
 import Table from '../../../Components/Table/Table'
-
-
+import {map} from 'lodash'
 import {clearSuccesDelete, clearSuccessUpdate, deleteIncoming, getIncomings, updateIncoming,excelIncomings} from '../incomingSlice'
 import { useTranslation } from 'react-i18next';
 
@@ -59,7 +58,7 @@ const IncomingsList = () => {
     const [storageCurrentIncoming, setStorageCurrentIncoming] = useState([])
 
     const getCurrentData = (data) => {
-        let current = data.map((incoming) => {
+        let current = map(data,(incoming) => {
             return {
                 ...incoming,
                 sellingprice: incoming.product.price.sellingprice,

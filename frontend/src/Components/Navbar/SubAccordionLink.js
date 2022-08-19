@@ -3,6 +3,7 @@ import {IoChevronForward} from 'react-icons/io5'
 import {GoPrimitiveDot} from 'react-icons/go'
 import {NavLink} from 'react-router-dom'
 import { useTranslation } from 'react-i18next';
+import {map} from 'lodash'
 
 function SubAccordionLink({
                               submenu,
@@ -52,7 +53,7 @@ function SubAccordionLink({
                         : 'max-h-0 opacity-0'
                 }`}
             >
-                {submenu.map((subitem) => (
+                {map(submenu, (subitem) => (
                     <NavLink
                         key={subitem.id}
                         to={subitem.path}

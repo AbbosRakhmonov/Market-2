@@ -1,6 +1,7 @@
 import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
 import TableInput from '../../Inputs/TableInput'
+import {map} from 'lodash'
 
 export const ProductReportTableRow = ({
                                           data,
@@ -17,7 +18,7 @@ export const ProductReportTableRow = ({
         'bg-primary-500 text-white-900 group-hover:bg-black-300'
     return (
         <>
-            {data.map((product, index) => (
+            {map(data,(product, index) => (
                 <tr className='tr' key={product._id}>
                     <td className='td'>
                         {currentPage * countPage + 1 + index}
@@ -63,7 +64,7 @@ export const ProductReportTableRow = ({
                         }
                     >
                         <span className='pointer-events-none'>
-                            {product.total} {product.unit.name}
+                            {product?.total} {product?.unit?.name}
                         </span>
                     </td>
                     <td className='td text-right'>
