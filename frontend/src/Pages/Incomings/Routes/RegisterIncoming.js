@@ -10,15 +10,15 @@ import {
     clearTemporary,
     deleteTemporary,
     getProducts,
-    getSuppliers
+    getSuppliers,
 } from '../incomingSlice'
 import {ConfirmBtn, SaveBtn} from '../../../Components/Buttons/SaveConfirmBtn'
-import {CheckIncoming} from '../Functions/CheckIncoming'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
 import {UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
 import {useNavigate} from 'react-router-dom'
 import { useTranslation } from 'react-i18next';
 import {map,filter} from 'lodash'
+import {universalToast} from '../../../Components/ToastMessages/ToastMessages'
 
 const RegisterIncoming = () => {
     const {t} = useTranslation(['common'])
@@ -26,7 +26,7 @@ const RegisterIncoming = () => {
     const navigate = useNavigate()
     const {
         market: {_id},
-        user
+        user,
     } = useSelector((state) => state.login)
     const {currency, currencyType} = useSelector((state) => state.currency)
     const {suppliers, products, successAdd, successTemporary, temporary} =
@@ -42,31 +42,32 @@ const RegisterIncoming = () => {
     const [temporaryIncomings, setTemporaryIncomings] = useState([])
     const [selectSupplierValue, setSelectSupplierValue] = useState({
         label: t('Yetkazib beruvchi'),
-        value: ''
+        value: '',
     })
     const [selectProductValue, setSelectProductValue] = useState({
         label: t('Maxsulotlar'),
-        value: ''
+        value: '',
     })
 
     // functions for onchange of select
     const selectSupplier = (e) => {
         setSelectSupplierValue({
             label: e.label,
-            value: e.value
+            value: e.value,
         })
         setSupplier(...suppliers.filter((supplier) => supplier._id === e.value))
         if (incomings.length > 0) {
             setIncomings([
                 ...incomings.map((product) => {
+
                     return {
                         ...product,
                         supplier: {
                             _id: e.value,
-                            name: e.label
-                        }
+                            name: e.label,
+                        },
                     }
-                })
+                }),
             ])
         }
     }
@@ -74,7 +75,7 @@ const RegisterIncoming = () => {
     const selectProduct = (e) => {
         setSelectProductValue({
             label: e.label,
-            value: e.value
+            value: e.value,
         })
         if (
             !incomings.some(
@@ -90,7 +91,7 @@ const RegisterIncoming = () => {
     // add to product to modalincoming. function
     const addIncomingToModal = (value) => {
         const product = [
-            ...products.filter((product) => product._id === value)
+            ...products.filter((product) => product._id === value),
         ][0]
         setIncomingModal({
             _id: product._id,
@@ -107,7 +108,7 @@ const RegisterIncoming = () => {
             sellingprice: product.price.sellingprice,
             sellingpriceuzs: product.price.sellingpriceuzs,
             procient: 0,
-            supplier: {...supplier}
+            supplier: {...supplier},
         })
         setModal(true)
     }
@@ -124,7 +125,7 @@ const RegisterIncoming = () => {
         const check = (property) => key === property
 
         const product = (!id && {
-            ...incomingModal
+            ...incomingModal,
         }) || {...incomings.filter((incoming) => incoming._id === id)[0]}
 
         const countUsd =
@@ -174,7 +175,7 @@ const RegisterIncoming = () => {
                         return product
                     }
                     return incoming
-                })
+                }),
             ])
         } else {
             setIncomingModal(product)
@@ -183,20 +184,20 @@ const RegisterIncoming = () => {
 
     // change datas for react-select //
     const changeSuppliersData = (data) => {
-        const suppliers = map(data,(supplier) => {
+        const suppliers = map(data, (supplier) => {
             return {
                 label: supplier.name,
-                value: supplier._id
+                value: supplier._id,
             }
         })
         setSuppliersData(suppliers)
     }
 
     const changeProductsData = (data) => {
-        const products = map(data,(product) => {
+        const products = map(data, (product) => {
             return {
                 label: product.productdata.name,
-                value: product._id
+                value: product._id,
             }
         })
         setProductsData(products)
@@ -216,9 +217,30 @@ const RegisterIncoming = () => {
         }
     }
 
+    const CheckIncoming = (products) => {
+        for (const product of products) {
+            if (product.pieces < 1) {
+                return universalToast(t('Mahsulot sonini kiriting!'), 'warning')
+            }
+            if (product.unitprice < 0.01) {
+                return universalToast(
+                    t('Mahsulot qabul narxini kiriting!'),
+                    'warning'
+                )
+            }
+            if (product.sellingprice < product.unitprice) {
+                return universalToast(
+                    t("Sotish narxi olish dan kam bo'lmasin"),
+                    'warning'
+                )
+            }
+        }
+        return false
+    }
+
     // request functions
     const createIncoming = () => {
-        const postincoming = map(incomings,(incoming) => {
+        const postincoming = map(incomings, (incoming) => {
             let obj = {...incoming}
             delete obj._id
             delete obj.procient
@@ -229,9 +251,11 @@ const RegisterIncoming = () => {
             dispatch(
                 addIncoming({
                     products: [...postincoming],
-                    user: user._id
+                    user: user._id,
                 })
-            ).then(({error}) => !error && navigate('/maxsulotlar/qabul/qabullar'))
+            ).then(
+                ({error}) => !error && navigate('/maxsulotlar/qabul/qabullar')
+            )
             removeTemporary()
         }
     }
@@ -244,7 +268,7 @@ const RegisterIncoming = () => {
         ) {
             dispatch(
                 deleteTemporary({
-                    _id: temporary._id
+                    _id: temporary._id,
                 })
             )
             dispatch(clearTemporary())
@@ -257,17 +281,17 @@ const RegisterIncoming = () => {
                 market: _id,
                 temporaryincoming: {
                     supplier,
-                    incomings
-                }
+                    incomings,
+                },
             })
         ).then(() => {
             setSelectSupplierValue({
                 label: t('Yetkazib beruvchi'),
-                value: ''
+                value: '',
             })
             setSelectProductValue({
                 label: t('Mahsulotlar'),
-                value: ''
+                value: '',
             })
         })
     }
@@ -276,39 +300,39 @@ const RegisterIncoming = () => {
     const headers = [
         {
             title: t('№'),
-            styles: 'w-[8%]'
+            styles: 'w-[8%]',
         },
         {
             title: t('Kodi'),
-            styles: 'w-[10%]'
+            styles: 'w-[10%]',
         },
         {
-            title: t('Nomi')
+            title: t('Nomi'),
         },
         {
             title: t('Soni'),
-            styles: 'w-[10%]'
+            styles: 'w-[10%]',
         },
         {
             title: t('Narxi'),
-            styles: 'w-[10%]'
+            styles: 'w-[10%]',
         },
         {
             title: t('Avvalgi narxi'),
-            styles: 'w-[15%]'
+            styles: 'w-[15%]',
         },
         {
             title: t('Jami'),
-            styles: 'w-[15%]'
+            styles: 'w-[15%]',
         },
         {
             title: t('Sotish'),
-            styles: 'w-[15%]'
+            styles: 'w-[15%]',
         },
         {
             title: '',
-            styles: 'w-[5%]'
-        }
+            styles: 'w-[5%]',
+        },
     ]
 
     useEffect(() => {
@@ -342,7 +366,7 @@ const RegisterIncoming = () => {
             setTemporaryIncomings(temporary.incomings)
             setSelectSupplierValue({
                 label: temporary.supplier.name,
-                value: temporary.supplier._id
+                value: temporary.supplier._id,
             })
         }
     }, [temporary, dispatch])
@@ -376,7 +400,7 @@ const RegisterIncoming = () => {
                 </div>
             </div>
             <p className='text-[1.25rem] text-blue-900 mainPadding'>
-                {t("Yetkazib beruvchi")}: {supplier.name}
+                {t('Yetkazib beruvchi')}: {supplier.name}
             </p>
             <div
                 className={`${incomings.length > 0 ? 'mainPadding' : 'hidden'}`}
