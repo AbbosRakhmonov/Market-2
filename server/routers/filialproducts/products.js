@@ -8,7 +8,9 @@ const { Product } = require('../../models/Products/Product');
 const { ProductData } = require('../../models/Products/Productdata');
 const { ProductPrice } = require('../../models/Products/ProductPrice');
 const { Unit } = require('../../models/Products/Unit');
+require('../../models/Products/ProductPrice');
 
+// Send Products To Filial
 module.exports.registerProducts = async (req, res) => {
   try {
     const { market, filial, products } = req.body;
@@ -85,6 +87,9 @@ module.exports.registerProducts = async (req, res) => {
         });
         filialProduct.total = filialProduct.total + product.total;
         await filialProduct.save();
+
+        newTransferProduct.filialproduct = filialProduct._id;
+        await newTransferProduct.save();
       } else {
         // filialda mahsulot yuq bulsa
 
@@ -129,30 +134,36 @@ module.exports.registerProducts = async (req, res) => {
 
         filialNewProduct.price = filialPrice._id;
         await filialNewProduct.save();
+
+        newTransfer.filialproduct = filialNewProduct._id;
+        await newTransfer.save();
       }
     }
 
-    newTransfer.pieces = products.reduce(
-      (summ, product) => summ + product.total,
-      0
-    );
-    newTransfer.totalprice = products.reduce(
-      (summ, product) => summ + product.price.incomingprice,
-      0
-    );
-    newTransfer.totalpriceuzs = products.reduce(
-      (summ, product) => summ + product.price.incomingpriceuzs,
-      0
-    );
+    const total = {
+      pieces: 0,
+      totalincoming: 0,
+      totalincominguzs: 0,
+      totalselling: 0,
+      totalsellinguzs: 0,
+    };
+    products.map((product) => {
+      total.pieces += product.total;
+      total.totalincoming += product.price.incomingprice;
+      total.totalincominguzs += product.price.incomingpriceuzs;
+      total.totalselling += product.price.sellingprice;
+      total.totalsellinguzs += product.price.sellingpriceuzs;
+    });
+
+    newTransfer.pieces = total.pieces;
+    newTransfer.totalincomingprice = total.totalincoming;
+    newTransfer.totalincomingpriceuzs = total.totalincominguzs;
+    newTransfer.totalsellingprice = total.totalselling;
+    newTransfer.totalsellingpriceuzs = total.totalsellinguzs;
+
     await newTransfer.save();
 
-    const responseTransfer = await Transfer.find({
-      market,
-    })
-      .sort({ createdAt: -1 })
-      .select(
-        'market filial totalprice totalpriceuzs pieces createdAt products'
-      );
+    const responseTransfer = await Transfer.findById(newTransfer._id);
 
     res.status(200).json(responseTransfer);
   } catch (error) {
@@ -194,5 +205,260 @@ const createFilialUnit = async (filial, product) => {
     });
     await newFilialUnit.save();
     return newFilialUnit;
+  }
+};
+
+// Edit Sended Products
+module.exports.editTransfer = async (req, res) => {
+  try {
+    const {
+      market,
+      filial,
+      transferproduct,
+      currentPage,
+      countPage,
+      startDate,
+      endDate,
+    } = req.body;
+
+    const marke = await Market.findById(market);
+    if (!marke) {
+      return res.status(400).json({
+        message:
+          "Diqqat! Foydalanuvchi ro'yxatga olinayotgan do'kon dasturda ro'yxatga olinmagan.",
+      });
+    }
+
+    if (!marke.filials.includes(filial)) {
+      return res.status(400).json({
+        message: "Diqqat! Bosh do'konda bunaqa filial mavjud emas.",
+      });
+    }
+
+    const {
+      _id,
+      product,
+      productdata,
+      unit,
+      category,
+      price,
+      pieces,
+      filialproduct,
+    } = transferproduct;
+
+    const oldTransferProduct = await TransferProduct.findById(_id)
+      .select('-__v -updatedAt -isArchive')
+      .populate(
+        'price',
+        'incomingprice sellingprice incomingpriceuzs sellingpriceuzs'
+      );
+
+    const { incomingprice, incomingpriceuzs, sellingprice, sellingpriceuzs } =
+      price;
+
+    const transfer = await Transfer.findById(oldTransferProduct.transfer);
+    transfer.pieces = transfer.pieces - oldTransferProduct.pieces + pieces;
+    transfer.totalincomingprice =
+      transfer.totalincomingprice -
+      oldTransferProduct.price.incomingprice +
+      incomingprice;
+    transfer.totalincomingpriceuzs =
+      transfer.totalincomingpriceuzs -
+      oldTransferProduct.price.incomingpriceuzs +
+      incomingpriceuzs;
+    transfer.totalsellingrprice =
+      transfer.totalsellingrprice -
+      oldTransferProduct.price.sellingprice +
+      sellingprice;
+    transfer.totalsellingrprice =
+      transfer.totalsellingrpriceuzs -
+      oldTransferProduct.price.sellingpriceuzs +
+      sellingpriceuzs;
+
+    const marketProduct = await Product.findById(product);
+    marketProduct.total =
+      marketProduct.total + oldTransferProduct.pieces - pieces;
+    await marketProduct.save();
+
+    await ProductPrice.findByIdAndUpdate(oldTransferProduct.price._id, {
+      incomingprice,
+      incomingpriceuzs,
+      sellingprice,
+      sellingpriceuzs,
+    });
+
+    await TransferProduct.findByIdAndUpdate(_id, {
+      pieces: pieces,
+    });
+
+    const filialProduct = await Product.findById(filialproduct);
+    filialProduct.pieces =
+      filialProduct.pieces - oldTransferProduct.pieces + pieces;
+    await filialProduct.save();
+
+    const responseTransferProducts = await TransferProduct.find({
+      market,
+      filial,
+      createdAt: {
+        $gte: startDate,
+        $lte: endDate,
+      },
+    })
+      .select('-__v -isArchive -updatedAt')
+      .populate('productdata', 'code name')
+      .populate('category', 'code')
+      .populate('unit', 'name')
+      .populate(
+        'price',
+        'incomingprice incomingpriceuzs sellingprice sellingpriceuzs'
+      );
+
+    res.status(201).json({
+      count: responseTransferProducts.length,
+      data: responseTransferProducts.splice(currentPage * countPage, countPage),
+    });
+  } catch (error) {
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+  }
+};
+
+// Delete TransferProduct
+module.exports.deleteTransfer = async (req, res) => {
+  try {
+    const { _id, market, filial, startDate, endDate, currentPage, countPage } =
+      req.body;
+
+    const marke = await Market.findById(market);
+    if (!marke) {
+      return res.status(400).json({
+        message:
+          "Diqqat! Foydalanuvchi ro'yxatga olinayotgan do'kon dasturda ro'yxatga olinmagan.",
+      });
+    }
+
+    if (!marke.filials.includes(filial)) {
+      return res.status(400).json({
+        message: "Diqqat! Bosh do'konda bunaqa filial mavjud emas.",
+      });
+    }
+
+    const transferProduct = await TransferProduct.findById(_id);
+
+    const marketProduct = await Product.findById(transferProduct.product);
+    await Product.findByIdAndUpdate(marketProduct._id, {
+      total: marketProduct.total + transferProduct.pieces,
+    });
+
+    const filialProduct = await Product.findById(transferProduct.filialproduct);
+    await Product.findByIdAndUpdate(filialProduct._id, {
+      total: filialProduct.total - transferProduct.pieces,
+    });
+
+    await TransferProduct.findByIdAndDelete(_id);
+    await ProductPrice.findByIdAndDelete(transferProduct.price);
+
+    const response = await TransferProduct.find({
+      market,
+      filial,
+      createdAt: {
+        $gte: startDate,
+        $lte: endDate,
+      },
+    })
+      .select('-__v -updatedAt -isArchive')
+      .populate('productdata', 'code name')
+      .populate('category', 'code')
+      .populate('unit', 'name')
+      .populate(
+        'price',
+        'incomingprice incomingpriceuzs sellingprice sellingpriceuzs'
+      );
+
+    res.status(200).json({
+      count: response.length,
+      data: response.splice(currentPage * countPage, countPage),
+    });
+  } catch (error) {
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+  }
+};
+
+// Get Transfers
+module.exports.getTransfers = async (req, res) => {
+  try {
+    const { market, filial, currentPage, countPage, startDate, endDate } =
+      req.body;
+
+    const marke = await Market.findById(market);
+    if (!marke) {
+      return res.status(400).json({
+        message:
+          "Diqqat! Foydalanuvchi ro'yxatga olinayotgan do'kon dasturda ro'yxatga olinmagan.",
+      });
+    }
+
+    const transfers = await Transfer.find({
+      market,
+      filial: filial ? filial : { $exists: true },
+      createdAt: {
+        $gte: startDate,
+        $lte: endDate,
+      },
+    }).select(
+      'market filial products createdAt totalincomingprice totalincomingpriceuzs totalsellingprice totalsellingpriceuzs pieces'
+    );
+
+    res.status(200).json({
+      count: transfers.length,
+      data: transfers.splice(currentPage * countPage, countPage),
+    });
+  } catch (error) {
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+  }
+};
+
+// Get TransferProducts
+module.exports.getTransferProducts = async (req, res) => {
+  try {
+    const { market, filial, currentPage, countPage, startDate, endDate } =
+      req.body;
+
+    const marke = await Market.findById(market);
+    if (!marke) {
+      return res.status(400).json({
+        message:
+          "Diqqat! Foydalanuvchi ro'yxatga olinayotgan do'kon dasturda ro'yxatga olinmagan.",
+      });
+    }
+
+    if (!marke.filials.includes(filial)) {
+      return res.status(400).json({
+        message: "Diqqat! Bosh do'konda bunaqa filial mavjud emas.",
+      });
+    }
+
+    const transferProducts = await TransferProduct.find({
+      market,
+      filial,
+      createdAt: {
+        $gte: startDate,
+        $lte: endDate,
+      },
+    })
+      .select('-__v -updatedAt -isArchive')
+      .populate('productdata', 'code name')
+      .populate('category', 'code')
+      .populate('unit', 'name')
+      .populate(
+        'price',
+        'incomingprice incomingpriceuzs sellingprice sellingpriceuzs'
+      );
+
+    return res.status(200).json({
+      count: transferProducts.length,
+      data: transferProducts.splice(currentPage * countPage, countPage),
+    });
+  } catch (error) {
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };

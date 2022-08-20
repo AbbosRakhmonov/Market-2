@@ -7,8 +7,10 @@ const transfer = new Schema(
     filial: { type: Schema.Types.ObjectId, ref: 'Market' },
     products: [{ type: Schema.Types.ObjectId, ref: 'TransferProduct' }],
     pieces: { type: Number },
-    totalprice: { type: Number },
-    totalpriceuzs: { type: Number },
+    totalincomingprice: { type: Number },
+    totalincomingpriceuzs: { type: Number },
+    totalsellingprice: { type: Number },
+    totalsellingpriceuzs: { type: Number },
     isArchive: { type: Boolean, default: false },
   },
   {
