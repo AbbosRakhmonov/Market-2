@@ -9,8 +9,9 @@ import Check from './ModalBodys/Check.js'
 import AllChecks from './ModalBodys/AllChecks.js'
 import StepperPage from './ModalBodys/StepperPage.js'
 import AdminMarkets from './ModalBodys/AdminMarkets.js'
-import {SavedSalesCheck} from '../SaleCheck/SavedSalesCheck.js'
+import { SavedSalesCheck } from '../SaleCheck/SavedSalesCheck.js'
 import { useTranslation } from 'react-i18next';
+import SalesList from './ModalBodys/SalesList';
 
 function UniversalModal({
     isOpen,
@@ -33,7 +34,7 @@ function UniversalModal({
     addMarket
 }) {
 
-   const {t} = useTranslation(['common'])
+    const { t } = useTranslation(['common'])
 
     const customStyles = {
         content: {
@@ -82,6 +83,14 @@ function UniversalModal({
                         toggleModal={toggleModal}
                     />
                 )
+            case 'addPlus':
+                return (
+                    <SalesList
+                        headers={headers}
+                        approveFunction={approveFunction}
+                        toggleModal={toggleModal}
+                    />
+                )
             case 'registerincomingbody':
                 return (
                     <RegisterIncomingModal
@@ -125,7 +134,7 @@ function UniversalModal({
             isOpen={isOpen}
             style={
                 body === 'checkSell' || body === 'allChecks' || body === 'addMarket' || body === 'filterBranch'
-                    ? {...modalFull}
+                    ? { ...modalFull }
 
                     : body === 'approve' || body === 'complete'
                         ? {}

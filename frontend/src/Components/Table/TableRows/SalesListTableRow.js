@@ -1,7 +1,8 @@
 import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
-import {uniqueId, map} from 'lodash'
-import {useNavigate} from 'react-router-dom'
+import { uniqueId, map } from 'lodash'
+import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 
 export const SalesListTableRow = ({
     data,
@@ -10,6 +11,7 @@ export const SalesListTableRow = ({
     currency,
     Print,
     sellers,
+    addPlus
 }) => {
     const result = (prev, usd, uzs) => {
         return currency === 'USD' ? prev + usd : prev + uzs
@@ -25,12 +27,14 @@ export const SalesListTableRow = ({
     const linkToSale = (saleconnector, returnProducts) => {
         navigate('/sotuv/sotish', {
             replace: true,
-            state: {saleconnector, returnProducts},
+            state: { saleconnector, returnProducts },
         })
     }
+
+  
     return (
         <>
-            {map(data,(saleconnector, index) => (
+            {map(data, (saleconnector, index) => (
                 <tr className='tr' key={uniqueId('sales')}>
                     <td className='text-left td'>
                         {currentPage * countPage + 1 + index}
@@ -41,7 +45,17 @@ export const SalesListTableRow = ({
                     <td className='text-left td'>{saleconnector.id}</td>
                     <td className='text-left td'>
                         {saleconnector?.client?.name ||
-                            saleconnector?.packman?.name}
+                            (
+                                <div className='flex justify-center items-center'>
+                                    <TableBtn
+                                        type={'add'}
+                                        bgcolor={'bg-success-500'}
+                                        onClick={addPlus}
+                                    />
+
+                                </div>
+                            )}
+
                     </td>
                     <td className='text-success-500 text-right td'>
                         {reduceEl(

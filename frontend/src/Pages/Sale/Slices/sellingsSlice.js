@@ -32,6 +32,22 @@ export const getSellingsByFilter = createAsyncThunk(
     }
 )
 
+export const updateSellingsClient= createAsyncThunk(
+    'sellings/getSellingsByFilter',
+    async (body = {}, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post(
+                '/sales/saleproducts/updateselling',
+                body
+            )
+            return data
+        } catch (err) {
+            return rejectWithValue(err)
+        }
+    }
+)
+
+
 export const excelAllSellings = createAsyncThunk(
     'sellings/excelAllSellings',
     async (
