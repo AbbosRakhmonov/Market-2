@@ -10,7 +10,7 @@ import {
     warningMorePayment,
 } from '../../Components/ToastMessages/ToastMessages'
 import {getDebts, payDebt} from '../Reports/reportsSlice'
-
+import {filter} from 'lodash'
 const PayDebts = () => {
     const dispatch = useDispatch()
 
@@ -442,13 +442,13 @@ const PayDebts = () => {
 
     const searchId = (e) => {
         setCurrentData([
-            ...storageData.filter((debt) => debt.id.includes(e.target.value)),
+            ...filter([...storageData],(debt) => debt.id.includes(e.target.value)),
         ])
     }
 
     const searchClientName = (e) => {
         setCurrentData([
-            ...storageData.filter(
+            ...filter([...storageData],
                 (debt) =>
                     debt.client &&
                     debt.client.name

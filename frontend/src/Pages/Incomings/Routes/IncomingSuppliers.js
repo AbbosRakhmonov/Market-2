@@ -18,10 +18,9 @@ import {
 import Table from '../../../Components/Table/Table'
 import { universalSort, UsdToUzs, UzsToUsd } from '../../../App/globalFunctions'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
-import {uniqueId,map} from 'lodash'
+import {uniqueId,map,filter} from 'lodash'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
 import { useTranslation } from 'react-i18next';
-
 const IncomingSuppliers = () => {
     const { t } = useTranslation(['common'])
     const dispatch = useDispatch()
@@ -234,7 +233,7 @@ const IncomingSuppliers = () => {
     const searchName = (e) => {
         let target = e.target.value.toLowerCase()
         setCurrentData([
-            ...currentDataStorage.filter(({ product }) =>
+            ...filter([...currentDataStorage],({ product }) =>
                 product.productdata.name.toLowerCase().includes(target)
             ),
         ])
@@ -248,7 +247,7 @@ const IncomingSuppliers = () => {
     const searchCode = (e) => {
         let target = e.target.value.toLowerCase()
         setCurrentData([
-            ...currentDataStorage.filter(({ product }) =>
+            ...filter([...currentDataStorage],({ product }) =>
                 product.productdata.code.includes(target)
             ),
         ])

@@ -14,10 +14,10 @@ export const RegisterIncomingTableRow = ({
                 <tr key={product._id} className='tr'>
                     <td className='py-0 td text-left'>{index + 1}</td>
                     <td className='py-0 td text-right'>
-                        {product.product.code}
+                        {product?.product?.code}
                     </td>
                     <td className='py-0 td text-left'>
-                        {product.product.name}
+                        {product?.product?.name}
                     </td>
                     <td className='py-1 td'>
                         <TableInput
@@ -25,7 +25,7 @@ export const RegisterIncomingTableRow = ({
                                 changeHandler(e, 'pieces', product._id)
                             }
                             type={'number'}
-                            value={product.pieces}
+                            value={product?.pieces}
                         />
                     </td>
                     <td className='py-1 td'>

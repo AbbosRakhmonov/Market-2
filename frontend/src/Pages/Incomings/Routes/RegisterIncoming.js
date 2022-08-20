@@ -16,8 +16,8 @@ import {ConfirmBtn, SaveBtn} from '../../../Components/Buttons/SaveConfirmBtn'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
 import {UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
 import {useNavigate} from 'react-router-dom'
-import { useTranslation } from 'react-i18next';
-import {map,filter} from 'lodash'
+import {useTranslation} from 'react-i18next'
+import {map, filter} from 'lodash'
 import {universalToast} from '../../../Components/ToastMessages/ToastMessages'
 
 const RegisterIncoming = () => {
@@ -55,11 +55,10 @@ const RegisterIncoming = () => {
             label: e.label,
             value: e.value,
         })
-        setSupplier(...suppliers.filter((supplier) => supplier._id === e.value))
+        setSupplier(...filter([...suppliers],(supplier) => supplier._id === e.value))
         if (incomings.length > 0) {
             setIncomings([
-                ...incomings.map((product) => {
-
+                ...map([...incomings], (product) => {
                     return {
                         ...product,
                         supplier: {
@@ -91,7 +90,7 @@ const RegisterIncoming = () => {
     // add to product to modalincoming. function
     const addIncomingToModal = (value) => {
         const product = [
-            ...products.filter((product) => product._id === value),
+            ...filter([...products],(product) => product._id === value),
         ][0]
         setIncomingModal({
             _id: product._id,
@@ -126,7 +125,7 @@ const RegisterIncoming = () => {
 
         const product = (!id && {
             ...incomingModal,
-        }) || {...incomings.filter((incoming) => incoming._id === id)[0]}
+        }) || {...filter([...incomings], (incoming) => incoming._id === id)[0]}
 
         const countUsd =
             currencyType === 'USD' ? target : UzsToUsd(target, currency)
@@ -170,7 +169,7 @@ const RegisterIncoming = () => {
 
         if (id) {
             setIncomings([
-                ...incomings.map((incoming) => {
+                ...map([...incomings], (incoming) => {
                     if (incoming._id === id) {
                         return product
                     }
@@ -204,11 +203,10 @@ const RegisterIncoming = () => {
     }
 
     const deleteIncoming = (product) => {
-        const filter = filter(incomings,
-            (incoming) => incoming._id !== product._id
-        )
-        setIncomings(filter)
-        const temps = filter(temporaryIncomings,
+        const f = filter(incomings, (incoming) => incoming._id !== product._id)
+        setIncomings(f)
+        const temps = filter(
+            temporaryIncomings,
             (temp) => temp._id !== product._id
         )
         setTemporaryIncomings(temporary)
