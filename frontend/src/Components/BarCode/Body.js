@@ -7,8 +7,8 @@ export const Body = ({product, currency, marketName}) => {
         options: {
             background: '#fff',
             width: '2cm',
-            height: '40cm'
-        }
+            height: '40cm',
+        },
     })
     return (
         <div className='w-[40mm] break-after-page font-sans h-[65mm] times '>
@@ -29,13 +29,13 @@ export const Body = ({product, currency, marketName}) => {
                         <span>{product.price ? 'Цена:' : ''}</span>{' '}
                         <span>
                             {(product.price &&
-                                    (currency === 'UZS'
-                                        ? product.price.sellingpriceuzs.toLocaleString(
-                                            'ru-RU'
-                                        )
-                                        : product.price.sellingprice.toLocaleString(
-                                            'ru-RU'
-                                        )) +
+                                (currency === 'UZS'
+                                    ? product.price.sellingpriceuzs.toLocaleString(
+                                          'ru-RU'
+                                      )
+                                    : product.price.sellingprice.toLocaleString(
+                                          'ru-RU'
+                                      )) +
                                     ' ' +
                                     currency) ||
                                 ''}
@@ -49,7 +49,7 @@ export const Body = ({product, currency, marketName}) => {
                     </div>
                     <div className='flex justify-between text-xl p-1'>
                         <div>
-                            Код:{' '}
+                            Код: {product.category && product.category.code}{' '}
                             {product.productdata && product.productdata.code}
                         </div>
                         <div>{new Date().toLocaleDateString()}</div>
