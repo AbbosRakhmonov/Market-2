@@ -27,7 +27,6 @@ module.exports.registerAll = async (req, res) => {
   try {
     const products = req.body.products;
     const market = req.body.market;
-
     const { currentPage, countPage, search } = req.body;
 
     const all = [];
@@ -46,6 +45,7 @@ module.exports.registerAll = async (req, res) => {
       });
 
       const productData = await ProductData.findOne({
+        barcode: product.barcode,
         market,
         code: product.code,
         category: category && category._id,
@@ -66,6 +66,7 @@ module.exports.registerAll = async (req, res) => {
         });
       }
       const {
+        barcode,
         category,
         name,
         code,
@@ -92,6 +93,9 @@ module.exports.registerAll = async (req, res) => {
       }
 
       const newProductData = new ProductData({
+        barcode: barcode
+          ? barcode
+          : "47800" + categor.code.toString() + code.toString(),
         code,
         name,
         category: categor._id,

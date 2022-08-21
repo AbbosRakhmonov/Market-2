@@ -2,11 +2,10 @@ import React, {useCallback} from 'react'
 import Excel from '../../Images/Excel.svg'
 import {universalToast} from '../ToastMessages/ToastMessages'
 import * as XLSX from 'xlsx'
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next'
 
 import {map} from 'lodash'
 function ExportBtn({headers, fileName, datas, pagesName}) {
-
     const {t} = useTranslation(['common'])
 
     const autoFillColumnWidth = (json) => {
@@ -15,7 +14,7 @@ function ExportBtn({headers, fileName, datas, pagesName}) {
             return acc > curr.length ? acc : curr.length
         }, 0)
         return map(cols, () => ({
-            wch: maxLength
+            wch: maxLength,
         }))
     }
 
@@ -28,7 +27,7 @@ function ExportBtn({headers, fileName, datas, pagesName}) {
             XLSX.utils.sheet_add_aoa(ws, [headers])
             XLSX.utils.sheet_add_json(ws, data, {
                 origin: 'A2',
-                skipHeader: true
+                skipHeader: true,
             })
             XLSX.utils.book_append_sheet(wb, ws, 'Maxsulotlar')
             XLSX.writeFile(
@@ -41,9 +40,10 @@ function ExportBtn({headers, fileName, datas, pagesName}) {
     const handleClick = () => {
         if (datas.length > 0) {
             switch (pagesName) {
-                case 'Products' :
-                    const newData = map(datas, (item,index) => ({
+                case 'Products':
+                    const newData = map(datas, (item, index) => ({
                         nth: index + 1,
+                        barcode: item.productdata.barcode,
                         category: item.category.code,
                         code: item.productdata.code,
                         name: item.productdata.name,
@@ -52,54 +52,75 @@ function ExportBtn({headers, fileName, datas, pagesName}) {
                         incomingprice: item?.price?.incomingprice,
                         incomingpriceuzs: item?.price?.incomingpriceuzs,
                         sellingprice: item?.price?.sellingprice,
-                        sellingpriceuzs: item?.price?.sellingpriceuzs
+                        sellingpriceuzs: item?.price?.sellingpriceuzs,
                     }))
                     continueHandleClick(newData)
                     break
 
-                case 'ProductReport' :
-                    const ReportData =map(datas, (item,index) => ({
+                case 'ProductReport':
+                    const ReportData = map(datas, (item, index) => ({
                         nth: index + 1,
                         code: item?.productdata?.code,
                         name: item?.productdata?.name,
                         total: item.total + item?.unit?.name,
                         incomingprice: item?.price?.incomingprice,
                         incomingpriceuzs: item?.price?.incomingpriceuzs,
-                        incomingpricealluzs: item?.price?.incomingpriceuzs * item.total,
-                        incomingpriceallusd: item?.price?.incomingprice * item.total,
+                        incomingpricealluzs:
+                            item?.price?.incomingpriceuzs * item.total,
+                        incomingpriceallusd:
+                            item?.price?.incomingprice * item.total,
                         sellingprice: item?.price?.sellingprice,
                         sellingpriceuzs: item?.price?.sellingpriceuzs,
-                        sellingalluzs: item?.price?.sellingpriceuzs * item.total,
-                        sellingallusd: item?.price?.sellingprice * item.total
+                        sellingalluzs:
+                            item?.price?.sellingpriceuzs * item.total,
+                        sellingallusd: item?.price?.sellingprice * item.total,
                     }))
                     continueHandleClick(ReportData)
                     break
 
-                case 'Sellings' :
-                    const SellingData = map(datas, (item,index) => ({
+                case 'Sellings':
+                    const SellingData = map(datas, (item, index) => ({
                         nth: index + 1,
                         id: item.id,
                         client: item?.client?.name || item?.packman?.name,
                         alluzs: item.products[0].totalpriceuzs,
                         allusd: item.products[0].totalprice,
-                        discount: item.discounts.length > 0 ? item.discounts.map((discount) => {
-                            return discount
-                        }) : 0,
-                        discountusd: item.discounts.length > 0 ? item.discounts.map((discount) => {
-                            return discount
-                        }) : 0,
-                        debd: (item.products[0].totalpriceuzs - item.payments[0].paymentuzs - item.discounts.length > 0 ? item.discounts.map((discount) => {
-                            return discount.discount
-                        }) : 0),
-                        debdusd: (item.products[0].totalprice - item.payments[0].payment - item.discounts.length > 0 ? item.discounts.map((discount) => {
-                            return discount.discount
-                        }) : 0)
+                        discount:
+                            item.discounts.length > 0
+                                ? item.discounts.map((discount) => {
+                                      return discount
+                                  })
+                                : 0,
+                        discountusd:
+                            item.discounts.length > 0
+                                ? item.discounts.map((discount) => {
+                                      return discount
+                                  })
+                                : 0,
+                        debd:
+                            item.products[0].totalpriceuzs -
+                                item.payments[0].paymentuzs -
+                                item.discounts.length >
+                            0
+                                ? item.discounts.map((discount) => {
+                                      return discount.discount
+                                  })
+                                : 0,
+                        debdusd:
+                            item.products[0].totalprice -
+                                item.payments[0].payment -
+                                item.discounts.length >
+                            0
+                                ? item.discounts.map((discount) => {
+                                      return discount.discount
+                                  })
+                                : 0,
                     }))
                     continueHandleClick(SellingData)
                     break
 
-                case 'IncomingList' :
-                    const IncomingData = map(datas, (item,index) => ({
+                case 'IncomingList':
+                    const IncomingData = map(datas, (item, index) => ({
                         nth: index + 1,
                         supplier: item.supplier?.name,
                         code: item.product?.productdata?.code,
@@ -113,8 +134,8 @@ function ExportBtn({headers, fileName, datas, pagesName}) {
                     continueHandleClick(IncomingData)
                     break
 
-                case 'IncomingSuppliers' :
-                    const IncomingSupplierData = map(datas, (item,index) => ({
+                case 'IncomingSuppliers':
+                    const IncomingSupplierData = map(datas, (item, index) => ({
                         nth: index + 1,
                         supplier: item.supplier.name,
                         code: item.product.productdata.code,
@@ -129,19 +150,18 @@ function ExportBtn({headers, fileName, datas, pagesName}) {
                     break
 
                 case 'barcode':
-                    const BarcodeData = map(datas, (item,index) => ({
+                    const BarcodeData = map(datas, (item, index) => ({
                         nth: index + 1,
                         code: item.barcode,
-                        name: item.name
+                        name: item.name,
                     }))
                     continueHandleClick(BarcodeData)
                     break
                 default:
                     break
             }
-
         } else {
-            universalToast('Jadvalda ma\'lumot yoq', 'error')
+            universalToast("Jadvalda ma'lumot yoq", 'error')
         }
     }
 
