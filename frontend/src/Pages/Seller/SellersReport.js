@@ -6,7 +6,8 @@ import Pagination from '../../Components/Pagination/Pagination'
 import SearchForm from '../../Components/SearchForm/SearchForm'
 import Table from '../../Components/Table/Table'
 import {getSellerReports} from './sellerSlice'
-import {filter} from "lodash"
+import {filter, reduce} from 'lodash'
+import UniversalModal from '../../Components/Modal/UniversalModal.js'
 const SellersReport = () => {
     const {id} = useParams()
 
@@ -39,6 +40,19 @@ const SellersReport = () => {
         {
             title: 'Izoh',
         },
+        {title: ''},
+    ]
+
+    const headersInfo = [
+        {
+            title: 'Sotuvlar soni',
+        },
+        {
+            title: 'Sotilgan mahsulotlar',
+        },
+        {
+            title: 'Jami tushum',
+        },
     ]
 
     const {currencyType} = useSelector((state) => state.currency)
@@ -55,6 +69,9 @@ const SellersReport = () => {
         id: '',
         client: '',
     })
+    const [printedSelling, setPrintedSelling] = useState(null)
+    const [modalVisible, setModalVisible] = useState(false)
+    const [generalReport, setGeneralreport] = useState({})
     const [startDate, setStartDate] = useState(
         new Date(
             new Date().getFullYear(),
@@ -64,11 +81,20 @@ const SellersReport = () => {
     )
     const [endDate, setEndDate] = useState(new Date())
 
+    const toggleModal = () => {
+        setModalVisible(!modalVisible)
+        setPrintedSelling(null)
+    }
+
+    const handleClickPrint = (selling) => {
+        setPrintedSelling(selling)
+        setModalVisible(true)
+    }
     // handle change client and id
     const handleChangeId = (e) => {
         const val = e.target.value
         const valForSearch = val.replace(/\s+/g, ' ').trim()
-        const filteredProducts = filter(sellersreport,(selling) => {
+        const filteredProducts = filter(sellersreport, (selling) => {
             return selling.id.includes(valForSearch)
         })
         setData(filteredProducts)
@@ -79,7 +105,7 @@ const SellersReport = () => {
     }
     const handleChangeClient = (e) => {
         const val = e.target.value.toLowerCase()
-        const filteredProducts = filter(sellersreport,(selling) => {
+        const filteredProducts = filter(sellersreport, (selling) => {
             return selling?.client?.name
                 ? selling?.client?.name.toLowerCase().includes(val)
                 : selling
@@ -119,10 +145,53 @@ const SellersReport = () => {
 
     useEffect(() => {
         setData(sellersreport)
-    }, [sellersreport])
+        if (sellersreport.length > 0) {
+            const totalprice = reduce(
+                sellersreport,
+                (summ, sale) =>
+                    summ +
+                    reduce(
+                        sale.payments,
+                        (summ, payment) => summ + payment.payment,
+                        0
+                    ),
+                0
+            )
+            const totalpriceuzs = reduce(
+                sellersreport,
+                (summ, sale) =>
+                    summ +
+                    reduce(
+                        sale.payments,
+                        (summ, payment) => summ + payment.paymentuzs,
+                        0
+                    ),
+                0
+            )
 
+            const saleProducts = reduce(
+                sellersreport,
+                (summ, sale) => summ + sale.products.length,
+                0
+            )
+
+            setGeneralreport({
+                salesCount: sellersreport.length,
+                totalprice,
+                totalpriceuzs,
+                saleProducts,
+            })
+        }
+    }, [sellersreport])
     return (
         <div className='w-full'>
+            <UniversalModal
+                printedSelling={printedSelling}
+                currency={currencyType}
+                body={'allChecks'}
+                isOpen={modalVisible}
+                toggleModal={toggleModal}
+            />
             <div className='flex items-center justify-between mainPadding'>
                 <LinkToBack link={'/hamkorlar/sotuvchilar'} />
             </div>
@@ -162,6 +231,14 @@ const SellersReport = () => {
             </div>
             <div className='mainPadding'>
                 <Table
+                    data={generalReport}
+                    currency={currencyType}
+                    page={'generalreport'}
+                    headers={headersInfo}
+                />
+            </div>
+            <div className='mainPadding'>
+                <Table
                     data={data}
                     currentPage={currentPage}
                     currency={currencyType}
@@ -169,6 +246,7 @@ const SellersReport = () => {
                     page={'saleslist'}
                     headers={headers}
                     sellers={true}
+                    Print={handleClickPrint}
                 />
             </div>
         </div>

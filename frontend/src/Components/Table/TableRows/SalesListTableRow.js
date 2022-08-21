@@ -30,7 +30,7 @@ export const SalesListTableRow = ({
     }
     return (
         <>
-            {map(data,(saleconnector, index) => (
+            {map(data, (saleconnector, index) => (
                 <tr className='tr' key={uniqueId('sales')}>
                     <td className='text-left td'>
                         {currentPage * countPage + 1 + index}
@@ -80,19 +80,31 @@ export const SalesListTableRow = ({
                         {currency}
                     </td>
                     <td className='text-left td py-[1rem] '>
-                        {map(saleconnector.dailyconnectors,
+                        {map(
+                            saleconnector.dailyconnectors,
                             (connector, index) => {
                                 if (connector.comment) {
                                     return (
-                                        <p key={uniqueId('sale-list-table')}>{connector.comment}</p>
+                                        <p key={uniqueId('sale-list-table')}>
+                                            {connector.comment}
+                                        </p>
                                     )
                                 }
                                 return ''
                             }
                         )}
                     </td>
-                    {!sellers && (
-                        <td className='py-[0.375rem] td border-r-0'>
+
+                    <td className='py-[0.375rem] td border-r-0'>
+                        {sellers ? (
+                            <div className='flex items-center justify-center gap-[0.625rem]'>
+                                <TableBtn
+                                    type={'print'}
+                                    bgcolor={'bg-primary-800'}
+                                    onClick={() => Print(saleconnector)}
+                                />
+                            </div>
+                        ) : (
                             <div className='flex items-center justify-center gap-[0.625rem]'>
                                 <TableBtn
                                     type={'print'}
@@ -112,8 +124,8 @@ export const SalesListTableRow = ({
                                     }
                                 />
                             </div>
-                        </td>
-                    )}
+                        )}
+                    </td>
                 </tr>
             ))}
         </>

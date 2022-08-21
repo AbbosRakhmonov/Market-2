@@ -26,6 +26,7 @@ import {ExpensesTableRow} from './TableRows/ExpensesTableRow'
 import {BarcodeTableRow} from './TableRows/BarcodeTableRow.js'
 import {AdminProductTableRow} from './TableRows/AdminProductTableRow'
 import {ReturnProductsTableRow} from './TableRows/ReturnProductsTableRow.js'
+import {GeneralReportTableRow} from './TableRows/GeneralReportTableRow.js'
 
 function Table({
     page,
@@ -365,6 +366,8 @@ function Table({
                         currency={currency}
                     />
                 )
+            case 'generalreport':
+                return <GeneralReportTableRow data={data} currency={currency} />
             default:
                 return ''
         }
