@@ -44,7 +44,7 @@ function validateProductExcel(product) {
   const schema = Joi.object({
     name: Joi.string().required(),
     unit: Joi.string(),
-    barcode: Joi.string(),
+    barcode: Joi.any(),
     producttype: Joi.string(),
     code: Joi.number().required(),
     category: Joi.number(),
