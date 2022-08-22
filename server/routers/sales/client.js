@@ -86,6 +86,7 @@ module.exports.register = async (req, res) => {
 module.exports.getAll = async (req, res) => {
   try {
     const { market } = req.body;
+    
     const marke = await Market.findById(market);
     if (!marke) {
       return res.status(400).json({

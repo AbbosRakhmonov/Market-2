@@ -35,7 +35,7 @@ import CustomerPayment from '../../../Components/Payment/CustomerPayment.js'
 import { useLocation, useNavigate } from 'react-router-dom'
 import BarcodeReader from 'react-barcode-reader'
 import { useTranslation } from 'react-i18next';
-import {map,filter} from 'lodash'
+import { map, filter } from 'lodash'
 
 const RegisterSelling = () => {
     const { t } = useTranslation(['common'])
@@ -705,7 +705,7 @@ const RegisterSelling = () => {
         const str = e.target.value
         setSearchCategory(str)
         const searchedStr = str.replace(/\s+/g, ' ').trim()
-        const filterData = filter(allcategories,(obj) =>
+        const filterData = filter(allcategories, (obj) =>
             obj.name
                 ? obj.name.toLowerCase().includes(searchedStr) ||
                 obj.code.includes(searchedStr)
@@ -718,7 +718,7 @@ const RegisterSelling = () => {
             ? filter(tableProducts,
                 (obj) => obj.product.barcode === option.barcode
             ).length > 0
-            : filter(tableProducts,(obj) => obj.product._id === option.value)
+            : filter(tableProducts, (obj) => obj.product._id === option.value)
                 .length > 0
         if (!hasProduct) {
             !option.barcode && setSelectedProduct(option)
@@ -751,10 +751,10 @@ const RegisterSelling = () => {
     }
     const handleChangePackmanValue = (option) => {
         setPackmanValue(option)
-        const pack = filter(packmans,(pack) => pack._id === option.value)[0]
+        const pack = filter(packmans, (pack) => pack._id === option.value)[0]
         if (pack && pack.hasOwnProperty('clients')) {
             setOptionClient(
-                map(pack.clients,(client) => ({
+                map(pack.clients, (client) => ({
                     label: client.name,
                     value: client._id,
                     packman: pack,
@@ -818,7 +818,7 @@ const RegisterSelling = () => {
         })
     }
     const handleChangeProductUnitPriceTable = (id, value) => {
-        const newRelease = map(tableProducts,(prevProduct) =>
+        const newRelease = map(tableProducts, (prevProduct) =>
             prevProduct.product._id === id
                 ? {
                     ...prevProduct,
@@ -850,7 +850,7 @@ const RegisterSelling = () => {
         setTableProducts(newRelease)
     }
     const handleChangeProductNumberTable = (id, value) => {
-        const newRelease = map(tableProducts,(prevProduct) =>
+        const newRelease = map(tableProducts, (prevProduct) =>
             prevProduct.product._id === id
                 ? {
                     ...prevProduct,
@@ -910,7 +910,7 @@ const RegisterSelling = () => {
                 t("Diqqat! Qaytariladigan mahsulot soni sotilgan mahsulot sonidan ortiq bo'lolmaydi"),
                 'warning'
             )
-        const newRelease = map(returnProducts,(prevProduct) =>
+        const newRelease = map(returnProducts, (prevProduct) =>
             prevProduct._id === id
                 ? {
                     ...prevProduct,
@@ -937,8 +937,8 @@ const RegisterSelling = () => {
             )
 
             const newRelease = discounts.map((discount) => {
-                let newDiscount = {...discount}
-                map(returnProducts,(product) => {
+                let newDiscount = { ...discount }
+                map(returnProducts, (product) => {
                     if (discount._id === product.product?.discount) {
                         newDiscount = {
                             ...discount,
@@ -1000,14 +1000,14 @@ const RegisterSelling = () => {
                 (product) => product.category._id === activeCategory
             )
             setFilteredProducts(
-                map(filteredData,(product) => ({
+                map(filteredData, (product) => ({
                     value: product._id,
                     label: `(${product.total}) ${product.category.code}${product.productdata.code} - ${product.productdata.name}`,
                 }))
             )
         } else {
             setFilteredProducts(
-                map(allProducts,(product) => ({
+                map(allProducts, (product) => ({
                     value: product._id,
                     label: `(${product.total}) ${product.category.code}${product.productdata.code} - ${product.productdata.name}`,
                 }))
@@ -1075,7 +1075,7 @@ const RegisterSelling = () => {
         if (data && data.saleconnector && data.returnProducts) {
             setClientData()
             let returned = []
-            map(data.saleconnector.products,(saleProduct) => {
+            map(data.saleconnector.products, (saleProduct) => {
                 const sale = {
                     _id: saleProduct.product._id,
                     discount: saleProduct.discount && saleProduct.discount,
@@ -1083,7 +1083,7 @@ const RegisterSelling = () => {
                     totalprice: saleProduct.totalprice,
                     totalpriceuzs: saleProduct.totalpriceuzs,
                 }
-                map(saleProduct.saleproducts,(product) => {
+                map(saleProduct.saleproducts, (product) => {
                     sale.pieces += product.pieces
                     sale.totalprice += product.totalprice
                     sale.totalpriceuzs += product.totalpriceuzs
@@ -1104,7 +1104,7 @@ const RegisterSelling = () => {
             })
 
             setReturnProducts(
-                filter(returned,(product) => product.product.pieces > 0)
+                filter(returned, (product) => product.product.pieces > 0)
             )
             setDiscounts([...data.saleconnector.discounts])
             const totalSumm = (datas, property, type) => {
@@ -1293,7 +1293,7 @@ const RegisterSelling = () => {
                                     <Spinner />
                                 </div>
                             ) : filteredCategories.length > 0 ? (
-                                map(filteredCategories,(category) => (
+                                map(filteredCategories, (category) => (
                                     <CategoryCard
                                         key={category._id}
                                         id={category._id}

@@ -9,9 +9,10 @@ import Check from './ModalBodys/Check.js'
 import AllChecks from './ModalBodys/AllChecks.js'
 import StepperPage from './ModalBodys/StepperPage.js'
 import AdminMarkets from './ModalBodys/AdminMarkets.js'
+import { SavedSalesCheck } from '../SaleCheck/SavedSalesCheck.js'
+import { useTranslation } from 'react-i18next';
+import SalesList from './ModalBodys/SalesList';
 import TotalReports from '../TotalReports/TotalReports.js'
-import {SavedSalesCheck} from '../SaleCheck/SavedSalesCheck.js'
-import {useTranslation} from 'react-i18next'
 
 function UniversalModal({
     isOpen,
@@ -37,7 +38,7 @@ function UniversalModal({
     saleproductsreport,
     totalreports,
 }) {
-    const {t} = useTranslation(['common'])
+    const { t } = useTranslation(['common'])
 
     const customStyles = {
         content: {
@@ -82,6 +83,14 @@ function UniversalModal({
                         headers={headers}
                         createdData={createdData}
                         setCreatedData={setCreatedData}
+                        approveFunction={approveFunction}
+                        toggleModal={toggleModal}
+                    />
+                )
+            case 'addPlus':
+                return (
+                    <SalesList
+                        headers={headers}
                         approveFunction={approveFunction}
                         toggleModal={toggleModal}
                     />

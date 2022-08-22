@@ -6,18 +6,18 @@ import SearchForm from '../../../Components/SearchForm/SearchForm.js'
 import { useDispatch, useSelector } from 'react-redux'
 import Spinner from '../../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../../Components/NotFind/NotFind.js'
-
-import {motion} from 'framer-motion'
+import { motion } from 'framer-motion'
 import {
     clearSearchedSellings,
     getSellings,
     getSellingsByFilter,
-    excelAllSellings
+    excelAllSellings,
 } from '../Slices/sellingsSlice.js'
-import {regexForTypeNumber} from '../../../Components/RegularExpressions/RegularExpressions.js'
+import { regexForTypeNumber } from '../../../Components/RegularExpressions/RegularExpressions.js'
 import UniversalModal from '../../../Components/Modal/UniversalModal.js'
 import { useTranslation } from 'react-i18next';
-import {filter} from "lodash"
+import { filter } from "lodash"
+import { updateSellingsClient } from '../Slices/sellingsSlice.js'
 const Sellings = () => {
     const { t } = useTranslation(['common'])
     const headers = [
@@ -55,6 +55,7 @@ const Sellings = () => {
     ]
     const dispatch = useDispatch()
     const { currencyType } = useSelector((state) => state.currency)
+    const { user } = useSelector((state) => state.login)
     const {
         sellings,
         searchedSellings,
@@ -63,11 +64,14 @@ const Sellings = () => {
         totalSearched,
         excelAllData
     } = useSelector((state) => state.sellings)
+    const [chooseBody, setChooseBody] = useState('')
     const [data, setData] = useState(sellings)
     const [filteredDataTotal, setFilteredDataTotal] = useState(total)
     const [searchedData, setSearchedData] = useState(searchedSellings)
     const [showByTotal, setShowByTotal] = useState('10')
     const [currentPage, setCurrentPage] = useState(0)
+    const [modalBody, setModalBody] = useState('')
+    const { packmans } = useSelector((state) => state.clients)
     const [search, setSearch] = useState({
         id: '',
         client: '',
@@ -100,7 +104,7 @@ const Sellings = () => {
             setData(sellings)
             setFilteredDataTotal(total)
         } else {
-            const filteredProducts = filter(sellings,(selling) => {
+            const filteredProducts = filter(sellings, (selling) => {
                 return selling.id.includes(valForSearch)
             })
             setData(filteredProducts)
@@ -117,7 +121,7 @@ const Sellings = () => {
             setData(sellings)
             setFilteredDataTotal(total)
         } else {
-            const filteredProducts = filter(sellings,(selling) => {
+            const filteredProducts = filter(sellings, (selling) => {
                 return (
                     selling?.client?.name
                         .toLowerCase()
@@ -161,7 +165,13 @@ const Sellings = () => {
     ]
 
     const handleClickPrint = (selling) => {
+        setChooseBody('allChecks')
         setPrintedSelling(selling)
+        setModalVisible(true)
+    }
+
+    const addPlus = () => {
+        setChooseBody('addPlus')
         setModalVisible(true)
     }
 
@@ -190,13 +200,22 @@ const Sellings = () => {
     }, [currentPage, showByTotal, startDate, endDate, dispatch])
 
     useEffect(() => {
-      const body = {
-        startDate,
-        endDate,
-        search
-      }
-      dispatch(excelAllSellings(body))
+        const body = {
+            startDate,
+            endDate,
+            search
+        }
+        dispatch(excelAllSellings(body))
     }, [dispatch])
+
+    const handleAddProduct = (saleconnector) => {
+        dispatch(updateSellingsClient(saleconnector))
+        setModalVisible(false)
+        setTimeout(() => {
+            setModalBody('')
+        }, 500)
+
+    }
 
     return (
         <motion.section
@@ -213,9 +232,10 @@ const Sellings = () => {
             <UniversalModal
                 printedSelling={printedSelling}
                 currency={currencyType}
-                body={'allChecks'}
+                body={chooseBody}
                 isOpen={modalVisible}
                 toggleModal={toggleModal}
+                approveFunction={handleAddProduct}
             />
             <div className='pagination mainPadding'>
                 <ExportBtn
@@ -264,6 +284,7 @@ const Sellings = () => {
                         page={'saleslist'}
                         headers={headers}
                         Print={handleClickPrint}
+                        addPlus={addPlus}
                     />
                 )}
             </div>

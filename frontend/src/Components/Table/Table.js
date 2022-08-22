@@ -59,6 +59,7 @@ function Table({
     onClickTableRow,
     linkToSellerReports,
     sellers,
+    addPlus
 }) {
     const checkRows = () => {
         switch (page) {
@@ -223,6 +224,7 @@ function Table({
                         Print={Print}
                         ReturnPayment={ReturnPayment}
                         sellers={sellers}
+                        addPlus={addPlus}
                     />
                 )
             case 'client':
