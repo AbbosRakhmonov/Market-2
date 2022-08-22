@@ -79,8 +79,29 @@ const Reports = () => {
     const [endDate, setEndDate] = useState(new Date())
     const {currencyType} = useSelector((state) => state.currency)
     const [modalVisible, setModalVisible] = useState(false)
-    const [modalData, setModalData] = useState(null)
     const [modalBody, setModalBody] = useState(null)
+
+    const handleClickPrint = () => {
+        let body = {
+            startDate: new Date(
+                new Date().setMonth(new Date().getMonth() - 1)
+            ).toISOString(),
+            endDate: new Date(),
+        }
+        dispatch(getProducts())
+        dispatch(getIncomings(body))
+        dispatch(getReportsForTotal(body))
+        dispatch(getSaleProducts(body))
+        setTimeout(() => {
+            setModalVisible(true)
+            setModalBody('totalReport')
+        }, 500)
+    }
+
+    const toggleClickPrint = () => {
+        setModalVisible(false)
+        setModalBody('')
+    }
 
     useEffect(() => {
         const body = {
@@ -100,19 +121,6 @@ const Reports = () => {
         }
     }, [dispatch, clearErrorrReports, errorReports])
 
-    useEffect(() => {
-        let body = {
-            startDate: new Date(
-                new Date().setMonth(new Date().getMonth() - 1)
-            ).toISOString(),
-            endDate: new Date(),
-        }
-        dispatch(getProducts())
-        dispatch(getIncomings(body))
-        dispatch(getReportsForTotal(body))
-        dispatch(getSaleProducts(body))
-    }, [dispatch])
-
     return (
         <motion.section
             key='content'
@@ -131,11 +139,7 @@ const Reports = () => {
                 endDate={endDate}
                 setStartDate={setStartDate}
                 setEndDate={setEndDate}
-                clickPrintBtn={() => {
-                    setModalVisible(true)
-                    setModalBody('totalReport')
-                    setModalData(null)
-                }}
+                clickPrintBtn={handleClickPrint}
             />
             <div className='checkout-card mainPadding'>
                 {reports &&
@@ -154,11 +158,7 @@ const Reports = () => {
             </div>
             <UniversalModal
                 body={modalBody}
-                toggleModal={() => {
-                    setModalVisible(false)
-                    setModalBody('')
-                    setModalData(null)
-                }}
+                toggleModal={toggleClickPrint}
                 incomingreport={incomingreport}
                 productreport={productreport}
                 saleproductsreport={saleproductsreport}
