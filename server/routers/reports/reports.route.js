@@ -42,4 +42,8 @@ router.post('/expensesreport', auth, (req, res) => {
   require('./reports').getExpensesReport(req, res);
 });
 
+router.post('/getsaleproducts', auth, (req, res) => {
+  require('./reports').getSalesReport(req, res);
+});
+
 module.exports = router;
