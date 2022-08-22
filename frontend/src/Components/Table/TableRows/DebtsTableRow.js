@@ -2,10 +2,10 @@ import {uniqueId, map} from 'lodash'
 import React from 'react'
 import TableBtn from '../../Buttons/TableBtn'
 
-export const DebtsTableRow = ({data, currency, Pay}) => {
+export const DebtsTableRow = ({data, currency, Pay, Print}) => {
     return (
         <>
-            {map(data,(debt, index) => (
+            {map(data, (debt, index) => (
                 <tr className='tr' key={uniqueId('debt')}>
                     <td className='text-left td'>{1 + index}</td>
                     <td className='text-right td'>
@@ -33,7 +33,12 @@ export const DebtsTableRow = ({data, currency, Pay}) => {
                         <span className='text-error-500'>{currency}</span>
                     </td>
                     <td className='td border-r-0 py-[6px]'>
-                        <div className='flex justify-center items-center'>
+                        <div className='flex justify-center items-center gap-[0.625rem]'>
+                            <TableBtn
+                                type={'print'}
+                                bgcolor={'bg-primary-800'}
+                                onClick={() => Print(debt.saleconnector)}
+                            />
                             <TableBtn
                                 type={'pay'}
                                 bgcolor={'bg-success-500'}
