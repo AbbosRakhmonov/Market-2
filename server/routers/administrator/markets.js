@@ -1,6 +1,6 @@
-const { Market } = require("../../models/MarketAndBranch/Market");
-const { User } = require("../../models/Users");
-const { filter } = require("lodash");
+const { Market } = require('../../models/MarketAndBranch/Market');
+const { User } = require('../../models/Users');
+const { filter } = require('lodash');
 module.exports.getmarkets = async (req, res) => {
   try {
     const { administrator, currentPage, countPage, search } = req.body;
@@ -13,16 +13,16 @@ module.exports.getmarkets = async (req, res) => {
     }
 
     const director = new RegExp(
-      ".*" + search ? search.director : "" + ".*",
-      "i"
+      '.*' + search ? search.director : '' + '.*',
+      'i'
     );
-    const name = new RegExp(".*" + search ? search.name : "" + ".*", "i");
+    const name = new RegExp('.*' + search ? search.name : '' + '.*', 'i');
 
     const markets = await Market.find({ name: name })
       .sort({ createdAt: -1 })
       .populate({
-        path: "director",
-        select: "firstname lastname phone image",
+        path: 'director',
+        select: 'firstname lastname phone image',
         match: { $or: [{ firstname: director }, { lastname: director }] },
       });
 
@@ -37,7 +37,7 @@ module.exports.getmarkets = async (req, res) => {
       count,
     });
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -55,17 +55,17 @@ module.exports.getmarketcontrols = async (req, res) => {
     }
 
     const director = new RegExp(
-      ".*" + search ? search.director : "" + ".*",
-      "i"
+      '.*' + search ? search.director : '' + '.*',
+      'i'
     );
-    const name = new RegExp(".*" + search ? search.name : "" + ".*", "i");
+    const name = new RegExp('.*' + search ? search.name : '' + '.*', 'i');
 
     const markets = await Market.find({ name: name, _id: { $ne: marketId } })
       .sort({ createdAt: -1 })
-      .select("filials connections mainmarket image name phone1")
+      .select('filials connections mainmarket image name phone1')
       .populate({
-        path: "director",
-        select: "firstname lastname",
+        path: 'director',
+        select: 'firstname lastname',
         match: { $or: [{ firstname: director }, { lastname: director }] },
       });
 
@@ -76,8 +76,8 @@ module.exports.getmarketcontrols = async (req, res) => {
     const count = filter.length;
 
     const market = await Market.findById(marketId)
-      .select("name filials connections phone1 phone2 phone3 permission")
-      .populate("director", "firstname lastname phone");
+      .select('name filials connections phone1 phone2 phone3 permission')
+      .populate('director', 'firstname lastname phone');
 
     filter = filter.splice(currentPage * countPage, countPage);
     res.status(201).json({
@@ -86,7 +86,7 @@ module.exports.getmarketcontrols = async (req, res) => {
       market,
     });
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -115,17 +115,17 @@ module.exports.updatemarkets = async (req, res) => {
     }
 
     const director = new RegExp(
-      ".*" + search ? search.director : "" + ".*",
-      "i"
+      '.*' + search ? search.director : '' + '.*',
+      'i'
     );
-    const name = new RegExp(".*" + search ? search.name : "" + ".*", "i");
+    const name = new RegExp('.*' + search ? search.name : '' + '.*', 'i');
 
     const markets = await Market.find({ name: name, _id: { $ne: market._id } })
       .sort({ createdAt: -1 })
-      .select("filials connections mainmarket image name phone1")
+      .select('filials connections mainmarket image name phone1')
       .populate({
-        path: "director",
-        select: "firstname lastname",
+        path: 'director',
+        select: 'firstname lastname',
         match: { $or: [{ firstname: director }, { lastname: director }] },
       });
 
@@ -136,8 +136,8 @@ module.exports.updatemarkets = async (req, res) => {
     const count = filtered.length;
 
     const marke = await Market.findById(market._id)
-      .select("name filials connections")
-      .populate("director", "firstname lastname phone");
+      .select('name filials connections')
+      .populate('director', 'firstname lastname phone');
 
     filtered = filtered.splice(currentPage * countPage, countPage);
     res.status(201).json({
@@ -146,6 +146,6 @@ module.exports.updatemarkets = async (req, res) => {
       market: marke,
     });
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };

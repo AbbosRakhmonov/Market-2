@@ -24,7 +24,7 @@ import {
     payDebt,
 } from './reportsSlice'
 import {ReportsTableHeaders} from './ReportsTableHeaders'
-import {filter} from "lodash"
+import {filter} from 'lodash'
 const ReportPage = () => {
     const {id} = useParams()
 
@@ -84,6 +84,14 @@ const ReportPage = () => {
     const [paidUzs, setPaidUzs] = useState(0)
     const [modalBody, setModalBody] = useState('')
     const [modalData, setModalData] = useState(null)
+    const [totalDebt, setTotalDebt] = useState({
+        usd: 0,
+        uzs: 0,
+    })
+    const [beginDay, setBeginDay] = useState(
+        new Date(new Date().setMonth(new Date().getMonth() - 3))
+    )
+    const [endDay, setEndDay] = useState(new Date())
 
     const headers = [
         {title: '№'},
@@ -114,6 +122,12 @@ const ReportPage = () => {
         setModalBody('')
         setModalData(null)
     }
+    const toggleSaleCheck = () => {
+        setModalVisible(!modalVisible)
+        setModalBody('')
+        setModalBody(null)
+    }
+
     const convertToUsd = (value) => Math.round(value * 1000) / 1000
     const convertToUzs = (value) => Math.round(value)
     const handleClickPayment = (debt) => {
@@ -476,13 +490,24 @@ const ReportPage = () => {
         }, 500)
     }
 
-    // const handleClickPrint = () => {}
+    const handleClickPrint = (saleconnector) => {
+        if (id === 'debts') {
+            setModalData(saleconnector)
+            setModalBody('allChecks')
+            setModalVisible(true)
+        }
+        if (id === 'sale') {
+            setModalData(saleconnector)
+            setModalBody('checkSell')
+            setModalVisible(true)
+        }
+    }
 
     // search functions
     const searchId = (e) => {
         let target = e.target.value
         setCurrentData([
-            ...filter([...storageData],(item) =>
+            ...filter([...storageData], (item) =>
                 item.saleconnector
                     ? item.saleconnector.id.includes(target)
                     : item.id.includes(target)
@@ -497,7 +522,8 @@ const ReportPage = () => {
     const searchClientName = (e) => {
         let target = e.target.value.toLowerCase()
         setCurrentData([
-            ...filter([...storageData],
+            ...filter(
+                [...storageData],
                 (item) =>
                     item.client &&
                     item.client.name.toLowerCase().includes(target)
@@ -567,6 +593,27 @@ const ReportPage = () => {
         count > 0 && setTotalPage(count)
     }, [count])
 
+    useEffect(() => {
+        if (id === 'debts') {
+            setTotalDebt({
+                usd: datas.reduce((prev, {debt}) => prev + debt, 0),
+                uzs: datas.reduce((prev, {debtuzs}) => prev + debtuzs, 0),
+            })
+        }
+    }, [datas, id])
+
+    useEffect(() => {
+        if (id === 'debts') {
+            const searched = [...datas].filter((debt) => {
+                return (
+                    new Date(debt.createdAt) >= beginDay &&
+                    new Date(debt.createdAt) <= endDay
+                )
+            })
+            setCurrentData(searched)
+        }
+    }, [id, datas, beginDay, endDay])
+
     return (
         <div className='relative overflow-auto h-full'>
             <div className='flex items-center justify-between mainPadding'>
@@ -585,7 +632,7 @@ const ReportPage = () => {
                 <SearchForm
                     filterBy={
                         id === 'debts'
-                            ? ['id', 'clientName']
+                            ? ['startDate', 'endDate', 'id', 'clientName']
                             : id === 'expenses'
                             ? ['total']
                             : ['total', 'id', 'clientName']
@@ -595,6 +642,10 @@ const ReportPage = () => {
                     filterByClientName={searchClientName}
                     filterByIdWhenPressEnter={onKeySearch}
                     filterByClientNameWhenPressEnter={onKeySearch}
+                    startDate={beginDay}
+                    endDate={endDay}
+                    setStartDate={setBeginDay}
+                    setEndDate={setEndDay}
                 />
                 {id !== 'debts' && (
                     <Pagination
@@ -617,7 +668,29 @@ const ReportPage = () => {
                         type={id}
                         Pay={handleClickPayment}
                         reports={true}
+                        Print={handleClickPrint}
                     />
+                )}
+                {id === 'debts' && (
+                    <ul className='w-full grid grid-cols-12 tr'>
+                        <li
+                            className={`col-span-8 ${
+                                currentData.length === 0 && 'border-t-2'
+                            } td py-[0.625rem] text-right`}
+                        >
+                            Jami:
+                        </li>
+                        <li
+                            className={`col-span-4 ${
+                                currentData.length === 0 && 'border-t-2'
+                            } td py-[0.625rem] font-bold`}
+                        >
+                            {currencyType === 'USD'
+                                ? totalDebt.usd
+                                : totalDebt.uzs}{' '}
+                            {currencyType}
+                        </li>
+                    </ul>
                 )}
             </div>
             <div>
@@ -667,11 +740,15 @@ const ReportPage = () => {
                         ? toggleModal
                         : modalBody === 'complete'
                         ? handleClosePay
+                        : modalBody === 'allChecks'
+                        ? toggleSaleCheck
                         : toggleCheckModal
                 }
                 approveFunction={handleApprovePay}
                 isOpen={modalVisible}
                 payment={modalData}
+                printedSelling={modalData}
+                product={modalData}
                 headers={headers}
                 headerText={
                     modalBody === 'complete' &&

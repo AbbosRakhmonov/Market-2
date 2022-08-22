@@ -63,7 +63,7 @@ export const getDebts = createAsyncThunk(
 )
 
 export const getDiscounts = createAsyncThunk(
-    'reports/getDebts',
+    'reports/getDsicounts',
     async (body, {rejectWithValue}) => {
         try {
             const {data} = await Api.post('/reports/getdiscountsreport', body)
@@ -132,7 +132,7 @@ const reportSlice = createSlice({
         count: 0,
         monthlyReport: null,
         monthlyReportLoading: true,
-        monthlyReportError: null
+        monthlyReportError: null,
     },
     reducers: {
         clearErrorReports: (state) => {
@@ -141,7 +141,7 @@ const reportSlice = createSlice({
         clearDatas: (state) => {
             state.datas = []
             state.count = 0
-        }
+        },
     },
     extraReducers: {
         [getReports.pending]: (state) => {
@@ -259,8 +259,8 @@ const reportSlice = createSlice({
         [getMonthlyReport.fulfilled]: (state, {payload}) => {
             state.monthlyReportLoading = false
             state.monthlyReport = payload
-        }
-    }
+        },
+    },
 })
 
 export const {clearErrorReports, clearDatas} = reportSlice.actions
