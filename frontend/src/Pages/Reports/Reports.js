@@ -78,20 +78,11 @@ const Reports = () => {
     )
     const [endDate, setEndDate] = useState(new Date())
     const {currencyType} = useSelector((state) => state.currency)
+
     const [modalVisible, setModalVisible] = useState(false)
     const [modalBody, setModalBody] = useState(null)
 
     const handleClickPrint = () => {
-        let body = {
-            startDate: new Date(
-                new Date().setMonth(new Date().getMonth() - 1)
-            ).toISOString(),
-            endDate: new Date(),
-        }
-        dispatch(getProducts())
-        dispatch(getIncomings(body))
-        dispatch(getReportsForTotal(body))
-        dispatch(getSaleProducts(body))
         setTimeout(() => {
             setModalVisible(true)
             setModalBody('totalReport')
@@ -112,7 +103,18 @@ const Reports = () => {
             ).toISOString(),
             endDate: endDate.toISOString(),
         }
+        let bodyTotal = {
+            startDate: new Date(
+                new Date().setMonth(new Date().getMonth() - 1)
+            ).toISOString(),
+            endDate: new Date(),
+        }
+
         dispatch(getReports(body))
+        dispatch(getProducts())
+        dispatch(getIncomings(bodyTotal))
+        dispatch(getReportsForTotal(bodyTotal))
+        dispatch(getSaleProducts(bodyTotal))
     }, [dispatch, startDate, endDate])
     useEffect(() => {
         if (errorReports) {
