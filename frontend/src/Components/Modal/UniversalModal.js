@@ -12,6 +12,7 @@ import AdminMarkets from './ModalBodys/AdminMarkets.js'
 import { SavedSalesCheck } from '../SaleCheck/SavedSalesCheck.js'
 import { useTranslation } from 'react-i18next';
 import SalesList from './ModalBodys/SalesList';
+import TotalReports from '../TotalReports/TotalReports.js'
 
 function UniversalModal({
     isOpen,
@@ -31,9 +32,12 @@ function UniversalModal({
     printedSelling,
     printedInventories,
     payment,
-    addMarket
+    addMarket,
+    incomingreport,
+    productreport,
+    saleproductsreport,
+    totalreports,
 }) {
-
     const { t } = useTranslation(['common'])
 
     const customStyles = {
@@ -41,16 +45,16 @@ function UniversalModal({
             width: '90%',
             height: '85%',
             padding: '1.25rem',
-            transform: 'auto'
-        }
+            transform: 'auto',
+        },
     }
     const modalFull = {
         content: {
             width: '100%',
             height: '100%',
             padding: '1rem',
-            transform: 'auto'
-        }
+            transform: 'auto',
+        },
     }
     const switchBody = () => {
         switch (body) {
@@ -120,9 +124,27 @@ function UniversalModal({
             case 'addMarket':
                 return <StepperPage addMarket={addMarket} />
             case 'filterBranch':
-                return <AdminMarkets product={product} approveFunction={approveFunction} toggleModal={toggleModal} />
+                return (
+                    <AdminMarkets
+                        product={product}
+                        approveFunction={approveFunction}
+                        toggleModal={toggleModal}
+                    />
+                )
             case 'savedsalescheck':
                 return <SavedSalesCheck product={printedSelling} />
+            case 'totalReport':
+                return (
+                    <div className={'flex items-center justify-center'}>
+                        <TotalReports
+                            currencyType={currency}
+                            incomingreport={incomingreport}
+                            productreport={productreport}
+                            saleproductsreport={saleproductsreport}
+                            totalreports={totalreports}
+                        />
+                    </div>
+                )
             // case 'checkInventory':
             //     return <AllCheckInventories product={printedInventories} />
             default:
@@ -133,12 +155,14 @@ function UniversalModal({
         <Modal
             isOpen={isOpen}
             style={
-                body === 'checkSell' || body === 'allChecks' || body === 'addMarket' || body === 'filterBranch'
-                    ? { ...modalFull }
-
+                body === 'checkSell' ||
+                body === 'allChecks' ||
+                body === 'addMarket' ||
+                body === 'filterBranch'
+                    ? {...modalFull}
                     : body === 'approve' || body === 'complete'
-                        ? {}
-                        : { ...customStyles }
+                    ? {}
+                    : {...customStyles}
             }
             onRequestClose={closeModal || toggleModal}
             closeTimeoutMS={100}

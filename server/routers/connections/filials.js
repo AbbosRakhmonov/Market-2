@@ -1,6 +1,6 @@
-const { Market } = require('../../models/MarketAndBranch/Market');
-const { Product } = require('../../models/Products/Product');
-const { ProductPrice } = require('../../models/Products/ProductPrice');
+const { Market } = require("../../models/MarketAndBranch/Market");
+const { Product } = require("../../models/Products/Product");
+const { ProductPrice } = require("../../models/Products/ProductPrice");
 
 module.exports.getfilials = async (req, res) => {
   try {
@@ -11,8 +11,8 @@ module.exports.getfilials = async (req, res) => {
 
     for (const f of marke.filials) {
       const products = await Product.find({ market: f })
-        .select('price total')
-        .populate('price', 'incomingprice');
+        .select("price total")
+        .populate("price", "incomingprice");
 
       const totalprice = products.reduce((summ, product) => {
         return summ + product.total * product.price.incomingprice;
@@ -25,8 +25,8 @@ module.exports.getfilials = async (req, res) => {
       const count = products.length;
 
       const market = await Market.findById(f)
-        .select('name phone1')
-        .populate('director', 'firstname lastname');
+        .select("name phone1")
+        .populate("director", "firstname lastname");
 
       const filial = {
         market,
@@ -39,7 +39,6 @@ module.exports.getfilials = async (req, res) => {
     }
     res.status(201).send(filials);
   } catch (error) {
-    console.log(error);
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };

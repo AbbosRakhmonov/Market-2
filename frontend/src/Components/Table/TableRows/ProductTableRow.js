@@ -30,7 +30,7 @@ export const ProductTableRow = ({
                     </td>
                     <td className='td text-left'>{product.productdata.name}</td>
                     <td className='td text-right'>
-                        {product.total} {product.unit && product.unit.name}
+                        {product.total.toLocaleString('ru-RU')} {product.unit && product.unit.name}
                     </td>
                     <td className='td text-right'>
                         {product.price &&

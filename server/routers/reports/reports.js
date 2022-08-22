@@ -218,8 +218,8 @@ module.exports.getReport = async (req, res) => {
       return prev + (totalpriceuzs - paymentuzs - discountuzs);
     }, 0);
 
-    reports.debts.debts = Math.round(reports.debts.debts * 1000) / 1000
-    reports.debts.debtsuzs = Math.round(reports.debts.debtsuzs * 1) / 1
+    reports.debts.debts = Math.round(reports.debts.debts * 1000) / 1000;
+    reports.debts.debtsuzs = Math.round(reports.debts.debtsuzs * 1) / 1;
     // Get debts report functions  END
 
     // Get expenses report functions  START
@@ -289,7 +289,10 @@ module.exports.getSales = async (req, res) => {
         select: 'name',
         match: { name: client },
       })
-      .populate('products', 'totalprice totalpriceuzs pieces price');
+      .populate(
+        'products',
+        'totalprice totalpriceuzs pieces price unitprice unitpriceuzs'
+      );
 
     let filter = saleconnector.filter((sale) => {
       return sale.saleconnector !== null && sale.client !== null;
@@ -485,9 +488,28 @@ module.exports.getDebtsReport = async (req, res) => {
         'payments',
         'cash cashuzs card carduzs transfer transferuzs payment paymentuzs totalprice totalpriceuzs'
       )
+      .populate({
+        path: 'products',
+        select:
+          'totalprice unitprice totalpriceuzs unitpriceuzs pieces createdAt discount saleproducts product',
+        options: { sort: { createdAt: -1 } },
+        populate: {
+          path: 'product',
+          select: 'productdata',
+          populate: { path: 'productdata', select: 'name code' },
+        },
+      })
       .populate('client', 'name')
-      .populate('discounts', 'discount discountuzs')
-      .populate('products', 'totalprice totalpriceuzs');
+      .populate(
+        'payments',
+        'payment paymentuzs comment totalprice totalpriceuzs'
+      )
+      .populate(
+        'discounts',
+        'discount discountuzs procient products totalprice totalpriceuzs'
+      )
+      .populate('user', 'firstname lastname')
+      .populate('dailyconnectors', 'comment');
 
     const debtsreport = saleconnector
       .map((sale) => {
@@ -510,6 +532,7 @@ module.exports.getDebtsReport = async (req, res) => {
           debt: Math.round((totalprice - payment - discount) * 1000) / 1000,
           debtuzs:
             Math.round((totalpriceuzs - paymentuzs - discountuzs) * 1) / 1,
+          saleconnector: sale,
         };
       })
       .filter((sales) => sales.debt > 0);
@@ -664,7 +687,7 @@ module.exports.getBackProducts = async (req, res) => {
 
 module.exports.getProductsReport = async (req, res) => {
   try {
-    const { market, startDate, endDate } = req.body;
+    const { market } = req.body;
 
     const isMarket = await Market.findById(market);
     if (!isMarket) {
@@ -675,10 +698,6 @@ module.exports.getProductsReport = async (req, res) => {
 
     const products = await Product.find({
       market,
-      createdAt: {
-        $gte: startDate,
-        $lte: endDate,
-      },
     })
       .select('total price')
       .populate('price', 'incomingprice incomingpriceuzs');
@@ -741,6 +760,38 @@ module.exports.getIncomingsReport = async (req, res) => {
     });
 
     res.status(200).json(incomingsreport);
+  } catch (error) {
+    res.status(400).json({ error: 'Serverda xatolik yuz berdi...' });
+  }
+};
+
+module.exports.getSalesReport = async (req, res) => {
+  try {
+    const { market, startDate, endDate } = req.body;
+
+    const salesProducts = await SaleProduct.find({
+      market,
+      createdAt: {
+        $gte: startDate,
+        $lte: endDate,
+      },
+    }).select('product pieces');
+
+    let saleproducts = {
+      producttypes: 0,
+      totalpieces: 0,
+    };
+
+    let arr = [];
+    salesProducts.map((product) => {
+      if (!arr.includes(product.product.toString())) {
+        saleproducts.producttypes += 1;
+        arr.push(product.product.toString());
+      }
+      saleproducts.totalpieces += product.pieces;
+    });
+
+    return res.status(200).json(saleproducts);
   } catch (error) {
     res.status(400).json({ error: 'Serverda xatolik yuz berdi...' });
   }

@@ -420,7 +420,7 @@ module.exports.getTransfers = async (req, res) => {
 // Get TransferProducts
 module.exports.getTransferProducts = async (req, res) => {
   try {
-    const { market, filial, currentPage, countPage, startDate, endDate } =
+    const { market, transfer, currentPage, countPage, startDate, endDate } =
       req.body;
 
     const marke = await Market.findById(market);
@@ -439,7 +439,7 @@ module.exports.getTransferProducts = async (req, res) => {
 
     const transferProducts = await TransferProduct.find({
       market,
-      filial,
+      transfer,
       createdAt: {
         $gte: startDate,
         $lte: endDate,
@@ -457,6 +457,37 @@ module.exports.getTransferProducts = async (req, res) => {
     return res.status(200).json({
       count: transferProducts.length,
       data: transferProducts.splice(currentPage * countPage, countPage),
+    });
+  } catch (error) {
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+  }
+};
+
+// Get Filials List
+module.exports.getFilials = async (req, res) => {
+  try {
+    const { market, currentPage, countPage, search } = req.body;
+
+    const marke = await Market.findById(market);
+    if (!marke) {
+      return res
+        .status(404)
+        .json({
+          error:
+            "Diqqat! Foydalanuvchi ro'yxatga olinayotgan do'kon dasturda ro'yxatga olinmagan.",
+        });
+    }
+
+    const name = new RegExp('.*' + search ? search.name : '' + '.*', 'i');
+
+    const filials = await Market.find({
+      mainmarket: market,
+      name: name,
+    }).select('director image name phone1 createdAt');
+
+    res.status(201).json({
+      count: filials.length,
+      filials: filials.splice(currentPage * countPage, countPage),
     });
   } catch (error) {
     res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });

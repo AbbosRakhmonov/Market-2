@@ -1,13 +1,21 @@
-const { Market } = require('../../models/MarketAndBranch/Market');
-const { Incoming } = require('../../models/Products/Incoming');
-const { SaleProduct } = require('../../models/Sales/SaleProduct');
-const { SaleConnector } = require('../../models/Sales/SaleConnector');
-const { Expense } = require('../../models/Expense/Expense');
-const { DailySaleConnector } = require('../../models/Sales/DailySaleConnector');
-const { Discount } = require('../../models/Sales/Discount');
-require('../../models/Sales/Payment');
-require('../../models/Sales/Discount');
-require('../../models/Products/ProductPrice');
+const { Market } = require("../../models/MarketAndBranch/Market");
+const { Incoming } = require("../../models/Products/Incoming");
+const { SaleProduct } = require("../../models/Sales/SaleProduct");
+const { SaleConnector } = require("../../models/Sales/SaleConnector");
+const { Expense } = require("../../models/Expense/Expense");
+const { DailySaleConnector } = require("../../models/Sales/DailySaleConnector");
+const { Discount } = require("../../models/Sales/Discount");
+require("../../models/Sales/Payment");
+require("../../models/Sales/Discount");
+require("../../models/Products/ProductPrice");
+const {
+  reducer,
+  roundToUzs,
+  roundToUsd,
+  reducerDuobleProperty,
+} = require("../globalFunctions.js");
+
+const { map, reduce } = require("lodash");
 
 module.exports.getIncomingData = async (req, res) => {
   try {
@@ -32,11 +40,11 @@ module.exports.getIncomingData = async (req, res) => {
         $gte: startDate,
         $lte: currenDate,
       },
-    }).select('totalprice market createdAt');
+    }).select("totalprice market createdAt");
 
     res.status(201).json(incomings);
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -63,11 +71,11 @@ module.exports.getSellingData = async (req, res) => {
         $gte: startDate,
         $lte: currenDate,
       },
-    }).select('totalprice market createdAt');
+    }).select("totalprice market createdAt");
 
     res.status(201).json(selling);
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -81,109 +89,90 @@ module.exports.getSalesDataByMonth = async (req, res) => {
     let count = 0;
     const currentMonth = new Date().getMonth();
 
+    // Oylik soffoyda chiqarish
+    let monthProfit = {
+      usd: 0,
+      uzs: 0,
+    };
+
     while (count <= currentMonth) {
-      const daysales = await DailySaleConnector.find({
+      const dailysales = await DailySaleConnector.find({
         market,
         createdAt: {
-          $gte: new Date(
-            new Date(new Date().setMonth(count, 1)).setHours(3, 0, 0, 0)
-          ).toISOString(),
+          $gte: new Date(new Date(new Date().setMonth(count, 1))).toISOString(),
           $lte: new Date(
-            new Date(new Date().setMonth(count + 1, 0)).setHours(26, 59, 59, 59)
+            new Date(new Date().setMonth(count + 1, 0)).setHours(0, 0, 0, 0)
           ).toISOString(),
         },
       })
-        .select('-isArchive -updatedAt -user -market -__v')
-        .populate('products', 'totalprice totalpriceuzs pieces price');
+        .select("-isArchive -updatedAt -user -market -__v")
+        .populate({
+          path: "products",
+          select: "pieces price totalprice totalpriceuzs",
+          populate: {
+            path: "price",
+            select: "incomingprice incomingpriceuzs",
+          },
+        })
+        .populate("discount", "discount discountuzs");
 
-      const reducer = (arr, el) =>
-        arr.reduce((prev, item) => prev + (item[el] || 0), 0);
+      const reduceData = (datas, propertys, property) =>
+        reduce(
+          datas,
+          (summ, data) => summ + reducer(data[propertys], property),
+          0
+        );
 
-      const usd = daysales.reduce((sum, { products }) => {
-        return sum + reducer(products, 'totalprice');
-      }, 0);
-      const uzs = daysales.reduce((sum, { products }) => {
-        return sum + reducer(products, 'totalpriceuzs');
-      }, 0);
+      const reduceIncoming = (propertyFirst, propertySecond) =>
+        reduce(
+          dailysales,
+          (summ, dailysale) =>
+            summ +
+            reducerDuobleProperty(
+              dailysale.products,
+              propertyFirst,
+              propertySecond
+            ),
+          0
+        );
 
-      sales.push(daysales.length);
+      const totalprice = roundToUsd(
+        reduceData(dailysales, "products", "totalprice")
+      );
+      const totalpriceuzs = roundToUsd(
+        reduceData(dailysales, "products", "totalpriceuzs")
+      );
+
+      sales.push(dailysales.length);
       salesSum.push({
-        usd: Math.round(usd * 1000) / 1000,
-        uzs: Math.round(uzs * 1) / 1,
+        usd: totalprice,
+        uzs: totalpriceuzs,
       });
-      count += 1;
+
+      if (count === currentMonth) {
+        const discounts = roundToUsd(
+          reduceData(dailysales, "discount", "discount")
+        );
+        const discountsuzs = roundToUzs(
+          reduceData(dailysales, "discount", "discountuzs")
+        );
+
+        const incomingprice = roundToUzs(
+          reduceIncoming("price", "incomingprice")
+        );
+        const incomingpriceuzs = roundToUzs(
+          reduceIncoming("price", "incomingpriceuzs")
+        );
+
+        monthProfit.uzs = roundToUzs(
+          totalpriceuzs - incomingpriceuzs - discountsuzs
+        );
+        monthProfit.usd = roundToUsd(totalprice - incomingprice - discounts);
+      }
+      count++;
     }
 
-    // Oylik soffoyda chiqarish
-    const monthProfit = {
-      usd: 0,
-      uzs: 0,
-    };
-
-    const dailysales = await DailySaleConnector.find({
-      market,
-      createdAt: {
-        $gte: new Date(new Date().setDate(1)).toISOString(),
-        $lte: new Date().toISOString(),
-      },
-    })
-      .select('discount products')
-      .populate({
-        path: 'products',
-        select: 'pieces price totalprice totalpriceuzs',
-        populate: {
-          path: 'price',
-          select: 'incomingprice incomingpriceuzs',
-        },
-      })
-      .populate('discount', 'discount discountuzs');
-
-    const roundUzs = (price) => Math.round(Number(price) * 1) / 1;
-    const roundUsd = (price) => Math.round(Number(price) * 1000) / 1000;
-
-    dailysales.map((sale) => {
-      const totalprice = sale.products.reduce((prev, { totalprice }) => {
-        return prev + (totalprice || 0);
-      }, 0);
-      const totalpriceuzs = sale.products.reduce((prev, { totalpriceuzs }) => {
-        return prev + (totalpriceuzs || 0);
-      }, 0);
-      const incomingtotal = sale.products.reduce((prev, product) => {
-        return prev + (product.price?.incomingprice || 0) * product.pieces;
-      }, 0);
-      const incomingtotaluzs = sale.products.reduce((prev, product) => {
-        return prev + (product.price?.incomingpriceuzs || 0) * product.pieces;
-      }, 0);
-
-      monthProfit.usd += roundUsd(totalprice - incomingtotal);
-      monthProfit.uzs += roundUzs(totalpriceuzs - incomingtotaluzs);
-    });
-
-    const discounts = await Discount.find({
-      discount: { $ne: 0 },
-      market,
-      createdAt: {
-        $gte: new Date(new Date().setDate(1)).toISOString(),
-        $lte: new Date().toISOString(),
-      },
-    });
-    const discounttotal = discounts.reduce(
-      (prev, { discount }) => prev + discount,
-      0
-    );
-    const discounttotaluzs = discounts.reduce(
-      (prev, { discountuzs }) => prev + discountuzs,
-      0
-    );
-
-    monthProfit.usd = roundUsd(monthProfit.usd - discounttotal);
-    monthProfit.uzs = roundUzs(monthProfit.uzs - discounttotaluzs);
-
     // Xarajat chiqarish bir oylik
-    const monthExpense = {
-      usd: 0,
-      uzs: 0,
-    };
 
     const expenses = await Expense.find({
       market,
@@ -191,15 +180,12 @@ module.exports.getSalesDataByMonth = async (req, res) => {
         $gte: new Date(new Date().setDate(1)).toISOString(),
         $lte: new Date().toISOString(),
       },
-    }).select('sum sumuzs');
+    }).select("sum sumuzs");
 
-    expenses.map((expense) => {
-      monthExpense.usd += expense.sum;
-      monthExpense.uzs += expense.sumuzs;
-    });
-
-    monthExpense.usd = roundUsd(monthExpense.usd);
-    monthExpense.uzs = roundUzs(monthExpense.uzs);
+    const monthExpense = {
+      usd: roundToUsd(reducer(expenses, "sum")),
+      uzs: roundToUzs(reducer(expenses, "sumuzs")),
+    };
 
     res.status(200).json({
       sales,
@@ -208,6 +194,6 @@ module.exports.getSalesDataByMonth = async (req, res) => {
       monthExpense,
     });
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };

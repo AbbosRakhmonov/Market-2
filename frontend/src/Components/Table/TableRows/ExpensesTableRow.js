@@ -33,7 +33,7 @@ export const ExpensesTableRow = ({
                         {new Date(expense.createdAt).toLocaleDateString()}
                     </td>
                     <td className='text-right td font-medium'>
-                        {currency === 'USD' ? expense.sum : expense.sumuzs}{' '}
+                        {currency === 'USD' ? expense.sum: expense.sumuzs.toLocaleString('ru-Ru')}{' '}
                         <span>{currency}</span>
                     </td>
                     <td className='text-left td'>{expense.comment}</td>

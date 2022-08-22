@@ -51,7 +51,7 @@ import BarcodeReader from 'react-barcode-reader'
 import {clearErrorGetBarcode, getBarcode} from '../../Barcode/barcodeSlice.js'
 import {getCurrency} from '../../Currency/currencySlice.js'
 import {useTranslation} from 'react-i18next'
-import {map,filter} from 'lodash'
+import {map, filter} from 'lodash'
 
 function Products() {
     const {t} = useTranslation(['common'])
@@ -152,6 +152,7 @@ function Products() {
     ]
     const exportHeader = [
         t('№'),
+        t('Shtrix kodi'),
         t('Mahsulot kategoriyasi'),
         t('Mahsulot kodi'),
         t('Mahsulot nomi'),
@@ -162,7 +163,9 @@ function Products() {
         t('Sotish narxi USD'),
         t('Sotish narxi UZS'),
     ]
+
     const importHeaders = [
+        {name: 'Shtrix kodi', value: 'barcode'},
         {name: 'Kategoriyasi', value: 'category'},
         {name: 'Kodi', value: 'code'},
         {name: 'Nomi', value: 'name'},
@@ -242,7 +245,7 @@ function Products() {
             setData(products)
             setFilteredDataTotal(total)
         } else {
-            const filteredProducts = filter(products,(product) => {
+            const filteredProducts = filter(products, (product) => {
                 return product.productdata.code.includes(valForSearch)
             })
             setData(filteredProducts)
@@ -260,7 +263,7 @@ function Products() {
             setData(products)
             setFilteredDataTotal(total)
         } else {
-            const filteredProducts = filter(products,(product) => {
+            const filteredProducts = filter(products, (product) => {
                 return product.productdata?.barcode.includes(valForSearch)
             })
             setData(filteredProducts)
@@ -278,7 +281,7 @@ function Products() {
             setData(products)
             setFilteredDataTotal(total)
         } else {
-            const filteredProducts = filter(products,(product) => {
+            const filteredProducts = filter(products, (product) => {
                 return product.category.code.includes(valForSearch)
             })
             setData(filteredProducts)
@@ -295,7 +298,7 @@ function Products() {
             setData(products)
             setFilteredDataTotal(total)
         } else {
-            const filteredProducts = filter(products,(product) => {
+            const filteredProducts = filter(products, (product) => {
                 return product.productdata.name
                     .toLowerCase()
                     .includes(valForSearch)
@@ -539,7 +542,7 @@ function Products() {
     }
     const handleClickApproveToImport = () => {
         const oldKeys = Object.keys(excelData[0])
-        const newData = map(createdData,(item) => {
+        const newData = map(createdData, (item) => {
             const newItem = {}
             for (const key in item) {
                 newItem[key] = item[key]
@@ -759,7 +762,7 @@ function Products() {
     }, [currentProduct, currencyType])
     useEffect(() => {
         setUnitOptions(
-            map(units,(unit) => ({
+            map(units, (unit) => ({
                 value: unit._id,
                 label: unit.name,
             }))
@@ -767,7 +770,7 @@ function Products() {
     }, [units])
     useEffect(() => {
         setCategoryOptions(
-            map(allcategories,(category) => ({
+            map(allcategories, (category) => ({
                 value: category._id,
                 label:
                     category.code +

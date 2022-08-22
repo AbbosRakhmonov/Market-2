@@ -8,10 +8,11 @@ import NavbarLink from './NavbarLink'
 import {logOut} from '../../Pages/Login/loginSlice'
 import {useDispatch, useSelector} from 'react-redux'
 import Language from './../Languages/Language'
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next'
 import {map} from 'lodash'
+
 function Navbar() {
-    const { t } = useTranslation(['common'])
+    const {t} = useTranslation(['common'])
 
     const dispatch = useDispatch()
     const {user} = useSelector((state) => state.login)
@@ -140,7 +141,7 @@ function Navbar() {
                 </div>
                 <div
                     className={`navbar-footer transition-all ease-in-out duration-300 text-center flex flex-col justify-center gap-[10px] bg-white-400 border-t-[2px] border-t-black-100 ${navbarExpended
-                        ? 'h-0 opacity-0'
+                        ? `h-0 opacity-0 hidden`
                         : 'p-[10px] opacity-100'
                     }`}
                 >
@@ -165,7 +166,7 @@ function Navbar() {
             {isAvatarMenuOpen && (
                 <div
                     className='avatar-config-menu absolute z-[90] w-max left-[17rem] top-[1.375rem] bg-white-700 backdrop-blur-[8px] py-[10px] rounded-[8px]'>
-                    {map(profileList,(item, index) =>
+                    {map(profileList, (item, index) =>
                         item.path ? (
                             <ProfileMenuLink
                                 path={item.path}

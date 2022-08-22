@@ -26,6 +26,7 @@ import {ExpensesTableRow} from './TableRows/ExpensesTableRow'
 import {BarcodeTableRow} from './TableRows/BarcodeTableRow.js'
 import {AdminProductTableRow} from './TableRows/AdminProductTableRow'
 import {ReturnProductsTableRow} from './TableRows/ReturnProductsTableRow.js'
+import {GeneralReportTableRow} from './TableRows/GeneralReportTableRow.js'
 
 function Table({
     page,
@@ -283,6 +284,7 @@ function Table({
                         currentPage={currentPage}
                         countPage={countPage}
                         data={data}
+                        Print={Print}
                     />
                 )
             case 'cash':
@@ -326,7 +328,12 @@ function Table({
                 )
             case 'debts':
                 return (
-                    <DebtsTableRow data={data} currency={currency} Pay={Pay} />
+                    <DebtsTableRow
+                        data={data}
+                        currency={currency}
+                        Pay={Pay}
+                        Print={Print}
+                    />
                 )
             case 'discounts':
                 return (
@@ -367,6 +374,8 @@ function Table({
                         currency={currency}
                     />
                 )
+            case 'generalreport':
+                return <GeneralReportTableRow data={data} currency={currency} />
             default:
                 return ''
         }

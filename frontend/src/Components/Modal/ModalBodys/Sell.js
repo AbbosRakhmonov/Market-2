@@ -103,9 +103,9 @@ function Sell({ product, changeProduct, approveFunction, toggleModal }) {
                                     <span>
                                         {showIncomingPrice
                                             ? currencyType === 'UZS'
-                                                ? product.incomingpriceuzs.toLocaleString() +
+                                                ? product.incomingpriceuzs.toLocaleString('ru-Ru') +
                                                 ' UZS'
-                                                : product.incomingprice.toLocaleString() +
+                                                : product.incomingprice.toLocaleString('ru-Ru') +
                                                 ' UZS'
                                             : ''}
                                     </span>

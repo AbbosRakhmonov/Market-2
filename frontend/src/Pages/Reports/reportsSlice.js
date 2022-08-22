@@ -63,7 +63,7 @@ export const getDebts = createAsyncThunk(
 )
 
 export const getDiscounts = createAsyncThunk(
-    'reports/getDebts',
+    'reports/getDsicounts',
     async (body, {rejectWithValue}) => {
         try {
             const {data} = await Api.post('/reports/getdiscountsreport', body)
@@ -122,17 +122,69 @@ export const getMonthlyReport = createAsyncThunk(
     }
 )
 
+export const getProducts = createAsyncThunk(
+    'reports/getProducts',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post('/reports/productsreport', body)
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
+export const getIncomings = createAsyncThunk(
+    'reports/getIncomings',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post('/reports/incomingsreport', body)
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
+export const getReportsForTotal = createAsyncThunk(
+    'reports/getReportsForTotal',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post('/reports/getreports', body)
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
+export const getSaleProducts = createAsyncThunk(
+    'reports/getSaleProducts',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post('/reports/getsaleproducts', body)
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
 const reportSlice = createSlice({
     name: 'cash',
     initialState: {
         reports: null,
+        productreport: null,
+        incomingreport: null,
+        totalreports: null,
+        saleproductsreport: null,
         loading: false,
         errorReports: null,
         datas: [],
         count: 0,
         monthlyReport: null,
         monthlyReportLoading: true,
-        monthlyReportError: null
+        monthlyReportError: null,
     },
     reducers: {
         clearErrorReports: (state) => {
@@ -141,7 +193,7 @@ const reportSlice = createSlice({
         clearDatas: (state) => {
             state.datas = []
             state.count = 0
-        }
+        },
     },
     extraReducers: {
         [getReports.pending]: (state) => {
@@ -259,8 +311,53 @@ const reportSlice = createSlice({
         [getMonthlyReport.fulfilled]: (state, {payload}) => {
             state.monthlyReportLoading = false
             state.monthlyReport = payload
-        }
-    }
+        },
+        [getProducts.pending]: (state) => {
+            state.loading = true
+        },
+        [getProducts.fulfilled]: (state, {payload}) => {
+            state.loading = false
+            state.productreport = payload
+        },
+        [getProducts.rejected]: (state, {payload}) => {
+            state.loading = false
+            universalToast(`${payload}`, 'error')
+        },
+        [getIncomings.pending]: (state) => {
+            state.loading = true
+        },
+        [getIncomings.fulfilled]: (state, {payload}) => {
+            state.loading = false
+            state.incomingreport = payload
+        },
+        [getIncomings.rejected]: (state, {payload}) => {
+            state.loading = false
+            universalToast(`${payload}`, 'error')
+        },
+        [getReportsForTotal.pending]: (state) => {
+            state.loading = true
+        },
+        [getReportsForTotal.fulfilled]: (state, {payload}) => {
+            state.loading = false
+            state.totalreports = payload
+        },
+        [getReportsForTotal.rejected]: (state, {payload}) => {
+            state.loading = false
+            state.errorReports = payload
+            universalToast(payload, 'error')
+        },
+        [getSaleProducts.pending]: (state) => {
+            state.loading = true
+        },
+        [getSaleProducts.fulfilled]: (state, {payload}) => {
+            state.loading = false
+            state.saleproductsreport = payload
+        },
+        [getSaleProducts.rejected]: (state, {payload}) => {
+            state.loading = false
+            universalToast(payload, 'error')
+        },
+    },
 })
 
 export const {clearErrorReports, clearDatas} = reportSlice.actions

@@ -20,6 +20,10 @@ router.post('/getproducts', auth, (req, res) => {
   require('./products').getTransferProducts(req, res);
 });
 
+router.post('/getfilials', auth, (req, res) => {
+  require('./products').getFilials(req, res);
+});
+
 router.delete('/delete', auth, (req, res) => {
   require('./products').deleteTransfer(req, res);
 });

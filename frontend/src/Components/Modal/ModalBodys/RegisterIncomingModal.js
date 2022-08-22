@@ -66,7 +66,7 @@ const RegisterproductModal = ({
                             />
                         </td>
                         <td className='py-0 td text-error-500 text-right'>
-                            {current(product.oldprice, product.oldpriceuzs)}{' '}
+                            {current(product.oldprice.toLocaleString('ru-Ru'), product.oldpriceuzs.toLocaleString('ru-Ru'))}{' '}
                             {currency}
                         </td>
                         <td className='py-0 td text-right'>
@@ -104,7 +104,7 @@ const RegisterproductModal = ({
             <div className='pt-[15px]'>
                 <button
                     onClick={approveFunction}
-                    className={'approveBtn bg-black-500 hover:bg-black-700'}
+                    className={'approveBtn bg-primary-800 hover:bg-primary-900'}
                 >
                     {t("Qo'shish")}
                 </button>
