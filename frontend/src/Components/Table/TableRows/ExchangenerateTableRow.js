@@ -20,7 +20,7 @@ export const ExchangenerateTableRow = ({
                         {new Date(exchange.createdAt).toLocaleDateString()}
                     </td>
                     <td className='text-left td'>
-                        1 USD - {exchange.exchangerate} UZS
+                        1 USD - {exchange.exchangerate.toLocaleString('ru-Ru')} UZS
                     </td>
                     <td className='border-r-0 td py-[0.375rem]'>
                         <div className='flex items-center justify-center gap-[0.625rem]'>

@@ -43,14 +43,14 @@ export const RegisterIncomingTableRow = ({
                     </td>
                     <td className='py-0 td text-error-500 text-right'>
                         {currency === 'USD'
-                            ? product.oldprice
-                            : product.oldpriceuzs}{' '}
+                            ? product.oldprice.toLocaleString('ru-Ru')
+                            : product.oldpriceuzs.toLocaleString('ru-Ru')}{' '}
                         {currency}
                     </td>
                     <td className='py-0 td text-right'>
                         {currency === 'USD'
-                            ? product.totalprice
-                            : product.totalpriceuzs}{' '}
+                            ? product.totalprice.toLocaleString('ru-Ru')
+                            : product.totalpriceuzs.toLocaleString('ru-Ru')}{' '}
                         {currency}
                     </td>
                     <td className='py-1 td'>
