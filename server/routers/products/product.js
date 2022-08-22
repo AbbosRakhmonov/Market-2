@@ -253,7 +253,6 @@ module.exports.register = async (req, res) => {
     const product = await ProductData.findOne({
       market,
       code,
-      category,
     });
 
     const productBarcode = await ProductData.findOne({
