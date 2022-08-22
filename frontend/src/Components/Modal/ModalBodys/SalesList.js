@@ -1,28 +1,22 @@
 import React from 'react'
-import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import FieldContainer from './../../FieldContainer/FieldContainer';
-import { useDispatch, useSelector } from 'react-redux';
-import { filter, map } from 'lodash';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { getAllPackmans } from './../../../Pages/Clients/clientsSlice';
-import { getClients } from './../../../Pages/Sale/Slices/registerSellingSlice';
+import {useState, useEffect} from 'react'
+import {useTranslation} from 'react-i18next'
+import FieldContainer from './../../FieldContainer/FieldContainer'
+import {useDispatch, useSelector} from 'react-redux'
+import {filter, map} from 'lodash'
+import {getAllPackmans} from './../../../Pages/Clients/clientsSlice'
+import {getClients} from './../../../Pages/Sale/Slices/registerSellingSlice'
 
-const SalesList = ({
-    approveFunction,
-    toggleModal,
-}) => {
+const SalesList = ({approveFunction, toggleModal}) => {
+    const {t} = useTranslation(['common'])
 
-    const { t } = useTranslation(['common'])
-
-    const location = useLocation()
     const dispatch = useDispatch()
     const [userValue, setUserValue] = useState('')
     const [packmanValue, setPackmanValue] = useState('')
     const [clientValue, setClientValue] = useState('')
     const [optionPackman, setOptionPackman] = useState([])
-    const { packmans } = useSelector((state) => state.clients)
-    const { clients } = useSelector((state) => state.registerSelling)
+    const {packmans} = useSelector((state) => state.clients)
+    const {clients} = useSelector((state) => state.registerSelling)
     const [optionClient, setOptionClient] = useState([])
 
     useEffect(() => {
@@ -36,10 +30,9 @@ const SalesList = ({
                 label: packman.name,
             })),
         ])
-    }, [packmans])
+    }, [packmans, t])
 
     useEffect(() => {
-        console.log(clients);
         setOptionClient([
             {
                 label: t('Barchasi'),
@@ -50,7 +43,7 @@ const SalesList = ({
                 label: client.name,
             })),
         ])
-    }, [clients])
+    }, [clients, t])
 
     const handleChangePackmanValue = (option) => {
         setPackmanValue(option)
@@ -81,7 +74,8 @@ const SalesList = ({
     }
     const handleChangeClientValue = (option) => {
         setClientValue(option)
-        const client = filter(clients,
+        const client = filter(
+            clients,
             (client) => client._id === option.value
         )[0]
         if (client && client.hasOwnProperty('packman')) {
@@ -97,14 +91,8 @@ const SalesList = ({
     }
 
     useEffect(() => {
-        const data = location.state
-        window.history.replaceState({}, document.title)
-    }, [location.state])
-
-    useEffect(() => {
         dispatch(getAllPackmans())
         dispatch(getClients())
-
     }, [dispatch])
 
     return (
@@ -145,13 +133,13 @@ const SalesList = ({
                     className={'approveBtn bg-black-500 hover:bg-black-700'}
                     onClick={toggleModal}
                 >
-                    {t("Bekor qilish")}
+                    {t('Bekor qilish')}
                 </button>
                 <button
                     className={'approveBtn bg-success-500 hover:bg-success-700'}
                     onClick={approveFunction}
                 >
-                    {t("Tasdiqlash")}
+                    {t('Tasdiqlash')}
                 </button>
             </div>
         </div>
