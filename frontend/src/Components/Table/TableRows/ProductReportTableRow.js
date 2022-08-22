@@ -64,7 +64,7 @@ export const ProductReportTableRow = ({
                         }
                     >
                         <span className='pointer-events-none'>
-                            {product?.total} {product?.unit?.name}
+                            {product?.total.toLocaleString('ru-Ru')} {product?.unit?.name}
                         </span>
                     </td>
                     <td className='td text-right'>

@@ -66,7 +66,7 @@ const RegisterproductModal = ({
                             />
                         </td>
                         <td className='py-0 td text-error-500 text-right'>
-                            {current(product.oldprice, product.oldpriceuzs)}{' '}
+                            {current(product.oldprice.toLocaleString('ru-Ru'), product.oldpriceuzs.toLocaleString('ru-Ru'))}{' '}
                             {currency}
                         </td>
                         <td className='py-0 td text-right'>

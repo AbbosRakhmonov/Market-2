@@ -23,7 +23,7 @@ export const InventoryTableRow = ({
                         {product.productdata.code}
                     </td>
                     <td className='td text-left'>{product.productdata.name}</td>
-                    <td className='td text-right'>{product.total}</td>
+                    <td className='td text-right'>{product.total.toLocaleString('ru-Ru')}</td>
                     <td className='py-1 td'>
                         <TableInput
                             disabled={inputDisabled}
