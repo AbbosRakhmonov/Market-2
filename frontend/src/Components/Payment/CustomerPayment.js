@@ -3,7 +3,7 @@ import {DiscountBtn, Payment, SaleBtn} from '../Buttons/SaleBtns.js'
 import {DiscountInput} from '../Inputs/DiscountInputs.js'
 import {useSelector} from 'react-redux'
 import PaymentInput from './PaymentInput/PaymentInput.js'
-import { t } from 'i18next'
+import {t} from 'i18next'
 
 function CustomerPayment({
                              returned,
@@ -35,7 +35,7 @@ function CustomerPayment({
                 return (
                     <PaymentInput
                         value={card}
-                        key={'sale-card'}
+                        key={'sale-card1'}
                         keyInput={type}
                         onChange={onChange}
                         onClose={onClose}
@@ -56,7 +56,7 @@ function CustomerPayment({
             case 'mixed':
                 return [
                     {label: t('Naqd'), key: 'cash', value: cash},
-                    {label: t('Plastik'), key: 'card', value: card},
+                    {label: t('Plastik'), key: 'card2', value: card},
                     {
                         label: t('O`tkazma'),
                         key: 'transfer',
@@ -100,7 +100,7 @@ function CustomerPayment({
                     'text-white-900 text-lg leading-[1.875rem absolute top-[50%] left-[35%] -translate-x-[50%]'
                 }
             >
-                {t("Oynani yopish uchun bu yerga bosing !")}
+                {t('Oynani yopish uchun bu yerga bosing !')}
             </h3>
             <div
                 className={`customerPay-head-style transition-all duration-200 ease-linear h-full overflow-auto absolute top-0 bottom-0 right-0 ${
@@ -114,7 +114,7 @@ function CustomerPayment({
                         <div className='customer-head-icon'>
                             <div className='flex items-center custom-payment-text-style'>
                                 <IoPerson className='mr-[0.75rem]' />
-                                <span>{t("Mijoz")} : </span>
+                                <span>{t('Mijoz')} : </span>
                             </div>
                             <h3 className='text-[0.875rem]'>{client}</h3>
                         </div>
@@ -144,7 +144,7 @@ function CustomerPayment({
                         )}
                         <li className='custom-payment-ul-li'>
                             <span className='custom-payment-text-style'>
-                                {t("Qarzlar")} :{' '}
+                                {t('Qarzlar')} :{' '}
                             </span>
                             <h3 className='text-error-500 text-[1rem]'>
                                 {debt.toLocaleString('ru-Ru')} {currencyType}

@@ -104,7 +104,7 @@ const RegisterproductModal = ({
             <div className='pt-[15px]'>
                 <button
                     onClick={approveFunction}
-                    className={'approveBtn bg-black-500 hover:bg-black-700'}
+                    className={'approveBtn bg-primary-800 hover:bg-primary-900'}
                 >
                     {t("Qo'shish")}
                 </button>
