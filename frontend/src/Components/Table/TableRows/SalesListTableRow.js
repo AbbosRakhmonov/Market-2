@@ -35,8 +35,19 @@ export const SalesListTableRow = ({
                     <td className='text-left td'>
                         {currentPage * countPage + 1 + index}
                     </td>
-                    <td className='text-right td'>
-                        {new Date(saleconnector.createdAt).toLocaleDateString()}
+                    <td className='td '>
+                        <div className='flex justify-between'>
+                            <span>
+                                {new Date(
+                                    saleconnector.createdAt
+                                ).toLocaleDateString()}
+                            </span>
+                            <span>
+                                {new Date(
+                                    saleconnector.createdAt
+                                ).toLocaleTimeString()}{' '}
+                            </span>
+                        </div>
                     </td>
                     <td className='text-left td'>{saleconnector.id}</td>
                     <td className='text-left td'>
