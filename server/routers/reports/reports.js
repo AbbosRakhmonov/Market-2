@@ -687,7 +687,7 @@ module.exports.getBackProducts = async (req, res) => {
 
 module.exports.getProductsReport = async (req, res) => {
   try {
-    const { market, startDate, endDate } = req.body;
+    const { market } = req.body;
 
     const isMarket = await Market.findById(market);
     if (!isMarket) {
@@ -698,10 +698,6 @@ module.exports.getProductsReport = async (req, res) => {
 
     const products = await Product.find({
       market,
-      createdAt: {
-        $gte: startDate,
-        $lte: endDate,
-      },
     })
       .select('total price')
       .populate('price', 'incomingprice incomingpriceuzs');
@@ -764,6 +760,38 @@ module.exports.getIncomingsReport = async (req, res) => {
     });
 
     res.status(200).json(incomingsreport);
+  } catch (error) {
+    res.status(400).json({ error: 'Serverda xatolik yuz berdi...' });
+  }
+};
+
+module.exports.getSalesReport = async (req, res) => {
+  try {
+    const { market, startDate, endDate } = req.body;
+
+    const salesProducts = await SaleProduct.find({
+      market,
+      createdAt: {
+        $gte: startDate,
+        $lte: endDate,
+      },
+    }).select('product pieces');
+
+    let saleproducts = {
+      producttypes: 0,
+      totalpieces: 0,
+    };
+
+    let arr = [];
+    salesProducts.map((product) => {
+      if (!arr.includes(product.product.toString())) {
+        saleproducts.producttypes += 1;
+        arr.push(product.product.toString());
+      }
+      saleproducts.totalpieces += product.pieces;
+    });
+
+    return res.status(200).json(saleproducts);
   } catch (error) {
     res.status(400).json({ error: 'Serverda xatolik yuz berdi...' });
   }

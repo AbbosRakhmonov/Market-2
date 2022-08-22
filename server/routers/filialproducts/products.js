@@ -420,7 +420,7 @@ module.exports.getTransfers = async (req, res) => {
 // Get TransferProducts
 module.exports.getTransferProducts = async (req, res) => {
   try {
-    const { market, filial, currentPage, countPage, startDate, endDate } =
+    const { market, transfer, currentPage, countPage, startDate, endDate } =
       req.body;
 
     const marke = await Market.findById(market);
@@ -439,7 +439,7 @@ module.exports.getTransferProducts = async (req, res) => {
 
     const transferProducts = await TransferProduct.find({
       market,
-      filial,
+      transfer,
       createdAt: {
         $gte: startDate,
         $lte: endDate,

@@ -654,7 +654,7 @@
     }
 
     .report-card {
-        @apply pt-[1.6rem] pb-[1.6rem] border-[2px] border-[rgb(0_180_204)] flex justify-around;
+        @apply pt-[1.6rem] pb-[1.6rem] border-[2px] border-[rgb(0_180_204)] flex justify-around items-center;
     }
 
     .cards-number {
@@ -683,32 +683,31 @@
 
     /* admin Report style start */
 
-
     /* Loader style start */
 
     .loader {
-        @apply w-full h-full flex justify-center items-center absolute z-[10000] top-[0] left-[0]
+        @apply w-full h-full flex justify-center items-center absolute z-[10000] top-[0] left-[0];
     }
     .animation {
-        @apply flex items-center justify-between gap-[15px]
+        @apply flex items-center justify-between gap-[15px];
     }
     .animation-img {
-        @apply relative h-[4.875rem] w-[4.875rem] items-center
+        @apply relative h-[4.875rem] w-[4.875rem] items-center;
     }
     .animation-bg {
-        @apply absolute w-[68.82px] h-[68.83px] rounded-[17px] bg-[rgba(35,187,134,0.47)] rotate-[8.84deg]
+        @apply absolute w-[68.82px] h-[68.83px] rounded-[17px] bg-[rgba(35,187,134,0.47)] rotate-[8.84deg];
     }
     .animation-block {
-        @apply absolute w-[4rem] h-[4rem] left-[3px] top-[2px] p-[15px] bg-[#23BB86] rounded-[15px] flex justify-center items-center
+        @apply absolute w-[4rem] h-[4rem] left-[3px] top-[2px] p-[15px] bg-[#23BB86] rounded-[15px] flex justify-center items-center;
     }
     .animation-icon {
-        @apply w-[2.125rem] h-[2.25rem] p-[9px] bg-[#ffffff] rounded-[12px] flex justify-center items-center
+        @apply w-[2.125rem] h-[2.25rem] p-[9px] bg-[#ffffff] rounded-[12px] flex justify-center items-center;
     }
     .animation-text {
-        @apply flex justify-center items-center font-semibold text-[1.5rem] leading-[1.125rem] text-[#23BB86]
+        @apply flex justify-center items-center font-semibold text-[1.5rem] leading-[1.125rem] text-[#23BB86];
     }
     .animation-name {
-        @apply pr-[8px] border-r-[2.5px]
+        @apply pr-[8px] border-r-[2.5px];
     }
     /* Loader style end */
 }
