@@ -83,10 +83,8 @@ const Reports = () => {
     const [modalBody, setModalBody] = useState(null)
 
     const handleClickPrint = () => {
-        setTimeout(() => {
-            setModalVisible(true)
-            setModalBody('totalReport')
-        }, 500)
+        setModalVisible(true)
+        setModalBody('totalReport')
     }
 
     const toggleClickPrint = () => {
