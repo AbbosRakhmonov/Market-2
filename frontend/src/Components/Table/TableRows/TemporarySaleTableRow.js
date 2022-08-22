@@ -24,8 +24,8 @@ export const TemporarySaleTableRow = ({data, Delete, currency, Print}) => {
                     </td>
                     <td className='text-success-500 td text-right'>
                         {currency === 'USD'
-                            ? temporary.totalPrice
-                            : temporary.totalPriceUzs}
+                            ? temporary.totalPrice.toLocaleString('ru-RU')
+                            : temporary.totalPriceUzs.toLocaleString('ru-RU')}
                         {currency}
                     </td>
                     <td className='td text-right'>
