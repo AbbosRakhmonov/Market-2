@@ -462,3 +462,34 @@ module.exports.getTransferProducts = async (req, res) => {
     res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
+
+// Get Filials List
+module.exports.getFilials = async (req, res) => {
+  try {
+    const { market, currentPage, countPage, search } = req.body;
+
+    const marke = await Market.findById(market);
+    if (!marke) {
+      return res
+        .status(404)
+        .json({
+          error:
+            "Diqqat! Foydalanuvchi ro'yxatga olinayotgan do'kon dasturda ro'yxatga olinmagan.",
+        });
+    }
+
+    const name = new RegExp('.*' + search ? search.name : '' + '.*', 'i');
+
+    const filials = await Market.find({
+      mainmarket: market,
+      name: name,
+    }).select('director image name phone1 createdAt');
+
+    res.status(201).json({
+      count: filials.length,
+      filials: filials.splice(currentPage * countPage, countPage),
+    });
+  } catch (error) {
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+  }
+};
