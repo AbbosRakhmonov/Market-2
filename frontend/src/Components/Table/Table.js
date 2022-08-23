@@ -27,6 +27,7 @@ import {BarcodeTableRow} from './TableRows/BarcodeTableRow.js'
 import {AdminProductTableRow} from './TableRows/AdminProductTableRow'
 import {ReturnProductsTableRow} from './TableRows/ReturnProductsTableRow.js'
 import {GeneralReportTableRow} from './TableRows/GeneralReportTableRow.js'
+import {RegisterSaleTableFooter} from './TableFooters/RegisterSaleTableFooter.js'
 
 function Table({
     page,
@@ -59,7 +60,8 @@ function Table({
     onClickTableRow,
     linkToSellerReports,
     sellers,
-    addPlus
+    addPlus,
+    footer,
 }) {
     const checkRows = () => {
         switch (page) {
@@ -380,12 +382,27 @@ function Table({
                 return ''
         }
     }
+
+    const checkFooters = () => {
+        switch (footer) {
+            case 'registersale':
+                return (
+                    <RegisterSaleTableFooter
+                        saleproducts={data}
+                        currency={currency}
+                    />
+                )
+            default:
+                return ''
+        }
+    }
     return (
         <table className='overflow-x-auto w-full'>
             <thead className='rounded-t-lg'>
                 {<Thead headers={headers} Sort={Sort} sortItem={sortItem} />}
             </thead>
             <tbody>{checkRows()}</tbody>
+            <tfoot>{checkFooters()}</tfoot>
         </table>
     )
 }

@@ -729,7 +729,7 @@ const RegisterSelling = () => {
                       (obj) => obj.productdata.barcode === option.barcode
                   )
                 : allProducts.find((obj) => obj._id === option.value)
-            setCurrentProduct({
+            const currentProduct = {
                 total: product.total,
                 product: {
                     _id: product._id,
@@ -744,9 +744,19 @@ const RegisterSelling = () => {
                 incomingpriceuzs: product.price.incomingpriceuzs,
                 unitprice: product.price.sellingprice,
                 unitpriceuzs: product.price.sellingpriceuzs,
-            })
-            setModalVisible(true)
-            setModalBody('sell')
+            }
+            if (
+                (currencyType === 'USD' &&
+                    currentProduct.incomingprice <= currentProduct.unitprice) ||
+                (currencyType === 'UZS' &&
+                    currentProduct.incomingpriceuzs <=
+                        currentProduct.unitpriceuzs)
+            ) {
+                setTableProducts([...tableProducts, currentProduct])
+                setSelectedProduct('')
+            } else {
+                warningLessSellPayment()
+            }
         } else {
             universalToast(t("Maxsulot ro'yxatda mavjud !"), 'error')
         }
@@ -1283,6 +1293,7 @@ const RegisterSelling = () => {
                         currency={currencyType}
                         Delete={handleDelete}
                         changeHandler={handleChange}
+                        footer={'registersale'}
                     />
                 )}
             </div>

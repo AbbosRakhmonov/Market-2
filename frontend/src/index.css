@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap');
 @import url('//db.onlinewebfonts.com/c/7f84c82115f70a63b5307518164b53dc?family=A2+CWM+WEB+3');
-
+@import url('http://fonts.cdnfonts.com/css/fake-receipt');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -868,7 +868,7 @@ input[type='number'] {
 }
 
 .reciept {
-    font-family: Monaco;
+    font-family: 'Fake Receipt', sans-serif;
 }
 
 @keyframes spin {
