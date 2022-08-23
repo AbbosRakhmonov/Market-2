@@ -289,10 +289,18 @@ module.exports.getSales = async (req, res) => {
         select: 'name',
         match: { name: client },
       })
-      .populate(
-        'products',
-        'totalprice totalpriceuzs pieces price unitprice unitpriceuzs'
-      );
+      .populate({
+        path: 'products',
+        select: 'totalprice totalpriceuzs pieces price unitprice unitpriceuzs',
+        populate: {
+          path: 'product',
+          select: 'productdata',
+          populate: {
+            path: 'productdata',
+            select: 'name code',
+          },
+        },
+      });
 
     let filter = saleconnector.filter((sale) => {
       return sale.saleconnector !== null && sale.client !== null;
