@@ -118,7 +118,7 @@ const SalesList = ({approveFunction, toggleModal}) => {
                         onChange={handleChangeClientValue}
                     />
                     <FieldContainer
-                        placeholder={t('Amaldagi xaridor')}
+                        placeholder={t('Xaridor yaratish')}
                         value={userValue}
                         onChange={handleChangeUserValue}
                     />

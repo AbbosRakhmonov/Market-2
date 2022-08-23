@@ -123,15 +123,16 @@ module.exports.getSalesDataByMonth = async (req, res) => {
           0
         );
 
-      const reduceIncoming = (propertyFirst, propertySecond) =>
+      const reduceIncoming = (property) =>
         reduce(
           dailysales,
           (summ, dailysale) =>
             summ +
-            reducerDuobleProperty(
+            reduce(
               dailysale.products,
-              propertyFirst,
-              propertySecond
+              (summ, product) =>
+                summ + product.price[property] * product.pieces,
+              0
             ),
           0
         );
@@ -157,12 +158,8 @@ module.exports.getSalesDataByMonth = async (req, res) => {
           reduceData(dailysales, "discount", "discountuzs")
         );
 
-        const incomingprice = roundToUzs(
-          reduceIncoming("price", "incomingprice")
-        );
-        const incomingpriceuzs = roundToUzs(
-          reduceIncoming("price", "incomingpriceuzs")
-        );
+        const incomingprice = roundToUzs(reduceIncoming("incomingprice"));
+        const incomingpriceuzs = roundToUzs(reduceIncoming("incomingpriceuzs"));
 
         monthProfit.uzs = roundToUzs(
           totalpriceuzs - incomingpriceuzs - discountsuzs
