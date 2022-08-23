@@ -24,6 +24,7 @@ import UniversalModal from '../../../Components/Modal/UniversalModal.js'
 import {UsdToUzs, UzsToUsd} from '../../../App/globalFunctions.js'
 import {
     universalToast,
+    warningCountSellPayment,
     warningCurrencyRate,
     warningLessSellPayment,
     warningMoreDiscount,
@@ -45,9 +46,8 @@ const RegisterSelling = () => {
     const {user} = useSelector((state) => state.login)
     const {currencyType, currency} = useSelector((state) => state.currency)
     const {allcategories, loading} = useSelector((state) => state.category)
-    const {allProducts, clients, loadingMakePayment} = useSelector(
-        (state) => state.registerSelling
-    )
+    const {allProducts, clients, loadingMakePayment, lastPayments} =
+        useSelector((state) => state.registerSelling)
     const {packmans} = useSelector((state) => state.clients)
     const [filteredProducts, setFilteredProducts] = useState([])
     const [selectedProduct, setSelectedProduct] = useState('')
@@ -105,6 +105,7 @@ const RegisterSelling = () => {
         {title: t('Soni')},
         {title: t('Narxi')},
         {title: t('Jami'), styles: 'w-[10rem]'},
+        {title: ''},
         {title: ''},
     ]
     const headerReturn = [
@@ -729,6 +730,7 @@ const RegisterSelling = () => {
                       (obj) => obj.productdata.barcode === option.barcode
                   )
                 : allProducts.find((obj) => obj._id === option.value)
+            if (product.total === 0) return warningCountSellPayment()
             const currentProduct = {
                 total: product.total,
                 product: {
@@ -1029,7 +1031,7 @@ const RegisterSelling = () => {
                 }))
             )
         }
-    }, [activeCategory, allProducts])
+    }, [activeCategory, allProducts, lastPayments])
     useEffect(() => {
         dispatch(getAllPackmans())
         dispatch(getClients())

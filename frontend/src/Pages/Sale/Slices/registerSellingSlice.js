@@ -1,6 +1,9 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import Api from '../../../Config/Api.js'
-import {successSavedTemporary, universalToast} from '../../../Components/ToastMessages/ToastMessages.js'
+import {
+    successSavedTemporary,
+    universalToast,
+} from '../../../Components/ToastMessages/ToastMessages.js'
 
 export const getAllProducts = createAsyncThunk(
     'registerSelling/getAllProducts',
@@ -93,7 +96,7 @@ const registerSellingSlice = createSlice({
         errorGetAllProducts: null,
         errorGetUsers: null,
         errorMakePayment: null,
-        errorSavePayment: null
+        errorSavePayment: null,
     },
     reducers: {},
     extraReducers: {
@@ -174,8 +177,8 @@ const registerSellingSlice = createSlice({
             state.loadingMakePayment = false
             state.errorMakePayment = payload
             state.errorMakePayment = null
-        }
-    }
+        },
+    },
 })
 
 export default registerSellingSlice.reducer

@@ -1,7 +1,5 @@
 import React from 'react'
-import TableBtn from '../../Buttons/TableBtn'
-import TableInput from '../../Inputs/TableInput'
-import {map, reduce} from 'lodash'
+import {reduce} from 'lodash'
 export const RegisterSaleTableFooter = ({saleproducts, currency}) => {
     const totalprice = reduce(
         saleproducts,
@@ -21,7 +19,10 @@ export const RegisterSaleTableFooter = ({saleproducts, currency}) => {
                     Jami:
                 </th>
                 <th colSpan={2}>
-                    {currency === 'UZS' ? totalpriceuzs : totalprice} {currency}
+                    {currency === 'UZS'
+                        ? totalpriceuzs.toLocaleString('ru-RU')
+                        : totalprice.toLocaleString('ru-RU')}{' '}
+                    {currency}
                 </th>
             </tr>
         </>
