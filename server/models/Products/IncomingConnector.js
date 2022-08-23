@@ -3,6 +3,11 @@ const Joi = require('joi');
 
 const incomingconnector = new Schema(
   {
+    id: { type: String },
+    payments: [{ type: Schema.Types.ObjectId, ref: 'IncomingPayment' }],
+    incomingdailyconnectors: [
+      { type: Schema.Types.ObjectId, ref: 'IncomingDailyConnector' },
+    ],
     total: { type: Number },
     totaluzs: { type: Number },
     supplier: { type: Schema.Types.ObjectId, ref: 'Supplier' },
