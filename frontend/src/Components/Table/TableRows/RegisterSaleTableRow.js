@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import TableBtn from '../../Buttons/TableBtn'
 import TableInput from '../../Inputs/TableInput'
 import {map} from 'lodash'
@@ -9,15 +9,15 @@ export const RegisterSaleTableRow = ({
     changeHandler,
     currency,
 }) => {
-    const [showIncomingPrice, setShowIncomingPrice] = useState([
-        map(data, () => false),
-    ])
+    const [showIncomingPrice, setShowIncomingPrice] = useState([])
     const changeShow = (i) => {
         const price = [...showIncomingPrice]
         price[i] = !price[i]
         setShowIncomingPrice([...price])
     }
-
+    useEffect(() => {
+        setShowIncomingPrice(map(data, () => false))
+    }, [data])
     return (
         <>
             {map(data, (product, index) => (
