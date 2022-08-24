@@ -3,8 +3,8 @@ const { Schema, model, Types } = require('mongoose');
 
 const payment = new Schema(
   {
-    totalprice: { type: Number, required: true },
-    totalpriceuzs: { type: Number, required: true },
+    totalprice: { type: Number },
+    totalpriceuzs: { type: Number },
     products: [{ type: Schema.Types.ObjectId, ref: 'Product', required: true }],
     payment: { type: Number, required: true },
     paymentuzs: { type: Number, required: true },
