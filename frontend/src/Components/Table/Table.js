@@ -62,6 +62,9 @@ function Table({
     sellers,
     addPlus,
     footer,
+    increment,
+    decrement,
+    lowUnitpriceProducts
 }) {
     const checkRows = () => {
         switch (page) {
@@ -192,6 +195,9 @@ function Table({
                         currency={currency}
                         Delete={Delete}
                         changeHandler={changeHandler}
+                        decrement={decrement}
+                        increment={increment}
+                        lowUnitpriceProducts={lowUnitpriceProducts}
                     />
                 )
             case 'temporaryincoming':

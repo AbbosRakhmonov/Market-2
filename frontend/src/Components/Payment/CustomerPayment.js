@@ -6,31 +6,30 @@ import PaymentInput from './PaymentInput/PaymentInput.js'
 import {t} from 'i18next'
 
 function CustomerPayment({
-    returned,
-    active,
-    togglePaymentModal,
-    type = 'cash',
-    cash = '',
-    card = '',
-    transfer = '',
-    discount,
-    hasDiscount,
-    debt,
-    allPayment,
-    paid = 0,
-    client = '',
-    onChange,
-    onClose,
-    changePaymentType,
-    discountSelectOption,
-    handleClickDiscountBtn,
-    handleChangeDiscountSelectOption,
-    handleChangeDiscount,
-    handleClickPay,
-    saleComment,
-    changeComment,
-    onDoubleClick,
-}) {
+                             returned,
+                             active,
+                             togglePaymentModal,
+                             type = 'cash',
+                             cash = '',
+                             card = '',
+                             transfer = '',
+                             discount,
+                             hasDiscount,
+                             debt,
+                             allPayment,
+                             paid = 0,
+                             client = '',
+                             onChange,
+                             onClose,
+                             changePaymentType,
+                             discountSelectOption,
+                             handleClickDiscountBtn,
+                             handleChangeDiscountSelectOption,
+                             handleChangeDiscount,
+                             handleClickPay,
+                             saleComment,
+                             changeComment,
+                         }) {
     const defineLabel = () => {
         switch (type) {
             case 'card':
@@ -62,8 +61,8 @@ function CustomerPayment({
                     {
                         label: t('O`tkazma'),
                         key: 'transfer',
-                        value: transfer,
-                    },
+                        value: transfer
+                    }
                 ].map((obj) => (
                     <PaymentInput
                         value={obj.value}
@@ -165,7 +164,8 @@ function CustomerPayment({
                         </li>
                     </ul>
                 </div>
-                <div className='bottom-payment w-full flex flex-col gap-[1.25rem] border-t-[1px] border-black-200 pt-[1.25rem]'>
+                <div
+                    className='bottom-payment w-full flex flex-col gap-[1.25rem] border-t-[1px] border-black-200 pt-[1.25rem]'>
                     <div className='custom-paymet-btn'>
                         <SaleBtn
                             text={t(`Naqd`)}
@@ -200,8 +200,7 @@ function CustomerPayment({
                     )}
                     <Payment
                         text={t(`To'lash`)}
-                        onClick={handleClickPay}
-                        onDoubleClick={onDoubleClick}
+                        onDoubleClick={handleClickPay}
                     />
                 </div>
             </div>
