@@ -10,7 +10,6 @@ import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
 import { checkEmptyString } from '../../App/globalFunctions.js'
 import { universalToast } from '../../Components/ToastMessages/ToastMessages.js'
-import { t } from 'i18next'
 import { useTranslation } from 'react-i18next';
 
 const Currency = () => {

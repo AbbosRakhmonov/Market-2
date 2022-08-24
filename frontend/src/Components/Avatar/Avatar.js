@@ -56,12 +56,7 @@ function Avatar({border = false, navbarExpended, director = null}) {
                                 className={'pointer-events-none'}
                             />
                         ) : (
-                            `${
-                                user?.firstname &&
-                                user?.firstname[0]?.toUpperCase() +
-                                user?.lastname &&
-                                user?.lastname[0]?.toUpperCase()
-                            }`
+                            `${user?.firstname[0].toUpperCase() + user?.lastname[0].toUpperCase()}`
                         )}
                     </div>
                     <div
@@ -72,7 +67,7 @@ function Avatar({border = false, navbarExpended, director = null}) {
                         }`}
                     >
                         <h4 className={'text-black-900 font-medium'}>
-                            {user.firstname} {user.lastname}
+                            {user?.firstname[0].toUpperCase() + user?.firstname.slice(1)} {user?.lastname[0].toUpperCase() + user?.lastname.slice(1)}
                         </h4>
                         <p className={'text-black-700 text-xs leading-[14px]'}>
                             {user.type}

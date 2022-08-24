@@ -368,6 +368,7 @@ const RegisterIncoming = () => {
     // sales functions
     const toggleModal = () => {
         setModalVisible(!modalVisible)
+        setSelectProductValue('')
         setTimeout(() => {
             setModalBody('')
         }, 500)

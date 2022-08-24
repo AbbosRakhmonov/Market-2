@@ -4,6 +4,7 @@ const {
 } = require('../../models/MarketAndBranch/Market')
 
 module.exports.register = async (req, res) => {
+    
     try {
         const {error} = validateMarket(req.body)
 

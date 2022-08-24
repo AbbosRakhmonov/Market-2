@@ -12,7 +12,6 @@ import {
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
 import { useTranslation } from 'react-i18next';
-import { useEffect } from 'react'
 
 function LineChart({ arr, label }) {
     const { t } = useTranslation(['common'])

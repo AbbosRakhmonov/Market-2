@@ -27,8 +27,7 @@ function CreateDirector({handleClickFinish, director}) {
                     lastname: directorSurname,
                     fathername: directorFatherName,
                     phone: directorPhone,
-                    password,
-                    'type': 'Director'
+                    password
                 }
                 handleClickFinish(body)
             }

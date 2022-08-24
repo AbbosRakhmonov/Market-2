@@ -51,6 +51,7 @@ const Placeholder = (styles, {isDisabled}) => ({
 const Control = (styles, {isDisabled}) => ({
     ...styles,
     width: '100%',
+    height: '100%',
     padding: '.625rem .58rem',
     borderRadius: '.25rem',
     fontSize: '.875rem',
@@ -79,6 +80,10 @@ const inputStyles = (styles) => ({
 })
 
 const CustomStyle = {
+    container: (styles) => ({
+        ...styles,
+        height: '100%'
+    }),
     control: Control,
     option: Option,
     menu: Menu,

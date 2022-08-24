@@ -1,32 +1,33 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import React, {useCallback, useEffect, useState} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import {useNavigate} from 'react-router-dom'
 import Table from '../../../Components/Table/Table'
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next'
 import {deleteTemporary, getTemporary, setTemporaryRegister} from '../incomingSlice'
-import {map,filter} from 'lodash'
+import {filter, map} from 'lodash'
+import NotFind from '../../../Components/NotFind/NotFind.js'
 
 const SavedIncomings = () => {
-    const { t } = useTranslation(['common'])
+    const {t} = useTranslation(['common'])
     const dispatch = useDispatch()
     let navigate = useNavigate()
 
     const {
-        market: { _id }
+        market: {_id}
     } = useSelector((state) => state.login)
-    const { currencyType } = useSelector((state) => state.currency)
-    const { temporaries } = useSelector((state) => state.incoming)
+    const {currencyType} = useSelector((state) => state.currency)
+    const {temporaries} = useSelector((state) => state.incoming)
 
     const [currentTemporaryData, setCurrentTemporaryData] = useState([])
 
     const changeTemporaryData = useCallback((data) => {
         const count = (arr, key) =>
             arr.reduce((prev, item) => prev + item[key], 0)
-        const temporary = map(data,(temp) => {
+        const temporary = map(data, (temp) => {
             let {
                 _id,
                 createdAt,
-                temporaryincoming: { supplier, incomings }
+                temporaryincoming: {supplier, incomings}
             } = temp
             return {
                 _id,
@@ -114,7 +115,7 @@ const SavedIncomings = () => {
     ]
 
     return (
-        <div className='mainPadding'>
+        <div className='mainPadding grow overflow-auto'>
             {currentTemporaryData.length > 0 ? (
                 <Table
                     page={'temporaryincoming'}
@@ -125,7 +126,7 @@ const SavedIncomings = () => {
                     Delete={removeTemporary}
                 />
             ) : (
-                <div>{t("Saqlangan qabullar mavjud emas")}</div>
+                <NotFind text={t('Saqlangan qabullar mavjud emas')} />
             )}
         </div>
     )
