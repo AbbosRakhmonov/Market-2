@@ -2,25 +2,35 @@ const {
   Incoming,
   validateIncoming,
   validateIncomingAll,
-} = require("../../models/Products/Incoming");
-const { Market } = require("../../models/MarketAndBranch/Market");
-const { ProductType } = require("../../models/Products/ProductType");
-const { Category } = require("../../models/Products/Category");
-const { Unit } = require("../../models/Products/Unit");
-const { Product } = require("../../models/Products//Product");
-const { Brand } = require("../../models/Products/Brand");
+} = require('../../models/Products/Incoming');
+const { Market } = require('../../models/MarketAndBranch/Market');
+const { ProductType } = require('../../models/Products/ProductType');
+const { Category } = require('../../models/Products/Category');
+const { Unit } = require('../../models/Products/Unit');
+const { Product } = require('../../models/Products//Product');
+const { Brand } = require('../../models/Products/Brand');
 const {
   IncomingConnector,
-} = require("../../models/Products/IncomingConnector");
-const { ProductPrice } = require("../../models/Products/ProductPrice");
-const { Supplier } = require("../../models/Supplier/Supplier");
-const router = require("./category_products");
-const { ProductData } = require("../../models/Products/Productdata");
-const ObjectId = require("mongodb").ObjectId;
+} = require('../../models/Products/IncomingConnector');
+const { ProductPrice } = require('../../models/Products/ProductPrice');
+const { Supplier } = require('../../models/Supplier/Supplier');
+const router = require('./category_products');
+const { ProductData } = require('../../models/Products/Productdata');
+const { IncomingPayment } = require('../../models/Products/IncomingPayment');
+const {
+  IncomingDailyConnector,
+} = require('../../models/Products/IncomingDailyConnector');
+const { Debt } = require('../../models/Sales/Debt');
+const ObjectId = require('mongodb').ObjectId;
+
+const convertToUsd = (num) => Math.round(num * 1000) / 1000;
+const convertToUzs = (num) => Math.round(num * 1) / 1;
+
 //Incoming registerall
 module.exports.registerAll = async (req, res) => {
   try {
-    const { market, startDate, endDate, products, user } = req.body;
+    const { market, startDate, endDate, products, payment, user } = req.body;
+
     const all = [];
     for (const newproduct of products) {
       delete newproduct.oldprice;
@@ -133,6 +143,54 @@ module.exports.registerAll = async (req, res) => {
     newIncomingConnector.totaluzs = Math.round(tuzs * 10000) / 10000;
     newIncomingConnector.incoming = p;
 
+    // Qabulda tulanidigan qilish
+
+    const productsId = products.map((product) => {
+      return product.product._id;
+    });
+
+    // Create payment
+    const newPayment = new IncomingPayment({
+      totalprice: convertToUsd(payment.totalprice),
+      totalpriceuzs: convertToUzs(payment.totalpriceuzs),
+      payment: convertToUsd(payment.cash + payment.card + payment.transfer),
+      paymentuzs: convertToUzs(
+        payment.cashuzs + payment.carduzs + payment.transferuzs
+      ),
+      cash: payment.cash,
+      cashuzs: payment.cashuzs,
+      card: payment.card,
+      carduzs: payment.carduzs,
+      transfer: payment.transfer,
+      transferuzs: payment.transferuzs,
+      type: payment.type,
+      comment: payment.comment,
+      products: [...productsId],
+      incomingconnector: newIncomingConnector._id,
+      user,
+      market,
+    });
+    await newPayment.save();
+
+    // Create IncomingDailyConnector
+    const newIncomingDailyConnector = new IncomingDailyConnector({
+      id: 1,
+      incomingconnector: newIncomingConnector._id,
+      payment: newPayment._id,
+      incomings: p,
+      supplier: products[0].supplier._id,
+      market,
+      user,
+    });
+    await newIncomingDailyConnector.save();
+
+    const id = await IncomingConnector.find({ market }).count();
+    newIncomingConnector.id = 1000000 + id;
+
+    newIncomingConnector.incomingdailyconnectors = [
+      newIncomingDailyConnector._id,
+    ];
+    newIncomingConnector.payments = [newPayment._id];
     await newIncomingConnector.save();
 
     const connectors = await IncomingConnector.find({
@@ -143,13 +201,193 @@ module.exports.registerAll = async (req, res) => {
       },
     })
       .sort({ _id: -1 })
-      .select("supplier incoming total createdAt")
-      .populate("supplier", "name")
-      .populate("incoming", "pieces");
+      .select('supplier incoming total createdAt')
+      .populate('supplier', 'name')
+      .populate('incoming', 'pieces');
 
     res.status(201).send(connectors);
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+  }
+};
+
+module.exports.addIncoming = async (req, res) => {
+  try {
+    const { market, payment, products, incomingconnectorid, user } = req.body;
+
+    const marke = await Market.findById(market);
+    if (!marke) {
+      return res.status(400).json({
+        message: "Diqqat! Do'kon ma'lumotlari topilmadi.",
+      });
+    }
+
+    let all = [];
+    for (const newproduct of products) {
+      delete newproduct.oldprice;
+      delete newproduct.oldpriceuzs;
+      const { error } = validateIncomingAll(newproduct);
+      if (error) {
+        return res.status(400).json({
+          error: error.message,
+        });
+      }
+
+      const {
+        product,
+        unit,
+        supplier,
+        pieces,
+        unitprice,
+        totalprice,
+        unitpriceuzs,
+        totalpriceuzs,
+        sellingprice,
+        sellingpriceuzs,
+      } = newproduct;
+
+      const marke = await Market.findById(market);
+
+      if (!marke) {
+        return res.status(400).json({
+          message: "Diqqat! Do'kon ma'lumotlari topilmadi.",
+        });
+      }
+
+      const produc = await Product.findById(product._id);
+
+      if (!produc) {
+        return res.status(400).json({
+          message: `Diqqat! ${product.code} kodli mahsulot avval yaratilmagan.`,
+        });
+      }
+
+      const unitt = await Unit.findById(unit._id);
+
+      if (!unitt) {
+        return res.status(400).json({
+          message: `Diqqat! ${unit.name} o'lchov birligi tizimda mavjud emas.`,
+        });
+      }
+
+      const newProduct = new Incoming({
+        product: product._id,
+        supplier: supplier._id,
+        unit: unit._id,
+        pieces,
+        unitprice: Math.round(unitprice * 10000) / 10000,
+        totalprice: Math.round(totalprice * 10000) / 10000,
+        unitpriceuzs: Math.round(unitpriceuzs * 10000) / 10000,
+        totalpriceuzs: Math.round(totalpriceuzs * 10000) / 10000,
+        unit: unit._id,
+        market,
+        user,
+      });
+
+      all.push(newProduct);
+
+      const newProductPrice = new ProductPrice({
+        product: product._id,
+        incomingprice: Math.round(unitprice * 10000) / 10000,
+        incomingpriceuzs: Math.round(unitpriceuzs * 10000) / 10000,
+        sellingprice: Math.round(sellingprice * 10000) / 10000,
+        sellingpriceuzs: Math.round(sellingpriceuzs * 10000) / 10000,
+        market,
+      });
+
+      await newProductPrice.save();
+
+      produc.price = newProductPrice._id;
+      await produc.save();
+    }
+
+    const incomingconnector = await IncomingConnector.findById(
+      incomingconnectorid
+    );
+
+    let p = [];
+    let t = 0;
+    let tuzs = 0;
+
+    for (const product of all) {
+      await product.save();
+      const produc = await Product.findById(product.product);
+      produc.total = produc.total + product.pieces;
+      await produc.save();
+
+      const productprice = await ProductPrice.findOne({
+        product: produc._id,
+      });
+
+      product.incomingconnector = incomingconnector._id;
+      await product.save();
+      p.push(product._id);
+      t += Math.round(product.totalprice * 10000) / 10000;
+      tuzs += Math.round(product.totalpriceuzs * 10000) / 10000;
+    }
+
+    incomingconnector.total = incomingconnector.total + t;
+    incomingconnector.totaluzs = incomingconnector.totaluzs + tuzs;
+    incomingconnector.incoming = [...incomingconnector.incoming, ...p];
+    await incomingconnector.save();
+
+    const productsId = products.map((product) => {
+      return product.product._id;
+    });
+
+    const newDailyConnector = new IncomingDailyConnector({
+      id: incomingconnector.incomingdailyconnectors.length,
+      comment: payment.comment,
+      incomingconnector: incomingconnector._id,
+      products: p,
+      supplier: products[0].supplier._id,
+      market,
+      user,
+    });
+
+    const newPayment = new IncomingPayment({
+      totalprice: convertToUsd(payment.totalprice),
+      totalpriceuzs: convertToUzs(payment.totalpriceuzs),
+      payment: convertToUsd(payment.cash + payment.card + payment.transfer),
+      paymentuzs: convertToUzs(
+        payment.cashuzs + payment.carduzs + payment.transferuzs
+      ),
+      cash: payment.cash,
+      cashuzs: payment.cashuzs,
+      card: payment.card,
+      carduzs: payment.carduzs,
+      transfer: payment.transfer,
+      transferuzs: payment.transferuzs,
+      type: payment.type,
+      comment: payment.comment,
+      products: [...productsId],
+      incomingconnector: incomingconnector._id,
+      user,
+      market,
+    });
+    await newPayment.save();
+
+    newDailyConnector.payment = newPayment._id;
+    await newDailyConnector.save();
+
+    incomingconnector.payments = [
+      ...incomingconnector.payments,
+      newPayment._id,
+    ];
+    incomingconnector.incomingdailyconnectors = [
+      ...incomingconnector.incomingdailyconnectors,
+      newDailyConnector._id,
+    ];
+    await incomingconnector.save();
+
+    const connectors = await IncomingConnector.findById(incomingconnectorid)
+      .select('supplier incoming total totaluzs createdAt')
+      .populate('supplier', 'name')
+      .populate('incoming', 'pieces');
+
+    return res.status(200).json(connectors);
+  } catch (error) {
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -205,7 +443,7 @@ module.exports.register = async (req, res) => {
 
     res.send(newIncoming);
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -240,9 +478,9 @@ module.exports.update = async (req, res) => {
       await incomingconnector.save();
     } else {
       const incomingconnectors = await IncomingConnector.find().populate({
-        path: "incoming",
+        path: 'incoming',
         match: { _id: product._id },
-        select: "_id",
+        select: '_id',
       });
       incomingconnectors.forEach(async (connector) => {
         if (connector.incoming.length > 0) {
@@ -285,13 +523,13 @@ module.exports.update = async (req, res) => {
       },
     })
       .sort({ _id: -1 })
-      .select("supplier incoming total createdAt")
-      .populate("supplier", "name")
-      .populate("incoming", "pieces");
+      .select('supplier incoming total createdAt')
+      .populate('supplier', 'name')
+      .populate('incoming', 'pieces');
 
     res.status(201).send(connectors);
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -329,9 +567,9 @@ module.exports.delete = async (req, res) => {
       });
     } else {
       const incomingconnectors = await IncomingConnector.find().populate({
-        path: "incoming",
+        path: 'incoming',
         match: { _id: product._id },
-        select: "_id",
+        select: '_id',
       });
       incomingconnectors.forEach(async (connector) => {
         if (connector.incoming.length > 0) {
@@ -367,13 +605,13 @@ module.exports.delete = async (req, res) => {
       },
     })
       .sort({ _id: -1 })
-      .select("supplier incoming total createdAt")
-      .populate("supplier", "name")
-      .populate("incoming", "pieces");
+      .select('supplier incoming total createdAt')
+      .populate('supplier', 'name')
+      .populate('incoming', 'pieces');
 
     res.status(201).send(connectors);
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -390,17 +628,17 @@ module.exports.get = async (req, res) => {
     }
 
     const productcode = new RegExp(
-      ".*" + search ? search.code : "" + ".*",
-      "i"
+      '.*' + search ? search.code : '' + '.*',
+      'i'
     );
     const productname = new RegExp(
-      ".*" + search ? search.name : "" + ".*",
-      "i"
+      '.*' + search ? search.name : '' + '.*',
+      'i'
     );
 
     const suppliername = new RegExp(
-      ".*" + search ? search.supplier : "" + ".*",
-      "i"
+      '.*' + search ? search.supplier : '' + '.*',
+      'i'
     );
 
     const incomings = await Incoming.find({
@@ -411,30 +649,30 @@ module.exports.get = async (req, res) => {
       },
     })
       .sort({ _id: -1 })
-      .select("-isArchive -updatedAt -market -user -__v")
+      .select('-isArchive -updatedAt -market -user -__v')
       .populate({
-        path: "supplier",
+        path: 'supplier',
         match: { name: suppliername },
-        select: "name",
+        select: 'name',
       })
       .populate({
-        path: "product",
-        select: "productdata",
+        path: 'product',
+        select: 'productdata',
         populate: {
-          path: "productdata",
+          path: 'productdata',
           match: { code: productcode, name: productname },
-          select: "name code",
+          select: 'name code',
         },
       })
       .populate({
-        path: "product",
-        select: "price",
+        path: 'product',
+        select: 'price',
         populate: {
-          path: "price",
-          select: "sellingprice sellingpriceuzs",
+          path: 'price',
+          select: 'sellingprice sellingpriceuzs',
         },
       })
-      .populate("unit", "name");
+      .populate('unit', 'name');
 
     let filter = incomings.filter((incoming) => {
       return (
@@ -451,7 +689,7 @@ module.exports.get = async (req, res) => {
       count: count,
     });
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -474,20 +712,20 @@ module.exports.getexcel = async (req, res) => {
       },
     })
       .sort({ _id: -1 })
-      .select("-isArchive -updatedAt -market -user -__v")
-      .populate("supplier", "name")
+      .select('-isArchive -updatedAt -market -user -__v')
+      .populate('supplier', 'name')
       .populate({
-        path: "product",
-        select: "productdata",
+        path: 'product',
+        select: 'productdata',
         populate: {
-          path: "productdata",
-          select: "name code",
+          path: 'productdata',
+          select: 'name code',
         },
       })
-      .populate("unit", "name");
+      .populate('unit', 'name');
     res.status(201).send(incomings);
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -503,13 +741,13 @@ module.exports.getConnectors = async (req, res) => {
       },
     })
       .sort({ _id: -1, supplier: -1 })
-      .select("supplier incoming total totaluzs createdAt")
-      .populate("supplier", "name")
-      .populate("incoming", "pieces");
+      .select('supplier incoming total totaluzs createdAt')
+      .populate('supplier', 'name')
+      .populate('incoming', 'pieces');
 
     res.send(connectors);
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -528,6 +766,6 @@ module.exports.getCount = async (req, res) => {
     const count = await Incoming.find({ market }).count();
     res.status(201).send({ count });
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
