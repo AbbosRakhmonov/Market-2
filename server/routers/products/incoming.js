@@ -391,6 +391,51 @@ module.exports.addIncoming = async (req, res) => {
   }
 };
 
+module.exports.paymentDebt = async (req, res) => {
+  try {
+    const { payment, market, user, incomingconnectorid } = req.body;
+
+    const marke = await Market.findById(market);
+    if (!marke) {
+      return res.status(400).json({
+        message: "Diqqat! Do'kon ma'lumotlari topilmadi.",
+      });
+    }
+
+    const incomingconnector = await IncomingConnector.findById(
+      incomingconnectorid
+    );
+
+    const newPayment = new IncomingPayment({
+      payment: payment.payment,
+      paymentuzs: payment.paymentuzs,
+      cash: payment.cash,
+      cashuzs: payment.cashuzs,
+      card: payment.card,
+      carduzs: payment.carduzs,
+      transfer: payment.transfer,
+      transferuzs: payment.transferuzs,
+      type: payment.type,
+      comment: payment.comment,
+      market,
+      user,
+      incomingconnector: incomingconnector._id,
+    });
+
+    await newPayment.save();
+
+    incomingconnector.payments.push(newPayment._id);
+    await incomingconnector.save();
+
+    const response = await IncomingPayment.findById(newPayment._id).select(
+      '-__v -updatedAt -isArchive'
+    );
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+  }
+};
+
 //Incoming register
 module.exports.register = async (req, res) => {
   try {
@@ -741,11 +786,37 @@ module.exports.getConnectors = async (req, res) => {
       },
     })
       .sort({ _id: -1, supplier: -1 })
-      .select('supplier incoming total totaluzs createdAt')
+      .select('supplier incoming total totaluzs createdAt payments')
       .populate('supplier', 'name')
+      .populate('payments', 'totalprice totalpriceuzs payment paymentuzs')
       .populate('incoming', 'pieces');
 
-    res.send(connectors);
+    const reducer = (arr, key) =>
+      arr.reduce((prev, item) => prev + (item[key] || 0), 0);
+
+    const response = connectors.map((connector) => {
+      const totalpayment = reducer(connector.payments, 'payment');
+      const totalpaymentuzs = reducer(connector.payments, 'paymentuzs');
+      const debt = totalpayment > 0.01 ? connector.total - totalpayment : 0;
+      const debtuzs =
+        totalpaymentuzs > 0.01 ? connector.totaluzs - totalpaymentuzs : 0;
+
+      return {
+        _id: connector._id,
+        supplier: connector.supplier,
+        createdAt: connector.createdAt,
+        incoming: connector.incoming,
+        total: connector.total,
+        totaluzs: connector.totaluzs,
+        totalpayment: totalpayment > 0.01 ? totalpayment : connector.total,
+        totalpaymentuzs:
+          totalpaymentuzs > 0.01 ? totalpaymentuzs : connector.totaluzs,
+        debt,
+        debtuzs,
+      };
+    });
+
+    res.status(200).json(response);
   } catch (error) {
     res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }

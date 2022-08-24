@@ -158,6 +158,10 @@ router.post('/incoming/addincoming', auth, (req, res) => {
   require('./incoming').addIncoming(req, res);
 });
 
+router.post('/incoming/payment', auth, (req, res) => {
+  require('./incoming').paymentDebt(req, res);
+});
+
 router.post('/incoming/register', auth, (req, res) => {
   require('./incoming').register(req, res);
 });
