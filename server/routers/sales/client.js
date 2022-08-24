@@ -278,11 +278,9 @@ module.exports.getClients = async (req, res) => {
     const clients = await Client.find({ market, name: name })
       .sort({ _id: -1 })
       .select("name market packman")
-      .populate({ path: "packman", match: { name: packman } })
-      .populate("packman", "name")
+      .populate({ path: "packman", match: { name: packman }, select: 'name'})
       .skip(currentPage * countPage)
       .limit(countPage);
-
     const filter = clients.filter((item) => {
       return item.packman !== null;
     });

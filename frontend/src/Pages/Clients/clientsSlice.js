@@ -1,11 +1,11 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import Api from '../../Config/Api'
 
 export const getClients = createAsyncThunk(
     'clients/getClients',
-    async (body, {rejectWithValue}) => {
+    async (body, { rejectWithValue }) => {
         try {
-            const {data} = await Api.post('/sales/client/getclients', body)
+            const { data } = await Api.post('/sales/client/getclients', body)
             return data
         } catch (error) {
             return rejectWithValue(error)
@@ -15,9 +15,9 @@ export const getClients = createAsyncThunk(
 
 export const getAllPackmans = createAsyncThunk(
     'packmans/getAllPackmans',
-    async (body, {rejectWithValue}) => {
+    async (body, { rejectWithValue }) => {
         try {
-            const {data} = await Api.post('/sales/packman/getall', body)
+            const { data } = await Api.post('/sales/packman/getall', body)
             return data
         } catch (error) {
             return rejectWithValue(error)
@@ -27,9 +27,9 @@ export const getAllPackmans = createAsyncThunk(
 
 export const addClients = createAsyncThunk(
     'clients/addClients',
-    async (body, {rejectWithValue}) => {
+    async (body, { rejectWithValue }) => {
         try {
-            const {data} = await Api.post('/sales/client/register', body)
+            const { data } = await Api.post('/sales/client/register', body)
             return data
         } catch (error) {
             return rejectWithValue(error)
@@ -39,9 +39,9 @@ export const addClients = createAsyncThunk(
 
 export const updateClients = createAsyncThunk(
     'clients/updateClients',
-    async (body, {rejectWithValue}) => {
+    async (body, { rejectWithValue }) => {
         try {
-            const {data} = await Api.put('/sales/client/update', body)
+            const { data } = await Api.put('/sales/client/update', body)
             return data
         } catch (error) {
             return rejectWithValue(error)
@@ -51,9 +51,9 @@ export const updateClients = createAsyncThunk(
 
 export const deleteClients = createAsyncThunk(
     'clients/deleteClients',
-    async (body, {rejectWithValue}) => {
+    async (body, { rejectWithValue }) => {
         try {
-            const {data} = await Api.delete('/sales/client/delete', {
+            const { data } = await Api.delete('/sales/client/delete', {
                 data: body
             })
             return data
@@ -65,9 +65,9 @@ export const deleteClients = createAsyncThunk(
 
 export const getClientsByFilter = createAsyncThunk(
     'clients/getClientsByFilter',
-    async (body, {rejectWithValue}) => {
+    async (body, { rejectWithValue }) => {
         try {
-            const {data} = await Api.post('/sales/client/getclients', body)
+            const { data } = await Api.post('/sales/client/getclients', body)
             return data
         } catch (error) {
             return rejectWithValue(error)
@@ -80,8 +80,10 @@ const clientsSlice = createSlice({
     initialState: {
         packmans: [],
         clients: [],
+        deliverer: [],
         total: 0,
         searchedClients: [],
+        searchedDeliverar: [],
         totalSearched: 0,
         loading: false,
         errorClients: null,
@@ -105,13 +107,17 @@ const clientsSlice = createSlice({
         clearSearchedClients: (state) => {
             state.searchedClients = []
             state.totalSearched = 0
+        },
+        clearSearchedDeliverer: (state) => {
+            state.searchedDeliverar = []
+            state.totalSearched = 0
         }
     },
     extraReducers: {
         [getClients.pending]: (state) => {
             state.loading = true
         },
-        [getClients.fulfilled]: (state, {payload: {clients, count}}) => {
+        [getClients.fulfilled]: (state, { payload: { clients, count } }) => {
             state.loading = false
             state.searchedClients.length
                 ? (state.searchedClients = clients)
@@ -123,15 +129,15 @@ const clientsSlice = createSlice({
         [getAllPackmans.pending]: (state) => {
             state.loading = true
         },
-        [getAllPackmans.fulfilled]: (state, {payload}) => {
+        [getAllPackmans.fulfilled]: (state, { payload }) => {
             state.loading = false
             state.packmans = payload
         },
-        [getAllPackmans.rejected]: (state, {payload}) => {
+        [getAllPackmans.rejected]: (state, { payload }) => {
             state.loading = false
             state.errorClients = payload
         },
-        [getClients.rejected]: (state, {payload}) => {
+        [getClients.rejected]: (state, { payload }) => {
             state.loading = false
             state.errorClients = payload
         },
@@ -140,20 +146,20 @@ const clientsSlice = createSlice({
         },
         [getClientsByFilter.fulfilled]: (
             state,
-            {payload: {clients, count}}
+            { payload: { clients, count } }
         ) => {
             state.loading = false
             state.searchedClients = clients
             state.totalSearched = count
         },
-        [getClientsByFilter.rejected]: (state, {payload}) => {
+        [getClientsByFilter.rejected]: (state, { payload }) => {
             state.loading = false
             state.errorClients = payload
         },
         [addClients.pending]: (state) => {
             state.loading = true
         },
-        [addClients.fulfilled]: (state, {payload: {clients, count}}) => {
+        [addClients.fulfilled]: (state, { payload: { clients, count } }) => {
             state.loading = false
             state.successAddClients = true
             state.searchedClients.length
@@ -163,14 +169,14 @@ const clientsSlice = createSlice({
                 ? (state.totalSearcheds = count)
                 : (state.total = count)
         },
-        [addClients.rejected]: (state, {payload}) => {
+        [addClients.rejected]: (state, { payload }) => {
             state.loading = false
             state.errorClients = payload
         },
         [updateClients.pending]: (state) => {
             state.loading = true
         },
-        [updateClients.fulfilled]: (state, {payload: {clients, count}}) => {
+        [updateClients.fulfilled]: (state, { payload: { clients, count } }) => {
             state.loading = false
             state.searchedClients.length
                 ? (state.searchedClients = clients)
@@ -180,14 +186,14 @@ const clientsSlice = createSlice({
                 : (state.total = count)
             state.successUpdateClients = true
         },
-        [updateClients.rejected]: (state, {payload}) => {
+        [updateClients.rejected]: (state, { payload }) => {
             state.loading = false
             state.errorClients = payload
         },
         [deleteClients.pending]: (state) => {
             state.loading = true
         },
-        [deleteClients.fulfilled]: (state, {payload: {clients, count}}) => {
+        [deleteClients.fulfilled]: (state, { payload: { clients,deliverer, count } }) => {
             state.loading = false
             state.successDeleteClients = true
             state.searchedClients.length
@@ -196,8 +202,14 @@ const clientsSlice = createSlice({
             state.searchedClients.length
                 ? (state.totalSearcheds = count)
                 : (state.total = count)
+                state.searchedDeliverar.length
+                ? (state.searchedDeliverar =deliverer)
+                : (state.deliverer = deliverer)
+            state.searchedDeliverar.length
+                ? (state.totalSearcheds = count)
+                : (state.total = count)
         },
-        [deleteClients.rejected]: (state, {payload}) => {
+        [deleteClients.rejected]: (state, { payload }) => {
             state.loading = false
             state.errorClients = payload
         }
@@ -209,6 +221,7 @@ export const {
     clearSuccessAddClients,
     clearSuccessDeleteClients,
     clearSuccessUpdateClients,
-    clearSearchedClients
+    clearSearchedClients,
+    clearSearchedDeliverer
 } = clientsSlice.actions
 export default clientsSlice.reducer

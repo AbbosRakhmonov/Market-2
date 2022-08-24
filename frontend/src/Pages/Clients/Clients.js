@@ -1,15 +1,15 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import FieldContainer from '../../Components/FieldContainer/FieldContainer'
 import Button from '../../Components/Buttons/BtnAddRemove'
 import Pagination from '../../Components/Pagination/Pagination'
 import Table from '../../Components/Table/Table'
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
 import SearchForm from '../../Components/SearchForm/SearchForm'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
-import {motion} from 'framer-motion'
-import {map, filter} from 'lodash'
+import { motion } from 'framer-motion'
+import { map, filter } from 'lodash'
 import {
     successAddSupplierMessage,
     successDeleteSupplierMessage,
@@ -28,33 +28,35 @@ import {
     getAllPackmans,
     getClients,
     getClientsByFilter,
-    updateClients
+    updateClients,
 } from './clientsSlice'
-import {checkEmptyString} from '../../App/globalFunctions.js'
+import { checkEmptyString } from '../../App/globalFunctions.js'
 import { useTranslation } from 'react-i18next';
 
 const ClientsPage = () => {
-    const {t} = useTranslation(['common'])
+    const { t } = useTranslation(['common'])
     const dispatch = useDispatch()
 
     const {
         packmans,
         errorClients,
         clients,
+        deliverer,
         successAddClients,
         successUpdateClients,
         successDeleteClients,
         loading,
         searchedClients,
+        searchedDeliverar,
         total,
         totalSearched
     } = useSelector((state) => state.clients)
 
     const headers = [
-        {title: '№', styles: 'w-[8%] text-left'},
-        {title: t('Agent'), styles: 'w-[41%] text-left'},
-        {title: t('Mijoz'), styles: 'w-[41%] text-left'},
-        {title: '', styles: 'w-[8%] text-left'}
+        { title: '№', styles: 'w-[8%] text-left' },
+        { title: t('Agent'), styles: 'w-[41%] text-left' },
+        { title: t('Mijoz'), styles: 'w-[41%] text-left' },
+        { title: '', styles: 'w-[8%] text-left' }
     ]
 
     // states
@@ -62,6 +64,7 @@ const ClientsPage = () => {
     const [data, setData] = useState([])
     const [searchedData, setSearchedData] = useState()
     const [clientName, setClientName] = useState('')
+    const [setDeliverarName] = useState('')
     const [packman, setPackman] = useState(null)
     const [currentClient, setCurrentClient] = useState()
     const [deletedCLients, setDeletedClients] = useState(null)
@@ -71,7 +74,7 @@ const ClientsPage = () => {
     const [currentPage, setCurrentPage] = useState(0)
     const [filteredDataTotal, setFilteredDataTotal] = useState(total)
     const [searchByName, setSearchByName] = useState('')
-
+    const [searchByDelivererName, setSearchByDelivererName] = useState('')
     // modal toggle
     const toggleModal = () => setModalViseble(!modalVisible)
 
@@ -84,8 +87,9 @@ const ClientsPage = () => {
     const handleEditClients = (client) => {
         setCurrentClient(client)
         client.packman &&
-        setPackman({label: client.packman.name, value: client.packman._id})
+            setPackman({ label: client.packman.name, value: client.packman._id })
         setClientName(client.name)
+        setDeliverarName(client.packman.name)
         setStickyForm(true)
     }
 
@@ -161,7 +165,7 @@ const ClientsPage = () => {
     }
 
     // filter by total
-    const filterByTotal = ({value}) => {
+    const filterByTotal = ({ value }) => {
         setShowByTotal(value)
         setCurrentPage(0)
     }
@@ -171,17 +175,35 @@ const ClientsPage = () => {
         let val = e.target.value
         let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
         setSearchByName(val)
-        ;(searchedData.length > 0 || totalSearched > 0) &&
-        dispatch(clearSearchedClients())
+            ; (searchedData.length > 0 || totalSearched > 0) &&
+                dispatch(clearSearchedClients())
         if (val === '') {
             setData(clients)
             setFilteredDataTotal(total)
         } else {
-            const filteredClients = filter(clients,(client) => {
+            const filteredClients = filter(clients, (client) => {
                 return client.name.toLowerCase().includes(valForSearch)
             })
             setData(filteredClients)
             setFilteredDataTotal(filteredClients.length)
+        }
+    }
+
+    const filterByDelivererName = (e) => {
+        let val = e.target.value
+        let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
+        setSearchByDelivererName(valForSearch)
+            ; (searchedData.length > 0 || totalSearched > 0) &&
+                dispatch(clearSearchedClients())
+        if (val === '') {
+            setData(clients)
+            setFilteredDataTotal(total)
+        } else {
+            const filteredDeliverar = filter(clients, (client) => {
+                return client.packman.name.toLowerCase().includes(valForSearch)
+            })
+            setData(filteredDeliverar)
+            setFilteredDataTotal(filteredDeliverar.length)
         }
     }
 
@@ -191,12 +213,14 @@ const ClientsPage = () => {
                 currentPage,
                 countPage: showByTotal,
                 search: {
-                    client: searchByName.replace(/\s+/g, ' ').trim()
+                    client: searchByName.replace(/\s+/g, ' ').trim(),
+                    packman: searchByDelivererName.replace(/\s+/g, ' ').trim()
                 }
             }
             dispatch(getClientsByFilter(body))
         }
     }
+
 
     const handleChangeOptions = (e) => {
         setPackman(e)
@@ -242,7 +266,8 @@ const ClientsPage = () => {
             currentPage,
             countPage: showByTotal,
             search: {
-                client: searchByName.replace(/\s+/g, ' ').trim()
+                client: searchByName.replace(/\s+/g, ' ').trim(),
+                packman: searchByDelivererName.replace(/\s+/g, ' ').trim()
             }
         }
         dispatch(getClients(body))
@@ -252,14 +277,20 @@ const ClientsPage = () => {
         setData(clients)
     }, [clients])
     useEffect(() => {
+        setData(deliverer)
+    }, [deliverer])
+    useEffect(() => {
         setFilteredDataTotal(total)
     }, [total])
+    useEffect(() => {
+        setSearchedData(searchedDeliverar)
+    }, [searchedDeliverar])
     useEffect(() => {
         setSearchedData(searchedClients)
     }, [searchedClients])
     useEffect(() => {
-        const options = map(packmans,(packman) => {
-            return {label: packman.name, value: packman._id}
+        const options = map(packmans, (packman) => {
+            return { label: packman.name, value: packman._id }
         })
         setPackmanOptions(options)
     }, [packmans])
@@ -271,14 +302,14 @@ const ClientsPage = () => {
             animate='open'
             exit='collapsed'
             variants={{
-                open: {opacity: 1, height: 'auto'},
-                collapsed: {opacity: 0, height: 0}
+                open: { opacity: 1, height: 'auto' },
+                collapsed: { opacity: 0, height: 0 }
             }}
-            transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
+            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
         >
             <UniversalModal
                 headerText={`${deletedCLients && deletedCLients.name
-                } ${t("ismli mijozni o`chirishni tasdiqlaysizmi?")}`}
+                    } ${t("ismli mijozni o`chirishni tasdiqlaysizmi?")}`}
                 title={t("O`chirilgan mijozni tiklashning imkoni mavjud emas!")}
                 toggleModal={toggleModal}
                 body={'approve'}
@@ -288,7 +319,7 @@ const ClientsPage = () => {
             />
             <form
                 className={`flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200 ${stickyForm && 'stickyForm'
-                }`}
+                    }`}
             >
                 <div className='supplier-style'>
                     <FieldContainer
@@ -339,8 +370,11 @@ const ClientsPage = () => {
                 filterBy={['total', 'delivererName', 'clientName']}
                 filterByTotal={filterByTotal}
                 filterByClientNameWhenPressEnter={filterByNameWhenPressEnter}
+                filterByDelivererNameWhenPressEnter={filterByNameWhenPressEnter}
                 searchByClientName={searchByName}
+                searchByDelivererName={searchByDelivererName}
                 filterByClientName={filterByClientName}
+                filterByDelivererName={filterByDelivererName}
             />
 
             <div className='tableContainerPadding'>
