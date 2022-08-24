@@ -12,6 +12,7 @@ import { motion } from 'framer-motion'
 import { getConnectors, postInventoriesId } from './inventorieSlice.js'
 import UniversalModal from '../../Components/Modal/UniversalModal'
 import { useTranslation } from 'react-i18next';
+import { universalSort } from './../../App/globalFunctions';
 
 function Inventories() {
     const { t } = useTranslation(['common'])
@@ -34,6 +35,12 @@ function Inventories() {
         dataLoading,
         total
     } = useSelector((state) => state.inventoryConnectors)
+    const [sorItem, setSorItem] = useState({
+        filter: '',
+        sort: '',
+        count: 0
+    })
+    const [storeData, setStoreData] = useState(connectors)
     const [data, setData] = useState(connectors)
     const [showByTotal, setShowByTotal] = useState('10')
     const [currentPage, setCurrentPage] = useState(0)
@@ -137,8 +144,74 @@ function Inventories() {
         })
     }
 
+    const filterData = (filterKey) => {
+        if (filterKey === sorItem.filter) {
+            switch (sorItem.count) {
+                case 1:
+                    setSorItem({
+                        filter: filterKey,
+                        sort: '1',
+                        count: 2
+                    })
+                    universalSort(
+                        data,
+                        setData,
+                        filterKey,
+                        1,
+                        storeData
+                    )
+                    break
+                case 2:
+                    setSorItem({
+                        filter: filterKey,
+                        sort: '',
+                        count: 0
+                    })
+                    universalSort(
+                        data,
+                        setData,
+                        filterKey,
+                        '',
+                        storeData
+                    )
+                    break
+                default:
+                    setSorItem({
+                        filter: filterKey,
+                        sort: '-1',
+                        count: 1
+                    })
+                    universalSort(
+                        data,
+                        setData,
+                        filterKey,
+                        -1,
+                        storeData
+                    )
+            }
+        } else {
+            setSorItem({
+                filter: filterKey,
+                sort: '-1',
+                count: 1
+            })
+            universalSort(
+                data,
+                setData,
+                filterKey,
+                -1,
+                storeData
+            )
+        }
+    }
+
+
     // excel function
 
+    useEffect(() => {
+        setData(connectors)
+        setStoreData(connectors)
+    }, [connectors])
     useEffect(() => {
         if (errorConnectors) {
             universalToast(errorConnectors, 'error')
@@ -230,6 +303,8 @@ function Inventories() {
                         headers={headers}
                         Excel={handleClick}
                         Print={handleClickPrint}
+                        Sort={filterData}
+                        sortItem={sorItem}
                     />
                 )}
             </div>
