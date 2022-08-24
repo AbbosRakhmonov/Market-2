@@ -29,6 +29,7 @@ function CustomerPayment({
                              handleClickPay,
                              saleComment,
                              changeComment,
+                             onDoubleClick
                          }) {
     const defineLabel = () => {
         switch (type) {
@@ -200,7 +201,8 @@ function CustomerPayment({
                     )}
                     <Payment
                         text={t(`To'lash`)}
-                        onDoubleClick={handleClickPay}
+                        onClick={handleClickPay}
+                        onDoubleClick={onDoubleClick}
                     />
                 </div>
             </div>

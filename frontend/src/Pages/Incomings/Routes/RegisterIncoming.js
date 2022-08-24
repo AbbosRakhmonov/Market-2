@@ -67,6 +67,7 @@ const RegisterIncoming = () => {
     const [modalVisible, setModalVisible] = useState(false)
     const [exchangerate, setExchangerate] = useState(currency)
     const [saleComment, setSaleComment] = useState('')
+    let delay = null
 
     // functions for onchange of select
     const selectSupplier = (e) => {
@@ -567,8 +568,18 @@ const RegisterIncoming = () => {
         }
     }
     const handleClickPay = () => {
-        setModalBody('complete')
-        setModalVisible(true)
+        if (delay === null) {
+            delay = window.setTimeout(() => {
+                delay = null
+                setModalBody('complete')
+                setModalVisible(true)
+            }, 300)
+        }
+    }
+    const handleDoubleClick = () => {
+        window.clearTimeout(delay)
+        delay = null
+        handleApprovePay()
     }
     const handleApprovePay = () => {
         const postincoming = map(incomings, (incoming) => {
@@ -671,6 +682,7 @@ const RegisterIncoming = () => {
                 handleClickPay={handleClickPay}
                 changeComment={changeComment}
                 saleComment={saleComment}
+                onDoubleClick={handleDoubleClick}
             />
             <div className='flex items-center mainPadding'>
                 <div className='w-full pr-[1.25rem] border-r border-blue-100'>

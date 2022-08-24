@@ -99,6 +99,7 @@ const RegisterSelling = () => {
     const [exchangerate, setExchangerate] = useState(currency)
     const [saleComment, setSaleComment] = useState('')
     const [lowUnitpriceProducts, setLowUnitpriceProducts] = useState([])
+    let delay = null
     const headers = [
         {title: '№'},
         {title: t('Kodi')},
@@ -521,6 +522,21 @@ const RegisterSelling = () => {
         setTotalPaymentsUsd(0)
         togglePaymentModal(bool)
     }
+    const handleClickPay = () => {
+        if (delay === null) {
+            delay = window.setTimeout(() => {
+                delay = null
+                setModalBody('complete')
+                setModalVisible(true)
+            }, 300)
+        }
+
+    }
+    const handleDoubleClick = () => {
+        window.clearTimeout(delay)
+        delay = null
+        returnProducts.length > 0 ? handleApproveReturn() : handleApprovePay()
+    }
     const handleClosePay = () => {
         setModalVisible(false)
         setTimeout(() => {
@@ -793,6 +809,8 @@ const RegisterSelling = () => {
         setClientValue('')
         setUserValue('')
     }
+    const handleClickPrint = () => {
+    }
     const handleChangeClientValue = (option) => {
         setClientValue(option)
         const client = filter(
@@ -899,12 +917,12 @@ const RegisterSelling = () => {
             prevProduct.product._id === id
                 ? {
                     ...prevProduct,
-                    pieces: prevProduct.pieces + 1,
+                    pieces: Number(prevProduct.pieces) + 1,
                     totalprice: convertToUsd(
-                        (prevProduct.pieces + 1) * prevProduct.unitprice
+                        (Number(prevProduct.pieces) + 1) * prevProduct.unitprice
                     ),
                     totalpriceuzs: convertToUzs(
-                        (prevProduct.pieces + 1) * prevProduct.unitpriceuzs
+                        (Number(prevProduct.pieces) + 1) * prevProduct.unitpriceuzs
                     )
                 }
                 : prevProduct
@@ -916,12 +934,12 @@ const RegisterSelling = () => {
             prevProduct.product._id === id
                 ? {
                     ...prevProduct,
-                    pieces: Number(prevProduct.pieces) > 1 ? prevProduct.pieces - 1 : 1,
+                    pieces: Number(prevProduct.pieces) > 1 ? Number(prevProduct.pieces) - 1 : 1,
                     totalprice: convertToUsd(
-                        (Number(prevProduct.pieces) > 1 ? prevProduct.pieces - 1 : 1) * prevProduct.unitprice
+                        (Number(prevProduct.pieces) > 1 ? Number(prevProduct.pieces) - 1 : 1) * prevProduct.unitprice
                     ),
                     totalpriceuzs: convertToUzs(
-                        (Number(prevProduct.pieces) > 1 ? prevProduct.pieces - 1 : 1) * prevProduct.unitpriceuzs
+                        (Number(prevProduct.pieces) > 1 ? Number(prevProduct.pieces) - 1 : 1) * prevProduct.unitpriceuzs
                     )
                 }
                 : prevProduct
@@ -1229,23 +1247,42 @@ const RegisterSelling = () => {
                     handleChangeDiscountSelectOption
                 }
                 paid={currencyType === 'USD' ? paid : paidUzs}
-                handleClickPay={returnProducts.length
-                    ? handleApproveReturn
-                    : handleApprovePay}
+                handleClickPay={handleClickPay}
                 changeComment={changeComment}
                 saleComment={saleComment}
+                onDoubleClick={handleDoubleClick}
             />
             <UniversalModal
                 body={modalBody}
                 toggleModal={
                     modalBody === 'sell'
                         ? toggleModal
-                        : toggleCheckModal
+                        : modalBody === 'complete'
+                            ? handleClosePay
+                            : toggleCheckModal
                 }
-                approveFunction={handleAddProduct}
+                approveFunction={
+                    modalBody === 'sell'
+                        ? handleAddProduct
+                        : modalBody === 'complete'
+                            ? returnProducts.length
+                                ? handleApproveReturn
+                                : handleApprovePay
+                            : handleClickPrint
+                }
                 isOpen={modalVisible}
                 product={modalBody === 'sell' ? currentProduct : modalData}
                 headers={headers}
+                headerText={
+                    modalBody === 'complete' &&
+                    t('To\'lovni amalga oshirishni tasdiqlaysizmi ?')
+                }
+                title={
+                    modalBody === 'complete' &&
+                    t(
+                        'To\'lovni amalga oshirgach bu ma`lumotlarni o`zgaritirb bo`lmaydi !'
+                    )
+                }
                 changeProduct={handleChangeProduct}
             />
             <div className='flex flex-col grow mainPadding gap-[1.25rem] overflow-auto'>
