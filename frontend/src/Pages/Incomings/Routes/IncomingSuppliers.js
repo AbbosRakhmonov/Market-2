@@ -611,7 +611,8 @@ const IncomingSuppliers = () => {
                         endDay
                     })
                 )
-                toggleModal()
+                setModalVisible(false)
+                setModalBody('')
                 togglePaymentModal()
             }
         })
@@ -753,7 +754,7 @@ const IncomingSuppliers = () => {
                         currencyType={currencyType}
                     />
                 </div>
-                <div className='flex flex-wrap gap-[1%] mainPadding'>
+                <div className='flex flex-wrap gap-[2.5rem_2%] mainPadding'>
                     {incomingCard.length > 0 &&
                         map(incomingCard, (incoming) => (
                             <CardBtn
