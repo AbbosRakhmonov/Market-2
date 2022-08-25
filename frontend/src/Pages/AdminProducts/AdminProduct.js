@@ -7,6 +7,7 @@ import {
     clearSearchedMarkets,
     createDirector,
     createMarket,
+    editDirector,
     editMarket,
     getMarkets,
     getMarketsByFilter
@@ -15,8 +16,9 @@ import Pagination from '../../Components/Pagination/Pagination.js'
 import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
-import {successAddDirectory} from '../../Components/ToastMessages/ToastMessages.js'
-import {filter} from "lodash"
+import {successAddDirectory, successEditProfile} from '../../Components/ToastMessages/ToastMessages.js'
+import {filter} from 'lodash'
+
 const AdminProduct = () => {
     const dispatch = useDispatch()
     const {markets, total, searchedMarkets, totalSearched, loadingGetMarkets} = useSelector(state => state.adminmarkets)
@@ -72,7 +74,7 @@ const AdminProduct = () => {
             setData(markets)
             setFilteredDataTotal(total)
         } else {
-            const filteredProducts = filter(markets,(market) => {
+            const filteredProducts = filter(markets, (market) => {
                 return market.name
                     .toLowerCase()
                     .includes(valForSearch)
@@ -91,7 +93,7 @@ const AdminProduct = () => {
             setData(markets)
             setFilteredDataTotal(total)
         } else {
-            const filteredProducts = filter(markets,(market) => {
+            const filteredProducts = filter(markets, (market) => {
                 return market.director.firstname
                     .toLowerCase()
                     .includes(valForSearch) || market.director.lastname.toLowerCase().includes(valForSearch)
@@ -145,6 +147,33 @@ const AdminProduct = () => {
                 setBgActive(false)
                 setCreatedMarketId(null)
                 successAddDirectory()
+                dispatch(getMarkets(body))
+                toggleModal()
+            }
+        })
+    }
+    const handleEditFinish = (data) => {
+        const body = {
+            ...data,
+            image,
+            market: createdMarketId,
+            _id: editedMarket.director._id
+        }
+        dispatch(editDirector(body)).then(({error}) => {
+            if (!error) {
+                const body = {
+                    currentPage,
+                    countPage: showByTotal,
+                    search: {
+                        name: name.replace(/\s+/g, ' ').trim(),
+                        director: director.replace(/\s+/g, ' ').trim()
+                    }
+                }
+                setImage('')
+                setCurrentStep(1)
+                setBgActive(false)
+                setCreatedMarketId(null)
+                successEditProfile()
                 dispatch(getMarkets(body))
                 toggleModal()
             }
@@ -235,7 +264,7 @@ const AdminProduct = () => {
                     currentStep,
                     bgActive,
                     handleNext: !editedMarket ? handleAddNext : handleEditNext,
-                    handleFinish: handleAddFinish,
+                    handleFinish: !editedMarket ? handleAddFinish : handleEditFinish,
                     image: image,
                     setImage: setImage,
                     editedMarket

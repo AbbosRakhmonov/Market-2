@@ -405,10 +405,10 @@ function Table({
     return (
         <table className='overflow-x-auto w-full'>
             <thead className='rounded-t-lg'>
-                {<Thead headers={headers} Sort={Sort} sortItem={sortItem} />}
+            {<Thead headers={headers} Sort={Sort} sortItem={sortItem} />}
             </thead>
             <tbody>{checkRows()}</tbody>
-            <tfoot>{checkFooters()}</tfoot>
+            {footer && <tfoot>{checkFooters()}</tfoot>}
         </table>
     )
 }

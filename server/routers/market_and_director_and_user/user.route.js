@@ -98,7 +98,7 @@ module.exports.editUser = async (req, res) => {
             })
         }
 
-        const {_id, firstname, lastname, login, password, market} = req.body
+        const {_id, password, market} = req.body
 
         const marke = await Market.findById(market)
         if (!marke) {

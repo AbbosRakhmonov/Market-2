@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {universalToast} from '../../Components/ToastMessages/ToastMessages'
+import {successPayDebt, universalToast} from '../../Components/ToastMessages/ToastMessages'
 import Api from '../../Config/Api'
 
 export const getSuppliers = createAsyncThunk(
@@ -136,18 +136,31 @@ export const excelIncomings = createAsyncThunk(
     'incoming/excelIncomings',
     async (body, {rejectWithValue}) => {
         try {
-            const {data} = await Api.post("/products/incoming/getexcel", body)
+            const {data} = await Api.post('/products/incoming/getexcel', body)
             return data
-        } catch(error) {
+        } catch (error) {
             return rejectWithValue(error)
         }
     }
 )
 
+export const payDebt = createAsyncThunk(
+    'incoming/makeDebt',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post('/products/incoming/payment', body)
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
+
 const incomingSlice = createSlice({
     name: 'incoming',
     initialState: {
-        allIncomingsData : [],
+        allIncomingsData: [],
         suppliers: [],
         products: [],
         loading: false,
@@ -309,16 +322,27 @@ const incomingSlice = createSlice({
             state.loading = false
             universalToast(`${payload}`, 'error')
         },
-        [excelIncomings.pending] : (state) => {
+        [excelIncomings.pending]: (state) => {
             state.loading = true
         },
-        [excelIncomings.fulfilled] : (state, {payload}) => {
+        [excelIncomings.fulfilled]: (state, {payload}) => {
             state.loading = false
-            state.allIncomingsData = payload;
+            state.allIncomingsData = payload
         },
-        [excelIncomings.rejected] : (state, {payload}) => {
+        [excelIncomings.rejected]: (state, {payload}) => {
             state.loading = false
             state.error = payload
+        },
+        [payDebt.pending]: (state) => {
+            state.loading = true
+        },
+        [payDebt.fulfilled]: (state) => {
+            state.loading = false
+            successPayDebt()
+        },
+        [payDebt.rejected]: (state, {payload}) => {
+            state.loading = false
+            universalToast(`${payload}`, 'error')
         }
     }
 })

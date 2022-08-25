@@ -1,22 +1,22 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import CardLink from '../../../Components/Card/CardLink'
 import {useDispatch, useSelector} from 'react-redux'
-import {uniqueId,map, filter} from 'lodash'
+import {filter, map, uniqueId} from 'lodash'
 import {getIncomingConnectors, getSuppliers} from '../incomingSlice'
 import Dates from '../../../Components/Dates/Dates'
 import SelectInput from '../../../Components/SelectInput/SelectInput'
 import FilterButtons from '../../../Components/FilterButtons/FilterButtons'
 import ResultIncomings from '../Components/ResultIncomings'
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next'
 
 function Incomings() {
-    const { t } = useTranslation(['common'])
+    const {t} = useTranslation(['common'])
     const dispatch = useDispatch()
     const {
-        market: { _id }
+        market: {_id}
     } = useSelector((state) => state.login)
-    const { currencyType } = useSelector((state) => state.currency)
-    const { incomingconnectors, suppliers } = useSelector(
+    const {currencyType} = useSelector((state) => state.currency)
+    const {incomingconnectors, suppliers} = useSelector(
         (state) => state.incoming
     )
 
@@ -37,7 +37,7 @@ function Incomings() {
 
     // change suppliers data
     const changeSuppliersData = (data) => {
-        const suppliers = map(data,(supplier) => {
+        const suppliers = map(data, (supplier) => {
             return {
                 label: supplier.name,
                 value: supplier._id
@@ -66,7 +66,7 @@ function Incomings() {
     const addChnagedIncomings = (groups) => {
         const sumSupplier = (arr) => {
             let repeat = []
-            return arr.reduce((prev, { _id }) => {
+            return arr.reduce((prev, {_id}) => {
                 if (!repeat.includes(_id)) {
                     repeat.push(_id)
                     return prev + 1
@@ -77,13 +77,17 @@ function Incomings() {
         const sumTotal = (arr) => {
             return arr.reduce((prev, total) => prev + total, 0)
         }
-        const data = map(groups,(income) => {
+        const data = map(groups, (income) => {
             return {
                 createdAt: income.createdAt,
                 products: income.incoming.length,
                 suppliers: sumSupplier(income.supplier),
                 totalprice: sumTotal(income.total),
-                totalpriceuzs: sumTotal(income.totaluzs)
+                totalpriceuzs: sumTotal(income.totaluzs),
+                totalpayment: sumTotal(income.totalpayment),
+                totalpaymentuzs: sumTotal(income.totalpaymentuzs),
+                debt: sumTotal(income.debt),
+                debtuzs: sumTotal(income.debtuzs)
             }
         })
         setCardConnectors(data)
@@ -94,6 +98,10 @@ function Incomings() {
         exist[0].supplier.push(el.supplier)
         exist[0].total.push(el.total)
         exist[0].totaluzs.push(el.totaluzs)
+        exist[0].totalpayment.push(el.totalpayment)
+        exist[0].totalpaymentuzs.push(el.totalpaymentuzs)
+        exist[0].debt.push(el.debt)
+        exist[0].debtuzs.push(el.debtuzs)
         exist[0]._id = el._id
     }
 
@@ -103,6 +111,10 @@ function Incomings() {
             incoming: [...el.incoming],
             total: [el.total],
             totaluzs: [el.totaluzs],
+            totalpayment: [el.totalpayment],
+            totalpaymentuzs: [el.totalpaymentuzs],
+            debt: [el.debt],
+            debtuzs: [el.debtuzs],
             supplier: [el.supplier],
             _id: el._id
         }
@@ -117,7 +129,7 @@ function Incomings() {
             setSupplierSearch('')
         } else {
             const connectorsForSupplier = filter(incomingconnectors,
-                ({ supplier }) => {
+                ({supplier}) => {
                     return supplier._id === target
                 }
             )
@@ -151,11 +163,10 @@ function Incomings() {
     }, [dispatch, _id, beginDay, endDay])
 
     useEffect(() => {
-        dispatch(getSuppliers({ _id }))
+        dispatch(getSuppliers({_id}))
     }, [dispatch, _id])
-
     return (
-        <section>
+        <section className={'grow overflow-auto'}>
             <div className='flex items-center gap-[1.25rem] mainPadding'>
                 <Dates
                     label={t('dan')}
@@ -193,7 +204,7 @@ function Incomings() {
                 styles={'mainPadding'}
             />
             <div className='flex flex-wrap gap-[1.25rem] mainPadding'>
-                {map(cardConnectors,(item) => {
+                {map(cardConnectors, (item) => {
                     return (
                         <CardLink
                             key={uniqueId('card')}
@@ -203,9 +214,11 @@ function Incomings() {
                             pieces={item.products}
                             suppliers={item.suppliers}
                             createdAt={item.createdAt}
-                            path={`/maxsulotlar/qabul/qabullar/${new Date(
-                                item.createdAt
-                            ).toLocaleDateString()}`}
+                            debt={item.debt}
+                            debtUzs={item.debtuzs}
+                            paid={item.totalpayment}
+                            paidUzs={item.totalpaymentuzs}
+                            path={`/maxsulotlar/qabul/qabullar/${uniqueId()}`}
                             state={{
                                 date: item.createdAt,
                                 supplier: supplierSearch

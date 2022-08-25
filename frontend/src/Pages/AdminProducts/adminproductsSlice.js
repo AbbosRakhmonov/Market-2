@@ -2,6 +2,7 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import Api from '../../Config/Api.js'
 import {universalToast} from '../../Components/ToastMessages/ToastMessages.js'
 import {map} from 'lodash'
+
 export const getMarkets = createAsyncThunk(
     'adminproducts/getMarkets',
     async (body, {rejectWithValue}) => {
@@ -81,6 +82,16 @@ export const createDirector = createAsyncThunk(
         }
     }
 )
+export const editDirector = createAsyncThunk(
+    'adminproducts/editDirector',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post('/user/edit', body)
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    })
 
 export const editMarket = createAsyncThunk(
     'adminproducts/editMarket',
@@ -171,6 +182,13 @@ const adminproductsSlice = createSlice({
             state.loadingCreateDirector = false
             universalToast(payload, 'error')
         },
+        [editDirector.pending]: (state) => {
+            state.loadingCreateDirector = true
+        },
+        [editDirector.rejected]: (state, {payload}) => {
+            state.loadingCreateDirector = false
+            universalToast(payload, 'error')
+        },
         [getBranchesByFilter.pending]: (state) => {
             state.loadingGetBranches = true
         },
@@ -209,10 +227,10 @@ const adminproductsSlice = createSlice({
             if (state.searchedBranches.length > 0) {
                 state.searchedBranches = state.searchedBranches.map(sb => sb._id === markets[0]._id ? markets[0] : sb)
             }
-            state.branches = map(state.branches,(sb) => sb._id === markets[0]._id ? markets[0] : sb)
+            state.branches = map(state.branches, (sb) => sb._id === markets[0]._id ? markets[0] : sb)
             state.markets = map(state.markets, (m) => m._id === market._id ? market : m)
             if (state.searchedMarkets.length > 0) {
-                state.searchedMarkets = map(state.searchedMarkets,(m) => m._id === market._id ? market : m)
+                state.searchedMarkets = map(state.searchedMarkets, (m) => m._id === market._id ? market : m)
             }
         },
         [updateMarkets.rejected]: (state, {payload}) => {
@@ -225,9 +243,9 @@ const adminproductsSlice = createSlice({
         },
         [editMarket.fulfilled]: (state, {payload}) => {
             state.loadingGetMarkets = false
-            state.markets = map(state.markets,(m) => m._id === payload._id ? payload : m)
+            state.markets = map(state.markets, (m) => m._id === payload._id ? payload : m)
             if (state.searchedMarkets.length > 0) {
-                state.searchedMarkets = map(state.searchedMarkets,(m) => m._id === payload._id ? payload : m)
+                state.searchedMarkets = map(state.searchedMarkets, (m) => m._id === payload._id ? payload : m)
             }
         },
         [editMarket.rejected]: (state, {payload}) => {

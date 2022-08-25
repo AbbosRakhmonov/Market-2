@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useLocation } from 'react-router-dom'
+import React, {useCallback, useEffect, useState} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import {useLocation} from 'react-router-dom'
 import ExportBtn from '../../../Components/Buttons/ExportBtn'
 import CardBtn from '../../../Components/Card/CardBtn'
 import LinkToBack from '../../../Components/LinkToBack/LinkToBack'
@@ -10,22 +10,28 @@ import {
     clearSuccesDelete,
     clearSuccessUpdate,
     deleteIncoming,
+    excelIncomings,
     getIncomingConnectors,
     getIncomings,
-    updateIncoming,
-    excelIncomings,
+    payDebt,
+    updateIncoming
 } from '../incomingSlice'
-import Table from '../../../Components/Table/Table'
-import { universalSort, UsdToUzs, UzsToUsd } from '../../../App/globalFunctions'
+import {universalSort, UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
-import {uniqueId,map,filter} from 'lodash'
+import {filter, map, uniqueId} from 'lodash'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next'
+import CustomerPayment from '../../../Components/Payment/CustomerPayment.js'
+import {warningMorePayment} from '../../../Components/ToastMessages/ToastMessages.js'
+import NotFind from '../../../Components/NotFind/NotFind.js'
+import Table from '../../../Components/Table/Table.js'
+
 const IncomingSuppliers = () => {
-    const { t } = useTranslation(['common'])
+    const {t} = useTranslation(['common'])
     const dispatch = useDispatch()
     const {
-        market: { _id },
+        market: {_id},
+        user
     } = useSelector((state) => state.login)
     const {
         incomings,
@@ -33,12 +39,12 @@ const IncomingSuppliers = () => {
         incomingconnectors,
         successUpdate,
         successDelete,
-        allIncomingsData,
+        allIncomingsData
     } = useSelector((state) => state.incoming)
-    const { currencyType, currency } = useSelector((state) => state.currency)
+    const {currencyType, currency} = useSelector((state) => state.currency)
 
     const {
-        state: { date, supplier },
+        state: {date, supplier}
 
     } = useLocation()
 
@@ -50,17 +56,17 @@ const IncomingSuppliers = () => {
     const [sendingSearch, setSendingSearch] = useState({
         name: '',
         code: '',
-        supplier: supplier,
+        supplier: supplier
     })
     const [localSearch, setLocalSearch] = useState({
         name: '',
         code: '',
-        supplier: supplier,
+        supplier: supplier
     })
     const [sortItem, setSortItem] = useState({
         filter: '',
         sort: '',
-        count: 0,
+        count: 0
     })
 
     const [incomingCard, setIncomingCard] = useState([])
@@ -68,57 +74,56 @@ const IncomingSuppliers = () => {
     const [currentDataStorage, setCurrentDataStorage] = useState([])
     const [editedIncoming, setEditedIncoming] = useState({})
     const [deletedIncoming, setDeletedIncoming] = useState('')
-    const [modal, setModal] = useState(false)
+
+    // sale states
+    const [paymentModalVisible, setPaymentModalVisible] = useState(false)
+    const [paymentType, setPaymentType] = useState('cash')
+    const [paymentCash, setPaymentCash] = useState('')
+    const [paymentCashUzs, setPaymentCashUzs] = useState('')
+    const [paymentCard, setPaymentCard] = useState('')
+    const [paymentCardUzs, setPaymentCardUzs] = useState('')
+    const [paymentTransfer, setPaymentTransfer] = useState('')
+    const [paymentTransferUzs, setPaymentTransferUzs] = useState('')
+    const [paymentDebt, setPaymentDebt] = useState(0)
+    const [paymentDebtUzs, setPaymentDebtUzs] = useState(0)
+    const [allPayment, setAllPayment] = useState(0)
+    const [allPaymentUzs, setAllPaymentUzs] = useState(0)
+    const [paid, setPaid] = useState(0)
+    const [paidUzs, setPaidUzs] = useState(0)
+    const [modalBody, setModalBody] = useState('approve')
+    const [modalVisible, setModalVisible] = useState(false)
+    const [exchangerate, setExchangerate] = useState(currency)
+    const [saleComment, setSaleComment] = useState('')
+    const [client, setClient] = useState('')
+    const [currentId, setCurrentId] = useState('')
+    let delay = null
 
     const changeCardData = useCallback(
         (data) => {
             let groups = []
             let pieces = (arr) => arr.reduce((prev, el) => prev + el.pieces, 0)
-            const currentGroup = (arr, incoming) => {
-                arr[0].products += incoming.incoming.length
-                arr[0].pieces += pieces(incoming.incoming)
-                arr[0].totalprice += incoming.total
-                arr[0].totalpriceuzs += incoming.totaluzs
-            }
-            const newGroup = (incoming) => {
+            for (let incoming of data) {
                 let obj = {
+                    _id: incoming._id,
                     createdAt: new Date(
                         incoming.createdAt
                     ).toLocaleDateString(),
-                    supplier: { ...incoming.supplier },
+                    time: new Date(incoming.createdAt).toLocaleTimeString('ru-RU', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hourCycle: 'h24'
+                    }),
+                    supplier: {...incoming.supplier},
                     products: incoming.incoming.length,
                     pieces: pieces(incoming.incoming),
                     totalprice: incoming.total,
                     totalpriceuzs: incoming.totaluzs,
+                    totalpayment: incoming.totalpayment,
+                    totalpaymentuzs: incoming.totalpaymentuzs,
+                    debt: incoming.debt,
+                    debtuzs: incoming.debtuzs
                 }
                 groups.push(obj)
-            }
-            const existSupplier = (element) => {
-                if (element.supplier.name === supplier) {
-                    if (groups.length > 0) {
-                        currentGroup(groups, element)
-                    } else {
-                        newGroup(element)
-                    }
-                }
-            }
-            const notExistSupplier = (element) => {
-                const arr = groups.filter(
-                    (group) => group.supplier._id === element.supplier._id
-                )
-                if (arr.length > 0) {
-                    currentGroup(arr, element)
-                } else {
-                    newGroup(element)
-                }
-            }
-
-            for (let incoming of data) {
-                if (supplier) {
-                    existSupplier(incoming)
-                } else {
-                    notExistSupplier(incoming)
-                }
             }
             setIncomingCard(groups)
         },
@@ -129,20 +134,20 @@ const IncomingSuppliers = () => {
     const changeCurrentData = (value) => {
         setSendingSearch({
             ...sendingSearch,
-            supplier: value,
+            supplier: value
         })
         setLocalSearch({
             ...localSearch,
-            supplier: value,
+            supplier: value
         })
     }
 
     const getCurrentData = (data) => {
-        let current = map(data,(incoming) => {
+        let current = map(data, (incoming) => {
             return {
                 ...incoming,
                 sellingprice: incoming.product.price.sellingprice,
-                sellingpriceuzs: incoming.product.price.sellingpriceuzs,
+                sellingpriceuzs: incoming.product.price.sellingpriceuzs
             }
         })
         setCurrentData(current)
@@ -158,7 +163,7 @@ const IncomingSuppliers = () => {
     const changeEditedIncoming = (e, key) => {
         let target = Number(e.target.value)
         let obj = {
-            ...editedIncoming,
+            ...editedIncoming
         }
 
         const check = (prop) => key === prop
@@ -205,7 +210,7 @@ const IncomingSuppliers = () => {
                     market: _id,
                     startDate: beginDay,
                     endDate: endDay,
-                    product: { ...editedIncoming },
+                    product: {...editedIncoming}
                 })
             )
         } else {
@@ -221,25 +226,21 @@ const IncomingSuppliers = () => {
 
     const openDeleteModal = (incoming) => {
         setDeletedIncoming(incoming)
-        setModal(true)
-    }
-
-    const closeModal = () => {
-        setDeletedIncoming({})
-        setModal(false)
+        setModalVisible(true)
+        setModalBody('approve')
     }
 
     // search by name
     const searchName = (e) => {
         let target = e.target.value.toLowerCase()
         setCurrentData([
-            ...filter([...currentDataStorage],({ product }) =>
+            ...filter([...currentDataStorage], ({product}) =>
                 product.productdata.name.toLowerCase().includes(target)
-            ),
+            )
         ])
         setLocalSearch({
             ...localSearch,
-            name: target,
+            name: target
         })
     }
 
@@ -247,13 +248,13 @@ const IncomingSuppliers = () => {
     const searchCode = (e) => {
         let target = e.target.value.toLowerCase()
         setCurrentData([
-            ...filter([...currentDataStorage],({ product }) =>
+            ...filter([...currentDataStorage], ({product}) =>
                 product.productdata.code.includes(target)
-            ),
+            )
         ])
         setLocalSearch({
             ...localSearch,
-            code: target,
+            code: target
         })
     }
 
@@ -272,7 +273,7 @@ const IncomingSuppliers = () => {
                 endDay,
                 currentPage,
                 countPage,
-                search: sendingSearch,
+                search: sendingSearch
             })
         )
     }, [dispatch, _id, beginDay, endDay, currentPage, countPage, sendingSearch])
@@ -283,10 +284,10 @@ const IncomingSuppliers = () => {
                 market: _id,
                 beginDay,
                 endDay,
-                product: { ...deletedIncoming },
+                product: {...deletedIncoming}
             })
         )
-        setModal(false)
+        toggleModal()
     }
 
     // Sort
@@ -297,7 +298,7 @@ const IncomingSuppliers = () => {
                     setSortItem({
                         filter: filterKey,
                         sort: '1',
-                        count: 2,
+                        count: 2
                     })
                     universalSort(
                         currentData,
@@ -311,7 +312,7 @@ const IncomingSuppliers = () => {
                     setSortItem({
                         filter: filterKey,
                         sort: '',
-                        count: 0,
+                        count: 0
                     })
                     universalSort(
                         currentData,
@@ -325,7 +326,7 @@ const IncomingSuppliers = () => {
                     setSortItem({
                         filter: filterKey,
                         sort: '-1',
-                        count: 1,
+                        count: 1
                     })
                     universalSort(
                         currentData,
@@ -339,7 +340,7 @@ const IncomingSuppliers = () => {
             setSortItem({
                 filter: filterKey,
                 sort: '-1',
-                count: 1,
+                count: 1
             })
             universalSort(
                 currentData,
@@ -349,6 +350,274 @@ const IncomingSuppliers = () => {
                 currentDataStorage
             )
         }
+    }
+
+    // sales functions
+    const toggleModal = () => {
+        setModalVisible(!modalVisible)
+        setTimeout(() => {
+            setModalBody('')
+            setDeletedIncoming({})
+        }, 500)
+    }
+    const convertToUsd = (value) => Math.round(value * 1000) / 1000
+    const convertToUzs = (value) => Math.round(value)
+    const currentEchangerate = (uzs, usd) => {
+        setExchangerate(convertToUzs(uzs / usd))
+    }
+    // payment
+    const togglePaymentModal = (bool) => {
+        bool
+            ? setPaymentModalVisible(!paymentModalVisible)
+            : setPaymentModalVisible(bool)
+        setPaymentType('cash')
+        setPaymentDebt(0)
+        setPaymentDebtUzs(0)
+    }
+    const handleChangePaymentType = (type) => {
+        if (paymentType !== type) {
+            setPaymentType(type)
+            switch (type) {
+                case 'cash':
+                    setPaymentCash(allPayment)
+                    setPaymentCashUzs(allPaymentUzs)
+                    setPaymentCard('')
+                    setPaymentCardUzs('')
+                    setPaymentTransfer('')
+                    setPaymentTransferUzs('')
+                    setPaid(allPayment)
+                    setPaidUzs(allPaymentUzs)
+                    setPaymentDebt(0)
+                    setPaymentDebtUzs(0)
+                    break
+                case 'card':
+                    setPaymentCard(allPayment)
+                    setPaymentCardUzs(allPaymentUzs)
+                    setPaymentCash('')
+                    setPaymentCashUzs('')
+                    setPaymentTransfer('')
+                    setPaymentTransferUzs('')
+                    setPaid(allPayment)
+                    setPaidUzs(allPaymentUzs)
+                    setPaymentDebt(0)
+                    setPaymentDebtUzs(0)
+                    break
+                case 'transfer':
+                    setPaymentTransfer(allPayment)
+                    setPaymentTransferUzs(allPaymentUzs)
+                    setPaymentCash('')
+                    setPaymentCashUzs('')
+                    setPaymentCard('')
+                    setPaymentCardUzs('')
+                    setPaid(allPayment)
+                    setPaidUzs(allPaymentUzs)
+                    setPaymentDebt(0)
+                    setPaymentDebtUzs(0)
+                    break
+                default:
+                    setPaymentCash('')
+                    setPaymentCashUzs('')
+                    setPaymentCard('')
+                    setPaymentCardUzs('')
+                    setPaymentTransfer('')
+                    setPaymentTransferUzs('')
+                    setPaid(0)
+                    setPaidUzs(0)
+                    setPaymentDebt(allPayment)
+                    setPaymentDebtUzs(
+                        allPaymentUzs
+                    )
+                    break
+            }
+        }
+    }
+    const handleChangePaymentInput = (value, key) => {
+        writePayment(value, key)
+    }
+    const writePayment = (value, type) => {
+        const maxSum = Math.abs(allPayment)
+        const maxSumUzs = Math.abs(allPaymentUzs)
+        if (currencyType === 'USD') {
+            if (type === 'cash') {
+                const all =
+                    Number(value) +
+                    Number(paymentCard) +
+                    Number(paymentTransfer)
+                const allUzs =
+                    Number(UsdToUzs(value, exchangerate)) +
+                    Number(paymentCardUzs) +
+                    Number(paymentTransferUzs)
+                if (all <= maxSum) {
+                    setPaymentCash(value)
+                    setPaymentCashUzs(UsdToUzs(value, exchangerate))
+                    setPaymentDebt(convertToUsd(maxSum - all))
+                    setPaymentDebtUzs(convertToUzs(maxSumUzs - allUzs))
+                    setPaid(all)
+                    setPaidUzs(allUzs)
+                } else {
+                    warningMorePayment()
+                }
+            } else if (type === 'card') {
+                const all =
+                    Number(value) +
+                    Number(paymentCash) +
+                    Number(paymentTransfer)
+                const allUzs =
+                    Number(paymentCashUzs) +
+                    Number(UsdToUzs(value, exchangerate)) +
+                    Number(paymentTransferUzs)
+                if (all <= maxSum) {
+                    setPaymentCard(value)
+                    setPaymentCardUzs(UsdToUzs(value, exchangerate))
+                    setPaymentDebt(convertToUsd(maxSum - all))
+                    setPaymentDebtUzs(convertToUzs(maxSumUzs - allUzs))
+                    setPaid(all)
+                    setPaidUzs(allUzs)
+                } else {
+                    warningMorePayment()
+                }
+            } else {
+                const all =
+                    Number(value) + Number(paymentCash) + Number(paymentCard)
+                const allUzs =
+                    Number(paymentCashUzs) +
+                    Number(paymentCardUzs) +
+                    Number(UsdToUzs(value, exchangerate))
+                if (all <= maxSum) {
+                    setPaymentTransfer(value)
+                    setPaymentTransferUzs(UsdToUzs(value, exchangerate))
+                    setPaymentDebt(convertToUsd(maxSum - all))
+                    setPaymentDebtUzs(convertToUzs(maxSumUzs - allUzs))
+                    setPaid(all)
+                    setPaidUzs(allUzs)
+                } else {
+                    warningMorePayment()
+                }
+            }
+        } else {
+            if (type === 'cash') {
+                const all =
+                    Number(value) +
+                    Number(paymentCardUzs) +
+                    Number(paymentTransferUzs)
+                const allUsd =
+                    Number(UzsToUsd(value, exchangerate)) +
+                    Number(paymentCard) +
+                    Number(paymentTransfer)
+                if (all <= maxSumUzs) {
+                    setPaymentCashUzs(value)
+                    setPaymentCash(UzsToUsd(value, exchangerate))
+                    setPaymentDebt(convertToUsd(maxSum - allUsd))
+                    setPaymentDebtUzs(convertToUzs(maxSumUzs - all))
+                    setPaid(allUsd)
+                    setPaidUzs(all)
+                } else {
+                    warningMorePayment()
+                }
+            } else if (type === 'card') {
+                const all =
+                    Number(value) +
+                    Number(paymentCashUzs) +
+                    Number(paymentTransferUzs)
+                const allUsd =
+                    Number(paymentCash) +
+                    Number(UzsToUsd(value, exchangerate)) +
+                    Number(paymentTransfer)
+                if (all <= maxSumUzs) {
+                    setPaymentCard(UzsToUsd(value, exchangerate))
+                    setPaymentCardUzs(value)
+                    setPaymentDebt(convertToUsd(maxSum - allUsd))
+                    setPaymentDebtUzs(convertToUzs(maxSumUzs - all))
+                    setPaid(UzsToUsd(all, exchangerate))
+                    setPaidUzs(all)
+                } else {
+                    warningMorePayment()
+                }
+            } else {
+                const all =
+                    Number(value) +
+                    Number(paymentCashUzs) +
+                    Number(paymentCardUzs)
+                const allUsd =
+                    Number(paymentCash) +
+                    Number(paymentCard) +
+                    Number(UzsToUsd(value, exchangerate))
+                if (all <= maxSumUzs) {
+                    setPaymentTransfer(UzsToUsd(value, exchangerate))
+                    setPaymentTransferUzs(value)
+                    setPaymentDebt(convertToUsd(maxSum - allUsd))
+                    setPaymentDebtUzs(convertToUzs(maxSumUzs - all))
+                    setPaid(allUsd)
+                    setPaidUzs(all)
+                } else {
+                    warningMorePayment()
+                }
+            }
+        }
+    }
+    const handleClickPay = () => {
+        if (delay === null) {
+            delay = window.setTimeout(() => {
+                delay = null
+                setModalBody('complete')
+                setModalVisible(true)
+            }, 300)
+        }
+
+    }
+    const handleDoubleClick = () => {
+        window.clearTimeout(delay)
+        delay = null
+        handleApprovePay()
+    }
+    const onClickPayDebt = (debts) => {
+        const all = debts.debt
+        const allUzs = debts.debtUzs
+        setClient(debts.deliver)
+        setCurrentId(debts.id)
+        setAllPayment(all)
+        setAllPaymentUzs(allUzs)
+        setPaymentCash(all)
+        setPaymentCashUzs(allUzs)
+        setPaid(all)
+        setPaidUzs(allUzs)
+        setPaymentModalVisible(true)
+        currentEchangerate(allUzs, all)
+        setPaymentModalVisible(true)
+    }
+    const handleApprovePay = () => {
+        const body = {
+            payment: {
+                payment: Number(paymentCash) + Number(paymentCard) + Number(paymentTransfer),
+                paymentuzs: Number(paymentCashUzs) + Number(paymentCardUzs) + Number(paymentTransferUzs),
+                type: paymentType,
+                cash: Number(paymentCash),
+                cashuzs: Number(paymentCashUzs),
+                card: Number(paymentCard),
+                carduzs: Number(paymentCardUzs),
+                transfer: Number(paymentTransfer),
+                transferuzs: Number(paymentTransferUzs),
+                comment: saleComment
+            },
+            user: user._id,
+            incomingconnectorid: currentId
+        }
+        dispatch(payDebt(body)).then(({error}) => {
+            if (!error) {
+                dispatch(
+                    getIncomingConnectors({
+                        market: _id,
+                        beginDay,
+                        endDay
+                    })
+                )
+                toggleModal()
+                togglePaymentModal()
+            }
+        })
+    }
+    const changeComment = (e) => {
+        setSaleComment(e)
     }
 
     useEffect(() => {
@@ -375,7 +644,7 @@ const IncomingSuppliers = () => {
             getIncomingConnectors({
                 market: _id,
                 beginDay,
-                endDay,
+                endDay
             })
         )
     }, [dispatch, _id, beginDay, endDay])
@@ -391,14 +660,14 @@ const IncomingSuppliers = () => {
     useEffect(() => {
         const body = {
             beginDay,
-            endDay,
+            endDay
         }
         dispatch(excelIncomings(body))
-    }, [dispatch])
+    }, [dispatch, beginDay, endDay])
 
     const headers = [
         {
-            title: '№',
+            title: '№'
         },
         {
             title: t('Yetkazuvchi'),
@@ -407,7 +676,7 @@ const IncomingSuppliers = () => {
         {
             title: t('Kodi'),
             filter: 'product.productdata.code',
-            styles: 'w-[7%]',
+            styles: 'w-[7%]'
         },
         {
 
@@ -432,8 +701,8 @@ const IncomingSuppliers = () => {
         },
         {
             title: '',
-            styles: 'w-[5%]',
-        },
+            styles: 'w-[5%]'
+        }
     ]
 
     const incomingSupplierHeaders = [
@@ -451,81 +720,116 @@ const IncomingSuppliers = () => {
     ]
 
     return (
-        <div className=''>
-            <div className='flex items-center justify-between mainPadding'>
-                <LinkToBack link={'/maxsulotlar/qabul/qabullar'} />
-                <ResultIncomings
-                    connectors={incomingCard}
-                    currencyType={currencyType}
-                />
-            </div>
-            <div className='flex flex-wrap gap-[1%] mainPadding'>
-                {incomingCard.length > 0 &&
-                    map(incomingCard,(incoming) => (
-                        <CardBtn
-                            date={incoming.createdAt}
-                            deliver={incoming.supplier.name}
-                            products={incoming.products}
-                            pieces={incoming.pieces}
-                            onClick={() =>
-                                changeCurrentData(incoming.supplier.name)
-                            }
-                            key={uniqueId('card')}
-                        />
-                    ))}
-            </div>
-            <div className='mainPadding flex items-center justify-between'>
-                <ExportBtn
-                    fileName={`Maxsulotlar-qabul-qabullar-${new Date().toLocaleDateString()}`}
-                    headers={incomingSupplierHeaders}
-                    datas={allIncomingsData}
-                    pagesName='IncomingSuppliers'
-                />
-                <span>Ro`yxat</span>
-                <Pagination
-                    currentPage={currentPage}
-                    setCurrentPage={setCurrentPage}
-                    countPage={countPage}
-                    totalDatas={incomingscount}
-                />
-            </div>
-            <div>
-                <SearchForm
-                    filterBy={['total', 'code', 'name']}
-                    filterByName={searchName}
-                    filterByTotal={(e) => setCountPage(e.value)}
-                    filterByCode={searchCode}
-                    filterByCodeAndNameAndCategoryWhenPressEnter={searchOnKeyUp}
-                />
-            </div>
-            <div className='mainPadding'>
-                <Table
-                    page={'incomings'}
-                    headers={headers}
-                    data={currentData}
-                    currentPage={currentPage}
-                    countPage={countPage}
-                    currency={currencyType}
-                    editedIncoming={editedIncoming}
-                    Edit={addToEditedIncoming}
-                    changeHandler={changeEditedIncoming}
-                    saveEditIncoming={updateEditedIncoming}
-                    Delete={(incoming) => openDeleteModal(incoming)}
-                    Sort={filterData}
-                    onKeyUp={onKeyUpdate}
-                    sortItem={sortItem}
-                />
-            </div>
-            <UniversalModal
-                body={'approve'}
-                isOpen={modal}
-                headerText={t('Mahsulotni o`chirishni tasdiqlaysizmi?')}
-                title={t('O`chirilgan mahsulotni tiklashning imkoni mavjud emas!')}
-
-                approveFunction={removeIncoming}
-                closeModal={closeModal}
-                toggleModal={closeModal}
+        <div className={`relative grow overflow-hidden`}>
+            <CustomerPayment
+                returned={true}
+                type={paymentType}
+                active={paymentModalVisible}
+                togglePaymentModal={togglePaymentModal}
+                changePaymentType={handleChangePaymentType}
+                onChange={handleChangePaymentInput}
+                client={client}
+                allPayment={currencyType === 'USD' ? allPayment : allPaymentUzs}
+                card={currencyType === 'USD' ? paymentCard : paymentCardUzs}
+                cash={currencyType === 'USD' ? paymentCash : paymentCashUzs}
+                debt={currencyType === 'USD' ? paymentDebt : paymentDebtUzs}
+                hasDiscount={false}
+                transfer={
+                    currencyType === 'USD'
+                        ? paymentTransfer
+                        : paymentTransferUzs
+                }
+                paid={currencyType === 'USD' ? paid : paidUzs}
+                handleClickPay={handleClickPay}
+                changeComment={changeComment}
+                saleComment={saleComment}
+                onDoubleClick={handleDoubleClick}
             />
+            <div className='absolute left-0 right-0 top-0 bottom-0 overflow-auto'>
+                <div className='flex items-center justify-between mainPadding'>
+                    <LinkToBack link={'/maxsulotlar/qabul/qabullar'} />
+                    <ResultIncomings
+                        connectors={incomingCard}
+                        currencyType={currencyType}
+                    />
+                </div>
+                <div className='flex flex-wrap gap-[1%] mainPadding'>
+                    {incomingCard.length > 0 &&
+                        map(incomingCard, (incoming) => (
+                            <CardBtn
+                                date={incoming.createdAt}
+                                time={incoming.time}
+                                deliver={incoming.supplier.name}
+                                products={incoming.products}
+                                pieces={incoming.pieces}
+                                debt={incoming.debt}
+                                debtUzs={incoming.debtuzs}
+                                paid={incoming.totalpayment}
+                                paidUzs={incoming.totalpaymentuzs}
+                                all={incoming.totalprice}
+                                allUzs={incoming.totalpriceuzs}
+                                onClickPayDebt={onClickPayDebt}
+                                id={incoming._id}
+                                onClick={() =>
+                                    changeCurrentData(incoming.supplier.name)
+                                }
+                                key={uniqueId('card')}
+                            />
+                        ))}
+                </div>
+                {
+                    currentData.length ? <>
+                        <div className='mainPadding flex items-center justify-between'>
+                            <ExportBtn
+                                fileName={`Maxsulotlar-qabul-qabullar-${new Date().toLocaleDateString()}`}
+                                headers={incomingSupplierHeaders}
+                                datas={allIncomingsData}
+                                pagesName='IncomingSuppliers'
+                            />
+                            <span>Ro`yxat</span>
+                            <Pagination
+                                currentPage={currentPage}
+                                setCurrentPage={setCurrentPage}
+                                countPage={countPage}
+                                totalDatas={incomingscount}
+                            />
+                        </div>
+                        <SearchForm
+                            filterBy={['total', 'code', 'name']}
+                            filterByName={searchName}
+                            filterByTotal={(e) => setCountPage(e.value)}
+                            filterByCode={searchCode}
+                            filterByCodeAndNameAndCategoryWhenPressEnter={searchOnKeyUp}
+                        />
+                        <div className='mainPadding'>
+                            <Table
+                                page={'incomings'}
+                                headers={headers}
+                                data={currentData}
+                                currentPage={currentPage}
+                                countPage={countPage}
+                                currency={currencyType}
+                                editedIncoming={editedIncoming}
+                                Edit={addToEditedIncoming}
+                                changeHandler={changeEditedIncoming}
+                                saveEditIncoming={updateEditedIncoming}
+                                Delete={(incoming) => openDeleteModal(incoming)}
+                                Sort={filterData}
+                                onKeyUp={onKeyUpdate}
+                                sortItem={sortItem}
+                            />
+                        </div>
+                    </> : <NotFind text='Qabullar mavjud emas...' />
+                }
+                <UniversalModal
+                    body={modalBody}
+                    isOpen={modalVisible}
+                    headerText={modalBody === 'complete' ? t('To\'lovni amalga oshirishni tasdiqlaysizmi ?') : t('Mahsulotni o`chirishni tasdiqlaysizmi?')}
+                    title={modalBody === 'complete' ? t('To\'lovni amalga oshirgach bu ma`lumotlarni o`zgaritirb bo`lmaydi !') : t('O`chirilgan mahsulotni tiklashning imkoni mavjud emas!')}
+                    approveFunction={modalBody === 'complete' ? handleApprovePay : removeIncoming}
+                    toggleModal={toggleModal}
+                />
+            </div>
         </div>
     )
 }

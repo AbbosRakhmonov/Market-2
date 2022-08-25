@@ -3,7 +3,6 @@ import {ArcElement, Chart as ChartJS, Legend, Tooltip} from 'chart.js'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import {Pie} from 'react-chartjs-2'
 import {useSelector} from 'react-redux'
-import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 function PieChart({arr = [0]}) {

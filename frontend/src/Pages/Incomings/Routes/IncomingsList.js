@@ -1,26 +1,33 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { universalSort, UsdToUzs, UzsToUsd } from '../../../App/globalFunctions'
+import React, {useCallback, useEffect, useState} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import {universalSort, UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
 import ExportBtn from '../../../Components/Buttons/ExportBtn'
 import Dates from '../../../Components/Dates/Dates'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
 import Pagination from '../../../Components/Pagination/Pagination'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
 import Table from '../../../Components/Table/Table'
-import {map,filter} from 'lodash'
-import {clearSuccesDelete, clearSuccessUpdate, deleteIncoming, getIncomings, updateIncoming,excelIncomings} from '../incomingSlice'
-import { useTranslation } from 'react-i18next';
+import {filter, map} from 'lodash'
+import {
+    clearSuccesDelete,
+    clearSuccessUpdate,
+    deleteIncoming,
+    excelIncomings,
+    getIncomings,
+    updateIncoming
+} from '../incomingSlice'
+import {useTranslation} from 'react-i18next'
 
 
 const IncomingsList = () => {
     const dispatch = useDispatch()
-    const { t } = useTranslation(['common'])
+    const {t} = useTranslation(['common'])
     const {
-        market: { _id }
+        market: {_id}
     } = useSelector((state) => state.login)
-    const {incomings, incomingscount, successUpdate, successDelete,allIncomingsData} =
+    const {incomings, incomingscount, successUpdate, successDelete, allIncomingsData} =
         useSelector((state) => state.incoming)
-    const { currencyType, currency } = useSelector((state) => state.currency)
+    const {currencyType, currency} = useSelector((state) => state.currency)
 
     const [beginDay, setBeginDay] = useState(
         new Date(
@@ -58,7 +65,7 @@ const IncomingsList = () => {
     const [storageCurrentIncoming, setStorageCurrentIncoming] = useState([])
 
     const getCurrentData = (data) => {
-        let current = map(data,(incoming) => {
+        let current = map(data, (incoming) => {
             return {
                 ...incoming,
                 sellingprice: incoming.product.price.sellingprice,
@@ -125,7 +132,7 @@ const IncomingsList = () => {
                     market: _id,
                     startDate: beginDay,
                     endDate: endDay,
-                    product: { ...editedIncoming }
+                    product: {...editedIncoming}
                 })
             )
         } else {
@@ -150,7 +157,7 @@ const IncomingsList = () => {
     const searchName = (e) => {
         let target = e.target.value.toLowerCase()
         setCurrentIncoming([
-            ...filter([...storageCurrentIncoming],({ product }) =>
+            ...filter([...storageCurrentIncoming], ({product}) =>
                 product.productdata.name.toLowerCase().includes(target)
             )
         ])
@@ -164,7 +171,7 @@ const IncomingsList = () => {
     const searchCode = (e) => {
         let target = e.target.value.toLowerCase()
         setCurrentIncoming([
-            ...filter([...storageCurrentIncoming],({ product }) =>
+            ...filter([...storageCurrentIncoming], ({product}) =>
                 product.productdata.code.includes(target)
             )
         ])
@@ -178,7 +185,7 @@ const IncomingsList = () => {
     const searchSupplier = (e) => {
         let target = e.target.value.toLowerCase()
         setCurrentIncoming([
-            ...filter([...storageCurrentIncoming],(product) =>
+            ...filter([...storageCurrentIncoming], (product) =>
                 product.supplier.name.toLowerCase().includes(target)
             )
         ])
@@ -273,7 +280,7 @@ const IncomingsList = () => {
                 market: _id,
                 beginDay,
                 endDay,
-                product: { ...deletedIncoming }
+                product: {...deletedIncoming}
             })
         )
         setModal(false)
@@ -324,9 +331,9 @@ const IncomingsList = () => {
     }, [dispatch, getIncomingsData, successDelete])
 
     useEffect(() => {
-      const body = {
-            beginDay, 
-            endDay ,
+        const body = {
+            beginDay,
+            endDay
         }
         dispatch(excelIncomings(body))
     }, [dispatch])
@@ -385,13 +392,13 @@ const IncomingsList = () => {
     ]
 
     return (
-        <div className=''>
+        <div className={'grow overflow-auto'}>
             <div className='mainPadding text-center'>
-                <p>{t("Ro'yxat")}</p>
+                <p>{t('Ro\'yxat')}</p>
             </div>
             <div className='mainPadding flex items-center justify-between'>
                 <ExportBtn
-                    fileName={`${t("Maxsulotlar-qabul")}-${new Date().toLocaleDateString()}`}
+                    fileName={`${t('Maxsulotlar-qabul')}-${new Date().toLocaleDateString()}`}
                     headers={incomingHeaders}
                     datas={allIncomingsData}
                     pagesName='IncomingList'
