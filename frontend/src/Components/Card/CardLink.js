@@ -18,7 +18,7 @@ const CardLink = (
     }) => {
     return (
         <Link to={path} className='flex-[0_0_23.5%]' state={state}>
-            <div className='w-full cardStyle'>
+            <div className='w-full h-full cardStyle'>
                 <h1 className='headerStyle'>
                     {(currencyType === 'USD'
                             ? totalprice
