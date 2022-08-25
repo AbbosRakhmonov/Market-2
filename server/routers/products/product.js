@@ -250,8 +250,11 @@ module.exports.register = async (req, res) => {
       });
     }
 
+    let categor = await Category.findById(category);
+
     const product = await ProductData.findOne({
       market,
+      category,
       code,
     });
 
@@ -271,8 +274,6 @@ module.exports.register = async (req, res) => {
         message: `Diqqat! ${barcode} shtrixkodli mahsulot avval yaratilgan.`,
       });
     }
-
-    let categor = await Category.findById(category);
 
     if (!categor) {
       return res.status(400).json({
