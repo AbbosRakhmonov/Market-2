@@ -81,7 +81,7 @@ function CreateProductForm({
                 <FieldContainer
                     value={unitOfProduct}
                     onChange={handleChangeUnitOfProduct}
-                    label={t("O`lchov birligi")}
+                    label={t("O'lchov birligi")}
                     placeholder={t('tanlang...')}
                     select={true}
                     options={unitOptions}
