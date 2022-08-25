@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import FieldContainer from '../../Components/FieldContainer/FieldContainer.js'
 import Button from '../../Components/Buttons/BtnAddRemove.js'
 import SearchForm from '../../Components/SearchForm/SearchForm.js'
 import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
 import Table from '../../Components/Table/Table.js'
-import { useDispatch, useSelector } from 'react-redux'
-import { regexForTypeNumber } from '../../Components/RegularExpressions/RegularExpressions.js'
-import { checkEmptyString, universalSort } from '../../App/globalFunctions.js'
+import {useDispatch, useSelector} from 'react-redux'
+import {regexForTypeNumber} from '../../Components/RegularExpressions/RegularExpressions.js'
+import {checkEmptyString, universalSort} from '../../App/globalFunctions.js'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
-import { motion } from 'framer-motion'
+import {motion} from 'framer-motion'
 import {
     successAddCategoryMessage,
     successDeleteCategoryMessage,
     successUpdateCategoryMessage,
     universalToast,
     warningCategory,
-    warningEmptyInput
+    warningEmptyInput,
 } from '../../Components/ToastMessages/ToastMessages.js'
 import {
     addCategory,
@@ -31,33 +31,37 @@ import {
     deleteCategory,
     getCategories,
     getCategoriesByFilter,
-    updateCategory
+    updateCategory,
 } from './categorySlice.js'
 import Pagination from '../../Components/Pagination/Pagination.js'
-import { useTranslation } from 'react-i18next';
-import {filter} from "lodash"
+import {useTranslation} from 'react-i18next'
+import {filter} from 'lodash'
+import ExportBtn from '../../Components/Buttons/ExportBtn.js'
 const Category = () => {
-    const { t } = useTranslation(['common'])
-  
+    const {t} = useTranslation(['common'])
+
     const headers = [
         {
             title: t('№'),
-            styles: 'w-[10%]'
+            styles: 'w-[10%]',
         },
         {
             title: t('Kategoriya kodi'),
             filter: 'code',
-            styles: 'w-[16%]'
+            styles: 'w-[16%]',
         },
         {
             title: t('Kategoriya nomi'),
             filter: 'name',
-            styles: 'w-[64%]'
+            styles: 'w-[64%]',
         },
         {
-            title: ''
-        }
+            title: '',
+        },
     ]
+
+    const exportHeader = ['№', 'Kodi', 'Nomi']
+
     const dispatch = useDispatch()
     const {
         categories,
@@ -71,7 +75,7 @@ const Category = () => {
         successUpdateCategory,
         errorUpdateCategory,
         successDeleteCategory,
-        errorDeleteCategory
+        errorDeleteCategory,
     } = useSelector((state) => state.category)
     const [data, setData] = useState(categories)
     const [searchedData, setSearchedData] = useState(searchedCategories)
@@ -86,7 +90,7 @@ const Category = () => {
     const [sorItem, setSorItem] = useState({
         filter: '',
         sort: '',
-        count: 0
+        count: 0,
     })
     const [currentCategory, setCurrentCategory] = useState(null)
     const [deletedCategory, setDeletedCategory] = useState(null)
@@ -107,7 +111,7 @@ const Category = () => {
     }
 
     // filter by total
-    const filterByTotal = ({ value }) => {
+    const filterByTotal = ({value}) => {
         setShowByTotal(value)
         setCurrentPage(0)
     }
@@ -127,13 +131,13 @@ const Category = () => {
             countPage: showByTotal,
             search: {
                 name: searchByName.replace(/\s+/g, ' ').trim(),
-                code: searchByCode.replace(/\s+/g, ' ').trim()
+                code: searchByCode.replace(/\s+/g, ' ').trim(),
             },
             category: {
                 name: nameOfCategory,
                 code: codeOfCategory,
-                _id: currentCategory._id
-            }
+                _id: currentCategory._id,
+            },
         }
         dispatch(updateCategory(body))
     }
@@ -145,8 +149,8 @@ const Category = () => {
             countPage: showByTotal,
             search: {
                 name: searchByName.replace(/\s+/g, ' ').trim(),
-                code: searchByCode.replace(/\s+/g, ' ').trim()
-            }
+                code: searchByCode.replace(/\s+/g, ' ').trim(),
+            },
         }
         setDeletedCategory(body)
         toggleModal()
@@ -172,12 +176,12 @@ const Category = () => {
                 countPage: showByTotal,
                 category: {
                     name: nameOfCategory,
-                    code: codeOfCategory
+                    code: codeOfCategory,
                 },
                 search: {
                     name: searchByName.replace(/\s+/g, ' ').trim(),
-                    code: searchByCode.replace(/\s+/g, ' ').trim()
-                }
+                    code: searchByCode.replace(/\s+/g, ' ').trim(),
+                },
             }
             dispatch(addCategory(body))
         }
@@ -196,13 +200,13 @@ const Category = () => {
         let val = e.target.value
         let valForSearch = val.replace(/\s+/g, ' ').trim()
         setSearchByCode(val)
-            ; (searchedData.length > 0 || totalSearched > 0) &&
-                dispatch(clearSearchedCategories())
+        ;(searchedData.length > 0 || totalSearched > 0) &&
+            dispatch(clearSearchedCategories())
         if (valForSearch === '') {
             setData(categories)
             setFilteredDataTotal(total)
         } else {
-            const filteredCategories = filter(categories,(category) => {
+            const filteredCategories = filter(categories, (category) => {
                 return category.code.includes(valForSearch)
             })
             setData(filteredCategories)
@@ -213,13 +217,13 @@ const Category = () => {
         let val = e.target.value
         let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
         setSearchByName(val)
-            ; (searchedData.length > 0 || totalSearched > 0) &&
-                dispatch(clearSearchedCategories())
+        ;(searchedData.length > 0 || totalSearched > 0) &&
+            dispatch(clearSearchedCategories())
         if (valForSearch === '') {
             setData(categories)
             setFilteredDataTotal(total)
         } else {
-            const filteredCategories = filter(categories,(category) => {
+            const filteredCategories = filter(categories, (category) => {
                 return (
                     category.name &&
                     category.name.toLowerCase().includes(valForSearch)
@@ -237,8 +241,8 @@ const Category = () => {
                 countPage: showByTotal,
                 search: {
                     name: searchByName.replace(/\s+/g, ' ').trim(),
-                    code: searchByCode.replace(/\s+/g, ' ').trim()
-                }
+                    code: searchByCode.replace(/\s+/g, ' ').trim(),
+                },
             }
             dispatch(getCategoriesByFilter(body))
         }
@@ -251,7 +255,7 @@ const Category = () => {
                     setSorItem({
                         filter: filterKey,
                         sort: '1',
-                        count: 2
+                        count: 2,
                     })
                     universalSort(
                         searchedData.length > 0 ? searchedData : data,
@@ -267,7 +271,7 @@ const Category = () => {
                     setSorItem({
                         filter: filterKey,
                         sort: '',
-                        count: 0
+                        count: 0,
                     })
                     universalSort(
                         searchedData.length > 0 ? searchedData : data,
@@ -283,7 +287,7 @@ const Category = () => {
                     setSorItem({
                         filter: filterKey,
                         sort: '-1',
-                        count: 1
+                        count: 1,
                     })
                     universalSort(
                         searchedData.length > 0 ? searchedData : data,
@@ -299,7 +303,7 @@ const Category = () => {
             setSorItem({
                 filter: filterKey,
                 sort: '-1',
-                count: 1
+                count: 1,
             })
             universalSort(
                 searchedData.length > 0 ? searchedData : data,
@@ -353,7 +357,7 @@ const Category = () => {
         successUpdateCategory,
         errorUpdateCategory,
         errorDeleteCategory,
-        successDeleteCategory
+        successDeleteCategory,
     ])
     useEffect(() => {
         const body = {
@@ -361,8 +365,8 @@ const Category = () => {
             countPage: showByTotal,
             search: {
                 name: searchByName.replace(/\s+/g, ' ').trim(),
-                code: searchByCode.replace(/\s+/g, ' ').trim()
-            }
+                code: searchByCode.replace(/\s+/g, ' ').trim(),
+            },
         }
         dispatch(getCategories(body))
         //    eslint-disable-next-line react-hooks/exhaustive-deps
@@ -377,7 +381,6 @@ const Category = () => {
         setSearchedData(searchedCategories)
     }, [searchedCategories])
 
-
     return (
         <motion.section
             key='content'
@@ -385,32 +388,36 @@ const Category = () => {
             animate='open'
             exit='collapsed'
             variants={{
-                open: { opacity: 1, height: 'auto' },
-                collapsed: { opacity: 0, height: 0 }
+                open: {opacity: 1, height: 'auto'},
+                collapsed: {opacity: 0, height: 0},
             }}
-            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}>
+            transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
+        >
             <UniversalModal
                 body='approve'
                 toggleModal={toggleModal}
-                headerText={`${deletedCategory && deletedCategory.code
-                    } - ${t("kategoriyani o`chirishni tasdiqlaysizmi?")}`}
-                title={
-                    t('O`chirilgan kategoriyalarni tiklashning imkoni mavjud emas!')
-                }
+                headerText={`${deletedCategory && deletedCategory.code} - ${t(
+                    'kategoriyani o`chirishni tasdiqlaysizmi?'
+                )}`}
+                title={t(
+                    'O`chirilgan kategoriyalarni tiklashning imkoni mavjud emas!'
+                )}
                 approveFunction={handleClickApproveToDelete}
                 closeModal={handleClickCancelToDelete}
                 isOpen={modalVisible}
             />
             <form
-                className={`flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200 ${stickyForm ? 'stickyForm' : ''
-                    }`}g
+                className={`flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200 ${
+                    stickyForm ? 'stickyForm' : ''
+                }`}
+                g
             >
                 <div className='supplier-style'>
                     <FieldContainer
                         value={codeOfCategory}
                         onChange={handleChangeCodeOfCategory}
                         label={t('Kategoriya kodi')}
-                        placeholder={(`${t('misol')}: 000000`)}
+                        placeholder={`${t('misol')}: 000000`}
                         maxWidth={'w-[9rem]'}
                         border={true}
                     />
@@ -438,7 +445,13 @@ const Category = () => {
                 </div>
             </form>
             <div className='pagination-supplier mainPadding'>
-                <p className='supplier-title'>{(t("Kategoriyalar"))}</p>
+                <ExportBtn
+                    datas={data}
+                    headers={exportHeader}
+                    fileName={'Kategoriyalar'}
+                    pagesName='Category'
+                />
+                <p className='supplier-title'>{t('Kategoriyalar')}</p>
                 {(filteredDataTotal !== 0 || totalSearched !== 0) && (
                     <Pagination
                         countPage={Number(showByTotal)}

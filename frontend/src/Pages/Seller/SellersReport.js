@@ -229,26 +229,30 @@ const SellersReport = () => {
                     }
                 />
             </div>
-            <div className='mainPadding'>
-                <Table
-                    data={generalReport}
-                    currency={currencyType}
-                    page={'generalreport'}
-                    headers={headersInfo}
-                />
-            </div>
-            <div className='mainPadding'>
-                <Table
-                    data={data}
-                    currentPage={currentPage}
-                    currency={currencyType}
-                    countPage={countPage}
-                    page={'saleslist'}
-                    headers={headers}
-                    sellers={true}
-                    Print={handleClickPrint}
-                />
-            </div>
+            {data.length > 0 && (
+                <>
+                    <div className='mainPadding'>
+                        <Table
+                            data={generalReport}
+                            currency={currencyType}
+                            page={'generalreport'}
+                            headers={headersInfo}
+                        />
+                    </div>
+                    <div className='mainPadding'>
+                        <Table
+                            data={data}
+                            currentPage={currentPage}
+                            currency={currencyType}
+                            countPage={countPage}
+                            page={'saleslist'}
+                            headers={headers}
+                            sellers={true}
+                            Print={handleClickPrint}
+                        />
+                    </div>
+                </>
+            )}
         </div>
     )
 }

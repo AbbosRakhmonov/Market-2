@@ -13,7 +13,7 @@ function Incomings() {
     const {t} = useTranslation(['common'])
     const dispatch = useDispatch()
     const {
-        market: {_id}
+        market: {_id},
     } = useSelector((state) => state.login)
     const {currencyType} = useSelector((state) => state.currency)
     const {incomingconnectors, suppliers} = useSelector(
@@ -40,7 +40,7 @@ function Incomings() {
         const suppliers = map(data, (supplier) => {
             return {
                 label: supplier.name,
-                value: supplier._id
+                value: supplier._id,
             }
         })
         setSuppliersData(suppliers)
@@ -51,7 +51,8 @@ function Incomings() {
         let groups = []
         const convert = (el) => new Date(el.createdAt).toLocaleDateString()
         for (let element of data) {
-            let existingGroups = filter(groups,
+            let existingGroups = filter(
+                groups,
                 (group) => convert(group) === convert(element)
             )
             if (existingGroups.length > 0) {
@@ -87,7 +88,7 @@ function Incomings() {
                 totalpayment: sumTotal(income.totalpayment),
                 totalpaymentuzs: sumTotal(income.totalpaymentuzs),
                 debt: sumTotal(income.debt),
-                debtuzs: sumTotal(income.debtuzs)
+                debtuzs: sumTotal(income.debtuzs),
             }
         })
         setCardConnectors(data)
@@ -116,7 +117,7 @@ function Incomings() {
             debt: [el.debt],
             debtuzs: [el.debtuzs],
             supplier: [el.supplier],
-            _id: el._id
+            _id: el._id,
         }
         group.push(newgroup)
     }
@@ -128,7 +129,8 @@ function Incomings() {
             changeConnectorsData(incomingconnectors)
             setSupplierSearch('')
         } else {
-            const connectorsForSupplier = filter(incomingconnectors,
+            const connectorsForSupplier = filter(
+                incomingconnectors,
                 ({supplier}) => {
                     return supplier._id === target
                 }
@@ -157,7 +159,7 @@ function Incomings() {
             getIncomingConnectors({
                 market: _id,
                 beginDay,
-                endDay
+                endDay,
             })
         )
     }, [dispatch, _id, beginDay, endDay])
@@ -187,9 +189,9 @@ function Incomings() {
                             options={[
                                 {
                                     label: t('Yetkazib beruvchilar'),
-                                    value: 'all'
+                                    value: 'all',
                                 },
-                                ...suppliersData
+                                ...suppliersData,
                             ]}
                             onSelect={selectSuppliers}
                         />
@@ -221,7 +223,7 @@ function Incomings() {
                             path={`/maxsulotlar/qabul/qabullar/${uniqueId()}`}
                             state={{
                                 date: item.createdAt,
-                                supplier: supplierSearch
+                                supplier: supplierSearch,
                             }}
                         />
                     )
