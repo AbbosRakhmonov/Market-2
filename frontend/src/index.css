@@ -52,7 +52,7 @@
     }
 
     .headerStyle {
-        @apply flex items-center justify-center text-[1.5rem] font-bold p-[.625rem];
+        @apply flex items-center justify-center text-[1.5rem] font-bold p-[.625rem] leading-["120%"];
     }
 
     .numberCard {
@@ -211,10 +211,6 @@
 
     .cardStyle {
         @apply p-[1.15rem] bg-primary-800 text-white-900 inline-block rounded-[.5rem] transition ease-in-out hover:bg-black-700;
-    }
-
-    .headerStyle {
-        @apply flex items-center justify-center text-[1.5rem] font-bold p-[.625rem];
     }
 
     .numberCard {
