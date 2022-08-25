@@ -142,6 +142,13 @@ const navListForDirector = [
                 path: 'dukonlar/filiallar',
                 icon: '',
                 submenu: false
+            },
+            {
+                id: 2,
+                label: 'Almashinuv',
+                path: 'dukonlar/almashinuv',
+                icon: '',
+                submenu: false
             }
         ]
     },

@@ -141,7 +141,6 @@ module.exports.registerDirector = async (req, res) => {
             phone,
             password,
             market,
-            type,
             administrator
         } = req.body
         const marke = await Market.findById(market)
@@ -172,7 +171,7 @@ module.exports.registerDirector = async (req, res) => {
             phone,
             password: hash,
             market,
-            type,
+            type: 'Director',
             login,
             administrator
         })

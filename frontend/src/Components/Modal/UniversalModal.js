@@ -9,9 +9,10 @@ import Check from './ModalBodys/Check.js'
 import AllChecks from './ModalBodys/AllChecks.js'
 import StepperPage from './ModalBodys/StepperPage.js'
 import AdminMarkets from './ModalBodys/AdminMarkets.js'
-import { SavedSalesCheck } from '../SaleCheck/SavedSalesCheck.js'
-import { useTranslation } from 'react-i18next';
-import SalesList from './ModalBodys/SalesList';
+import {SavedSalesCheck} from '../SaleCheck/SavedSalesCheck.js'
+import ExchangesBody from './ModalBodys/ExchangesBody'
+import {useTranslation} from 'react-i18next'
+import SalesList from './ModalBodys/SalesList'
 import TotalReports from '../TotalReports/TotalReports.js'
 
 function UniversalModal({
@@ -37,8 +38,9 @@ function UniversalModal({
     productreport,
     saleproductsreport,
     totalreports,
+    dataObject,
 }) {
-    const { t } = useTranslation(['common'])
+    const {t} = useTranslation(['common'])
 
     const customStyles = {
         content: {
@@ -147,6 +149,14 @@ function UniversalModal({
                 )
             // case 'checkInventory':
             //     return <AllCheckInventories product={printedInventories} />
+            case 'exchanges':
+                return (
+                    <ExchangesBody
+                        approveFunction={approveFunction}
+                        toggleModal={toggleModal}
+                        dataObject={dataObject}
+                    />
+                )
             default:
                 return t('Bunday jadval topilmadi')
         }
@@ -160,6 +170,8 @@ function UniversalModal({
                 body === 'addMarket' ||
                 body === 'filterBranch'
                     ? {...modalFull}
+                    : body === 'exchanges'
+                    ? {content: {width: '70%'}}
                     : body === 'approve' || body === 'complete'
                     ? {}
                     : {...customStyles}

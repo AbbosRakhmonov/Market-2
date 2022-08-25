@@ -483,13 +483,15 @@ module.exports.getFilials = async (req, res) => {
     const filials = await Market.find({
       mainmarket: market,
       name: name,
-    }).select('director image name phone1 createdAt');
+    }).select('director image name phone1 createdAt')
+    .populate("director", "firstname lastname");
 
     res.status(201).json({
       count: filials.length,
       filials: filials.splice(currentPage * countPage, countPage),
     });
   } catch (error) {
+    console.log(error);
     res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
