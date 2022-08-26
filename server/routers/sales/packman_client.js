@@ -72,8 +72,13 @@ router.post("/saleproducts/getconnectorsexcel", auth, (req, res) => {
 router.post("/saleproducts/payment", auth, (req, res) => {
   require("./saleproduct").payment(req, res);
 });
+
 router.post("/saleproducts/getreportproducts", auth, (req, res) => {
   require("./saleproduct").getreportproducts(req, res);
+});
+
+router.post("/saleproducts/getexcelreportproducts", auth, (req, res) => {
+  require("./saleproduct").getexcelreportproducts(req, res);
 });
 
 // Discounts

@@ -1052,7 +1052,82 @@ module.exports.getreportproducts = async (req, res) => {
       count: count.length,
     });
   } catch (error) {
-    console.log(error);
+    res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
+  }
+};
+
+module.exports.getexcelreportproducts = async (req, res) => {
+  try {
+    const { market, search } = req.body;
+    const marke = await Market.findById(market);
+    if (!marke) {
+      return res.status(400).json({
+        message: `Diqqat! Do'kon haqida malumotlar topilmadi!`,
+      });
+    }
+
+    const code = new RegExp(
+      ".*" + search ? search.codeofproduct : "" + ".*",
+      "i"
+    );
+    const name = new RegExp(
+      ".*" + search ? search.nameofproduct : "" + ".*",
+      "i"
+    );
+    const client = new RegExp(
+      ".*" + search ? search.nameofclient : "" + ".*",
+      "i"
+    );
+    const firstname = new RegExp(
+      ".*" + search ? search.nameofseller : "" + ".*",
+      "i"
+    );
+
+    const saleproducts = await SaleProduct.find({
+      market,
+    })
+      .select("-isArchive -updatedAt -market -__v")
+      .sort({ _id: -1 })
+      .populate({
+        path: "user",
+        select: "firstname lastname",
+        match: { firstname },
+      })
+      .populate({
+        path: "saleconnector",
+        select: "id client",
+        populate: { path: "client", select: "name", match: { name: client } },
+      })
+      .populate({
+        path: "product",
+        select: "productdata",
+        populate: {
+          path: "productdata",
+          select: "name code",
+          match: { code, name },
+        },
+      })
+      .then((saleproducts) =>
+        filter(saleproducts, (saleproduct) =>
+          search.nameofclient.length > 0
+            ? saleproduct.product.productdata &&
+              saleproduct.product.productdata !== null &&
+              saleproduct.user &&
+              saleproduct.user !== null &&
+              saleproduct.saleconnector &&
+              saleproduct.saleconnector.client &&
+              saleproduct.saleconnector.client !== null
+            : saleproduct.product.productdata &&
+              saleproduct.product.productdata !== null &&
+              saleproduct.user &&
+              saleproduct.user !== null
+        )
+      );
+
+    res.status(200).send({
+      products: saleproducts,
+    });
+  } catch (error) {
     res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
