@@ -2,6 +2,7 @@ import React, {useCallback, useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {useNavigate} from 'react-router-dom'
 import Table from '../../../Components/Table/Table'
+import { universalSort } from './../../../App/globalFunctions';
 import {useTranslation} from 'react-i18next'
 import {deleteTemporary, getTemporary, setTemporaryRegister} from '../incomingSlice'
 import {filter, map} from 'lodash'
@@ -10,15 +11,22 @@ import NotFind from '../../../Components/NotFind/NotFind.js'
 const SavedIncomings = () => {
     const {t} = useTranslation(['common'])
     const dispatch = useDispatch()
+    const { temporaries } = useSelector((state) => state.incoming)
     let navigate = useNavigate()
-
+    const [sorItem, setSorItem] = useState({
+        filter: '',
+        sort: '',
+        count: 0
+    })
     const {
         market: {_id}
     } = useSelector((state) => state.login)
+
     const {currencyType} = useSelector((state) => state.currency)
     const {temporaries} = useSelector((state) => state.incoming)
 
     const [currentTemporaryData, setCurrentTemporaryData] = useState([])
+    const [storeData, setStoreData] = useState([])
 
     const changeTemporaryData = useCallback((data) => {
         const count = (arr, key) =>
@@ -41,6 +49,7 @@ const SavedIncomings = () => {
             }
         })
         setCurrentTemporaryData(temporary)
+        setStoreData(temporary)
     }, [])
 
     const sendTemporayToRegister = (temporary) => {
@@ -56,7 +65,6 @@ const SavedIncomings = () => {
         )
         navigate('/maxsulotlar/qabul/qabulqilish')
     }
-
     useEffect(() => {
         dispatch(
             getTemporary({
@@ -114,6 +122,67 @@ const SavedIncomings = () => {
         }
     ]
 
+    const filterData = (filterKey) => {
+        if (filterKey === sorItem.filter) {
+            switch (sorItem.count) {
+                case 1:
+                    setSorItem({
+                        filter: filterKey,
+                        sort: '1',
+                        count: 2
+                    })
+                    universalSort(
+                        currentTemporaryData,
+                        setCurrentTemporaryData,
+                        filterKey,
+                        1,
+                        storeData
+                    )
+                    break
+                case 2:
+                    setSorItem({
+                        filter: filterKey,
+                        sort: '',
+                        count: 0
+                    })
+                    universalSort(
+                        currentTemporaryData,
+                        setCurrentTemporaryData,
+                        filterKey,
+                        '',
+                        storeData
+                    )
+                    break
+                default:
+                    setSorItem({
+                        filter: filterKey,
+                        sort: '-1',
+                        count: 1
+                    })
+                    universalSort(
+                        currentTemporaryData,
+                        setCurrentTemporaryData,
+                        filterKey,
+                        -1,
+                        storeData
+                    )
+            }
+        } else {
+            setSorItem({
+                filter: filterKey,
+                sort: '-1',
+                count: 1
+            })
+            universalSort(
+                currentTemporaryData,
+                setCurrentTemporaryData,
+                filterKey,
+                -1,
+                storeData
+            )
+        }
+    }
+
     return (
         <div className='mainPadding grow overflow-auto'>
             {currentTemporaryData.length > 0 ? (
@@ -124,6 +193,8 @@ const SavedIncomings = () => {
                     currency={currencyType}
                     Edit={sendTemporayToRegister}
                     Delete={removeTemporary}
+                    Sort={filterData}
+                    sortItem={sorItem}
                 />
             ) : (
                 <NotFind text={t('Saqlangan qabullar mavjud emas')} />

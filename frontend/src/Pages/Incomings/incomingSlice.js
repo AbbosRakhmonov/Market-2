@@ -173,7 +173,8 @@ const incomingSlice = createSlice({
         successTemporary: false,
         successDelete: false,
         temporaries: [],
-        temporary: {}
+        temporary: {},
+        searchedIncoming: []
     },
     reducers: {
         clearError: (state) => {

@@ -1,4 +1,5 @@
 export const ReportsTableHeaders = (header) => {
+
     let paymenttype =
         (header === 'cash' && 'Naqt') ||
         (header === 'card' && 'Plastik') ||
@@ -11,12 +12,15 @@ export const ReportsTableHeaders = (header) => {
             },
             {
                 title: 'Sana',
+                filter:'createdAt'
             },
             {
                 title: 'ID',
+                filter:'saleconnector.id'
             },
             {
                 title: 'Mijoz',
+                filter: 'client'
             },
             {
                 title: 'Sotuv',
@@ -40,9 +44,11 @@ export const ReportsTableHeaders = (header) => {
             },
             {
                 title: 'Sana',
+                filter:'createdAt'
             },
             {
                 title: 'ID',
+                filter:'saleconnector.id'
             },
             {
                 title: 'Kelgan narxi',
@@ -63,12 +69,15 @@ export const ReportsTableHeaders = (header) => {
             },
             {
                 title: 'Sana',
+                filter:'createdAt'
             },
             {
                 title: 'ID',
+                filter:'saleconnector.id'
             },
             {
                 title: 'Mijoz',
+                filter: 'client'
             },
             {
                 title: 'Jami',
@@ -86,6 +95,7 @@ export const ReportsTableHeaders = (header) => {
             },
             {
                 title: 'Sana',
+                filter:'createdAt'
             },
             {
                 title: 'Summa',
@@ -103,12 +113,15 @@ export const ReportsTableHeaders = (header) => {
             },
             {
                 title: 'Sana',
+                filter:'createdAt'
             },
             {
                 title: 'ID',
+                filter:'saleconnector.id'
             },
             {
                 title: 'Mijoz',
+                filter: 'client'
             },
             {
                 title: 'Jami',
@@ -126,12 +139,15 @@ export const ReportsTableHeaders = (header) => {
             },
             {
                 title: 'Sana',
+                filter:'createdAt'
             },
             {
                 title: 'ID',
+                filter:'saleconnector.id'
             },
             {
                 title: 'Mijoz',
+                filter: 'client'
             },
             {
                 title: 'Soni',
@@ -149,12 +165,15 @@ export const ReportsTableHeaders = (header) => {
             },
             {
                 title: 'Sana',
+                filter:'createdAt'
             },
             {
                 title: 'ID',
+                filter:'saleconnector.id'
             },
             {
                 title: 'Mijoz',
+                filter: 'client'
             },
             {
                 title: 'Sotuv',

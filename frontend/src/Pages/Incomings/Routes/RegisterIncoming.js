@@ -10,7 +10,7 @@ import {
     clearTemporary,
     deleteTemporary,
     getProducts,
-    getSuppliers
+    getSuppliers,
 } from '../incomingSlice'
 import {ConfirmBtn, SaveBtn} from '../../../Components/Buttons/SaveConfirmBtn'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
@@ -22,7 +22,7 @@ import {
     universalToast,
     warningCurrencyRate,
     warningMorePayment,
-    warningSaleProductsEmpty
+    warningSaleProductsEmpty,
 } from '../../../Components/ToastMessages/ToastMessages'
 import CustomerPayment from '../../../Components/Payment/CustomerPayment.js'
 
@@ -32,7 +32,7 @@ const RegisterIncoming = () => {
     const navigate = useNavigate()
     const {
         market: {_id},
-        user
+        user,
     } = useSelector((state) => state.login)
     const {currency, currencyType} = useSelector((state) => state.currency)
     const {suppliers, products, successAdd, successTemporary, temporary} =
@@ -73,9 +73,11 @@ const RegisterIncoming = () => {
     const selectSupplier = (e) => {
         setSelectSupplierValue({
             label: e.label,
-            value: e.value
+            value: e.value,
         })
-        setSupplier(...filter([...suppliers], (supplier) => supplier._id === e.value))
+        setSupplier(
+            ...filter([...suppliers], (supplier) => supplier._id === e.value)
+        )
         if (incomings.length > 0) {
             setIncomings([
                 ...map([...incomings], (product) => {
@@ -83,10 +85,10 @@ const RegisterIncoming = () => {
                         ...product,
                         supplier: {
                             _id: e.value,
-                            name: e.label
-                        }
+                            name: e.label,
+                        },
                     }
-                })
+                }),
             ])
         }
     }
@@ -94,7 +96,7 @@ const RegisterIncoming = () => {
     const selectProduct = (e) => {
         setSelectProductValue({
             label: e.label,
-            value: e.value
+            value: e.value,
         })
         if (
             !incomings.some(
@@ -110,7 +112,7 @@ const RegisterIncoming = () => {
     // add to product to modalincoming. function
     const addIncomingToModal = (value) => {
         const product = [
-            ...filter([...products], (product) => product._id === value)
+            ...filter([...products], (product) => product._id === value),
         ][0]
         setIncomingModal({
             _id: product._id,
@@ -127,7 +129,7 @@ const RegisterIncoming = () => {
             sellingprice: product.price.sellingprice,
             sellingpriceuzs: product.price.sellingpriceuzs,
             procient: 0,
-            supplier: {...supplier}
+            supplier: {...supplier},
         })
         setModalBody('registerincomingbody')
         setModalVisible(true)
@@ -145,7 +147,7 @@ const RegisterIncoming = () => {
         const check = (property) => key === property
 
         const product = (!id && {
-            ...incomingModal
+            ...incomingModal,
         }) || {...filter([...incomings], (incoming) => incoming._id === id)[0]}
 
         const countUsd =
@@ -195,7 +197,7 @@ const RegisterIncoming = () => {
                         return product
                     }
                     return incoming
-                })
+                }),
             ])
         } else {
             setIncomingModal(product)
@@ -207,7 +209,7 @@ const RegisterIncoming = () => {
         const suppliers = map(data, (supplier) => {
             return {
                 label: supplier.name,
-                value: supplier._id
+                value: supplier._id,
             }
         })
         setSuppliersData(suppliers)
@@ -216,8 +218,9 @@ const RegisterIncoming = () => {
     const changeProductsData = (data) => {
         const products = map(data, (product) => {
             return {
-                label: product.productdata.code + ' - ' + product.productdata.name,
-                value: product._id
+                label:
+                    product.productdata.code + ' - ' + product.productdata.name,
+                value: product._id,
             }
         })
         setProductsData(products)
@@ -249,7 +252,7 @@ const RegisterIncoming = () => {
             }
             if (product.sellingprice < product.unitprice) {
                 return universalToast(
-                    t('Sotish narxi olish dan kam bo\'lmasin'),
+                    t("Sotish narxi olish dan kam bo'lmasin"),
                     'warning'
                 )
             }
@@ -298,7 +301,7 @@ const RegisterIncoming = () => {
         ) {
             dispatch(
                 deleteTemporary({
-                    _id: temporary._id
+                    _id: temporary._id,
                 })
             )
             dispatch(clearTemporary())
@@ -306,22 +309,23 @@ const RegisterIncoming = () => {
     }
 
     const createTemporary = () => {
+        removeTemporary()
         dispatch(
             addTemporary({
                 market: _id,
                 temporaryincoming: {
                     supplier,
-                    incomings
-                }
+                    incomings,
+                },
             })
         ).then(() => {
             setSelectSupplierValue({
                 label: t('Yetkazib beruvchi'),
-                value: ''
+                value: '',
             })
             setSelectProductValue({
                 label: t('Mahsulotlar'),
-                value: ''
+                value: '',
             })
         })
     }
@@ -330,39 +334,39 @@ const RegisterIncoming = () => {
     const headers = [
         {
             title: t('№'),
-            styles: 'w-[8%]'
+            styles: 'w-[8%]',
         },
         {
             title: t('Kodi'),
-            styles: 'w-[10%]'
+            styles: 'w-[10%]',
         },
         {
-            title: t('Nomi')
+            title: t('Nomi'),
         },
         {
             title: t('Soni'),
-            styles: 'w-[10%]'
+            styles: 'w-[10%]',
         },
         {
             title: t('Narxi'),
-            styles: 'w-[10%]'
+            styles: 'w-[10%]',
         },
         {
             title: t('Avvalgi narxi'),
-            styles: 'w-[15%]'
+            styles: 'w-[15%]',
         },
         {
             title: t('Jami'),
-            styles: 'w-[15%]'
+            styles: 'w-[15%]',
         },
         {
             title: t('Sotish'),
-            styles: 'w-[15%]'
+            styles: 'w-[15%]',
         },
         {
             title: '',
-            styles: 'w-[5%]'
-        }
+            styles: 'w-[5%]',
+        },
     ]
 
     // sales functions
@@ -437,9 +441,7 @@ const RegisterIncoming = () => {
                     setPaid(0)
                     setPaidUzs(0)
                     setPaymentDebt(allPayment)
-                    setPaymentDebtUzs(
-                        allPaymentUzs
-                    )
+                    setPaymentDebtUzs(allPaymentUzs)
                     break
             }
         }
@@ -602,12 +604,10 @@ const RegisterIncoming = () => {
                     card: Number(paymentCard),
                     carduzs: Number(paymentCardUzs),
                     transfer: Number(paymentTransfer),
-                    transferuzs: Number(paymentTransferUzs)
-                }
+                    transferuzs: Number(paymentTransferUzs),
+                },
             })
-        ).then(
-            ({error}) => !error && navigate('/maxsulotlar/qabul/qabullar')
-        )
+        ).then(({error}) => !error && navigate('/maxsulotlar/qabul/qabullar'))
         removeTemporary()
     }
     const changeComment = (e) => {
@@ -645,7 +645,7 @@ const RegisterIncoming = () => {
             setTemporaryIncomings(temporary.incomings)
             setSelectSupplierValue({
                 label: temporary.supplier.name,
-                value: temporary.supplier._id
+                value: temporary.supplier._id,
             })
         }
     }, [temporary, dispatch])
@@ -734,12 +734,18 @@ const RegisterIncoming = () => {
             <UniversalModal
                 isOpen={modalVisible}
                 body={modalBody}
-                headerText={t('To\'lovni amalga oshirishni tasdiqlaysizmi ?')}
-                title={t('To\'lovni amalga oshirgach bu ma`lumotlarni o`zgaritirb bo`lmaydi !')}
+                headerText={t("To'lovni amalga oshirishni tasdiqlaysizmi ?")}
+                title={t(
+                    "To'lovni amalga oshirgach bu ma`lumotlarni o`zgaritirb bo`lmaydi !"
+                )}
                 product={incomingModal}
                 toggleModal={toggleModal}
                 changeProduct={changeIncomings}
-                approveFunction={modalBody === 'complete' ? handleApprovePay : addProductToIncomings}
+                approveFunction={
+                    modalBody === 'complete'
+                        ? handleApprovePay
+                        : addProductToIncomings
+                }
                 currency={currencyType}
             />
         </div>
