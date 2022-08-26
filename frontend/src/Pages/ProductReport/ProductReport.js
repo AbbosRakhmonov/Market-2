@@ -221,7 +221,7 @@ function ProductReport() {
                     sana: `${new Date(product.createdAt).toLocaleDateString('ru-Ru')} ${new Date(product.createdAt).toLocaleTimeString('ru-Ru', {
                         hourCycle: 'h24'
                     })}`,
-                    client: product.saleconnector?.client ? product.saleconnector.client.name : product.saleconnector?._id,
+                    client: product.saleconnector?.client ? product.saleconnector.client.name : product.saleconnector?.id,
                     code: product.product.productdata.code,
                     name: product.product.productdata.name,
                     soni: product.pieces,

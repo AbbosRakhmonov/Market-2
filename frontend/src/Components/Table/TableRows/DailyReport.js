@@ -30,7 +30,7 @@ function DailyReport({data}) {
                                 })}</p>
                             </span>
                         </td>
-                        <td className='text-left td'>{dailyReport.saleconnector?.client?.name || dailyReport.saleconnector?._id}</td>
+                        <td className='text-left td'>{dailyReport.saleconnector?.client?.name || dailyReport.saleconnector?.id}</td>
                         <td className='td text-right'>{code}</td>
                         <td className='td'>{name}</td>
                         <td className='text-right td'>{pieces + ' ' + unit.name}</td>
