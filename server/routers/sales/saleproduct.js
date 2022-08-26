@@ -1058,7 +1058,7 @@ module.exports.getreportproducts = async (req, res) => {
 
 module.exports.getexcelreportproducts = async (req, res) => {
   try {
-    const { market, search } = req.body;
+    const { market, search, startDate, endDate } = req.body;
     const marke = await Market.findById(market);
     if (!marke) {
       return res.status(400).json({
@@ -1085,6 +1085,10 @@ module.exports.getexcelreportproducts = async (req, res) => {
 
     const saleproducts = await SaleProduct.find({
       market,
+      createdAt: {
+        $gte: startDate,
+        $lt: endDate,
+      },
     })
       .select("-isArchive -updatedAt -market -__v")
       .sort({ _id: -1 })
