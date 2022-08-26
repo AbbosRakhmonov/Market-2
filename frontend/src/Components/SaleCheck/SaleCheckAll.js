@@ -48,7 +48,6 @@ export const SaleCheckAll = forwardRef((props, ref) => {
               }, 0)
             : 0
     }
-    console.log(selled)
     return (
         <div ref={ref} className={'bg-white-900 p-4 rounded-md'}>
             <div className='flex pb-2 justify-between border-b-[0.8px] border-black-700'>
@@ -120,6 +119,7 @@ export const SaleCheckAll = forwardRef((props, ref) => {
                                 <td className='check-table-rtr'>Soni</td>
                                 <td className='check-table-rtr'>Narxi(dona)</td>
                                 <td className='check-table-rtr'>Jami</td>
+                                <td className='check-table-rtr'>Sotuvchi</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -162,6 +162,9 @@ export const SaleCheckAll = forwardRef((props, ref) => {
                                                       'ru-Ru'
                                                   )}{' '}
                                             {currencyType}
+                                        </td>
+                                        <td className='check-table-body'>
+                                            {item?.product? item.user.firstname + ' ' + item.user.lastname[0] : ''}
                                         </td>
                                     </tr>
                                 )
