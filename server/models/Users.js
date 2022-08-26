@@ -32,7 +32,7 @@ function validateUser(user) {
         phone: Joi.string().required(),
         password: Joi.string().required(),
         market: Joi.string().required(),
-        type: Joi.string().required(),
+        type: Joi.string().optional(),
         specialty: Joi.string(),
         users: Joi.array(),
         user: Joi.string(),

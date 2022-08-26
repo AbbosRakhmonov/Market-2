@@ -527,7 +527,7 @@
     }
 
     .register-selling-right-accept-btn {
-        @apply grow bg-success-500 text-center py-[0.875rem] hover:bg-success-600 transition-all duration-100 rounded-[0.5rem] text-white-900 text-sm leading-[1rem];
+        @apply grow bg-success-500 text-center py-[0.875rem] hover:bg-success-600 transition-all duration-100 rounded-[0.5rem] text-white-900 text-sm leading-[1rem] flex justify-center items-center;
     }
 
     .register-selling-right-deny-btn {
@@ -680,6 +680,43 @@
     }
 
     /* Loader style end */
+
+    /* product exchanges style */
+    .product-exchanges-card {
+        @apply relative border-2 rounded-lg h-auto p-[1.25rem] shadow-[0px_10px_10px_rgba(0,0,0,0.05)]
+    }
+
+    .product-exchanges-card-top-icons {
+        @apply absolute top-[0.6875rem] right-[-1.1rem] w-[2.125rem] h-[2.125rem] rounded-full border z-20 flex justify-center items-center shadow-[0px_10px_10px_rgba(0,0,0,0.05)] active:shadow-none cursor-pointer
+    }
+
+    .product-exchanges-card-center-icons {
+        @apply absolute top-[36%] left-[-1.15rem] w-[2.125rem] h-[2.125rem] rounded-full bg-[#F79009] border border-[#F79009] z-20 flex justify-center items-center shadow-[0px_10px_10px_rgba(0,0,0,0.05)] active:shadow-none cursor-pointer
+    }
+
+    .product-exchanges-card-text{
+        @apply text-black-700 font-[400] text-[0.875rem] leading-[1rem] mb-[1.25rem]
+    }
+
+    .product-exchanges-card-body {
+        @apply flex items-start gap-[1.875rem] text-[0.75rem] font-[300] text-black-700
+    }
+
+    .product-exchanges-card-body-text {
+        @apply flex justify-between leading-[0.875rem]
+    }
+
+    .product-exchanges-span{
+        @apply text-[0.75rem] py-[0.125rem] px-[0.675rem] rounded-[3.125rem] text-white-900
+    }
+    .product-exchange-modal-span {
+        @apply py-[0.125rem] px-[0.625rem] rounded-[3.125rem] text-white-900 text-[1rem] font-[400] leading-[1rem]
+    }
+    .product-exchange-modal-text{
+        @apply text-[1rem] font-[300] text-black-700 w-full flex items-center justify-between
+    }
+
+    /* product exchanges style */
 }
 
 html,

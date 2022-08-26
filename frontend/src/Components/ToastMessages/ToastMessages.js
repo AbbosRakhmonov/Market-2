@@ -119,6 +119,23 @@ export const warningCountSellPayment = () =>
 export const warningReturnProductsEmpty = () =>
     toast.warn(i18n.t('Qaytariladigan maxsulotlar mavjud emas !'))
 
+// Product Exchanges toast
+
+export const warningSellingExchanges = () => 
+toast.warn("Sotish narxi olish narxidan kam yoki teng bo'lmasligi kerak !")
+
+export const emptyProductExchanges = () => 
+ toast.warn("Ma'lumotlar to'liq kiritilmagan !")
+
+export const productNumberExchanges = () => 
+ toast.warn("Siz kiritgan maxsulot soni umumiy maxsulot sonidan ko'p bolishi mumkin emas !")
+
+export const productNumberMinusExchanges = () => 
+  toast.warn("Maxsulot soni manfiy bo'lishi mumkin emas !")
+
+export const productExchangesFilial = () => 
+  toast.error("Maxsulot kiritilmagan yoki filial tanlanmagan !")
+
 // Universal Messages
 export const universalToast = (message, type, option = {}) =>
     toast[type](message, option)
