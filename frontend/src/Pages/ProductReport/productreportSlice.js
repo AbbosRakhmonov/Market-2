@@ -7,14 +7,25 @@ export const getProductReports = createAsyncThunk(
     async (body = {}, {rejectWithValue}) => {
         try {
             const {data} = await Api.post('/sales/saleproducts/getreportproducts', body)
-            console.log(data)
             return data
         } catch (error) {
             rejectWithValue(error)
         }
     }
 )
-// * buni ishlatish kerak
+
+export const getProductReportsByFilter = createAsyncThunk(
+    'productReport/getProductReportsByFilter',
+    async (body = {}, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post('/sales/saleproducts/getreportproducts', body)
+            return data
+        } catch (error) {
+            rejectWithValue(error)
+        }
+    }
+)
+
 export const getAllProductReports = createAsyncThunk(
     'productReport/getAllProductReports',
     async (body = {}, {rejectWithValue}) => {
@@ -30,9 +41,9 @@ export const getAllProductReports = createAsyncThunk(
 const productreportSlice = createSlice({
     name: 'productreport',
     initialState: {
-        loading: false,
+        loading: true,
+        loadingExcel: false,
         error: null,
-        allProducts: [],
         products: [],
         searchedProducts: [],
         total: 0,
@@ -48,12 +59,42 @@ const productreportSlice = createSlice({
         [getProductReports.pending]: (state) => {
             state.loading = true
         },
-        [getProductReports.fulfilled]: (state, {payload}) => {
+        [getProductReports.fulfilled]: (state, {payload: {products, count}}) => {
             state.loading = false
+            if (state.totalSearched > 0) {
+                state.searchedProducts = products
+                state.totalSearched = count
+            } else {
+                state.products = products
+                state.total = count
+            }
         },
         [getProductReports.rejected]: (state, {payload}) => {
             state.loading = false
             state.error = payload
+            universalToast(payload, 'error')
+        },
+        [getProductReportsByFilter.pending]: (state) => {
+            state.loading = true
+        },
+        [getProductReportsByFilter.fulfilled]: (state, {payload: {products, count}}) => {
+            state.loading = false
+            state.searchedProducts = products
+            state.totalSearched = count
+        },
+        [getProductReportsByFilter.rejected]: (state, {payload}) => {
+            state.loading = false
+            state.error = payload
+            universalToast(payload, 'error')
+        },
+        [getAllProductReports.pending]: (state) => {
+            state.loadingExcel = true
+        },
+        [getAllProductReports.fulfilled]: (state) => {
+            state.loadingExcel = false
+        },
+        [getAllProductReports.rejected]: (state, {payload}) => {
+            state.loadingExcel = false
             universalToast(payload, 'error')
         }
     }

@@ -292,7 +292,7 @@ const WareHouse = () => {
                 <ExportBtn
                     datas={allProducts}
                     headers={exportProductHead}
-                    fileName={'Maxsulotlar hisoboti'}
+                    fileName={'Ombrxona'}
                     pagesName='WareHouse'
                 />
                 <p className='product_name'>{t('Omborxona')}</p>
