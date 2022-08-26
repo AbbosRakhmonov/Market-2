@@ -3,13 +3,12 @@ import SelectForm from '../Select/SelectForm.js'
 import FilterButtons from '../FilterButtons/FilterButtons.js'
 import FieldContainer from '../FieldContainer/FieldContainer.js'
 import PrintBtn from '../Buttons/PrintBtn.js'
-import { ConfirmBtn } from '../Buttons/SaveConfirmBtn.js'
+import {ConfirmBtn} from '../Buttons/SaveConfirmBtn.js'
 import Dates from '../Dates/Dates.js'
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next'
 import {map} from 'lodash'
 
 function SearchForm(
-
     {
         filterByTotal,
         searchByCode,
@@ -48,9 +47,12 @@ function SearchForm(
         searchByMarketName,
         filterByMarketName,
         filterByMarketNameWhenPressEnter,
+        searchBySellerName,
+        filterBySellerName,
+        filterBySellerNameWhenPressEnter,
     }) {
 
-    const { t } = useTranslation(['common'])
+    const {t} = useTranslation(['common'])
     const chooseComponent = (key) => {
         switch (key) {
             case 'total':
@@ -141,6 +143,17 @@ function SearchForm(
                         value={searchByClientName}
                         onChange={filterByClientName}
                         onKeyUp={filterByClientNameWhenPressEnter}
+                    />
+                )
+            case 'sellerName':
+                return (
+                    <SearchInput
+                        key={'sotuvchi_ismi_1'}
+                        placeholder={t('sotuvchi ismi...')}
+                        someClasses={'grow basis-1/6'}
+                        value={searchBySellerName}
+                        onChange={filterBySellerName}
+                        onKeyUp={filterBySellerNameWhenPressEnter}
                     />
                 )
             case 'checks':
@@ -257,7 +270,7 @@ function SearchForm(
     }
     return (
         <div className='flex items-end gap-[1.875rem] mainPadding grow'>
-            {map(filterBy,(key) => chooseComponent(key))}
+            {map(filterBy, (key) => chooseComponent(key))}
         </div>
     )
 }

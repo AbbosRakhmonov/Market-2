@@ -5,13 +5,14 @@ import {
     IoExitOutline,
     IoHome,
     IoKeyOutline,
+    IoListOutline,
     IoPeople,
     IoQrCode,
     IoSettingsOutline,
-    IoWallet,
-    IoListOutline,
+    IoWallet
 } from 'react-icons/io5'
 import {FaCashRegister, FaHandHoldingUsd} from 'react-icons/fa'
+
 const navListForDirector = [
     {
         id: 1,
@@ -28,52 +29,44 @@ const navListForDirector = [
         submenu: [
             {
                 id: 1,
-                label: 'Yaratish',
-                icon: true,
-                path: 'maxsulotlar/yaratish',
-                submenu: [
-                    {
-                        id: 1,
-                        label: 'Kategoriyalar',
-                        icon: 'home',
-                        path: 'maxsulotlar/yaratish/kategoriyalar'
-                    },
-                    {
-                        id: 2,
-                        label: 'Maxsulotlar',
-                        icon: 'home',
-                        path: 'maxsulotlar/yaratish/maxsulotlar'
-                    },
-                    {
-                        id: 3,
-                        label: 'O\'lchov birliklari',
-                        icon: 'home',
-                        path: 'maxsulotlar/yaratish/ulchov'
-                    },
-                    {
-                        id: 4,
-                        label: 'Yetkazib beruvchilar',
-                        icon: 'home',
-                        path: 'maxsulotlar/yaratish/yetkazuvchilar'
-                    }
-                ]
+                label: 'Kategoriyalar',
+                icon: 'home',
+                path: 'maxsulotlar/kategoriyalar'
             },
             {
                 id: 2,
-                label: 'Maxsulotlar hisoboti',
-                icon: '',
-                path: 'maxsulotlar/hisobot',
-                submenu: false
+                label: 'Maxsulotlar',
+                icon: 'home',
+                path: 'maxsulotlar/maxsulotlar'
             },
             {
                 id: 3,
+                label: 'Maxsulotlar hisoboti',
+                icon: 'home',
+                path: 'maxsulotlar/hisobot'
+            },
+            {
+                id: 4,
+                label: 'O\'lchov birliklari',
+                icon: 'home',
+                path: 'maxsulotlar/ulchov'
+            },
+            {
+                id: 5,
+                label: 'Omborxona',
+                icon: '',
+                path: 'maxsulotlar/omborxona',
+                submenu: false
+            },
+            {
+                id: 6,
                 label: 'Qabul qilish',
                 icon: '',
                 path: 'maxsulotlar/qabul/qabulqilish',
                 submenu: false
             },
             {
-                id: 4,
+                id: 7,
                 label: 'Inventarizatsiya',
                 icon: true,
                 path: 'maxsulotlar/inventarizatsiya',
@@ -109,20 +102,27 @@ const navListForDirector = [
         submenu: [
             {
                 id: 1,
+                label: 'Yetkazuvchilar',
+                icon: '',
+                path: 'hamkorlar/yetkazuvchilar',
+                submenu: false
+            },
+            {
+                id: 2,
                 label: 'Agentlar',
                 icon: '',
                 path: 'hamkorlar/agentlar',
                 submenu: false
             },
             {
-                id: 2,
+                id: 3,
                 label: 'Mijozlar',
                 icon: '',
                 path: 'hamkorlar/mijozlar',
                 submenu: false
             },
             {
-                id: 3,
+                id: 4,
                 label: 'Sotuvchilar',
                 icon: '',
                 path: 'hamkorlar/sotuvchilar',
@@ -165,7 +165,7 @@ const navListForDirector = [
         icon: <IoCash size={'1.5rem'} />,
         path: 'valyuta',
         submenu: false
-    },
+    }
 ]
 export const navListForSeller = [
     {
@@ -173,15 +173,15 @@ export const navListForSeller = [
         label: 'Sotuv',
         path: '/',
         icon: <IoWallet size={'1.5rem'} />,
-        submenu: false,
+        submenu: false
     },
     {
         id: 2,
         label: 'Qarzdorlar',
         path: 'qarzdorlar',
         icon: <IoListOutline size={'1.5rem'} />,
-        submenu: false,
-    },
+        submenu: false
+    }
 ]
 export const navListForAdmin = [
     {

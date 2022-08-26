@@ -1,69 +1,70 @@
-import React, {useEffect, useRef, useState} from 'react'
-import ExportBtn from '../../Components/Buttons/ExportBtn'
-import Pagination from '../../Components/Pagination/Pagination'
-import Table from '../../Components/Table/Table'
+import React, {useEffect, useState} from 'react'
 import {motion} from 'framer-motion'
-import SearchForm from '../../Components/SearchForm/SearchForm.js'
 import {useDispatch, useSelector} from 'react-redux'
+import ExportBtn from '../../Components/Buttons/ExportBtn.js'
+import Pagination from '../../Components/Pagination/Pagination.js'
+import {useTranslation} from 'react-i18next'
+import Table from '../../Components/Table/Table.js'
 import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
-import { clearSearchedProducts,
-         getProducts,
-         getProductsByFilter,
-         getProductsAll
-       } from '../Products/Create/productSlice.js'
-import {useReactToPrint} from 'react-to-print'
-import {BarCode} from '../../Components/BarCode/BarCode.js'
-import {universalSort} from '../../App/globalFunctions.js'
-import { useTranslation } from 'react-i18next';
-import {filter} from "lodash"
-const ProductReport = () => {
+import SearchForm from '../../Components/SearchForm/SearchForm.js'
+import {clearSearchedProducts, getProductReports} from './productreportSlice.js'
+import {filter} from 'lodash'
+import Dates from '../../Components/Dates/Dates.js'
+
+
+function ProductReport() {
+    const dispatch = useDispatch()
     const {t} = useTranslation(['common'])
+    const exportProductHead = [
+        t('№'),
+        t('Nomi'),
+        t('Kodi'),
+        t('Sana'),
+        t('Sotuvchi'),
+        t('Mijoz'),
+        t('Soni'),
+        t('Narxi'),
+        t('Jami')
+    ]
+
     const headers = [
         {
             title: t('№')
         },
         {
-            title: t('Maxsulot kodi'),
-            filter: 'productdata.code'
+            title: t('Nomi')
         },
         {
-            title: t('Maxsulot nomi'),
-            filter: 'productdata.name'
+            title: t('Kodi')
         },
         {
-            title: t('Soni(dona)'),
-            filter: 'product.total'
+            title: t('Sana')
         },
         {
-            title: t('Olish'),
-            filter: 'price.incomingprice'
+            title: t('Sotuvchi')
         },
         {
-            title: t('Olish jami')
+            title: t('Mijoz')
         },
         {
-            title: t('Sotish'),
-            filter: 'price.sellingprice'
+            title: t('Soni')
         },
         {
-            title: t('Sotish jami')
+            title: t('Narxi')
         },
         {
-            title: t('Cheklar soni')
-        },
-        {
-            title: ''
+            title: t('Jami')
         }
     ]
-
-    const dispatch = useDispatch()
-        const {products, total, loading, searchedProducts, totalSearched,allProducts} =
-        useSelector((state) => state.products)
-    const {currencyType} = useSelector((state) => state.currency)
     const {
-        market: {name}
-    } = useSelector((state) => state.login)
+        loading,
+        allProducts,
+        products,
+        searchedProducts,
+        total,
+        totalSearched
+    } = useSelector(state => state.productReport)
     const [data, setData] = useState(products)
     const [searchedData, setSearchedData] = useState(searchedProducts)
     const [filteredDataTotal, setFilteredDataTotal] = useState(total)
@@ -71,18 +72,27 @@ const ProductReport = () => {
     const [currentPage, setCurrentPage] = useState(0)
     const [searchByCode, setSearchByCode] = useState('')
     const [searchByName, setSearchByName] = useState('')
+    const [searchByClient, setSearchByClient] = useState('')
+    const [searchBySeller, setSearchBySeller] = useState('')
+    const [beginDay, setBeginDay] = useState(
+        new Date(
+            new Date().getFullYear(),
+            new Date().getMonth(),
+            1
+        ).toISOString()
+    )
 
-    const [productForCheque, setProductForCheque] = useState(null)
-    const [productForCheques, setProductForCheques] = useState(null)
-    const [countOfCheque, setCountOfCheque] = useState(null)
-    const [countOfCheques, setCountOfCheques] = useState(null)
-    const [sorItem, setSorItem] = useState({
-        filter: '',
-        sort: '',
-        count: 0
-    })
-
-    // handle change of search inputs
+    const [endDay, setEndDay] = useState(
+        new Date(
+            new Date().getFullYear(),
+            new Date().getMonth(),
+            1
+        ).toISOString()
+    )
+    const filterByTotal = ({value}) => {
+        setShowByTotal(value)
+        setCurrentPage(0)
+    }
     const filterByCode = (e) => {
         let val = e.target.value
         let valForSearch = val.replace(/\s+/g, ' ').trim()
@@ -93,14 +103,13 @@ const ProductReport = () => {
             setData(products)
             setFilteredDataTotal(total)
         } else {
-            const filteredProducts = filter(products,(product) => {
+            const filteredProducts = filter(products, (product) => {
                 return product.productdata.code.includes(valForSearch)
             })
             setData(filteredProducts)
             setFilteredDataTotal(filteredProducts.length)
         }
     }
-  
     const filterByName = (e) => {
         let val = e.target.value
         let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
@@ -111,7 +120,7 @@ const ProductReport = () => {
             setData(products)
             setFilteredDataTotal(total)
         } else {
-            const filteredProducts = filter(products,(product) => {
+            const filteredProducts = filter(products, (product) => {
                 return product.productdata.name
                     .toLowerCase()
                     .includes(valForSearch)
@@ -120,160 +129,42 @@ const ProductReport = () => {
             setFilteredDataTotal(filteredProducts.length)
         }
     }
-
-    // filter by total
-    const filterByTotal = ({value}) => {
-        setShowByTotal(value)
-        setCurrentPage(0)
-    }
-
-    const filterData = (filterKey) => {
-        if (filterKey === sorItem.filter) {
-            switch (sorItem.count) {
-                case 1:
-                    setSorItem({
-                        filter: filterKey,
-                        sort: '1',
-                        count: 2
-                    })
-                    universalSort(
-                        searchedData.length > 0 ? searchedData : data,
-                        searchedData.length > 0 ? setSearchedData : setData,
-                        filterKey,
-                        1,
-                        searchedData.length > 0 ? searchedProducts : products
-                    )
-                    break
-                case 2:
-                    setSorItem({
-                        filter: filterKey,
-                        sort: '',
-                        count: 0
-                    })
-                    universalSort(
-                        searchedData.length > 0 ? searchedData : data,
-                        searchedData.length > 0 ? setSearchedData : setData,
-                        filterKey,
-                        '',
-                        searchedData.length > 0 ? searchedProducts : products
-                    )
-                    break
-                default:
-                    setSorItem({
-                        filter: filterKey,
-                        sort: '-1',
-                        count: 1
-                    })
-                    universalSort(
-                        searchedData.length > 0 ? searchedData : data,
-                        searchedData.length > 0 ? setSearchedData : setData,
-                        filterKey,
-                        -1,
-                        searchedData.length > 0 ? searchedProducts : products
-                    )
-            }
-        } else {
-            setSorItem({
-                filter: filterKey,
-                sort: '-1',
-                count: 1
-            })
-            universalSort(
-                searchedData.length > 0 ? searchedData : data,
-                searchedData.length > 0 ? setSearchedData : setData,
-                filterKey,
-                -1,
-                searchedData ? searchedProducts : products,
-                searchedData.length > 0
-            )
-        }
-    }
-
-    // handle print
-    const componentRef = useRef()
-
-    const handleChequeCounts = (e) => {
-        setCountOfCheques(parseInt(e.target.value))
-        setProductForCheques(searchedData.length > 0 ? searchedData : data)
-    }
-
-    const handleChequeCount = (e, product) => {
-        setCountOfCheque(parseInt(e.target.value))
-        setProductForCheque(product)
-    }
-
-    const handlePrint = useReactToPrint({
-        content: () => componentRef.current
-    })
-
-    const handlePrintToProduct = async () => {
-        await handlePrint()
-        setTimeout(() => {
-            setCountOfCheque('')
-            setCountOfCheques(null)
-            setProductForCheque(null)
-            setProductForCheques(null)
-        }, 1000)
-    }
-
-    const filterByCodeAndNameAndCategoryWhenPressEnter = (e) => {
-        if (e.key === 'Enter') {
-            setCurrentPage(0)
-            const body = {
-                currentPage: 0,
-                countPage: showByTotal,
-                search: {
-                    name: searchByName.replace(/\s+/g, ' ').trim(),
-                    code: searchByCode.replace(/\s+/g, ' ').trim()
-                }
-            }
-            dispatch(getProductsByFilter(body))
-        }
-    }
-
-    const exportProductHead = [
-        '№',
-        'Mahsulot kodi',
-        'Mahsulot nomi',
-        'Soni',
-        'Olish narxi USD',
-        'Olish narxi UZS',
-        'Olish narxi jami USD',
-        'Olish narxi jami UZS',
-        'Sotish narxi USD',
-        'Sotish narxi UZS',
-        'Sotish narxi jami UZS',
-        'Sotish narxi jami USD'
-    ]
-
     useEffect(() => {
         const body = {
-            currentPage,
+            startDate: new Date(
+                new Date().getFullYear(),
+                new Date().getMonth(),
+                1
+            ).toISOString(),
+            endDate: new Date(
+                new Date().getFullYear(),
+                new Date().getMonth(),
+                1
+            ).toISOString(),
+            currentPage: currentPage,
             countPage: showByTotal,
             search: {
-                name: searchByName.replace(/\s+/g, ' ').trim(),
-                code: searchByCode.replace(/\s+/g, ' ').trim()
+                codeofproduct: '',
+                nameofproduct: '',
+                nameofclient: '',
+                nameofseller: ''
             }
         }
-        dispatch(getProducts(body))
-        //    eslint-disable-next-line react-hooks/exhaustive-deps
+        dispatch(getProductReports(body))
     }, [currentPage, showByTotal, dispatch])
+    const changeDate = (value, name) => {
+        name === 'beginDay' && setBeginDay(new Date(value).toISOString())
+        name === 'endDay' && setEndDay(new Date(value).toISOString())
+    }
     useEffect(() => {
         setData(products)
     }, [products])
-
-    useEffect(() => {
-        setFilteredDataTotal(total)
-    }, [total])
-
     useEffect(() => {
         setSearchedData(searchedProducts)
     }, [searchedProducts])
-
     useEffect(() => {
-        dispatch(getProductsAll())
-    }, [ dispatch])
-
+        setFilteredDataTotal(total)
+    }, [total])
     return (
         <motion.section
             key='content'
@@ -286,14 +177,30 @@ const ProductReport = () => {
             }}
             transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
         >
+            <div className={'mainPadding'}>
+                <p className='product_name text-center'>{t('Omborxona')}</p>
+            </div>
             <div className='pagination mainPadding'>
                 <ExportBtn
                     datas={allProducts}
                     headers={exportProductHead}
                     fileName={'Maxsulotlar hisoboti'}
-                    pagesName='ProductReport'
+                    pagesName='WareHouse'
                 />
-                <p className='product_name'>{t("Maxsulot hisoboti")}</p>
+                <div className='flex gap-[10px]'>
+                    <Dates
+                        label={t('dan')}
+                        value={new Date(beginDay)}
+                        onChange={(value) => changeDate(value, 'beginDay')}
+                        maxWidth={'max-w-[9.6875rem]'}
+                    />
+                    <Dates
+                        label={t('gacha')}
+                        value={new Date(endDay)}
+                        onChange={(value) => changeDate(value, 'endDay')}
+                        maxWidth={'max-w-[9.6875rem]'}
+                    />
+                </div>
                 {(filteredDataTotal !== 0 || totalSearched !== 0) && (
                     <Pagination
                         countPage={Number(showByTotal)}
@@ -304,50 +211,22 @@ const ProductReport = () => {
                 )}
             </div>
             <SearchForm
-                filterBy={['total', 'code', 'name', 'checks', 'printBtn']}
-                filterByCode={filterByCode}
-                filterByName={filterByName}
-                searchByCode={searchByCode}
-                searchByName={searchByName}
-                filterByTotal={filterByTotal}
-                filterByCodeAndNameAndCategoryWhenPressEnter={
-                    filterByCodeAndNameAndCategoryWhenPressEnter
-                }
-                clickPrintBtn={handlePrintToProduct}
-                setNumberOfChecks={handleChequeCounts}
+                filterBy={['total', 'code', 'name', 'clientName', 'sellerName']}
             />
-            <div className='tableContainerPadding'>
+            <div className={'tableContainerPadding'}>
                 {loading ? (
                     <Spinner />
                 ) : data.length === 0 && searchedData.length === 0 ? (
                     <NotFind text={t('Maxsulotlar mavjud emas')} />
                 ) : (
                     <Table
-                        page={'productreport'}
+                        page={'dailyreport'}
                         data={searchedData.length > 0 ? searchedData : data}
                         currentPage={currentPage}
                         countPage={showByTotal}
-                        currency={currencyType}
                         headers={headers}
-                        Sort={filterData}
-                        sortItem={sorItem}
-                        placeholder={'misol : 10'}
-                        productCheque={{}}
-                        changeHandler={handleChequeCount}
-                        Print={handlePrintToProduct}
                     />
                 )}
-            </div>
-            <div className='hidden'>
-                <BarCode
-                    currency={currencyType}
-                    componentRef={componentRef}
-                    countOfCheque={countOfCheque}
-                    countOfCheques={countOfCheques}
-                    productForCheque={productForCheque}
-                    productForCheques={productForCheques}
-                    marketName={name}
-                />
             </div>
         </motion.section>
     )
