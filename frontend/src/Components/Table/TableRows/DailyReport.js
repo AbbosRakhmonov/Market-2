@@ -15,7 +15,6 @@ function DailyReport({data}) {
                     unitpriceuzs,
                     totalprice,
                     totalpriceuzs,
-                    saleconnector,
                     user: {firstname, lastname}
                 } = dailyReport
                 return (
@@ -31,12 +30,12 @@ function DailyReport({data}) {
                                 })}</p>
                             </span>
                         </td>
-                        <td className='text-left td'>{saleconnector?.client?.name}</td>
+                        <td className='text-left td'>{dailyReport.saleconnector?.client?.name || dailyReport.saleconnector?._id}</td>
                         <td className='td text-right'>{code}</td>
                         <td className='td'>{name}</td>
                         <td className='text-right td'>{pieces + ' ' + unit.name}</td>
-                        <td className='text-right td font-medium'>{currencyType === 'UZS' ? unitpriceuzs.toLocaleString('ru-RU') : unitprice.toLocaleString('ru-RU')}</td>
-                        <td className='text-right td font-medium'>{currencyType === 'UZS' ? totalpriceuzs.toLocaleString('ru-RU') : totalprice.toLocaleString('ru-RU')}</td>
+                        <td className='text-right td font-medium'>{currencyType === 'UZS' ? unitpriceuzs.toLocaleString('ru-RU') : unitprice.toLocaleString('ru-RU')} {currencyType}</td>
+                        <td className='text-right td font-medium'>{currencyType === 'UZS' ? totalpriceuzs.toLocaleString('ru-RU') : totalprice.toLocaleString('ru-RU')} {currencyType}</td>
                         <td className='text-left td'>{lastname[0] + '. ' + firstname}</td>
                     </tr>
                 )
