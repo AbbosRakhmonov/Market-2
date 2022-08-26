@@ -10,12 +10,12 @@ import {
     Title,
     Tooltip
 } from 'chart.js'
-import { Line } from 'react-chartjs-2'
-import { useTranslation } from 'react-i18next';
+import {Line} from 'react-chartjs-2'
+import {useTranslation} from 'react-i18next'
 
-function LineChart({ arr, label }) {
-    const { t } = useTranslation(['common'])
-   
+function LineChart({arr, label}) {
+    const {t} = useTranslation(['common'])
+
     ChartJS.register(
         CategoryScale,
         LinearScale,
@@ -45,9 +45,29 @@ function LineChart({ arr, label }) {
                     bottom: 30
                 },
                 font: {
-                    size: 16
+                    size: 16,
+                    lineHeight: 2,
                 },
                 color: 'rgba(28, 28, 28, 0.7)'
+            },
+            tooltip: {
+                mode: 'index',
+                intersect: false
+            }
+        },
+        hover: {
+            mode: 'index',
+            intersect: false
+        },
+        scales: {
+            y: {
+                min: 0,
+                ticks: {
+                    callback: (value) => {
+                        return value.toLocaleString('ru-Ru')
+                    },
+                    beginAtZero: true
+                }
             }
         }
     }

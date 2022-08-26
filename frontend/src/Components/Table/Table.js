@@ -28,44 +28,45 @@ import {AdminProductTableRow} from './TableRows/AdminProductTableRow'
 import {ReturnProductsTableRow} from './TableRows/ReturnProductsTableRow.js'
 import {GeneralReportTableRow} from './TableRows/GeneralReportTableRow.js'
 import {RegisterSaleTableFooter} from './TableFooters/RegisterSaleTableFooter.js'
+import DailyReport from './TableRows/DailyReport.js'
 
 function Table({
-    page,
-    data,
-    headers,
-    currentPage,
-    countPage,
-    Sort,
-    Edit,
-    Delete,
-    currency,
-    changeHandler,
-    addProductCheque,
-    productCheque,
-    Print,
-    inputValue,
-    inputDisabled,
-    Excel,
-    editedIncoming,
-    saveEditIncoming,
-    sortItem,
-    ReturnPayment,
-    Save,
-    onKeyUp,
-    currencyType,
-    type,
-    Pay,
-    isDisabled,
-    reports,
-    onClickTableRow,
-    linkToSellerReports,
-    sellers,
-    addPlus,
-    footer,
-    increment,
-    decrement,
-    lowUnitpriceProducts
-}) {
+                   page,
+                   data,
+                   headers,
+                   currentPage,
+                   countPage,
+                   Sort,
+                   Edit,
+                   Delete,
+                   currency,
+                   changeHandler,
+                   addProductCheque,
+                   productCheque,
+                   Print,
+                   inputValue,
+                   inputDisabled,
+                   Excel,
+                   editedIncoming,
+                   saveEditIncoming,
+                   sortItem,
+                   ReturnPayment,
+                   Save,
+                   onKeyUp,
+                   currencyType,
+                   type,
+                   Pay,
+                   isDisabled,
+                   reports,
+                   onClickTableRow,
+                   linkToSellerReports,
+                   sellers,
+                   addPlus,
+                   footer,
+                   increment,
+                   decrement,
+                   lowUnitpriceProducts
+               }) {
     const checkRows = () => {
         switch (page) {
             case 'product':
@@ -384,6 +385,8 @@ function Table({
                 )
             case 'generalreport':
                 return <GeneralReportTableRow data={data} currency={currency} />
+            case 'dailyreport':
+                return <DailyReport data={data} />
             default:
                 return ''
         }

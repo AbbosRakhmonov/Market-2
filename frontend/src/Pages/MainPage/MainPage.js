@@ -1,14 +1,29 @@
 import React, {useEffect} from 'react'
 import LineChart from '../../Components/LineChart/LineChart.js'
-import PieChart from '../../Components/PieChart/PieChart.js'
 import DailyCircle from '../../Components/DailyCircle/DailyCircle.js'
 import {useDispatch, useSelector} from 'react-redux'
 import {getMonthlyReport, getReports} from '../Reports/reportsSlice.js'
 import {getCurrency} from '../Currency/currencySlice.js'
 import {useTranslation} from 'react-i18next'
 import {map} from 'lodash'
+import PieChart from '../../Components/PieChart/PieChart.js'
+
 function MainPage() {
     const {t} = useTranslation(['common'])
+    const months = [
+        t('Yanvar'),
+        t('Fevral'),
+        t('Mart'),
+        t('Aprel'),
+        t('May'),
+        t('Iyun'),
+        t('Iyul'),
+        t('Avgust'),
+        t('Sentabr'),
+        t('Oktabr'),
+        t('Noyabr'),
+        t('Dekabr')
+    ]
     const dispatch = useDispatch()
     const {reports, monthlyReport} = useSelector(
         (state) => state.reports
@@ -16,6 +31,10 @@ function MainPage() {
     const {currencyType} = useSelector((state) => state.currency)
     const filterMonthlyReport = () => {
         return monthlyReport ? (currencyType === 'USD' ? map(monthlyReport.salesSum, (item) => item.usd) : map(monthlyReport.salesSum, (item) => item.uzs)) : []
+    }
+    const filterMonthlyReportCount = () => {
+        const arr = filterMonthlyReport()
+        return arr.length > 0 ? arr[arr.length - 1].toLocaleString('ru-Ru') : 0
     }
     useEffect(() => {
         const body = {
@@ -65,14 +84,14 @@ function MainPage() {
             </div>
             <div className={'h-[25rem]'}>
                 <LineChart
-                    label={t('Oylik sotuvlar soni')}
+                    label={[t('Oylik sotuvlar soni'), `${months[new Date().getMonth()]} : ${monthlyReport?.sales[monthlyReport.sales.length - 1]} ${t('ta')}`]}
                     arr={monthlyReport?.sales}
                 />
             </div>
             <div className={'flex gap-[5%] h-[25rem]'}>
                 <div className={'w-[65%]'}>
                     <LineChart
-                        label={t('Oylik sotuvlar summasi')}
+                        label={[t('Oylik sotuvlar summasi'), `${months[new Date().getMonth()]} : ${filterMonthlyReportCount()} ${currencyType}`]}
                         arr={filterMonthlyReport()}
                     />
                 </div>

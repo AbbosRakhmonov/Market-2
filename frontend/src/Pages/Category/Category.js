@@ -410,7 +410,6 @@ const Category = () => {
                 className={`flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200 ${
                     stickyForm ? 'stickyForm' : ''
                 }`}
-                g
             >
                 <div className='supplier-style'>
                     <FieldContainer

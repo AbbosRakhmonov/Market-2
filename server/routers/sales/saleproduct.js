@@ -12,6 +12,7 @@ const { Packman } = require("../../models/Sales/Packman");
 const { Payment } = require("../../models/Sales/Payment");
 const { checkPayments } = require("./saleproduct/checkData");
 const { Product } = require("../../models/Products/Product");
+const { Unit } = require("../../models/Products/Unit.js");
 const { ProductData } = require("../../models/Products/Productdata");
 const { Category } = require("../../models/Products/Category");
 const { DailySaleConnector } = require("../../models/Sales/DailySaleConnector");
@@ -987,6 +988,14 @@ module.exports.getreportproducts = async (req, res) => {
           match: { code, name },
         },
       })
+        .populate({
+          path: "product",
+          select: "unit",
+          populate: {
+            path: "unit",
+            select: "name",
+          },
+        })
       .then((saleproducts) =>
         filter(saleproducts, (saleproduct) =>
           search.nameofclient.length > 0
@@ -1030,6 +1039,14 @@ module.exports.getreportproducts = async (req, res) => {
           match: { code, name },
         },
       })
+        .populate({
+          path: "product",
+          select: "unit",
+          populate: {
+            path: "unit",
+            select: "name",
+          },
+        })
       .then((saleproducts) =>
         filter(saleproducts, (saleproduct) =>
           search.nameofclient.length > 0
@@ -1111,6 +1128,14 @@ module.exports.getexcelreportproducts = async (req, res) => {
           match: { code, name },
         },
       })
+        .populate({
+          path: "product",
+          select: "unit",
+          populate: {
+            path: "unit",
+            select: "name",
+          },
+        })
       .then((saleproducts) =>
         filter(saleproducts, (saleproduct) =>
           search.nameofclient.length > 0

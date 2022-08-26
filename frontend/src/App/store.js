@@ -5,19 +5,21 @@ import ProductsReducer from '../Pages/Products/Create/productSlice'
 import UnitsReducer from '../Pages/Units/unitsSlice'
 import SuppliersReducer from '../Pages/SupplierPage/suppliersSlice.js'
 import CategoryReducer from '../Pages/Category/categorySlice'
-import incomingReducer from '../Pages/Incomings/incomingSlice'
-import inventoryReducer from '../Pages/Inventory/inventorySlice'
-import inventoryConnectorReducer from '../Pages/Inventories/inventorieSlice.js'
-import packmanReducer from '../Pages/Packman/packmanSlice'
-import registerSellingReducer from '../Pages/Sale/Slices/registerSellingSlice.js'
-import savedSellingsReducer from '../Pages/Sale/Slices/savedSellingsSlice.js'
-import clientsReducer from '../Pages/Clients/clientsSlice'
-import reportsReducer from '../Pages/Reports/reportsSlice.js'
-import sellingsReducer from '../Pages/Sale/Slices/sellingsSlice.js'
-import sellersReducer from './../Pages/Seller/sellerSlice'
-import barcodeReducer from './../Pages/Barcode/barcodeSlice.js'
-import expenseReducer from '../Pages/Expense/expenseSlice'
+import IncomingReducer from '../Pages/Incomings/incomingSlice'
+import InventoryReducer from '../Pages/Inventory/inventorySlice'
+import InventoryConnectorReducer from '../Pages/Inventories/inventorieSlice.js'
+import PackmanReducer from '../Pages/Packman/packmanSlice'
+import RegisterSellingReducer from '../Pages/Sale/Slices/registerSellingSlice.js'
+import SavedSellingsReducer from '../Pages/Sale/Slices/savedSellingsSlice.js'
+import ClientsReducer from '../Pages/Clients/clientsSlice'
+import ReportsReducer from '../Pages/Reports/reportsSlice.js'
+import SellingsReducer from '../Pages/Sale/Slices/sellingsSlice.js'
+import SellersReducer from './../Pages/Seller/sellerSlice'
+import BarcodeReducer from './../Pages/Barcode/barcodeSlice.js'
+import ExpenseReducer from '../Pages/Expense/expenseSlice'
 import AdminProductsReducer from '../Pages/AdminProducts/adminproductsSlice.js'
+import ProductReportReducer from '../Pages/ProductReport/productreportSlice.js'
+
 export default configureStore({
     devTools: process.env.NODE_ENV === 'development',
     reducer: {
@@ -27,18 +29,19 @@ export default configureStore({
         units: UnitsReducer,
         suppliers: SuppliersReducer,
         category: CategoryReducer,
-        incoming: incomingReducer,
-        inventories: inventoryReducer,
-        inventoryConnectors: inventoryConnectorReducer,
-        packmans: packmanReducer,
-        clients: clientsReducer,
-        registerSelling: registerSellingReducer,
-        savedSellings: savedSellingsReducer,
-        reports: reportsReducer,
-        sellings: sellingsReducer,
-        sellers: sellersReducer,
-        barcode: barcodeReducer,
-        expense: expenseReducer,
-        adminmarkets: AdminProductsReducer
+        incoming: IncomingReducer,
+        inventories: InventoryReducer,
+        inventoryConnectors: InventoryConnectorReducer,
+        packmans: PackmanReducer,
+        clients: ClientsReducer,
+        registerSelling: RegisterSellingReducer,
+        savedSellings: SavedSellingsReducer,
+        reports: ReportsReducer,
+        sellings: SellingsReducer,
+        sellers: SellersReducer,
+        barcode: BarcodeReducer,
+        expense: ExpenseReducer,
+        adminmarkets: AdminProductsReducer,
+        productReport: ProductReportReducer
     }
 })
