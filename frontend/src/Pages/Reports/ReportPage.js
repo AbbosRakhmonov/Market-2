@@ -25,6 +25,7 @@ import {
 } from './reportsSlice'
 import {ReportsTableHeaders} from './ReportsTableHeaders'
 import {filter} from 'lodash'
+import { universalSort } from './../../App/globalFunctions';
 const ReportPage = () => {
     const {id} = useParams()
 
@@ -54,7 +55,7 @@ const ReportPage = () => {
         client: '',
     })
     const [storageData, setStorageData] = useState([])
-    const [currentData, setCurrentData] = useState([])
+    const [currentData, setCurrentData] = useState(datas)
 
     // Payments STATES
     const [modalVisible, setModalVisible] = useState(false)
@@ -76,6 +77,12 @@ const ReportPage = () => {
         label: '%',
         value: '%',
     })
+    const [sorItem, setSorItem] = useState({
+        filter: '',
+        sort: '',
+        count: 0
+    })
+    const [storeData, setStoreData] = useState(datas)
     const [paymentDebt, setPaymentDebt] = useState(0)
     const [paymentDebtUzs, setPaymentDebtUzs] = useState(0)
     const [allPayment, setAllPayment] = useState(0)
@@ -612,7 +619,70 @@ const ReportPage = () => {
             })
             setCurrentData(searched)
         }
+        setCurrentData(datas)
+        setStoreData(datas)
     }, [id, datas, beginDay, endDay])
+
+    const filterData = (filterKey) => {
+        if (filterKey === sorItem.filter) {
+            switch (sorItem.count) {
+                case 1:
+                    setSorItem({
+                        filter: filterKey,
+                        sort: '1',
+                        count: 2
+                    })
+                    universalSort(
+                        currentData,
+                        setCurrentData,
+                        filterKey,
+                        1,
+                        storeData
+                    )
+                    break
+                case 2:
+                    setSorItem({
+                        filter: filterKey,
+                        sort: '',
+                        count: 0
+                    })
+                    universalSort(
+                        currentData,
+                        setCurrentData,
+                        filterKey,
+                        '',
+                        storeData
+                    )
+                    break
+                default:
+                    setSorItem({
+                        filter: filterKey,
+                        sort: '-1',
+                        count: 1
+                    })
+                    universalSort(
+                        currentData,
+                        setCurrentData,
+                        filterKey,
+                        -1,
+                        storeData
+                    )
+            }
+        } else {
+            setSorItem({
+                filter: filterKey,
+                sort: '-1',
+                count: 1
+            })
+            universalSort(
+                currentData,
+                setCurrentData,
+                filterKey,
+                -1,
+                storeData
+            )
+        }
+    }
 
     return (
         <div className='relative overflow-auto h-full'>
@@ -669,6 +739,8 @@ const ReportPage = () => {
                         Pay={handleClickPayment}
                         reports={true}
                         Print={handleClickPrint}
+                        Sort={filterData}
+                        sortItem={sorItem}
                     />
                 )}
                 {id === 'debts' && (

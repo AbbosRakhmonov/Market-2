@@ -11,22 +11,22 @@ import {
 import SearchForm from '../../Components/SearchForm/SearchForm'
 import Pagination from '../../Components/Pagination/Pagination'
 import Table from '../../Components/Table/Table'
-import {universalToast} from '../../Components/ToastMessages/ToastMessages'
-import {regexForTypeNumber} from '../../Components/RegularExpressions/RegularExpressions'
+import { universalToast } from '../../Components/ToastMessages/ToastMessages'
 import { useTranslation } from 'react-i18next';
-
+import { universalSort } from './../../App/globalFunctions';
 
 const Expense = () => {
     const { t } = useTranslation(['common'])
     const dispatch = useDispatch()
     const {
-        market: {_id},
+        market: { _id },
     } = useSelector((state) => state.login)
     const { currencyType, currency } = useSelector((state) => state.currency)
     const { expenses, count, successRegister } = useSelector(
         (state) => state.expense
     )
-
+    const [data, setData] = useState(expenses)
+    const [storeData, setStoreData] = useState(expenses)
     const [currentPage, setCurrentPage] = useState(0)
     const [countPage, setCountPage] = useState(10)
     const [startDate, setStartDate] = useState(
@@ -40,6 +40,11 @@ const Expense = () => {
         new Date(new Date().setHours(26, 59, 59, 0)).toISOString()
     )
 
+    const [sorItem, setSorItem] = useState({
+        filter: '',
+        sort: '',
+        count: 0
+    })
     const [expense, setExpense] = useState({
         sum: '',
         sumuzs: '',
@@ -180,6 +185,72 @@ const Expense = () => {
         }
     }, [dispatch, successRegister, clearForm])
 
+    const filterData = (filterKey) => {
+        if (filterKey === sorItem.filter) {
+            switch (sorItem.count) {
+                case 1:
+                    setSorItem({
+                        filter: filterKey,
+                        sort: '1',
+                        count: 2
+                    })
+                    universalSort(
+                        data,
+                        setData,
+                        filterKey,
+                        1,
+                        storeData
+                    )
+                    break
+                case 2:
+                    setSorItem({
+                        filter: filterKey,
+                        sort: '',
+                        count: 0
+                    })
+                    universalSort(
+                        data,
+                        setData,
+                        filterKey,
+                        '',
+                        storeData
+                    )
+                    break
+                default:
+                    setSorItem({
+                        filter: filterKey,
+                        sort: '-1',
+                        count: 1
+                    })
+                    universalSort(
+                        data,
+                        setData,
+                        filterKey,
+                        -1,
+                        storeData
+                    )
+            }
+        } else {
+            setSorItem({
+                filter: filterKey,
+                sort: '-1',
+                count: 1
+            })
+            universalSort(
+                data,
+                setData,
+                filterKey,
+                -1,
+                storeData
+            )
+        }
+    }
+
+    useEffect(() => {
+        setData(expenses)
+        setStoreData(expenses)
+    }, [expenses])
+
     const headers = [
         {
             title: '№',
@@ -188,7 +259,8 @@ const Expense = () => {
         {
 
             title: t('Sana'),
-            styles: 'w-[10%]'
+            styles: 'w-[10%]',
+            filter: 'createdAt',
         },
         {
             title: t('Summa'),
@@ -275,12 +347,14 @@ const Expense = () => {
                     <Table
                         page={'expenses'}
                         headers={headers}
-                        data={expenses}
+                        data={data}
                         reports={false}
                         Delete={removeExpense}
                         currentPage={currentPage}
                         countPage={countPage}
                         currency={currencyType}
+                        Sort={filterData}
+                        sortItem={sorItem}
                     />
                 </div>
             )}
