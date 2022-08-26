@@ -13,6 +13,7 @@ const {
   DailySaleConnector,
 } = require('../../models/Sales/DailySaleConnector.js');
 const { Client } = require('../../models/Sales/Client');
+require('../../models/Users');
 
 const reduce = (arr, el) =>
   arr.reduce((prev, item) => prev + (item[el] || 0), 0);
@@ -274,7 +275,7 @@ module.exports.getSales = async (req, res) => {
         $lte: endDate,
       },
     })
-      .select('-isArchive -user -updatedAt -__v -packman')
+      .select('-isArchive -updatedAt -__v -packman')
       .populate({
         path: 'saleconnector',
         select: 'id',
@@ -284,6 +285,7 @@ module.exports.getSales = async (req, res) => {
         'payment',
         'cash cashuzs card carduzs transfer transferuzs payment paymentuzs totalprice totalpriceuzs'
       )
+      .populate('user', 'firstname lastname')
       .populate({
         path: 'client',
         select: 'name',
