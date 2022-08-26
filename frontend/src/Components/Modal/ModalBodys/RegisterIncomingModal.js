@@ -1,6 +1,6 @@
 import React from 'react'
 import TableInput from '../../Inputs/TableInput'
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next'
 
 const RegisterproductModal = ({
                                   product,
@@ -25,22 +25,22 @@ const RegisterproductModal = ({
                     <thead className='rounded-t-lg'>
                     <tr className='bg-primary-900 rounded-t-lg'>
                         <th scope='col' className='th w-[15%]'>
-                            <span>{t("Soni")}</span>
+                            <span>{t('Soni')}</span>
                         </th>
                         <th scope='col' className='th w-[15%]'>
-                            <span>{t("Kelish")}</span>
+                            <span>{t('Kelish')}</span>
                         </th>
                         <th scope='col' className='th'>
-                            <span>{t("Avvalgi")}</span>
+                            <span>{t('Avvalgi')}</span>
                         </th>
                         <th scope='col' className='th'>
-                            <span>{t("Jami")}</span>
+                            <span>{t('Jami')}</span>
                         </th>
                         <th scope='col' className='th w-[15%]'>
-                            <span>{t("Sotish")}</span>
+                            <span>{t('Sotish')}</span>
                         </th>
                         <th scope='col' className='th w-[15%]'>
-                            <span>{t("Sotish")} %</span>
+                            <span>{t('Sotish')} %</span>
                         </th>
                     </tr>
                     </thead>
@@ -61,7 +61,7 @@ const RegisterproductModal = ({
                                 type={'number'}
                                 value={current(
                                     product.unitprice,
-                                    product.unitpricezs
+                                    product.unitpriceuzs
                                 )}
                             />
                         </td>
@@ -106,7 +106,7 @@ const RegisterproductModal = ({
                     onClick={approveFunction}
                     className={'approveBtn bg-primary-800 hover:bg-primary-900'}
                 >
-                    {t("Qo'shish")}
+                    {t('Qo\'shish')}
                 </button>
             </div>
         </div>

@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import ExportBtn from '../../../Components/Buttons/ExportBtn'
 import ImportBtn from '../../../Components/Buttons/ImportBtn'
 import * as XLSX from 'xlsx'
@@ -6,6 +6,7 @@ import Pagination from '../../../Components/Pagination/Pagination'
 import Table from '../../../Components/Table/Table'
 import {useDispatch, useSelector} from 'react-redux'
 import Spinner from '../../../Components/Spinner/SmallLoader'
+import SmallLoader from '../../../Components/Spinner/SmallLoader'
 import NotFind from '../../../Components/NotFind/NotFind'
 import {motion} from 'framer-motion'
 import {
@@ -21,7 +22,7 @@ import {
     getProducts,
     getProductsAll,
     getProductsByFilter,
-    updateProduct,
+    updateProduct
 } from './productSlice'
 import {clearErrorUnits, getUnits} from '../../Units/unitsSlice'
 import {
@@ -31,33 +32,25 @@ import {
     universalToast,
     warningCategory,
     warningCurrencyRate,
-    warningEmptyInput,
+    warningEmptyInput
 } from '../../../Components/ToastMessages/ToastMessages'
 import {regexForTypeNumber} from '../../../Components/RegularExpressions/RegularExpressions'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
 import CreateProductForm from '../../../Components/CreateProductForm/CreateProductForm'
-import {
-    clearErrorGetAllCategories,
-    getAllCategories,
-} from '../../Category/categorySlice'
-import {
-    checkEmptyString,
-    universalSort,
-    UsdToUzs,
-    UzsToUsd,
-} from '../../../App/globalFunctions'
+import {clearErrorGetAllCategories, getAllCategories} from '../../Category/categorySlice'
+import {checkEmptyString, universalSort, UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
 import BarcodeReader from 'react-barcode-reader'
 import {clearErrorGetBarcode, getBarcode} from '../../Barcode/barcodeSlice.js'
 import {getCurrency} from '../../Currency/currencySlice.js'
 import {useTranslation} from 'react-i18next'
-import {map, filter} from 'lodash'
+import {filter, map} from 'lodash'
 
 function Products() {
     const {t} = useTranslation(['common'])
     const dispatch = useDispatch()
     const {
-        market: {_id},
+        market: {_id}
     } = useSelector((state) => state.login)
     const {errorUnits, units} = useSelector((state) => state.units)
     const {allcategories, errorGetCategories} = useSelector(
@@ -77,7 +70,7 @@ function Products() {
         searchedProducts,
         totalSearched,
         successDeleteProduct,
-        allProducts,
+        allProducts
     } = useSelector((state) => state.products)
     const {barcode, errorGetBarcode} = useSelector((state) => state.barcode)
     const [data, setData] = useState(products)
@@ -111,8 +104,9 @@ function Products() {
     const [sorItem, setSorItem] = useState({
         filter: '',
         sort: '',
-        count: 0,
+        count: 0
     })
+    const [importLoading, setImportLoading] = useState(false)
 
     // modal toggle
     const toggleModal = () => setModalVisible(!modalVisible)
@@ -122,33 +116,33 @@ function Products() {
         {title: t('№')},
         {
             filter: 'productdata.barcode',
-            title: t('Shtrix kodi'),
+            title: t('Shtrix kodi')
         },
         {
             title: t('Kategoriyasi'),
-            filter: t('category.code'),
+            filter: t('category.code')
         },
         {title: t('Kodi'), filter: 'productdata.code'},
         {title: t('Nomi'), filter: 'productdata.name'},
         {
             title: t('Soni'),
-            filter: 'total',
+            filter: 'total'
         },
         {
             title: t('Olish'),
             filter:
                 currencyType === 'UZS'
                     ? 'price.incomingpriceuzs'
-                    : 'price.incomingprice',
+                    : 'price.incomingprice'
         },
         {
             title: t('Sotish'),
             filter:
                 currencyType === 'UZS'
                     ? 'price.sellingpriceuzs'
-                    : 'price.sellingprice',
+                    : 'price.sellingprice'
         },
-        {title: ''},
+        {title: ''}
     ]
     const exportHeader = [
         t('№'),
@@ -157,11 +151,11 @@ function Products() {
         t('Mahsulot kodi'),
         t('Mahsulot nomi'),
         t('Soni'),
-        t("O'lchov birligi"),
+        t('O\'lchov birligi'),
         t('Kelish narxi USD'),
         t('Kelish narxi UZS'),
         t('Sotish narxi USD'),
-        t('Sotish narxi UZS'),
+        t('Sotish narxi UZS')
     ]
 
     const importHeaders = [
@@ -169,12 +163,12 @@ function Products() {
         {name: 'Kategoriyasi', value: 'category'},
         {name: 'Kodi', value: 'code'},
         {name: 'Nomi', value: 'name'},
-        {name: "O'lchov birligi", value: 'unit'},
+        {name: 'O\'lchov birligi', value: 'unit'},
         {name: 'Soni', value: 'total'},
         {name: 'Kelish narxi USD', value: 'incomingprice'},
         {name: 'Kelish narxi UZS', value: 'incomingpriceuzs'},
         {name: 'Sotish narxi USD', value: 'sellingprice'},
-        {name: 'Sotish narxi UZS', value: 'sellingpriceuzs'},
+        {name: 'Sotish narxi UZS', value: 'sellingpriceuzs'}
     ]
 
     // handle change of inputs
@@ -229,7 +223,7 @@ function Products() {
     const handleChangeCategoryOfProduct = (option) => {
         setCategoryOfProduct(option)
         const body = {
-            categoryId: option.value,
+            categoryId: option.value
         }
         dispatch(getCodeOfCategory(body))
     }
@@ -240,7 +234,7 @@ function Products() {
         let valForSearch = val.replace(/\s+/g, ' ').trim()
         setSearchByCode(val)
         ;(searchedData.length > 0 || totalSearched > 0) &&
-            dispatch(clearSearchedProducts())
+        dispatch(clearSearchedProducts())
         if (valForSearch === '') {
             setData(products)
             setFilteredDataTotal(total)
@@ -258,7 +252,7 @@ function Products() {
         let valForSearch = val.replace(/\s+/g, ' ').trim()
         setBarCode(val)
         ;(searchedData.length > 0 || totalSearched > 0) &&
-            dispatch(clearSearchedProducts())
+        dispatch(clearSearchedProducts())
         if (valForSearch === '') {
             setData(products)
             setFilteredDataTotal(total)
@@ -276,7 +270,7 @@ function Products() {
         let valForSearch = val.replace(/\s+/g, ' ').trim()
         setSearchByCategory(val)
         ;(searchedData.length > 0 || totalSearched > 0) &&
-            dispatch(clearSearchedProducts())
+        dispatch(clearSearchedProducts())
         if (valForSearch === '') {
             setData(products)
             setFilteredDataTotal(total)
@@ -293,7 +287,7 @@ function Products() {
         let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
         setSearchByName(val)
         ;(searchedData.length > 0 || totalSearched > 0) &&
-            dispatch(clearSearchedProducts())
+        dispatch(clearSearchedProducts())
         if (valForSearch === '') {
             setData(products)
             setFilteredDataTotal(total)
@@ -316,14 +310,14 @@ function Products() {
                 search: {
                     name: searchByName.replace(/\s+/g, ' ').trim(),
                     code: searchByCode.replace(/\s+/g, ' ').trim(),
-                    category: searchByCategory.replace(/\s+/g, ' ').trim(),
+                    category: searchByCategory.replace(/\s+/g, ' ').trim()
                 },
                 product: {
                     code: codeOfProduct,
                     name: nameOfProduct.replace(/\s+/g, ' ').trim(),
                     unit: unitOfProduct.value,
-                    market: _id,
-                },
+                    market: _id
+                }
             }
             dispatch(getProductsByFilter(body))
         }
@@ -336,14 +330,14 @@ function Products() {
                 currentPage: 0,
                 countPage: showByTotal,
                 search: {
-                    barcode: barCode.replace(/\s+/g, ' ').trim(),
+                    barcode: barCode.replace(/\s+/g, ' ').trim()
                 },
                 product: {
                     code: codeOfProduct,
                     name: nameOfProduct.replace(/\s+/g, ' ').trim(),
                     unit: unitOfProduct.value,
-                    market: _id,
-                },
+                    market: _id
+                }
             }
             dispatch(getProductsByFilter(body))
         }
@@ -359,7 +353,7 @@ function Products() {
     const searchBarcode = (e) => {
         if (e.key === 'Enter') {
             const body = {
-                code: e.target.value,
+                code: e.target.value
             }
             dispatch(getBarcode(body))
         }
@@ -375,7 +369,7 @@ function Products() {
                 categoryOfProduct,
                 priceOfProduct,
                 sellingPriceOfProduct,
-                checkOfProduct,
+                checkOfProduct
             ])
             if (filter) {
                 warningEmptyInput()
@@ -387,7 +381,7 @@ function Products() {
                     search: {
                         name: searchByName.replace(/\s+/g, ' ').trim(),
                         code: searchByCode.replace(/\s+/g, ' ').trim(),
-                        category: searchByCategory.replace(/\s+/g, ' ').trim(),
+                        category: searchByCategory.replace(/\s+/g, ' ').trim()
                     },
                     product: {
                         code: codeOfProduct,
@@ -400,8 +394,8 @@ function Products() {
                         sellingprice: sellingPriceOfProductUsd,
                         incomingpriceuzs: priceOfProduct,
                         sellingpriceuzs: sellingPriceOfProduct,
-                        barcode: checkOfProduct,
-                    },
+                        barcode: checkOfProduct
+                    }
                 }
                 dispatch(addProduct(body))
             }
@@ -432,7 +426,7 @@ function Products() {
             unitOfProduct,
             categoryOfProduct,
             priceOfProduct,
-            sellingPriceOfProduct,
+            sellingPriceOfProduct
         ])
         if (filter) {
             warningEmptyInput()
@@ -451,15 +445,15 @@ function Products() {
                     incomingpriceuzs: priceOfProduct,
                     sellingpriceuzs: sellingPriceOfProduct,
                     total: numberOfProduct,
-                    barcode: checkOfProduct,
+                    barcode: checkOfProduct
                 },
                 currentPage,
                 countPage: showByTotal,
                 search: {
                     name: searchByName.replace(/\s+/g, ' ').trim(),
                     code: searchByCode.replace(/\s+/g, ' ').trim(),
-                    category: searchByCategory.replace(/\s+/g, ' ').trim(),
-                },
+                    category: searchByCategory.replace(/\s+/g, ' ').trim()
+                }
             }
             dispatch(updateProduct(body))
         }
@@ -469,6 +463,7 @@ function Products() {
     const readExcel = (file) => {
         const fileTypes = ['xls', 'xlsx']
         if (fileTypes.includes(file.name.split('.').pop())) {
+            setImportLoading(true)
             new Promise((resolve, reject) => {
                 const fileReader = new FileReader()
                 fileReader.readAsArrayBuffer(file)
@@ -477,7 +472,7 @@ function Products() {
                     const bufferArray = e.target.result
 
                     const wb = XLSX.read(bufferArray, {
-                        type: 'buffer',
+                        type: 'buffer'
                     })
 
                     const wsname = wb.SheetNames[0]
@@ -501,9 +496,10 @@ function Products() {
                 } else {
                     universalToast('Jadvalda ma`lumot mavjud emas', 'error')
                 }
+                setImportLoading(false)
             })
         } else {
-            universalToast("Fayl formati noto'g'ri", 'error')
+            universalToast('Fayl formati noto\'g\'ri', 'error')
         }
     }
 
@@ -520,10 +516,10 @@ function Products() {
             search: {
                 name: searchByName.replace(/\s+/g, ' ').trim(),
                 code: searchByCode.replace(/\s+/g, ' ').trim(),
-                category: searchByCategory.replace(/\s+/g, ' ').trim(),
+                category: searchByCategory.replace(/\s+/g, ' ').trim()
             },
             name: nameOfProduct.replace(/\s+/g, ' ').trim(),
-            productdata: product.productdata._id,
+            productdata: product.productdata._id
         }
         setDeletedProduct(body)
         setModalBody('approve')
@@ -561,8 +557,8 @@ function Products() {
             search: {
                 name: searchByName.replace(/\s+/g, ' ').trim(),
                 code: searchByCode.replace(/\s+/g, ' ').trim(),
-                category: searchByCategory.replace(/\s+/g, ' ').trim(),
-            },
+                category: searchByCategory.replace(/\s+/g, ' ').trim()
+            }
         }
         dispatch(addProductsFromExcel(body))
     }
@@ -579,7 +575,7 @@ function Products() {
                     setSorItem({
                         filter: filterKey,
                         sort: '1',
-                        count: 2,
+                        count: 2
                     })
                     universalSort(
                         searchedData.length > 0 ? searchedData : data,
@@ -593,7 +589,7 @@ function Products() {
                     setSorItem({
                         filter: filterKey,
                         sort: '',
-                        count: 0,
+                        count: 0
                     })
                     universalSort(
                         searchedData.length > 0 ? searchedData : data,
@@ -607,7 +603,7 @@ function Products() {
                     setSorItem({
                         filter: filterKey,
                         sort: '-1',
-                        count: 1,
+                        count: 1
                     })
                     universalSort(
                         searchedData.length > 0 ? searchedData : data,
@@ -621,7 +617,7 @@ function Products() {
             setSorItem({
                 filter: filterKey,
                 sort: '-1',
-                count: 1,
+                count: 1
             })
             universalSort(
                 searchedData.length > 0 ? searchedData : data,
@@ -635,12 +631,12 @@ function Products() {
     }
 
     const handleError = () => {
-        universalToast("Mahsulot kodi o'qilmadi!", 'warning')
+        universalToast('Mahsulot kodi o\'qilmadi!', 'warning')
     }
     const handleScan = (data) => {
         setCheckOfProduct(data.toString())
         const body = {
-            code: data,
+            code: data
         }
         dispatch(getBarcode(body))
     }
@@ -691,7 +687,7 @@ function Products() {
         successDeleteProduct,
         errorGetCategories,
         currencyError,
-        errorGetBarcode,
+        errorGetBarcode
     ])
     useEffect(() => {
         const body = {
@@ -700,8 +696,8 @@ function Products() {
             search: {
                 name: searchByName.replace(/\s+/g, ' ').trim(),
                 code: searchByCode.replace(/\s+/g, ' ').trim(),
-                category: searchByCategory.replace(/\s+/g, ' ').trim(),
-            },
+                category: searchByCategory.replace(/\s+/g, ' ').trim()
+            }
         }
         dispatch(getProducts(body))
         //    eslint-disable-next-line react-hooks/exhaustive-deps
@@ -711,8 +707,8 @@ function Products() {
             search: {
                 name: searchByName.replace(/\s+/g, ' ').trim(),
                 code: searchByCode.replace(/\s+/g, ' ').trim(),
-                category: searchByCategory.replace(/\s+/g, ' ').trim(),
-            },
+                category: searchByCategory.replace(/\s+/g, ' ').trim()
+            }
         }
         dispatch(getProductsAll(body))
         //    eslint-disable-next-line react-hooks/exhaustive-deps
@@ -739,19 +735,19 @@ function Products() {
                     sellingprice,
                     incomingprice,
                     sellingpriceuzs,
-                    incomingpriceuzs,
-                },
+                    incomingpriceuzs
+                }
             } = currentProduct
             setCodeOfProduct(code)
             setNameOfProduct(name)
             setNumberOfProduct(total)
             setUnitOfProduct({
                 value: unit._id,
-                label: unit.name,
+                label: unit.name
             })
             setCategoryOfProduct({
                 value: category._id,
-                label: `${category.code} - ${category.name}`,
+                label: `${category.code} - ${category.name}`
             })
             setPriceOfProduct(incomingpriceuzs)
             setSellingPriceOfProduct(sellingpriceuzs)
@@ -764,7 +760,7 @@ function Products() {
         setUnitOptions(
             map(units, (unit) => ({
                 value: unit._id,
-                label: unit.name,
+                label: unit.name
             }))
         )
     }, [units])
@@ -774,7 +770,7 @@ function Products() {
                 value: category._id,
                 label:
                     category.code +
-                    `${category.name ? ` - ${category.name}` : ''}`,
+                    `${category.name ? ` - ${category.name}` : ''}`
             }))
         )
     }, [allcategories])
@@ -783,11 +779,11 @@ function Products() {
             setCodeOfProduct(lastProductCode)
             if (checkOfProduct.length === 0)
                 categoryOfProduct?.label &&
-                    setCheckOfProduct(
-                        '47800' +
-                            categoryOfProduct.label.slice(0, 3) +
-                            lastProductCode
-                    )
+                setCheckOfProduct(
+                    '47800' +
+                    categoryOfProduct.label.slice(0, 3) +
+                    lastProductCode
+                )
         }
         //    eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lastProductCode])
@@ -808,10 +804,16 @@ function Products() {
             exit='collapsed'
             variants={{
                 open: {opacity: 1, height: 'auto'},
-                collapsed: {opacity: 0, height: 0},
+                collapsed: {opacity: 0, height: 0}
             }}
             transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
         >
+            {importLoading && (
+                <div
+                    className='fixed backdrop-blur-[2px] z-[50] top-0 left-0 right-0 bottom-0 bg-white-700 flex flex-col items-center justify-center w-full'>
+                    <SmallLoader />
+                </div>
+            )}
             {/* Modal */}
             <UniversalModal
                 toggleModal={toggleModal}
@@ -905,7 +907,7 @@ function Products() {
                     'category',
                     'code',
                     'name',
-                    'doubleDate',
+                    'doubleDate'
                 ]}
                 filterByCode={filterByCode}
                 filterByCodeAndNameAndCategoryWhenPressEnter={

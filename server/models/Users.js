@@ -51,7 +51,10 @@ function validateEditUser(user) {
         lastname: Joi.string().required(),
         password: Joi.string().required(),
         market: Joi.string().required(),
-        image: Joi.string().allow('').optional()
+        image: Joi.string().allow('').optional(),
+        phone: Joi.string().allow("").optional(),
+        fathername: Joi.string().allow("").optional(),
+        administrator: Joi.string().allow("").optional(),
     })
 
     return schema.validate(user)

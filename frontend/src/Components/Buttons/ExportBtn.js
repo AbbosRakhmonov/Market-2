@@ -56,6 +56,14 @@ function ExportBtn({headers, fileName, datas, pagesName}) {
                     }))
                     continueHandleClick(newData)
                     break
+                case 'Category':
+                    const categoryData = map(datas, (item, index) => ({
+                        nth: index + 1,
+                        code: item.code,
+                        name: item.name,
+                    }))
+                    continueHandleClick(categoryData)
+                    break
 
                 case 'ProductReport':
                     const ReportData = map(datas, (item, index) => ({
