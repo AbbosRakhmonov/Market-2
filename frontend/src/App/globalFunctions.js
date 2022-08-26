@@ -1,5 +1,5 @@
 import {regexForEmptyString} from '../Components/RegularExpressions/RegularExpressions.js'
-import {map, orderBy} from 'lodash'
+import {orderBy} from 'lodash'
 import * as XLSX from 'xlsx'
 
 export const universalSort = (data, setData, key, sort, prevData) => {
@@ -33,12 +33,10 @@ export const checkEmptyString = (values) => {
 export const exportExcel = (data, fileName, headers) => {
     const autoFillColumnWidth = (json) => {
         const cols = Object.keys(json[0])
-        const maxLength = cols.reduce((acc, curr) => {
-            return acc > curr.length ? acc : curr.length
-        }, 0)
-        return map(cols, () => ({
-            wch: maxLength
-        }))
+        return cols.map((key, index) => {
+            let maxLength = Math.max(...json.map(x => x[key].toString().length))
+            return {wch: headers[index].length > maxLength ? headers[index].length + 1 : maxLength + 4}
+        })
     }
     const wscols = autoFillColumnWidth(data)
     const wb = XLSX.utils.book_new()
