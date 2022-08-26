@@ -26,23 +26,15 @@ import {
 import {ReportsTableHeaders} from './ReportsTableHeaders'
 import {filter} from 'lodash'
 import { universalSort } from './../../App/globalFunctions';
+import {changeStartDate,changeEndDate} from './reportsSlice'
 const ReportPage = () => {
     const {id} = useParams()
 
     const dispatch = useDispatch()
 
     const {market: _id, user} = useSelector((state) => state.login)
-    const {datas, count} = useSelector((state) => state.reports)
+    const {datas, count,startDate,endDate} = useSelector((state) => state.reports)
     const {currencyType, currency} = useSelector((state) => state.currency)
-
-    const [startDate, setStartDate] = useState(
-        new Date(
-            new Date().getFullYear(),
-            new Date().getMonth(),
-            new Date().getDate()
-        )
-    )
-    const [endDate, setEndDate] = useState(new Date())
     const [currentPage, setCurrentPage] = useState(0)
     const [countPage, setCountPage] = useState(10)
     const [totalPage, setTotalPage] = useState(1)
@@ -547,6 +539,12 @@ const ReportPage = () => {
             setSendingSearch(localSearch)
         }
     }
+    const handleStartDate = (e) => {
+        dispatch(changeStartDate({start: e.toISOString()}))
+    }
+    const handleEndDate = (e) => {
+        dispatch(changeEndDate({end : e.toISOString()}))
+    }
 
     useEffect(() => {
         const check = (page) => id === page
@@ -683,7 +681,6 @@ const ReportPage = () => {
             )
         }
     }
-
     return (
         <div className='relative overflow-auto h-full'>
             <div className='flex items-center justify-between mainPadding'>
@@ -691,10 +688,10 @@ const ReportPage = () => {
                 {id !== 'debts' && (
                     <SearchForm
                         filterBy={['startDate', 'endDate']}
-                        startDate={startDate}
-                        endDate={endDate}
-                        setStartDate={setStartDate}
-                        setEndDate={setEndDate}
+                        startDate={new Date(startDate)}
+                        endDate={new Date(endDate)}
+                        setStartDate={handleStartDate}
+                        setEndDate={handleEndDate}
                     />
                 )}
             </div>

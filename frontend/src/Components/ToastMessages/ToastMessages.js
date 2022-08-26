@@ -3,8 +3,8 @@ import i18n from './../../i18n';
 // Long toast message with header and body
 const toastWithHeader = (header, message) => (
     <div>
-        <h1 className={'text-sm mb-1'}>i18n.t({header})</h1>
-        <p className={'text-xs'}>i18n.t({message})</p>
+        <h1 className={'text-sm mb-1'}>{header}</h1>
+        <p className={'text-xs'}>{message}</p>
     </div>
 )
 

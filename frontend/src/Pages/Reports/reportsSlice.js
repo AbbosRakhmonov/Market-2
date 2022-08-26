@@ -185,6 +185,16 @@ const reportSlice = createSlice({
         monthlyReport: null,
         monthlyReportLoading: true,
         monthlyReportError: null,
+        startDate: new Date(
+            new Date().getFullYear(),
+            new Date().getMonth(),
+            new Date().getDate()
+        ).toISOString(),
+        endDate :new Date(
+            new Date().getFullYear(),
+            new Date().getMonth(),
+            new Date().getDate()
+        ).toISOString()
     },
     reducers: {
         clearErrorReports: (state) => {
@@ -194,6 +204,12 @@ const reportSlice = createSlice({
             state.datas = []
             state.count = 0
         },
+        changeStartDate: (state,{payload}) => {
+            state.startDate = payload.start
+        },
+        changeEndDate: (state,{payload}) => {
+            state.endDate = payload.end
+        }
     },
     extraReducers: {
         [getReports.pending]: (state) => {
@@ -360,5 +376,5 @@ const reportSlice = createSlice({
     },
 })
 
-export const {clearErrorReports, clearDatas} = reportSlice.actions
+export const {clearErrorReports, clearDatas,changeStartDate,changeEndDate} = reportSlice.actions
 export default reportSlice.reducer
