@@ -122,6 +122,7 @@ export const SaleCheckAll = forwardRef((props, ref) => {
                                 <td className='check-table-rtr'>Soni</td>
                                 <td className='check-table-rtr'>Narxi(dona)</td>
                                 <td className='check-table-rtr'>Jami</td>
+                                <td className='check-table-rtr'>Sotuvchi</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -164,6 +165,9 @@ export const SaleCheckAll = forwardRef((props, ref) => {
                                                       'ru-Ru'
                                                   )}{' '}
                                             {currencyType}
+                                        </td>
+                                        <td className='check-table-body'>
+                                            {item?.product? item.user.firstname + ' ' + item.user.lastname[0] : ''}
                                         </td>
                                     </tr>
                                 )
