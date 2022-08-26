@@ -519,7 +519,10 @@ module.exports.update = async (req, res) => {
 
       incomingconnector.total = incomingconnector.total - old.totalprice;
       incomingconnector.total = incomingconnector.total + product.totalprice;
-
+      incomingconnector.totaluzs =
+        incomingconnector.totaluzs - old.totalpriceuzs;
+      incomingconnector.totaluzs =
+        incomingconnector.totaluzs + product.totalpriceuzs;
       await incomingconnector.save();
     } else {
       const incomingconnectors = await IncomingConnector.find().populate({
@@ -544,11 +547,6 @@ module.exports.update = async (req, res) => {
         }
       });
     }
-
-    await ProductPrice.findByIdAndUpdate(product.product.price._id, {
-      sellingprice: product.sellingprice,
-      sellingpriceuzs: product.sellingpriceuzs,
-    });
 
     const produc = await Product.findById(product.product._id);
 

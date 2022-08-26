@@ -69,6 +69,7 @@ const IncomingSuppliers = () => {
     })
 
     const [incomingCard, setIncomingCard] = useState([])
+    const [incomingsData, setIncomingsData] = useState([])
     const [currentData, setCurrentData] = useState([])
     const [currentDataStorage, setCurrentDataStorage] = useState([])
     const [editedIncoming, setEditedIncoming] = useState({})
@@ -126,14 +127,11 @@ const IncomingSuppliers = () => {
 
     // click supplier card and show the table
     const changeCurrentData = (value) => {
-        setSendingSearch({
-            ...sendingSearch,
-            supplier: value,
+        const filteredData = filter(incomingsData, (item) => {
+            return item.incomingconnector === value
         })
-        setLocalSearch({
-            ...localSearch,
-            supplier: value,
-        })
+        setCurrentData(filteredData)
+        setCurrentDataStorage(filteredData)
     }
 
     const getCurrentData = (data) => {
@@ -144,6 +142,7 @@ const IncomingSuppliers = () => {
                 sellingpriceuzs: incoming.product.price.sellingpriceuzs,
             }
         })
+        setIncomingsData(current)
         setCurrentData(current)
         setCurrentDataStorage(current)
     }
@@ -271,6 +270,16 @@ const IncomingSuppliers = () => {
             })
         )
     }, [dispatch, _id, beginDay, endDay, currentPage, countPage, sendingSearch])
+
+    const getConnectors = useCallback(() => {
+        dispatch(
+            getIncomingConnectors({
+                market: _id,
+                beginDay,
+                endDay,
+            })
+        )
+    }, [dispatch, _id, beginDay, endDay])
 
     const removeIncoming = () => {
         dispatch(
@@ -625,10 +634,11 @@ const IncomingSuppliers = () => {
     useEffect(() => {
         if (successUpdate) {
             getIncomingsData()
+            getConnectors()
             setEditedIncoming({})
             dispatch(clearSuccessUpdate())
         }
-    }, [dispatch, getIncomingsData, successUpdate])
+    }, [dispatch, getIncomingsData, getConnectors, successUpdate])
 
     useEffect(() => {
         if (successDelete) {
@@ -638,14 +648,8 @@ const IncomingSuppliers = () => {
     }, [dispatch, getIncomingsData, successDelete])
 
     useEffect(() => {
-        dispatch(
-            getIncomingConnectors({
-                market: _id,
-                beginDay,
-                endDay,
-            })
-        )
-    }, [dispatch, _id, beginDay, endDay])
+        getConnectors()
+    }, [getConnectors])
 
     useEffect(() => {
         changeCardData(incomingconnectors)
@@ -767,9 +771,7 @@ const IncomingSuppliers = () => {
                                 allUzs={incoming.totalpriceuzs}
                                 onClickPayDebt={onClickPayDebt}
                                 id={incoming._id}
-                                onClick={() =>
-                                    changeCurrentData(incoming.supplier.name)
-                                }
+                                onClick={() => changeCurrentData(incoming._id)}
                                 key={uniqueId('card')}
                             />
                         ))}
