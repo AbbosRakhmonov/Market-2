@@ -8,7 +8,7 @@ const CheckoutCards = ({
                            active,
                            currency,
                            report,
-                           path
+                           path,
                        }) => {
     const chooseCardName = `cardContainer ${
         type === 'sale' ||

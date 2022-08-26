@@ -5,6 +5,8 @@ import {useDispatch, useSelector} from 'react-redux'
 import {universalToast} from '../../Components/ToastMessages/ToastMessages.js'
 import {uniqueId, map} from 'lodash'
 import {
+    changeEndDate,
+    changeStartDate,
     clearErrorReports,
     getIncomings,
     getProducts,
@@ -68,15 +70,10 @@ const Reports = () => {
         incomingreport,
         totalreports,
         saleproductsreport,
+        startDate,
+        endDate
     } = useSelector((state) => state.reports)
-    const [startDate, setStartDate] = useState(
-        new Date(
-            new Date().getFullYear(),
-            new Date().getMonth(),
-            new Date().getDate()
-        )
-    )
-    const [endDate, setEndDate] = useState(new Date())
+
     const {currencyType} = useSelector((state) => state.currency)
 
     const [modalVisible, setModalVisible] = useState(false)
@@ -92,6 +89,13 @@ const Reports = () => {
         setModalBody('')
     }
 
+    const handleStartDate = (e) => {
+        dispatch(changeStartDate({start: e.toISOString()}))
+    }
+    const handleEndDate = (e) => {
+        dispatch(changeEndDate({end : e.toISOString()}))
+    }
+
     useEffect(() => {
         const body = {
             startDate: new Date(
@@ -99,7 +103,7 @@ const Reports = () => {
                 new Date(startDate).getMonth(),
                 new Date(startDate).getDate()
             ).toISOString(),
-            endDate: endDate.toISOString(),
+            endDate: endDate,
         }
         let bodyTotal = {
             startDate: new Date(
@@ -135,10 +139,10 @@ const Reports = () => {
         >
             <SearchForm
                 filterBy={['startDate', 'endDate', 'printBtn']}
-                startDate={startDate}
-                endDate={endDate}
-                setStartDate={setStartDate}
-                setEndDate={setEndDate}
+                startDate={new Date(startDate)}
+                endDate={new Date(endDate)}
+                setStartDate={handleStartDate}
+                setEndDate={handleEndDate}
                 clickPrintBtn={handleClickPrint}
             />
             <div className='checkout-card mainPadding'>
