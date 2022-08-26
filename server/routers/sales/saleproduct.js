@@ -16,6 +16,7 @@ const { ProductData } = require("../../models/Products/Productdata");
 const { Category } = require("../../models/Products/Category");
 const { DailySaleConnector } = require("../../models/Sales/DailySaleConnector");
 const ObjectId = require("mongodb").ObjectId;
+const { filter } = require("lodash");
 
 const convertToUsd = (value) => Math.round(value * 1000) / 1000;
 const convertToUzs = (value) => Math.round(value);
@@ -136,6 +137,8 @@ module.exports.register = async (req, res) => {
     let products = [];
 
     for (const saleproduct of all) {
+      saleproduct.saleconnector = saleconnector._id;
+      saleproduct.dailysaleconnector = dailysaleconnector._id;
       await saleproduct.save();
       products.push(saleproduct._id);
 
@@ -391,6 +394,8 @@ module.exports.addproducts = async (req, res) => {
     let products = [];
 
     for (const saleproduct of all) {
+      saleproduct.saleconnector = saleconnector._id;
+      saleproduct.dailysaleconnector = dailysaleconnector._id;
       await saleproduct.save();
       products.push(saleproduct._id);
 
@@ -615,7 +620,6 @@ module.exports.getsaleconnectors = async (req, res) => {
       count,
     });
   } catch (error) {
-    console.log(error);
     res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
@@ -788,6 +792,8 @@ module.exports.registeredit = async (req, res) => {
     let products = [];
 
     for (const saleproduct of all) {
+      saleproduct.saleconnector = saleconnector._id;
+      saleproduct.dailysaleconnector = dailysaleconnector._id;
       await saleproduct.save();
       products.push(saleproduct._id);
 
@@ -921,6 +927,132 @@ module.exports.payment = async (req, res) => {
     });
     res.status(201).send(returnpayment);
   } catch (error) {
+    res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
+  }
+};
+
+module.exports.getreportproducts = async (req, res) => {
+  try {
+    const { market, countPage, currentPage, startDate, endDate, search } =
+      req.body;
+    const marke = await Market.findById(market);
+    if (!marke) {
+      return res.status(400).json({
+        message: `Diqqat! Do'kon haqida malumotlar topilmadi!`,
+      });
+    }
+
+    const code = new RegExp(
+      ".*" + search ? search.codeofproduct : "" + ".*",
+      "i"
+    );
+    const name = new RegExp(
+      ".*" + search ? search.nameofproduct : "" + ".*",
+      "i"
+    );
+    const client = new RegExp(
+      ".*" + search ? search.nameofclient : "" + ".*",
+      "i"
+    );
+    const firstname = new RegExp(
+      ".*" + search ? search.nameofseller : "" + ".*",
+      "i"
+    );
+
+    const saleproducts = await SaleProduct.find({
+      market,
+      createdAt: {
+        $gte: startDate,
+        $lt: endDate,
+      },
+    })
+      .select("-isArchive -updatedAt -market -__v")
+      .sort({ _id: -1 })
+      .populate({
+        path: "user",
+        select: "firstname lastname",
+        match: { firstname },
+      })
+      .populate({
+        path: "saleconnector",
+        select: "id client",
+        populate: { path: "client", select: "name", match: { name: client } },
+      })
+      .populate({
+        path: "product",
+        select: "productdata",
+        populate: {
+          path: "productdata",
+          select: "name code",
+          match: { code, name },
+        },
+      })
+      .then((saleproducts) =>
+        filter(saleproducts, (saleproduct) =>
+          search.nameofclient.length > 0
+            ? saleproduct.product.productdata &&
+              saleproduct.product.productdata !== null &&
+              saleproduct.user &&
+              saleproduct.user !== null &&
+              saleproduct.saleconnector &&
+              saleproduct.saleconnector.client &&
+              saleproduct.saleconnector.client !== null
+            : saleproduct.product.productdata &&
+              saleproduct.product.productdata !== null &&
+              saleproduct.user &&
+              saleproduct.user !== null
+        )
+      );
+
+    const count = await SaleProduct.find({
+      market,
+      createdAt: {
+        $gte: startDate,
+        $lt: endDate,
+      },
+    })
+      .populate({
+        path: "user",
+        select: "firstname lastname",
+        match: { firstname },
+      })
+      .populate({
+        path: "saleconnector",
+        select: "id client",
+        populate: { path: "client", select: "name", match: { name: client } },
+      })
+      .populate({
+        path: "product",
+        select: "productdata",
+        populate: {
+          path: "productdata",
+          select: "name code",
+          match: { code, name },
+        },
+      })
+      .then((saleproducts) =>
+        filter(saleproducts, (saleproduct) =>
+          search.nameofclient.length > 0
+            ? saleproduct.product.productdata &&
+              saleproduct.product.productdata !== null &&
+              saleproduct.user &&
+              saleproduct.user !== null &&
+              saleproduct.saleconnector &&
+              saleproduct.saleconnector.client &&
+              saleproduct.saleconnector.client !== null
+            : saleproduct.product.productdata &&
+              saleproduct.product.productdata !== null &&
+              saleproduct.user &&
+              saleproduct.user !== null
+        )
+      );
+
+    res.status(200).send({
+      products: saleproducts.splice(countPage * currentPage, countPage),
+      count: count.length,
+    });
+  } catch (error) {
+    console.log(error);
     res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };

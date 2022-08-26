@@ -1009,26 +1009,20 @@ module.exports.deleteAll = async (req, res) => {
     for (const product of products) {
       const del = await Product.findByIdAndDelete(product._id);
 
-      const categoryUpdate = await Category.findByIdAndUpdate(
-        product.category,
-        {
-          $pull: {
-            products: new ObjectId(product._id),
-          },
-        }
-      );
+      await Category.findByIdAndUpdate(product.category, {
+        $pull: {
+          products: new ObjectId(product._id),
+        },
+      });
 
-      const producttypeUpdate = await ProductType.findByIdAndUpdate(
-        product.producttype,
-        {
-          $pull: {
-            products: new ObjectId(product._id),
-          },
-        }
-      );
+      await ProductType.findByIdAndUpdate(product.producttype, {
+        $pull: {
+          products: new ObjectId(product._id),
+        },
+      });
 
       for (const productconnector of product.productconnectors) {
-        const del = await ProductConnector.findByIdAndDelete(productconnector);
+        await ProductConnector.findByIdAndDelete(productconnector);
       }
 
       all.push(del);

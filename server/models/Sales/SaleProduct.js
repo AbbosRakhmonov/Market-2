@@ -14,6 +14,11 @@ const saleproduct = new Schema(
     market: { type: Schema.Types.ObjectId, ref: "Market", required: true },
     saleproducts: [{ type: Schema.Types.ObjectId, ref: "SaleProduct" }],
     saleproduct: { type: Schema.Types.ObjectId, ref: "SaleProduct" },
+    saleconnector: { type: Schema.Types.ObjectId, ref: "SaleConnector" },
+    dailysaleconnector: {
+      type: Schema.Types.ObjectId,
+      ref: "DailySaleConnector",
+    },
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     isArchive: { type: Boolean, default: false },
   },
