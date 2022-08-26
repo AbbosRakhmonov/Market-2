@@ -167,7 +167,11 @@ export const SaleCheckAll = forwardRef((props, ref) => {
                                             {currencyType}
                                         </td>
                                         <td className='check-table-body'>
-                                            {item?.product? item.user.firstname + ' ' + item.user.lastname[0] : ''}
+                                            {item?.user
+                                                ? item.user.firstname +
+                                                  ' ' +
+                                                  item.user.lastname[0]
+                                                : ''}
                                         </td>
                                     </tr>
                                 )
