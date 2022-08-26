@@ -100,7 +100,6 @@ module.exports.register = async (req, res) => {
           error: error.message,
         });
       }
-
       const newSaleProduct = new SaleProduct({
         price: produc.price,
         totalprice: convertToUsd(totalprice),
@@ -574,6 +573,14 @@ module.exports.getsaleconnectors = async (req, res) => {
       .sort({ _id: -1 })
       .populate({
         path: "products",
+        select: "user",
+        populate: {
+          path: "user",
+          select: "firstname lastname",
+        },
+      })
+      .populate({
+        path: "products",
         select:
           "totalprice unitprice totalpriceuzs unitpriceuzs pieces createdAt discount saleproducts product",
         options: { sort: { createdAt: -1 } },
@@ -608,6 +615,7 @@ module.exports.getsaleconnectors = async (req, res) => {
       count,
     });
   } catch (error) {
+    console.log(error);
     res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };

@@ -1,5 +1,5 @@
-const { Schema, model, Types } = require('mongoose');
-const Joi = require('joi');
+const { Schema, model, Types } = require("mongoose");
+const Joi = require("joi");
 
 const saleproduct = new Schema(
   {
@@ -8,12 +8,13 @@ const saleproduct = new Schema(
     unitprice: { type: Number, required: true },
     unitpriceuzs: { type: Number, required: true },
     pieces: { type: Number, required: true },
-    discount: { type: Schema.Types.ObjectId, ref: 'Discount' },
-    price: { type: Schema.Types.ObjectId, ref: 'ProductPrice' },
-    product: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
-    market: { type: Schema.Types.ObjectId, ref: 'Market', required: true },
-    saleproducts: [{ type: Schema.Types.ObjectId, ref: 'SaleProduct' }],
-    saleproduct: { type: Schema.Types.ObjectId, ref: 'SaleProduct' },
+    discount: { type: Schema.Types.ObjectId, ref: "Discount" },
+    price: { type: Schema.Types.ObjectId, ref: "ProductPrice" },
+    product: { type: Schema.Types.ObjectId, ref: "Product", required: true },
+    market: { type: Schema.Types.ObjectId, ref: "Market", required: true },
+    saleproducts: [{ type: Schema.Types.ObjectId, ref: "SaleProduct" }],
+    saleproduct: { type: Schema.Types.ObjectId, ref: "SaleProduct" },
+    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     isArchive: { type: Boolean, default: false },
   },
   {
@@ -30,9 +31,10 @@ function validateSaleProduct(saleproduct) {
     pieces: Joi.number().required(),
     product: Joi.string().required(),
     market: Joi.string(),
+    user: Joi.string(),
   });
   return schema.validate(saleproduct);
 }
 
 module.exports.validateSaleProduct = validateSaleProduct;
-module.exports.SaleProduct = model('SaleProduct', saleproduct);
+module.exports.SaleProduct = model("SaleProduct", saleproduct);
