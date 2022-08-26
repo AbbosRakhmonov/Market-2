@@ -68,6 +68,15 @@ function ProductReport() {
     const [currentPage, setCurrentPage] = useState(0)
     const [searchByCode, setSearchByCode] = useState('')
     const [searchByName, setSearchByName] = useState('')
+    const [searchByClient, setSearchByClient] = useState('')
+    const [searchBySeller, setSearchBySeller] = useState('')
+    const [beginDay, setBeginDay] = useState(
+        new Date(
+            new Date().getFullYear(),
+            new Date().getMonth(),
+            1
+        ).toISOString()
+    )
 
     const [endDay, setEndDay] = useState(
         new Date(new Date().setHours(23, 59, 59, 0)).toISOString()
