@@ -11,8 +11,10 @@ export const SaleCheckAll = forwardRef((props, ref) => {
         selledPayments,
         returnedPayments,
         product,
+        userInfo,
     } = props
-    const {user, market} = useSelector((state) => state.login)
+
+    const {market} = useSelector((state) => state.login)
     const {currencyType} = useSelector((state) => state.currency)
     const calculateAllSum = (data) => {
         return data
@@ -48,7 +50,7 @@ export const SaleCheckAll = forwardRef((props, ref) => {
               }, 0)
             : 0
     }
-    console.log(selled)
+
     return (
         <div ref={ref} className={'bg-white-900 p-4 rounded-md'}>
             <div className='flex pb-2 justify-between border-b-[0.8px] border-black-700'>
@@ -99,7 +101,7 @@ export const SaleCheckAll = forwardRef((props, ref) => {
                         <p>
                             Sotuvchi:{' '}
                             <span className='check-ul-li-span'>
-                                {user.firstname} {user.lastname}
+                                {userInfo?.firstname} {userInfo?.lastname}
                             </span>
                         </p>
                     </div>
