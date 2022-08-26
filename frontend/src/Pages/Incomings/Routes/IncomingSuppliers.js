@@ -14,7 +14,7 @@ import {
     getIncomingConnectors,
     getIncomings,
     payDebt,
-    updateIncoming
+    updateIncoming,
 } from '../incomingSlice'
 import {universalSort, UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
@@ -31,7 +31,7 @@ const IncomingSuppliers = () => {
     const dispatch = useDispatch()
     const {
         market: {_id},
-        user
+        user,
     } = useSelector((state) => state.login)
     const {
         incomings,
@@ -39,13 +39,12 @@ const IncomingSuppliers = () => {
         incomingconnectors,
         successUpdate,
         successDelete,
-        allIncomingsData
+        allIncomingsData,
     } = useSelector((state) => state.incoming)
     const {currencyType, currency} = useSelector((state) => state.currency)
 
     const {
-        state: {date, supplier}
-
+        state: {date, supplier},
     } = useLocation()
 
     let beginDay = new Date(new Date(date).setHours(3, 0, 0, 0)).toISOString()
@@ -56,17 +55,17 @@ const IncomingSuppliers = () => {
     const [sendingSearch, setSendingSearch] = useState({
         name: '',
         code: '',
-        supplier: supplier
+        supplier: supplier,
     })
     const [localSearch, setLocalSearch] = useState({
         name: '',
         code: '',
-        supplier: supplier
+        supplier: supplier,
     })
     const [sortItem, setSortItem] = useState({
         filter: '',
         sort: '',
-        count: 0
+        count: 0,
     })
 
     const [incomingCard, setIncomingCard] = useState([])
@@ -98,47 +97,42 @@ const IncomingSuppliers = () => {
     const [currentId, setCurrentId] = useState('')
     let delay = null
 
-    const changeCardData = useCallback(
-        (data) => {
-            let groups = []
-            let pieces = (arr) => arr.reduce((prev, el) => prev + el.pieces, 0)
-            for (let incoming of data) {
-                let obj = {
-                    _id: incoming._id,
-                    createdAt: new Date(
-                        incoming.createdAt
-                    ).toLocaleDateString(),
-                    time: new Date(incoming.createdAt).toLocaleTimeString('ru-RU', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hourCycle: 'h24'
-                    }),
-                    supplier: {...incoming.supplier},
-                    products: incoming.incoming.length,
-                    pieces: pieces(incoming.incoming),
-                    totalprice: incoming.total,
-                    totalpriceuzs: incoming.totaluzs,
-                    totalpayment: incoming.totalpayment,
-                    totalpaymentuzs: incoming.totalpaymentuzs,
-                    debt: incoming.debt,
-                    debtuzs: incoming.debtuzs
-                }
-                groups.push(obj)
+    const changeCardData = useCallback((data) => {
+        let groups = []
+        let pieces = (arr) => arr.reduce((prev, el) => prev + el.pieces, 0)
+        for (let incoming of data) {
+            let obj = {
+                _id: incoming._id,
+                createdAt: new Date(incoming.createdAt).toLocaleDateString(),
+                time: new Date(incoming.createdAt).toLocaleTimeString('ru-RU', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hourCycle: 'h24',
+                }),
+                supplier: {...incoming.supplier},
+                products: incoming.incoming.length,
+                pieces: pieces(incoming.incoming),
+                totalprice: incoming.total,
+                totalpriceuzs: incoming.totaluzs,
+                totalpayment: incoming.totalpayment,
+                totalpaymentuzs: incoming.totalpaymentuzs,
+                debt: incoming.debt,
+                debtuzs: incoming.debtuzs,
             }
-            setIncomingCard(groups)
-        },
-        [supplier]
-    )
+            groups.push(obj)
+        }
+        setIncomingCard(groups)
+    }, [])
 
     // click supplier card and show the table
     const changeCurrentData = (value) => {
         setSendingSearch({
             ...sendingSearch,
-            supplier: value
+            supplier: value,
         })
         setLocalSearch({
             ...localSearch,
-            supplier: value
+            supplier: value,
         })
     }
 
@@ -147,7 +141,7 @@ const IncomingSuppliers = () => {
             return {
                 ...incoming,
                 sellingprice: incoming.product.price.sellingprice,
-                sellingpriceuzs: incoming.product.price.sellingpriceuzs
+                sellingpriceuzs: incoming.product.price.sellingpriceuzs,
             }
         })
         setCurrentData(current)
@@ -163,7 +157,7 @@ const IncomingSuppliers = () => {
     const changeEditedIncoming = (e, key) => {
         let target = Number(e.target.value)
         let obj = {
-            ...editedIncoming
+            ...editedIncoming,
         }
 
         const check = (prop) => key === prop
@@ -210,7 +204,7 @@ const IncomingSuppliers = () => {
                     market: _id,
                     startDate: beginDay,
                     endDate: endDay,
-                    product: {...editedIncoming}
+                    product: {...editedIncoming},
                 })
             )
         } else {
@@ -236,11 +230,11 @@ const IncomingSuppliers = () => {
         setCurrentData([
             ...filter([...currentDataStorage], ({product}) =>
                 product.productdata.name.toLowerCase().includes(target)
-            )
+            ),
         ])
         setLocalSearch({
             ...localSearch,
-            name: target
+            name: target,
         })
     }
 
@@ -250,11 +244,11 @@ const IncomingSuppliers = () => {
         setCurrentData([
             ...filter([...currentDataStorage], ({product}) =>
                 product.productdata.code.includes(target)
-            )
+            ),
         ])
         setLocalSearch({
             ...localSearch,
-            code: target
+            code: target,
         })
     }
 
@@ -273,7 +267,7 @@ const IncomingSuppliers = () => {
                 endDay,
                 currentPage,
                 countPage,
-                search: sendingSearch
+                search: sendingSearch,
             })
         )
     }, [dispatch, _id, beginDay, endDay, currentPage, countPage, sendingSearch])
@@ -284,7 +278,7 @@ const IncomingSuppliers = () => {
                 market: _id,
                 beginDay,
                 endDay,
-                product: {...deletedIncoming}
+                product: {...deletedIncoming},
             })
         )
         toggleModal()
@@ -298,7 +292,7 @@ const IncomingSuppliers = () => {
                     setSortItem({
                         filter: filterKey,
                         sort: '1',
-                        count: 2
+                        count: 2,
                     })
                     universalSort(
                         currentData,
@@ -312,7 +306,7 @@ const IncomingSuppliers = () => {
                     setSortItem({
                         filter: filterKey,
                         sort: '',
-                        count: 0
+                        count: 0,
                     })
                     universalSort(
                         currentData,
@@ -326,7 +320,7 @@ const IncomingSuppliers = () => {
                     setSortItem({
                         filter: filterKey,
                         sort: '-1',
-                        count: 1
+                        count: 1,
                     })
                     universalSort(
                         currentData,
@@ -340,7 +334,7 @@ const IncomingSuppliers = () => {
             setSortItem({
                 filter: filterKey,
                 sort: '-1',
-                count: 1
+                count: 1,
             })
             universalSort(
                 currentData,
@@ -424,9 +418,7 @@ const IncomingSuppliers = () => {
                     setPaid(0)
                     setPaidUzs(0)
                     setPaymentDebt(allPayment)
-                    setPaymentDebtUzs(
-                        allPaymentUzs
-                    )
+                    setPaymentDebtUzs(allPaymentUzs)
                     break
             }
         }
@@ -563,7 +555,6 @@ const IncomingSuppliers = () => {
                 setModalVisible(true)
             }, 300)
         }
-
     }
     const handleDoubleClick = () => {
         window.clearTimeout(delay)
@@ -588,8 +579,14 @@ const IncomingSuppliers = () => {
     const handleApprovePay = () => {
         const body = {
             payment: {
-                payment: Number(paymentCash) + Number(paymentCard) + Number(paymentTransfer),
-                paymentuzs: Number(paymentCashUzs) + Number(paymentCardUzs) + Number(paymentTransferUzs),
+                payment:
+                    Number(paymentCash) +
+                    Number(paymentCard) +
+                    Number(paymentTransfer),
+                paymentuzs:
+                    Number(paymentCashUzs) +
+                    Number(paymentCardUzs) +
+                    Number(paymentTransferUzs),
                 type: paymentType,
                 cash: Number(paymentCash),
                 cashuzs: Number(paymentCashUzs),
@@ -597,10 +594,10 @@ const IncomingSuppliers = () => {
                 carduzs: Number(paymentCardUzs),
                 transfer: Number(paymentTransfer),
                 transferuzs: Number(paymentTransferUzs),
-                comment: saleComment
+                comment: saleComment,
             },
             user: user._id,
-            incomingconnectorid: currentId
+            incomingconnectorid: currentId,
         }
         dispatch(payDebt(body)).then(({error}) => {
             if (!error) {
@@ -608,7 +605,7 @@ const IncomingSuppliers = () => {
                     getIncomingConnectors({
                         market: _id,
                         beginDay,
-                        endDay
+                        endDay,
                     })
                 )
                 setModalVisible(false)
@@ -645,7 +642,7 @@ const IncomingSuppliers = () => {
             getIncomingConnectors({
                 market: _id,
                 beginDay,
-                endDay
+                endDay,
             })
         )
     }, [dispatch, _id, beginDay, endDay])
@@ -661,49 +658,48 @@ const IncomingSuppliers = () => {
     useEffect(() => {
         const body = {
             beginDay,
-            endDay
+            endDay,
         }
         dispatch(excelIncomings(body))
     }, [dispatch, beginDay, endDay])
 
     const headers = [
         {
-            title: '№'
+            title: '№',
         },
         {
             title: t('Yetkazuvchi'),
-            styles: 'w-[10%]'
+            styles: 'w-[10%]',
         },
         {
             title: t('Kodi'),
             filter: 'product.productdata.code',
-            styles: 'w-[7%]'
+            styles: 'w-[7%]',
         },
         {
-
             title: t('Nomi'),
-            filter: 'product.productdata.name'
+            filter: 'product.productdata.name',
         },
         {
             title: t('Soni'),
-            styles: 'w-[10%]'
+            styles: 'w-[10%]',
         },
         {
             title: t('Kelish'),
-            styles: 'w-[10%]'
+            styles: 'w-[10%]',
         },
         {
             title: t('Jami'),
-            styles: 'w-[15%]'
+            styles: 'w-[15%]',
         },
         {
             title: t('Sotish'),
-            styles: 'w-[10%]'
+            styles: 'w-[10%]',
         },
         {
             title: '',
-            styles: 'w-[5%]'
-        }
+            styles: 'w-[5%]',
+        },
     ]
 
     const incomingSupplierHeaders = [
@@ -717,7 +713,7 @@ const IncomingSuppliers = () => {
         t('Jami UZS'),
         t('Jami USD'),
         t('Sotish UZS'),
-        t('Sotish USD')
+        t('Sotish USD'),
     ]
 
     return (
@@ -778,8 +774,8 @@ const IncomingSuppliers = () => {
                             />
                         ))}
                 </div>
-                {
-                    currentData.length ? <>
+                {currentData.length ? (
+                    <>
                         <div className='mainPadding flex items-center justify-between'>
                             <ExportBtn
                                 fileName={`Maxsulotlar-qabul-qabullar-${new Date().toLocaleDateString()}`}
@@ -800,7 +796,9 @@ const IncomingSuppliers = () => {
                             filterByName={searchName}
                             filterByTotal={(e) => setCountPage(e.value)}
                             filterByCode={searchCode}
-                            filterByCodeAndNameAndCategoryWhenPressEnter={searchOnKeyUp}
+                            filterByCodeAndNameAndCategoryWhenPressEnter={
+                                searchOnKeyUp
+                            }
                         />
                         <div className='mainPadding'>
                             <Table
@@ -820,14 +818,32 @@ const IncomingSuppliers = () => {
                                 sortItem={sortItem}
                             />
                         </div>
-                    </> : <NotFind text='Qabullar mavjud emas...' />
-                }
+                    </>
+                ) : (
+                    <NotFind text='Qabullar mavjud emas...' />
+                )}
                 <UniversalModal
                     body={modalBody}
                     isOpen={modalVisible}
-                    headerText={modalBody === 'complete' ? t('To\'lovni amalga oshirishni tasdiqlaysizmi ?') : t('Mahsulotni o`chirishni tasdiqlaysizmi?')}
-                    title={modalBody === 'complete' ? t('To\'lovni amalga oshirgach bu ma`lumotlarni o`zgaritirb bo`lmaydi !') : t('O`chirilgan mahsulotni tiklashning imkoni mavjud emas!')}
-                    approveFunction={modalBody === 'complete' ? handleApprovePay : removeIncoming}
+                    headerText={
+                        modalBody === 'complete'
+                            ? t("To'lovni amalga oshirishni tasdiqlaysizmi ?")
+                            : t('Mahsulotni o`chirishni tasdiqlaysizmi?')
+                    }
+                    title={
+                        modalBody === 'complete'
+                            ? t(
+                                  "To'lovni amalga oshirgach bu ma`lumotlarni o`zgaritirb bo`lmaydi !"
+                              )
+                            : t(
+                                  'O`chirilgan mahsulotni tiklashning imkoni mavjud emas!'
+                              )
+                    }
+                    approveFunction={
+                        modalBody === 'complete'
+                            ? handleApprovePay
+                            : removeIncoming
+                    }
                     toggleModal={toggleModal}
                 />
             </div>

@@ -245,7 +245,6 @@ const RegisterSelling = () => {
         }
     }
     const writePayment = (value, type) => {
-        console.log(type)
         const maxSum = Math.abs(allPayment) - Number(paymentDiscount)
         const maxSumUzs = Math.abs(allPaymentUzs) - Number(paymentDiscountUzs)
         if (currencyType === 'USD') {

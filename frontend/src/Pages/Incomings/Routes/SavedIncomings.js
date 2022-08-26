@@ -2,24 +2,27 @@ import React, {useCallback, useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {useNavigate} from 'react-router-dom'
 import Table from '../../../Components/Table/Table'
-import { universalSort } from './../../../App/globalFunctions';
+import {universalSort} from './../../../App/globalFunctions'
 import {useTranslation} from 'react-i18next'
-import {deleteTemporary, getTemporary, setTemporaryRegister} from '../incomingSlice'
+import {
+    deleteTemporary,
+    getTemporary,
+    setTemporaryRegister,
+} from '../incomingSlice'
 import {filter, map} from 'lodash'
 import NotFind from '../../../Components/NotFind/NotFind.js'
 
 const SavedIncomings = () => {
     const {t} = useTranslation(['common'])
     const dispatch = useDispatch()
-    const { temporaries } = useSelector((state) => state.incoming)
     let navigate = useNavigate()
     const [sorItem, setSorItem] = useState({
         filter: '',
         sort: '',
-        count: 0
+        count: 0,
     })
     const {
-        market: {_id}
+        market: {_id},
     } = useSelector((state) => state.login)
 
     const {currencyType} = useSelector((state) => state.currency)
@@ -35,7 +38,7 @@ const SavedIncomings = () => {
             let {
                 _id,
                 createdAt,
-                temporaryincoming: {supplier, incomings}
+                temporaryincoming: {supplier, incomings},
             } = temp
             return {
                 _id,
@@ -44,8 +47,8 @@ const SavedIncomings = () => {
                 incomings: {
                     totalprice: count(incomings, 'totalprice'),
                     totalpriceuzs: count(incomings, 'totalpriceuzs'),
-                    pieces: count(incomings, 'pieces')
-                }
+                    pieces: count(incomings, 'pieces'),
+                },
             }
         })
         setCurrentTemporaryData(temporary)
@@ -53,14 +56,15 @@ const SavedIncomings = () => {
     }, [])
 
     const sendTemporayToRegister = (temporary) => {
-        const incomings = filter(temporaries,
+        const incomings = filter(
+            temporaries,
             (temp) => temp._id === temporary._id
         )[0]
         dispatch(
             setTemporaryRegister({
                 _id: temporary._id,
                 incomings: incomings.temporaryincoming.incomings,
-                supplier: temporary.supplier
+                supplier: temporary.supplier,
             })
         )
         navigate('/maxsulotlar/qabul/qabulqilish')
@@ -68,7 +72,7 @@ const SavedIncomings = () => {
     useEffect(() => {
         dispatch(
             getTemporary({
-                market: _id
+                market: _id,
             })
         )
     }, [dispatch, _id])
@@ -76,7 +80,7 @@ const SavedIncomings = () => {
     const removeTemporary = (temporary) => {
         dispatch(
             deleteTemporary({
-                _id: temporary._id
+                _id: temporary._id,
             })
         )
     }
@@ -89,37 +93,37 @@ const SavedIncomings = () => {
     const headers = [
         {
             title: '№',
-            styles: 'w-[8%]'
+            styles: 'w-[8%]',
         },
         {
             title: t('Yetkazib beruvchi'),
             filter: 'supplier.name',
-            styles: ''
+            styles: '',
         },
         {
             title: t('Maxsulotlar'),
             filter: 'incomings.pieces',
-            styles: 'w-[10%]'
+            styles: 'w-[10%]',
         },
         {
             title: t('Jami'),
             filter: 'incomings.totalprice',
-            styles: 'w-[10%]'
+            styles: 'w-[10%]',
         },
         {
             title: t('Sana'),
             filter: 'createdAt',
-            styles: 'w-[10%]'
+            styles: 'w-[10%]',
         },
         {
             title: t('Vaqti'),
             filter: 'createdAt',
-            styles: 'w-[10%]'
+            styles: 'w-[10%]',
         },
         {
             title: '',
-            styles: 'w-[10%]'
-        }
+            styles: 'w-[10%]',
+        },
     ]
 
     const filterData = (filterKey) => {
@@ -129,7 +133,7 @@ const SavedIncomings = () => {
                     setSorItem({
                         filter: filterKey,
                         sort: '1',
-                        count: 2
+                        count: 2,
                     })
                     universalSort(
                         currentTemporaryData,
@@ -143,7 +147,7 @@ const SavedIncomings = () => {
                     setSorItem({
                         filter: filterKey,
                         sort: '',
-                        count: 0
+                        count: 0,
                     })
                     universalSort(
                         currentTemporaryData,
@@ -157,7 +161,7 @@ const SavedIncomings = () => {
                     setSorItem({
                         filter: filterKey,
                         sort: '-1',
-                        count: 1
+                        count: 1,
                     })
                     universalSort(
                         currentTemporaryData,
@@ -171,7 +175,7 @@ const SavedIncomings = () => {
             setSorItem({
                 filter: filterKey,
                 sort: '-1',
-                count: 1
+                count: 1,
             })
             universalSort(
                 currentTemporaryData,
