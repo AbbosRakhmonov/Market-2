@@ -125,7 +125,7 @@ function SearchForm(
                 return (
                     <SearchInput
                         key={'yetkazuvchi_ismi_1'}
-                        placeholder={t('yetkazuchi ismi...')}
+                        placeholder={t('yetkazuvchi ismi...')}
                         someClasses={'grow'}
                         value={searchByDelivererName}
                         onChange={filterByDelivererName}
