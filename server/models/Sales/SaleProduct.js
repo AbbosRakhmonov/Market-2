@@ -8,6 +8,8 @@ const saleproduct = new Schema(
     unitprice: { type: Number, required: true },
     unitpriceuzs: { type: Number, required: true },
     pieces: { type: Number, required: true },
+    previous: { type: Number, required: true },
+    next: { type: Number, required: true },
     discount: { type: Schema.Types.ObjectId, ref: "Discount" },
     price: { type: Schema.Types.ObjectId, ref: "ProductPrice" },
     product: { type: Schema.Types.ObjectId, ref: "Product", required: true },
