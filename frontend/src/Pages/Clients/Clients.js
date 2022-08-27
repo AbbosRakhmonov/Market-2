@@ -257,7 +257,6 @@ const ClientsPage = () => {
         })
         setPackmanOptions(options)
     }, [packmans])
-    console.log(searchedClients, data)
     return (
         <motion.section
             key='content'
