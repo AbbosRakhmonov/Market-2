@@ -88,6 +88,19 @@ const SalesList = ({approveFunction, toggleModal}) => {
     }
     const handleChangeUserValue = (e) => {
         setUserValue(e.target.value)
+        if (e.target.value !== clientValue) {
+            setOptionClient([
+                {
+                    label: t('Tanlang'),
+                    value: '',
+                },
+                ...clients.map((client) => ({
+                    label: client.name,
+                    value: client._id,
+                    packman: client?.packman,
+                })),
+            ])
+        }
     }
 
     useEffect(() => {
@@ -137,7 +150,20 @@ const SalesList = ({approveFunction, toggleModal}) => {
                 </button>
                 <button
                     className={'approveBtn bg-success-500 hover:bg-success-700'}
-                    onClick={approveFunction}
+                    onClick={() => {
+                        let body = {
+                            client: {
+                                name: userValue,
+                            },
+                        }
+                        packmanValue.value
+                            ? (body.packmanid = packmanValue.value)
+                            : (body.client.name = userValue)
+                        clientValue.value
+                            ? (body.client._id = clientValue.value)
+                            : (body.client.name = userValue)
+                        approveFunction(body)
+                    }}
                 >
                     {t('Tasdiqlash')}
                 </button>

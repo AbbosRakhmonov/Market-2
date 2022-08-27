@@ -1,26 +1,26 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import ExportBtn from '../../../Components/Buttons/ExportBtn.js'
 import Pagination from '../../../Components/Pagination/Pagination.js'
 import Table from '../../../Components/Table/Table.js'
 import SearchForm from '../../../Components/SearchForm/SearchForm.js'
-import { useDispatch, useSelector } from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import Spinner from '../../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../../Components/NotFind/NotFind.js'
-import { motion } from 'framer-motion'
+import {motion} from 'framer-motion'
 import {
     clearSearchedSellings,
     getSellings,
     getSellingsByFilter,
     excelAllSellings,
+    addClient,
 } from '../Slices/sellingsSlice.js'
-import { regexForTypeNumber } from '../../../Components/RegularExpressions/RegularExpressions.js'
+import {regexForTypeNumber} from '../../../Components/RegularExpressions/RegularExpressions.js'
 import UniversalModal from '../../../Components/Modal/UniversalModal.js'
-import { useTranslation } from 'react-i18next'
-import { filter } from 'lodash'
-import { updateSellingsClient } from '../Slices/sellingsSlice.js'
-import { universalSort } from './../../../App/globalFunctions';
+import {useTranslation} from 'react-i18next'
+import {filter} from 'lodash'
+import {universalSort} from './../../../App/globalFunctions'
 const Sellings = () => {
-    const { t } = useTranslation(['common'])
+    const {t} = useTranslation(['common'])
     const headers = [
         {
             title: '№',
@@ -54,7 +54,7 @@ const Sellings = () => {
         },
     ]
     const dispatch = useDispatch()
-    const { currencyType } = useSelector((state) => state.currency)
+    const {currencyType} = useSelector((state) => state.currency)
     const {
         sellings,
         searchedSellings,
@@ -76,7 +76,7 @@ const Sellings = () => {
     const [sorItem, setSorItem] = useState({
         filter: '',
         sort: '',
-        count: 0
+        count: 0,
     })
     const [startDate, setStartDate] = useState(
         new Date(
@@ -88,9 +88,10 @@ const Sellings = () => {
     const [endDate, setEndDate] = useState(new Date())
     const [printedSelling, setPrintedSelling] = useState(null)
     const [modalVisible, setModalVisible] = useState(false)
+    const [saleConnectorId, setSaleConnectorId] = useState(null)
 
     // filter by total
-    const filterByTotal = ({ value }) => {
+    const filterByTotal = ({value}) => {
         setShowByTotal(value)
         setCurrentPage(0)
     }
@@ -99,9 +100,9 @@ const Sellings = () => {
     const handleChangeId = (e) => {
         const val = e.target.value
         const valForSearch = val.replace(/\s+/g, ' ').trim()
-        regexForTypeNumber.test(val) && setSearch({ ...search, id: val })
-            ; (searchedData.length > 0 || totalSearched > 0) &&
-                dispatch(clearSearchedSellings())
+        regexForTypeNumber.test(val) && setSearch({...search, id: val})
+        ;(searchedData.length > 0 || totalSearched > 0) &&
+            dispatch(clearSearchedSellings())
         if (valForSearch === '') {
             setData(sellings)
             setFilteredDataTotal(total)
@@ -116,9 +117,9 @@ const Sellings = () => {
     const handleChangeClient = (e) => {
         const val = e.target.value
         const valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
-        setSearch({ ...search, client: val })
-            ; (searchedData.length > 0 || totalSearched > 0) &&
-                dispatch(clearSearchedSellings())
+        setSearch({...search, client: val})
+        ;(searchedData.length > 0 || totalSearched > 0) &&
+            dispatch(clearSearchedSellings())
         if (valForSearch === '') {
             setData(sellings)
             setFilteredDataTotal(total)
@@ -172,9 +173,10 @@ const Sellings = () => {
         setModalVisible(true)
     }
 
-    const addPlus = () => {
+    const addPlus = (id) => {
         setChooseBody('addPlus')
         setModalVisible(true)
+        setSaleConnectorId(id)
     }
 
     // effects
@@ -209,12 +211,29 @@ const Sellings = () => {
             search,
         }
         dispatch(excelAllSellings(body))
-    }, [dispatch])
+    }, [dispatch, startDate, endDate, search])
 
     const handleAddClient = (client) => {
-        dispatch(updateSellingsClient(client))
+        dispatch(
+            addClient({
+                ...client,
+                saleconnectorid: saleConnectorId,
+            })
+        ).then(() => {
+            const body = {
+                currentPage,
+                countPage: showByTotal,
+                startDate: startDate.toISOString(),
+                endDate: endDate.toISOString(),
+                search: {
+                    id: '',
+                    client: '',
+                },
+            }
+            dispatch(getSellings(body))
+        })
         setModalVisible(false)
-    }   
+    }
 
     const filterData = (filterKey) => {
         if (filterKey === sorItem.filter) {
@@ -223,57 +242,33 @@ const Sellings = () => {
                     setSorItem({
                         filter: filterKey,
                         sort: '1',
-                        count: 2
+                        count: 2,
                     })
-                    universalSort(
-                        data,
-                        setData,
-                        filterKey,
-                        1,
-                        storeData
-                    )
+                    universalSort(data, setData, filterKey, 1, storeData)
                     break
                 case 2:
                     setSorItem({
                         filter: filterKey,
                         sort: '',
-                        count: 0
+                        count: 0,
                     })
-                    universalSort(
-                        data,
-                        setData,
-                        filterKey,
-                        '',
-                        storeData
-                    )
+                    universalSort(data, setData, filterKey, '', storeData)
                     break
                 default:
                     setSorItem({
                         filter: filterKey,
                         sort: '-1',
-                        count: 1
+                        count: 1,
                     })
-                    universalSort(
-                        data,
-                        setData,
-                        filterKey,
-                        -1,
-                        storeData
-                    )
+                    universalSort(data, setData, filterKey, -1, storeData)
             }
         } else {
             setSorItem({
                 filter: filterKey,
                 sort: '-1',
-                count: 1
+                count: 1,
             })
-            universalSort(
-                data,
-                setData,
-                filterKey,
-                -1,
-                storeData
-            )
+            universalSort(data, setData, filterKey, -1, storeData)
         }
     }
 
@@ -284,10 +279,10 @@ const Sellings = () => {
             animate='open'
             exit='collapsed'
             variants={{
-                open: { opacity: 1, height: 'auto' },
-                collapsed: { opacity: 0, height: 0 },
+                open: {opacity: 1, height: 'auto'},
+                collapsed: {opacity: 0, height: 0},
             }}
-            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
+            transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
         >
             <UniversalModal
                 printedSelling={printedSelling}

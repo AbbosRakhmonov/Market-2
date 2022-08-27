@@ -58,7 +58,7 @@ export const SalesListTableRow = ({
                                 <TableBtn
                                     type={'add'}
                                     bgcolor={'bg-success-500'}
-                                    onClick={addPlus}
+                                    onClick={() => addPlus(saleconnector._id)}
                                 />
                             </div>
                         )}
