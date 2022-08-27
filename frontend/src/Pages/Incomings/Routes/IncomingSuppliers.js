@@ -16,7 +16,12 @@ import {
     payDebt,
     updateIncoming,
 } from '../incomingSlice'
-import {universalSort, UsdToUzs, UzsToUsd, exportExcel} from '../../../App/globalFunctions'
+import {
+    universalSort,
+    UsdToUzs,
+    UzsToUsd,
+    exportExcel,
+} from '../../../App/globalFunctions'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
 import {filter, map, uniqueId} from 'lodash'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
@@ -40,7 +45,7 @@ const IncomingSuppliers = () => {
         incomingconnectors,
         successUpdate,
         successDelete,
-        loadingExcel
+        loadingExcel,
     } = useSelector((state) => state.incoming)
     const {currencyType, currency} = useSelector((state) => state.currency)
 
@@ -587,23 +592,58 @@ const IncomingSuppliers = () => {
         setPaymentModalVisible(true)
     }
     const handleApprovePay = () => {
+        const isMinus = (num) => (num < 0 && num) || -1 * num
         const body = {
             payment: {
                 payment:
-                    Number(paymentCash) +
-                    Number(paymentCard) +
-                    Number(paymentTransfer),
+                    Number(
+                        allPayment < 0 ? isMinus(paymentCash) : paymentCash
+                    ) +
+                    Number(
+                        allPayment < 0 ? isMinus(paymentCard) : paymentCard
+                    ) +
+                    Number(
+                        allPayment < 0
+                            ? isMinus(paymentTransfer)
+                            : paymentTransfer
+                    ),
                 paymentuzs:
-                    Number(paymentCashUzs) +
-                    Number(paymentCardUzs) +
-                    Number(paymentTransferUzs),
+                    Number(
+                        allPayment < 0
+                            ? isMinus(paymentCashUzs)
+                            : paymentCashUzs
+                    ) +
+                    Number(
+                        allPayment < 0
+                            ? isMinus(paymentCardUzs)
+                            : paymentCardUzs
+                    ) +
+                    Number(
+                        allPayment < 0
+                            ? paymentTransfer < 0 && isMinus(paymentTransferUzs)
+                            : paymentTransferUzs
+                    ),
                 type: paymentType,
-                cash: Number(paymentCash),
-                cashuzs: Number(paymentCashUzs),
-                card: Number(paymentCard),
-                carduzs: Number(paymentCardUzs),
-                transfer: Number(paymentTransfer),
-                transferuzs: Number(paymentTransferUzs),
+                cash: Number(
+                    allPayment < 0 ? isMinus(paymentCash) : paymentCash
+                ),
+                cashuzs: Number(
+                    allPaymentUzs < 0 ? isMinus(paymentCashUzs) : paymentCashUzs
+                ),
+                card: Number(
+                    allPayment < 0 ? isMinus(paymentCard) : paymentCard
+                ),
+                carduzs: Number(
+                    allPayment < 0 ? isMinus(paymentCardUzs) : paymentCardUzs
+                ),
+                transfer: Number(
+                    allPayment < 0 ? isMinus(paymentTransfer) : paymentTransfer
+                ),
+                transferuzs: Number(
+                    allPayment < 0
+                        ? isMinus(paymentTransferUzs)
+                        : paymentTransferUzs
+                ),
                 comment: saleComment,
             },
             user: user._id,
@@ -660,7 +700,6 @@ const IncomingSuppliers = () => {
         getCurrentData(incomings)
     }, [incomings])
 
-
     const headers = [
         {
             title: '№',
@@ -700,10 +739,10 @@ const IncomingSuppliers = () => {
         },
     ]
 
-   
     const exportData = () => {
         let fileName = `Maxsulotlar-qabul-qabullar - ${new Date().toLocaleDateString()}`
-        const incomingSupplierHeaders = [    //- new Date().toLocaleDateString()
+        const incomingSupplierHeaders = [
+            //- new Date().toLocaleDateString()
             '№',
             t('Yetkazuvchi'),
             t('Kodi'),
@@ -713,34 +752,36 @@ const IncomingSuppliers = () => {
             t('Kelish USD'),
             t('Jami UZS'),
             t('Jami USD'),
-        ]    
+        ]
         const body = {
             beginDay,
-            endDay
+            endDay,
         }
         dispatch(excelIncomings(body)).then(({error, payload}) => {
-            if(!error){
+            if (!error) {
                 const IncomingSupplierData = map(payload, (item, index) => ({
                     nth: index + 1,
-                    supplier: item?.supplier?.name || "",
-                    code: item?.product?.productdata?.code || "",
-                    name: item?.product?.productdata?.name || "",
-                    count: (item?.pieces + ' ' + item?.unit?.name) || "",
-                    unit: item?.unitpriceuzs || "",
-                    unitusd: item?.unitprice || "",
-                    all: item?.totalpriceuzs || "",
-                    allusd: item?.totalprice || "",
+                    supplier: item?.supplier?.name || '',
+                    code: item?.product?.productdata?.code || '',
+                    name: item?.product?.productdata?.name || '',
+                    count: item?.pieces + ' ' + item?.unit?.name || '',
+                    unit: item?.unitpriceuzs || '',
+                    unitusd: item?.unitprice || '',
+                    all: item?.totalpriceuzs || '',
+                    allusd: item?.totalprice || '',
                 }))
-                exportExcel(IncomingSupplierData, fileName, incomingSupplierHeaders)
+                exportExcel(
+                    IncomingSupplierData,
+                    fileName,
+                    incomingSupplierHeaders
+                )
             }
         })
-
     }
     return (
         <div className={`relative grow overflow-hidden`}>
-             {loadingExcel && (
-                <div
-                    className='fixed backdrop-blur-[2px] z-[100] left-0 top-0 right-0 bottom-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
+            {loadingExcel && (
+                <div className='fixed backdrop-blur-[2px] z-[100] left-0 top-0 right-0 bottom-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
                     <SmallLoader />
                 </div>
             )}
@@ -801,9 +842,7 @@ const IncomingSuppliers = () => {
                 {currentData.length ? (
                     <>
                         <div className='mainPadding flex items-center justify-between'>
-                            <ExportBtn
-                                onClick={exportData}
-                            />
+                            <ExportBtn onClick={exportData} />
                             <span>Ro`yxat</span>
                             <Pagination
                                 currentPage={currentPage}
