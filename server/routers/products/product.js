@@ -734,7 +734,7 @@ module.exports.getProducts = async (req, res) => {
       .populate({
         path: "productdata",
         select: "name code barcode",
-        match: { name: name, code: code, barcode: barcode },
+        match: { name: name, code: code },
       })
       .populate({
         path: "category",
