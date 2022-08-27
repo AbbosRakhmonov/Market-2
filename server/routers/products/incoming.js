@@ -805,9 +805,8 @@ module.exports.getConnectors = async (req, res) => {
         incoming: connector.incoming,
         total: connector.total,
         totaluzs: connector.totaluzs,
-        totalpayment: totalpayment > 0.01 ? totalpayment : connector.total,
-        totalpaymentuzs:
-          totalpaymentuzs > 0.01 ? totalpaymentuzs : connector.totaluzs,
+        totalpayment: totalpayment,
+        totalpaymentuzs: totalpaymentuzs,
         debt,
         debtuzs,
       };
