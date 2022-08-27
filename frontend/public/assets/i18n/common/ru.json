@@ -1,11 +1,11 @@
 {
     "Savdo" :"Торговля",
     "Sof foyda":"Чистая прибыль",
-    "Xarajatlar":"Затраты",
+    "Xarajatlar":"Расходы",
     "Naqd":"Наличные",
     "Plastik":"Пластик",
     "O`tkazmalar":"Трансферы",
-    "Qaytarilgan":"Вернулся",
+    "Qaytarilgan":"Возвраты",
     "Chegirmalar":"Скидки",
     "Qarzlar": "Долги",
     "Login": "Логин",
@@ -36,8 +36,8 @@
     "Kirish muvaffaqiyatli amalga oshirildi":"Вход прошел успешно",
     "Bosh sahifa":"Домашня страница",
     "Maxsulotlar":"Товары",
-    "Sotuv":"Распродажа",
+    "Sotuv":"Продажа",
     "Do`konlar":"Магазины",
     "Kassa":"Касса",
-    "Valyuta kursi":"Обменный курс"
+    "Valyuta kursi":"Курс валюты"
 }
