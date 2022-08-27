@@ -32,14 +32,11 @@ export const getSellingsByFilter = createAsyncThunk(
     }
 )
 
-export const updateSellingsClient= createAsyncThunk(
-    'sellings/getSellingsByFilter',
+export const addClient = createAsyncThunk(
+    'sellings/addClient',
     async (body = {}, {rejectWithValue}) => {
         try {
-            const {data} = await Api.post(
-                '/sales/saleproducts/updateselling',
-                body
-            )
+            const {data} = await Api.post('/sales/saleproducts/addclient', body)
             return data
         } catch (err) {
             return rejectWithValue(err)
@@ -47,13 +44,9 @@ export const updateSellingsClient= createAsyncThunk(
     }
 )
 
-
 export const excelAllSellings = createAsyncThunk(
     'sellings/excelAllSellings',
-    async (
-        body,
-        {rejectWithValue}
-    ) => {
+    async (body, {rejectWithValue}) => {
         try {
             const {data} = await Api.post(
                 '/sales/saleproducts/getconnectorsexcel',
@@ -125,13 +118,24 @@ const sellingsSlice = createSlice({
         [excelAllSellings.pending]: (state) => {
             state.getSellingsLoading = true
         },
-        [excelAllSellings.fulfilled]: (state, {payload : {saleconnectors}}) => {
+        [excelAllSellings.fulfilled]: (state, {payload: {saleconnectors}}) => {
             state.getSellingsLoading = false
             state.excelAllData = saleconnectors
         },
         [excelAllSellings.rejected]: (state, {payload}) => {
             state.getSellingsLoading = false
             state.getSellingsError = payload
+        },
+        [addClient.pending]: (state) => {
+            state.loading = true
+        },
+        [addClient.rejected]: (state, {payload}) => {
+            state.loading = false
+            universalToast(payload, 'error')
+        },
+        [addClient.fulfilled]: (state) => {
+            state.loading = false
+            universalToast('Mijoz qushildi!', 'success')
         },
     },
 })

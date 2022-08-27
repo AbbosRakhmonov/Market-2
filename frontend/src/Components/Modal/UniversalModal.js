@@ -10,7 +10,10 @@ import AllChecks from './ModalBodys/AllChecks.js'
 import StepperPage from './ModalBodys/StepperPage.js'
 import AdminMarkets from './ModalBodys/AdminMarkets.js'
 import {SavedSalesCheck} from '../SaleCheck/SavedSalesCheck.js'
+<<<<<<< HEAD
 import ExchangesBody from './ModalBodys/ExchangesBody'
+=======
+>>>>>>> 9af683a (done)
 import {useTranslation} from 'react-i18next'
 import SalesList from './ModalBodys/SalesList'
 import TotalReports from '../TotalReports/TotalReports.js'

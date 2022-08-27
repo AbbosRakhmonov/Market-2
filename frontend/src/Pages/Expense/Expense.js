@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, {useCallback, useEffect, useState} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
 import FieldContainer from '../../Components/FieldContainer/FieldContainer'
 import Button from '../../Components/Buttons/BtnAddRemove'
 import {
@@ -11,18 +11,18 @@ import {
 import SearchForm from '../../Components/SearchForm/SearchForm'
 import Pagination from '../../Components/Pagination/Pagination'
 import Table from '../../Components/Table/Table'
-import { universalToast } from '../../Components/ToastMessages/ToastMessages'
-import { useTranslation } from 'react-i18next';
-import { universalSort } from './../../App/globalFunctions';
+import {universalToast} from '../../Components/ToastMessages/ToastMessages'
+import {useTranslation} from 'react-i18next'
+import {universalSort} from './../../App/globalFunctions'
 
 const Expense = () => {
-    const { t } = useTranslation(['common'])
+    const {t} = useTranslation(['common'])
     const dispatch = useDispatch()
     const {
-        market: { _id },
+        market: {_id},
     } = useSelector((state) => state.login)
-    const { currencyType, currency } = useSelector((state) => state.currency)
-    const { expenses, count, successRegister } = useSelector(
+    const {currencyType, currency} = useSelector((state) => state.currency)
+    const {expenses, count, successRegister} = useSelector(
         (state) => state.expense
     )
     const [data, setData] = useState(expenses)
@@ -37,13 +37,13 @@ const Expense = () => {
         ).toISOString()
     )
     const [endDate, setEndDate] = useState(
-        new Date(new Date().setHours(26, 59, 59, 0)).toISOString()
+        new Date(new Date().setHours(23, 59, 59, 59)).toISOString()
     )
 
     const [sorItem, setSorItem] = useState({
         filter: '',
         sort: '',
-        count: 0
+        count: 0,
     })
     const [expense, setExpense] = useState({
         sum: '',
@@ -53,25 +53,23 @@ const Expense = () => {
         market: _id,
     })
     const [expenseType, setExpenseType] = useState({
-
         label: t('Turi'),
-        value: ''
+        value: '',
     })
 
     const types = [
         {
-
             label: t('Naqd'),
-            value: 'cash'
+            value: 'cash',
         },
         {
             label: t('Plastik'),
-            value: 'card'
+            value: 'card',
         },
         {
             label: t("O'tkazma"),
-            value: 'transfer'
-        }
+            value: 'transfer',
+        },
     ]
 
     const handleChangeInput = (e, key) => {
@@ -158,7 +156,7 @@ const Expense = () => {
         })
         setExpenseType({
             label: t('Turi'),
-            value: ''
+            value: '',
         })
     }, [_id])
 
@@ -192,57 +190,33 @@ const Expense = () => {
                     setSorItem({
                         filter: filterKey,
                         sort: '1',
-                        count: 2
+                        count: 2,
                     })
-                    universalSort(
-                        data,
-                        setData,
-                        filterKey,
-                        1,
-                        storeData
-                    )
+                    universalSort(data, setData, filterKey, 1, storeData)
                     break
                 case 2:
                     setSorItem({
                         filter: filterKey,
                         sort: '',
-                        count: 0
+                        count: 0,
                     })
-                    universalSort(
-                        data,
-                        setData,
-                        filterKey,
-                        '',
-                        storeData
-                    )
+                    universalSort(data, setData, filterKey, '', storeData)
                     break
                 default:
                     setSorItem({
                         filter: filterKey,
                         sort: '-1',
-                        count: 1
+                        count: 1,
                     })
-                    universalSort(
-                        data,
-                        setData,
-                        filterKey,
-                        -1,
-                        storeData
-                    )
+                    universalSort(data, setData, filterKey, -1, storeData)
             }
         } else {
             setSorItem({
                 filter: filterKey,
                 sort: '-1',
-                count: 1
+                count: 1,
             })
-            universalSort(
-                data,
-                setData,
-                filterKey,
-                -1,
-                storeData
-            )
+            universalSort(data, setData, filterKey, -1, storeData)
         }
     }
 
@@ -257,20 +231,19 @@ const Expense = () => {
             styles: 'w-[7%]',
         },
         {
-
             title: t('Sana'),
             styles: 'w-[10%]',
             filter: 'createdAt',
         },
         {
             title: t('Summa'),
-            styles: 'w-[20%]'
+            styles: 'w-[20%]',
         },
         {
-            title: t('Izoh')
+            title: t('Izoh'),
         },
         {
-            title: t('Turi')
+            title: t('Turi'),
         },
         {
             title: '',
