@@ -84,7 +84,7 @@ function MainPage() {
             </div>
             <div className={'h-[25rem]'}>
                 <LineChart
-                    label={[t('Oylik sotuvlar soni'), `${months[new Date().getMonth()]} : ${monthlyReport?.sales[monthlyReport.sales.length - 1]} ${t('ta')}`]}
+                    label={[t('Oylik sotuvlar soni'), `${months[new Date().getMonth()]} : ${monthlyReport?.sales.length > 0 ? monthlyReport.sales[monthlyReport.sales.length - 1] : 0} ${t('ta')}`]}
                     arr={monthlyReport?.sales}
                 />
             </div>
