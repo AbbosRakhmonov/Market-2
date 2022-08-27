@@ -254,17 +254,17 @@ const WareHouse = () => {
             if(!error){
                     const ReportData = map(payload, (item, index) => ({
                     nth: index + 1,
-                    code: item?.productdata?.code,
-                    name: item?.productdata?.name,
-                    total: item.total + item?.unit?.name,
-                    incomingprice: item?.price?.incomingprice,
-                    incomingpriceuzs: item?.price?.incomingpriceuzs,
+                    code: item?.productdata?.code || "",
+                    name: item?.productdata?.name || "",
+                    total:( item.total + item?.unit?.name) || "",
+                    incomingprice: item?.price?.incomingprice || "",
+                    incomingpriceuzs: item?.price?.incomingpriceuzs || "",
                     incomingpricealluzs:
                         item?.price?.incomingpriceuzs * item.total,
                     incomingpriceallusd:
                         item?.price?.incomingprice * item.total,
-                    sellingprice: item?.price?.sellingprice,
-                    sellingpriceuzs: item?.price?.sellingpriceuzs,
+                    sellingprice: item?.price?.sellingprice || "",
+                    sellingpriceuzs: item?.price?.sellingpriceuzs || "",
                     sellingalluzs:
                         item?.price?.sellingpriceuzs * item.total,
                     sellingallusd: item?.price?.sellingprice * item.total

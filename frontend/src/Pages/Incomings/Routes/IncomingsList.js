@@ -323,14 +323,14 @@ const IncomingsList = () => {
             if(!error){
                 const IncomingData = map(payload, (item, index) => ({
                     nth: index + 1,
-                    supplier: item.supplier?.name,
-                    code: item.product?.productdata?.code,
-                    name: item.product?.productdata?.name,
-                    count: item.pieces + ' ' + item.unit?.name,
-                    unit: item.unitpriceuzs,
-                    unitusd: item.unitprice,
-                    all: item.totalpriceuzs,
-                    allusd: item.totalprice
+                    supplier: item.supplier?.name || "",
+                    code: item.product?.productdata?.code || "",
+                    name: item.product?.productdata?.name || "",
+                    count: (item.pieces + ' ' + item.unit?.name) || "",
+                    unit: item?.unitpriceuzs || "",
+                    unitusd: item?.unitprice || "",
+                    all: item?.totalpriceuzs || "",
+                    allusd: item?.totalprice || "",
                 }))
                 exportExcel(IncomingData, fileName, incomingHeaders)
             }

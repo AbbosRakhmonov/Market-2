@@ -319,8 +319,8 @@ const Category = () => {
         const exportHeader = ['№', 'Kodi', 'Nomi']
         const categoryData = map(data, (item, index) => ({
         nth: index + 1,
-        code: item.code,
-        name: item.name
+        code: item?.code || "",
+        name: item?.name || "",
         }))
         exportExcel(categoryData, fileName, exportHeader)
     }

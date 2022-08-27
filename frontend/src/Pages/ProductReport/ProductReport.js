@@ -222,13 +222,13 @@ function ProductReport() {
                         hourCycle: 'h24'
                     })}`,
                     client: product.saleconnector?.client ? product.saleconnector.client.name : product.saleconnector?.id,
-                    code: product.product.productdata.code,
-                    name: product.product.productdata.name,
-                    soni: product.pieces,
-                    narxiUSD: product.unitprice,
-                    narxiUZS: product.unitpriceuzs,
-                    jamiUSD: product.totalprice,
-                    jamiUZS: product.totalpriceuzs
+                    code: product?.product?.productdata?.code || "",
+                    name: product?.product?.productdata?.name || "",
+                    soni: product?.pieces || "",
+                    narxiUSD: product?.unitprice || "",
+                    narxiUZS: product?.unitpriceuzs || "",
+                    jamiUSD: product?.totalprice || "",
+                    jamiUZS: product?.totalpriceuzs || "",
                 }))
                 exportExcel(data, fileName, exportProductHead)
             }
