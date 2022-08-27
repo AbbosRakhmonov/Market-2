@@ -10,6 +10,7 @@ export const SavedSalesCheck = forwardRef((props, ref) => {
     const {currencyType} = useSelector((state) => state.currency)
     const [loadContent, setLoadContent] = useState(false)
     const saleCheckRef = useRef(null)
+
     const onBeforeGetContentResolve = useRef(null)
     const handleOnBeforeGetContent = React.useCallback(() => {
         setLoadContent(true)
@@ -111,7 +112,7 @@ export const SavedSalesCheck = forwardRef((props, ref) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {map(product?.products,(item, index) => {
+                            {map(product?.products, (item, index) => {
                                 return (
                                     <tr key={uniqueId('saved-table-row')}>
                                         <td className='p-1 border text-center text-[0.875rem] font-bold'>
@@ -144,7 +145,24 @@ export const SavedSalesCheck = forwardRef((props, ref) => {
                         </tbody>
                     </table>
                 </div>
-                <div className='border-t-[0.8px] border-black-700 w-full my-[1rem]'></div>
+                <div className='border-t-[0.8px] border-black-700 w-full my-[1rem]'>
+                    <h3 className='text-[1.1rem] text-right text-black-700 font-bold pt-4'>
+                        Saqlanganlar jami :{' '}
+                        <span>
+                            {currencyType === 'USD'
+                                ? product?.products.reduce(
+                                      (prev, {totalprice}) => prev + totalprice,
+                                      0
+                                  )
+                                : product?.products.reduce(
+                                      (prev, {totalpriceuzs}) =>
+                                          prev + totalpriceuzs,
+                                      0
+                                  )}{' '}
+                            {currencyType}
+                        </span>
+                    </h3>
+                </div>
             </div>
             <div className='flex justify-center items-center mt-6'>
                 <PrintBtn onClick={print} isDisabled={loadContent} />
