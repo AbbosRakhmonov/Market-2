@@ -795,9 +795,8 @@ module.exports.getConnectors = async (req, res) => {
     const response = connectors.map((connector) => {
       const totalpayment = reducer(connector.payments, 'payment');
       const totalpaymentuzs = reducer(connector.payments, 'paymentuzs');
-      const debt = totalpayment > 0.01 ? connector.total - totalpayment : 0;
-      const debtuzs =
-        totalpaymentuzs > 0.01 ? connector.totaluzs - totalpaymentuzs : 0;
+      const debt = connector.total - totalpayment;
+      const debtuzs = connector.totaluzs - totalpaymentuzs;
 
       return {
         _id: connector._id,
