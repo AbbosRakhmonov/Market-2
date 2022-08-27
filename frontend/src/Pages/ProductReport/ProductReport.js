@@ -250,7 +250,7 @@ function ProductReport() {
             startDate: new Date(
                 new Date().getFullYear(),
                 new Date().getMonth(),
-                1
+                new Date().getDate()
             ).toISOString(),
             endDate: new Date(new Date().setHours(23, 59, 59, 0)).toISOString(),
             currentPage: currentPage,

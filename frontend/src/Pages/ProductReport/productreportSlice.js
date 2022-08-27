@@ -9,7 +9,7 @@ export const getProductReports = createAsyncThunk(
             const {data} = await Api.post('/sales/saleproducts/getreportproducts', body)
             return data
         } catch (error) {
-            rejectWithValue(error)
+            return rejectWithValue(error)
         }
     }
 )
@@ -21,7 +21,7 @@ export const getProductReportsByFilter = createAsyncThunk(
             const {data} = await Api.post('/sales/saleproducts/getreportproducts', body)
             return data
         } catch (error) {
-            rejectWithValue(error)
+            return rejectWithValue(error)
         }
     }
 )
@@ -33,7 +33,7 @@ export const getAllProductReports = createAsyncThunk(
             const {data} = await Api.post('/sales/saleproducts/getexcelreportproducts', body)
             return data
         } catch (error) {
-            rejectWithValue(error)
+            return rejectWithValue(error)
         }
     }
 )
