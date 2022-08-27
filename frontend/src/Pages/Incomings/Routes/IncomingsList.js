@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
-import {universalSort, UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
+import {universalSort, UsdToUzs, UzsToUsd, exportExcel} from '../../../App/globalFunctions'
 import ExportBtn from '../../../Components/Buttons/ExportBtn'
 import Dates from '../../../Components/Dates/Dates'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
@@ -17,6 +17,7 @@ import {
     updateIncoming
 } from '../incomingSlice'
 import {useTranslation} from 'react-i18next'
+import SmallLoader from '../../../Components/Spinner/SmallLoader'
 
 
 const IncomingsList = () => {
@@ -25,7 +26,7 @@ const IncomingsList = () => {
     const {
         market: {_id}
     } = useSelector((state) => state.login)
-    const {incomings, incomingscount, successUpdate, successDelete, allIncomingsData} =
+    const {incomings, incomingscount, successUpdate, successDelete, loadingExcel} =
         useSelector((state) => state.incoming)
     const {currencyType, currency} = useSelector((state) => state.currency)
 
@@ -299,6 +300,43 @@ const IncomingsList = () => {
         )
     }, [dispatch, _id, beginDay, endDay, currentPage, countPage, sendingSearch])
 
+    const exportData = () => {
+        let fileName = 'Maxsulotlar-qabul' - new Date().toLocaleDateString()
+        const incomingHeaders = [
+            '№',
+            t('Yetkazuvchi'),
+            t('Kodi'),
+            t('Nomi'),
+            t('Soni'),
+            t('Kelish UZS'),
+            t('Kelish USD'),
+            t('Jami UZS'),
+            t('Jami USD'),
+            t('Sotish UZS'),
+            t('Sotish USD')
+        ]
+        const body = {
+            beginDay,
+            endDay
+        }
+        dispatch(excelIncomings(body)).then(({error, payload}) => {
+            if(!error){
+                const IncomingData = map(payload, (item, index) => ({
+                    nth: index + 1,
+                    supplier: item.supplier?.name,
+                    code: item.product?.productdata?.code,
+                    name: item.product?.productdata?.name,
+                    count: item.pieces + ' ' + item.unit?.name,
+                    unit: item.unitpriceuzs,
+                    unitusd: item.unitprice,
+                    all: item.totalpriceuzs,
+                    allusd: item.totalprice
+                }))
+                exportExcel(IncomingData, fileName, incomingHeaders)
+            }
+        })
+
+    }
     useEffect(() => {
         getCurrentData(incomings)
     }, [incomings])
@@ -330,13 +368,6 @@ const IncomingsList = () => {
         }
     }, [dispatch, getIncomingsData, successDelete])
 
-    useEffect(() => {
-        const body = {
-            beginDay,
-            endDay
-        }
-        dispatch(excelIncomings(body))
-    }, [dispatch])
     const headers = [
         {
             title: '№'
@@ -377,31 +408,22 @@ const IncomingsList = () => {
         }
     ]
 
-    const incomingHeaders = [
-        '№',
-        t('Yetkazuvchi'),
-        t('Kodi'),
-        t('Nomi'),
-        t('Soni'),
-        t('Kelish UZS'),
-        t('Kelish USD'),
-        t('Jami UZS'),
-        t('Jami USD'),
-        t('Sotish UZS'),
-        t('Sotish USD')
-    ]
+    
 
     return (
         <div className={'grow overflow-auto'}>
+            {loadingExcel && (
+                <div
+                    className='fixed backdrop-blur-[2px] z-[100] left-0 top-0 right-0 bottom-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
+                    <SmallLoader />
+                </div>
+            )}
             <div className='mainPadding text-center'>
                 <p>{t('Ro\'yxat')}</p>
             </div>
             <div className='mainPadding flex items-center justify-between'>
                 <ExportBtn
-                    fileName={`${t('Maxsulotlar-qabul')}-${new Date().toLocaleDateString()}`}
-                    headers={incomingHeaders}
-                    datas={allIncomingsData}
-                    pagesName='IncomingList'
+                    onClick={exportData}
                 />
                 <div className='flex gap-[10px]'>
                     <Dates

@@ -9,6 +9,8 @@ import Spinner from '../../../Components/Spinner/SmallLoader'
 import SmallLoader from '../../../Components/Spinner/SmallLoader'
 import NotFind from '../../../Components/NotFind/NotFind'
 import {motion} from 'framer-motion'
+
+
 import {
     addProduct,
     addProductsFromExcel,
@@ -38,7 +40,7 @@ import {regexForTypeNumber} from '../../../Components/RegularExpressions/Regular
 import UniversalModal from '../../../Components/Modal/UniversalModal'
 import CreateProductForm from '../../../Components/CreateProductForm/CreateProductForm'
 import {clearErrorGetAllCategories, getAllCategories} from '../../Category/categorySlice'
-import {checkEmptyString, universalSort, UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
+import {checkEmptyString, exportExcel, universalSort, UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
 import BarcodeReader from 'react-barcode-reader'
 import {clearErrorGetBarcode, getBarcode} from '../../Barcode/barcodeSlice.js'
@@ -70,7 +72,7 @@ function Products() {
         searchedProducts,
         totalSearched,
         successDeleteProduct,
-        allProducts
+        loadingExcel
     } = useSelector((state) => state.products)
     const {barcode, errorGetBarcode} = useSelector((state) => state.barcode)
     const [data, setData] = useState(products)
@@ -144,19 +146,7 @@ function Products() {
         },
         {title: ''}
     ]
-    const exportHeader = [
-        t('№'),
-        t('Shtrix kodi'),
-        t('Mahsulot kategoriyasi'),
-        t('Mahsulot kodi'),
-        t('Mahsulot nomi'),
-        t('Soni'),
-        t('O\'lchov birligi'),
-        t('Kelish narxi USD'),
-        t('Kelish narxi UZS'),
-        t('Sotish narxi USD'),
-        t('Sotish narxi UZS')
-    ]
+   
 
     const importHeaders = [
         {name: 'Shtrix kodi', value: 'barcode'},
@@ -641,6 +631,49 @@ function Products() {
         dispatch(getBarcode(body))
     }
 
+    const exportData = () => {
+        let fileName = 'Maxsulotlar'
+        const exportHeader = [
+            t('№'),
+            t('Shtrix kodi'),
+            t('Mahsulot kategoriyasi'),
+            t('Mahsulot kodi'),
+            t('Mahsulot nomi'),
+            t('Soni'),
+            t('O\'lchov birligi'),
+            t('Kelish narxi USD'),
+            t('Kelish narxi UZS'),
+            t('Sotish narxi USD'),
+            t('Sotish narxi UZS')
+        ]
+        const body = {
+            search: {
+                name: searchByName.replace(/\s+/g, ' ').trim(),
+                code: searchByCode.replace(/\s+/g, ' ').trim(),
+                category: searchByCategory.replace(/\s+/g, ' ').trim()
+            }
+        }
+        dispatch(getProductsAll(body)).then(({error, payload}) => {
+           if(!error) {
+            const newData = map(payload, (item, index) => ({
+                    nth: index + 1,
+                    barcode: item.productdata.barcode,
+                    category: item.category.code,
+                    code: item.productdata.code,
+                    name: item.productdata.name,
+                    total: item.total,
+                    unit: item?.unit?.name,
+                    incomingprice: item?.price?.incomingprice,
+                    incomingpriceuzs: item?.price?.incomingpriceuzs,
+                    sellingprice: item?.price?.sellingprice,
+                    sellingpriceuzs: item?.price?.sellingpriceuzs
+                }))
+                exportExcel(newData, fileName, exportHeader)
+               
+           }  
+        })
+    }
+
     useEffect(() => {
         if (errorUnits) {
             universalToast(errorUnits, 'error')
@@ -702,17 +735,7 @@ function Products() {
         dispatch(getProducts(body))
         //    eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage, showByTotal, dispatch])
-    useEffect(() => {
-        const body = {
-            search: {
-                name: searchByName.replace(/\s+/g, ' ').trim(),
-                code: searchByCode.replace(/\s+/g, ' ').trim(),
-                category: searchByCategory.replace(/\s+/g, ' ').trim()
-            }
-        }
-        dispatch(getProductsAll(body))
-        //    eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch])
+  
     useEffect(() => {
         dispatch(getUnits())
         dispatch(getAllCategories())
@@ -814,6 +837,12 @@ function Products() {
                     <SmallLoader />
                 </div>
             )}
+             {loadingExcel && (
+                <div
+                    className='fixed backdrop-blur-[2px] z-[100] left-0 top-0 right-0 bottom-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
+                    <SmallLoader />
+                </div>
+            )}
             {/* Modal */}
             <UniversalModal
                 toggleModal={toggleModal}
@@ -880,11 +909,8 @@ function Products() {
             />
             <div className={'flex justify-between items-center mainPadding'}>
                 <div className={'flex gap-[1.5rem]'}>
-                    <ExportBtn
-                        datas={allProducts}
-                        headers={exportHeader}
-                        fileName={'Maxsulotlar'}
-                        pagesName='Products'
+                    <ExportBtn    
+                        onClick={exportData}
                     />
                     <ImportBtn readExcel={readExcel} />
                 </div>

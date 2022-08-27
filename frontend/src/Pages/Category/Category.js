@@ -7,7 +7,7 @@ import NotFind from '../../Components/NotFind/NotFind.js'
 import Table from '../../Components/Table/Table.js'
 import {useDispatch, useSelector} from 'react-redux'
 import {regexForTypeNumber} from '../../Components/RegularExpressions/RegularExpressions.js'
-import {checkEmptyString, universalSort} from '../../App/globalFunctions.js'
+import {checkEmptyString, universalSort, exportExcel} from '../../App/globalFunctions.js'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
 import {motion} from 'framer-motion'
 import {
@@ -35,7 +35,7 @@ import {
 } from './categorySlice.js'
 import Pagination from '../../Components/Pagination/Pagination.js'
 import {useTranslation} from 'react-i18next'
-import {filter} from 'lodash'
+import {filter, map} from 'lodash'
 import ExportBtn from '../../Components/Buttons/ExportBtn.js'
 const Category = () => {
     const {t} = useTranslation(['common'])
@@ -59,8 +59,6 @@ const Category = () => {
             title: '',
         },
     ]
-
-    const exportHeader = ['№', 'Kodi', 'Nomi']
 
     const dispatch = useDispatch()
     const {
@@ -316,6 +314,17 @@ const Category = () => {
         }
     }
 
+    const excelData = () => {
+        let fileName = 'Kategoriyalar'
+        const exportHeader = ['№', 'Kodi', 'Nomi']
+        const categoryData = map(data, (item, index) => ({
+        nth: index + 1,
+        code: item.code,
+        name: item.name
+        }))
+        exportExcel(categoryData, fileName, exportHeader)
+    }
+
     useEffect(() => {
         if (errorGetCategories) {
             warningCategory()
@@ -445,10 +454,7 @@ const Category = () => {
             </form>
             <div className='pagination-supplier mainPadding'>
                 <ExportBtn
-                    datas={data}
-                    headers={exportHeader}
-                    fileName={'Kategoriyalar'}
-                    pagesName='Category'
+                    onClick={excelData}
                 />
                 <p className='supplier-title'>{t('Kategoriyalar')}</p>
                 {(filteredDataTotal !== 0 || totalSearched !== 0) && (
