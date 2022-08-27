@@ -112,6 +112,8 @@ module.exports.register = async (req, res) => {
         product: product._id,
         market,
         user,
+        previous: produc.total,
+        next: produc.total - Number(pieces),
       });
 
       all.push(newSaleProduct);
@@ -274,6 +276,7 @@ module.exports.register = async (req, res) => {
 
     res.status(201).send(connector);
   } catch (error) {
+    console.log(error);
     res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
@@ -374,6 +377,8 @@ module.exports.addproducts = async (req, res) => {
         product: product._id,
         market,
         user,
+        previous: produc.total,
+        next: produc.total - Number(pieces),
       });
 
       all.push(newSaleProduct);
@@ -758,6 +763,8 @@ module.exports.registeredit = async (req, res) => {
           market,
           user,
           saleproduct: saleproduct._id,
+          previous: produc.total,
+          next: produc.total + Number(pieces),
         });
 
         await SaleProduct.findByIdAndUpdate(saleproduct._id, {
@@ -988,14 +995,14 @@ module.exports.getreportproducts = async (req, res) => {
           match: { code, name },
         },
       })
-        .populate({
-          path: "product",
-          select: "unit",
-          populate: {
-            path: "unit",
-            select: "name",
-          },
-        })
+      .populate({
+        path: "product",
+        select: "unit",
+        populate: {
+          path: "unit",
+          select: "name",
+        },
+      })
       .then((saleproducts) =>
         filter(saleproducts, (saleproduct) =>
           search.nameofclient.length > 0
@@ -1039,14 +1046,14 @@ module.exports.getreportproducts = async (req, res) => {
           match: { code, name },
         },
       })
-        .populate({
-          path: "product",
-          select: "unit",
-          populate: {
-            path: "unit",
-            select: "name",
-          },
-        })
+      .populate({
+        path: "product",
+        select: "unit",
+        populate: {
+          path: "unit",
+          select: "name",
+        },
+      })
       .then((saleproducts) =>
         filter(saleproducts, (saleproduct) =>
           search.nameofclient.length > 0
@@ -1128,14 +1135,14 @@ module.exports.getexcelreportproducts = async (req, res) => {
           match: { code, name },
         },
       })
-        .populate({
-          path: "product",
-          select: "unit",
-          populate: {
-            path: "unit",
-            select: "name",
-          },
-        })
+      .populate({
+        path: "product",
+        select: "unit",
+        populate: {
+          path: "unit",
+          select: "name",
+        },
+      })
       .then((saleproducts) =>
         filter(saleproducts, (saleproduct) =>
           search.nameofclient.length > 0
@@ -1157,7 +1164,7 @@ module.exports.getexcelreportproducts = async (req, res) => {
       products: saleproducts,
     });
   } catch (error) {
-    res.status(400).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -1199,7 +1206,7 @@ module.exports.addClient = async (req, res) => {
 
     res.status(200).json(saleConnector);
   } catch (error) {
-    res.status(400).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 

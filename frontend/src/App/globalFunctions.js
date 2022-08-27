@@ -6,16 +6,16 @@ export const universalSort = (data, setData, key, sort, prevData) => {
     const keys = key.split('.')
     const result = sort
         ? orderBy(
-            [...data],
-            (item) => {
-                return keys.length === 3
-                    ? item[keys[0]][keys[1]][keys[2]]
-                    : keys.length === 2
-                        ? item[keys[0]][keys[1]]
-                        : item[key]
-            },
-            [sort === -1 ? 'desc' : 'asc']
-        )
+              [...data],
+              (item) => {
+                  return keys.length === 3
+                      ? item[keys[0]][keys[1]][keys[2]]
+                      : keys.length === 2
+                      ? item[keys[0]][keys[1]]
+                      : item[key]
+              },
+              [sort === -1 ? 'desc' : 'asc']
+          )
         : prevData
     setData(result)
 }
@@ -34,8 +34,15 @@ export const exportExcel = (data, fileName, headers) => {
     const autoFillColumnWidth = (json) => {
         const cols = Object.keys(json[0])
         return cols.map((key, index) => {
-            let maxLength = Math.max(...json.map(x => x[key].toString().length))
-            return {wch: headers[index].length > maxLength ? headers[index].length + 1 : maxLength + 4}
+            let maxLength = Math.max(
+                ...json.map((x) => x[key].toString().length)
+            )
+            return {
+                wch:
+                    headers[index].length > maxLength
+                        ? headers[index].length + 1
+                        : maxLength + 4,
+            }
         })
     }
     const wscols = autoFillColumnWidth(data)
@@ -45,11 +52,8 @@ export const exportExcel = (data, fileName, headers) => {
     XLSX.utils.sheet_add_aoa(ws, [headers])
     XLSX.utils.sheet_add_json(ws, data, {
         origin: 'A2',
-        skipHeader: true
+        skipHeader: true,
     })
     XLSX.utils.book_append_sheet(wb, ws, 'Maxsulotlar')
-    XLSX.writeFile(
-        wb,
-        `${fileName}-${new Date().toLocaleDateString()}.xlsx`
-    )
+    XLSX.writeFile(wb, `${fileName}-${new Date().toLocaleDateString()}.xlsx`)
 }
