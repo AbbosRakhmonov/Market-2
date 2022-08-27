@@ -53,9 +53,9 @@ const navListForDirector = [
             },
             {
                 id: 5,
-                label: 'Omborxona',
+                label: 'Etiketka',
                 icon: '',
-                path: 'maxsulotlar/omborxona',
+                path: 'maxsulotlar/etiketka',
                 submenu: false
             },
             {
@@ -188,6 +188,28 @@ export const navListForSeller = [
         path: 'qarzdorlar',
         icon: <IoListOutline size={'1.5rem'} />,
         submenu: false
+    },
+    {
+        id: 3,
+        label: 'Hamkorlar',
+        path: 'hamkorlar',
+        icon: <IoPeople size={'1.5rem'} />,
+        submenu: [
+            {
+                id: 1,
+                label: 'Agentlar',
+                icon: '',
+                path: 'hamkorlar/agentlar',
+                submenu: false
+            },
+            {
+                id: 2,
+                label: 'Mijozlar',
+                icon: '',
+                path: 'hamkorlar/mijozlar',
+                submenu: false
+            }
+        ]
     }
 ]
 export const navListForAdmin = [

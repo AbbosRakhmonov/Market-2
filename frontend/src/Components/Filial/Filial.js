@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import FilialButtons from '../FilialButtons/FilialButtons'
 import Avatar from '../Avatar/Avatar.js'
 import { Link, Route, Routes, useLocation, useParams } from 'react-router-dom'
-import WareHouse from '../../Pages/WareHouse/WareHouse.js'
+import Labels from '../../Pages/Labels/Labels.js'
 import Currency from '../../Pages/Currency/Currency.js'
 import { AnimatePresence } from 'framer-motion'
 import Sellings from '../../Pages/Sale/Routes/Sellings'
@@ -133,7 +133,7 @@ const Filial = ({
                         element={
                             _id === id ? (
                                 tablename === 'report' ? (
-                                    <WareHouse id={_id} />
+                                    <Labels id={_id} />
                                 ) : tablename === 'sales' ? (
                                     <Sellings id={_id} />
                                 ) : (

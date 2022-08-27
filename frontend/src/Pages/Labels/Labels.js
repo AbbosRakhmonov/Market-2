@@ -20,7 +20,7 @@ import {useTranslation} from 'react-i18next'
 import {filter, map} from 'lodash'
 
 
-const WareHouse = () => {
+const Labels = () => {
     const {t} = useTranslation(['common'])
     const headers = [
         {
@@ -235,7 +235,7 @@ const WareHouse = () => {
     }
 
     const exportData = () => {
-        let fileName = 'Wire House'
+        let fileName = 'Etiketka'
         const exportProductHead = [
             '№',
             'Mahsulot kodi',
@@ -321,7 +321,7 @@ const WareHouse = () => {
                 <ExportBtn
                     onClick={exportData}
                 />
-                <p className='product_name'>{t('Omborxona')}</p>
+                <p className='product_name'>{t('Etiketka')}</p>
                 {(filteredDataTotal !== 0 || totalSearched !== 0) && (
                     <Pagination
                         countPage={Number(showByTotal)}
@@ -381,4 +381,4 @@ const WareHouse = () => {
     )
 }
 
-export default WareHouse
+export default Labels

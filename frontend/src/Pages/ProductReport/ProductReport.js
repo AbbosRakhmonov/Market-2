@@ -23,6 +23,7 @@ import {exportExcel} from '../../App/globalFunctions.js'
 function ProductReport() {
     const dispatch = useDispatch()
     const {t} = useTranslation(['common'])
+    const {currencyType} = useSelector(state => state.currency)
 
     const headers = [
         {
@@ -41,13 +42,19 @@ function ProductReport() {
             title: t('Nomi')
         },
         {
-            title: t('Soni')
+            title: t('Avvalgi')
         },
         {
-            title: t('Narxi')
+            title: t('Sotilgan')
         },
         {
-            title: t('Jami')
+            title: t('Qolgan')
+        },
+        {
+            title: t('Narxi') + ' ' + `(${currencyType})`
+        },
+        {
+            title: t('Jami') + ' ' + `(${currencyType})`
         },
         {
             title: t('Sotuvchi')
@@ -74,7 +81,7 @@ function ProductReport() {
         new Date(
             new Date().getFullYear(),
             new Date().getMonth(),
-            1
+            new Date().getDate()
         ).toISOString()
     )
 
@@ -198,7 +205,9 @@ function ProductReport() {
             t('Mijoz'),
             t('Maxsulot Kodi'),
             t('Maxsulot Nomi'),
-            t('Soni'),
+            t('Avvalgi'),
+            t('Sotilgan'),
+            t('Qolgan'),
             t('Maxsulot Narxi (USD)'),
             t('Maxsulot Narxi (UZS)'),
             t('Jami (USD)'),
@@ -222,13 +231,15 @@ function ProductReport() {
                         hourCycle: 'h24'
                     })}`,
                     client: product.saleconnector?.client ? product.saleconnector.client.name : product.saleconnector?.id,
-                    code: product?.product?.productdata?.code || "",
-                    name: product?.product?.productdata?.name || "",
-                    soni: product?.pieces || "",
-                    narxiUSD: product?.unitprice || "",
-                    narxiUZS: product?.unitpriceuzs || "",
-                    jamiUSD: product?.totalprice || "",
-                    jamiUZS: product?.totalpriceuzs || "",
+                    code: product.product.productdata.code,
+                    name: product.product.productdata.name,
+                    previous: product.previous ? product.previous + ' ' + product.product.unit.name || '' : '',
+                    soni: product.pieces + ' ' + product.product.unit.name || '',
+                    next: product.next ? product.next + ' ' + product.product.unit.name || '' : '',
+                    narxiUSD: product.unitprice,
+                    narxiUZS: product.unitpriceuzs,
+                    jamiUSD: product.totalprice,
+                    jamiUZS: product.totalpriceuzs
                 }))
                 exportExcel(data, fileName, exportProductHead)
             }
@@ -281,7 +292,7 @@ function ProductReport() {
                 </div>
             )}
             <div className={'mainPadding'}>
-                <p className='product_name text-center'>{t('Omborxona')}</p>
+                <p className='product_name text-center'>{t('Maxsulotlar hisoboti')}</p>
             </div>
             <div className='pagination mainPadding'>
                 <ExportBtn
