@@ -702,8 +702,8 @@ const IncomingSuppliers = () => {
 
    
     const exportData = () => {
-        let fileName = 'Maxsulotlar-qabul-qabullar'-new Date().toLocaleDateString()
-        const incomingSupplierHeaders = [
+        let fileName = `Maxsulotlar-qabul-qabullar - ${new Date().toLocaleDateString()}`
+        const incomingSupplierHeaders = [    //- new Date().toLocaleDateString()
             '№',
             t('Yetkazuvchi'),
             t('Kodi'),
@@ -713,8 +713,6 @@ const IncomingSuppliers = () => {
             t('Kelish USD'),
             t('Jami UZS'),
             t('Jami USD'),
-            t('Sotish UZS'),
-            t('Sotish USD'),
         ]    
         const body = {
             beginDay,
