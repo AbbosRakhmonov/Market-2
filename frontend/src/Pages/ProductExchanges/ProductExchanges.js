@@ -5,6 +5,7 @@ import FilialCard from '../../Components/Card/FilialCard'
 import {IoPaperPlane} from 'react-icons/io5'
 import UniversalModal from '../../Components/Modal/UniversalModal'
 import NotFind from '../../Components/NotFind/NotFind'
+import {filter, map} from 'lodash'
 import {
     universalToast,
     warningSellingExchanges,
@@ -16,10 +17,11 @@ import {
 import {getExchangesFilial, sendingFilial} from './productExchangesSlice'
 import {useDispatch, useSelector} from 'react-redux'
 import {getProducts} from './../Incomings/incomingSlice'
+import SmallLoader from '../../Components/Spinner/SmallLoader'
 function ProductExchanges() {
     const dispatch = useDispatch()
 
-    const {filialDatas} = useSelector((state) => state.exchanges)
+    const {filialDatas, loading} = useSelector((state) => state.exchanges)
 
     const {products} = useSelector((state) => state.incoming)
 
@@ -75,7 +77,7 @@ function ProductExchanges() {
     const approveFilialData = (e, numberError) => {
         if (e.number > 0 && e.get !== '' && e.sell !== '') {
             setProductData((current) =>
-                current?.map((obj) => {
+                current && map(current,(obj) => {
                     if (obj.code === e.code && numberError) {
                         return {
                             ...obj,
@@ -111,7 +113,7 @@ function ProductExchanges() {
             productNumberMinusExchanges()
         } else {
             setSellingProductData((current) => {
-                return current.map((obj) => {
+                return map(current,(obj) => {
                     if (obj?.code === e.code) {
                         return {
                             ...obj,
@@ -131,7 +133,7 @@ function ProductExchanges() {
 
     const deletedProducts = (e) => {
         setProductData((current) =>
-            current?.map((obj) => {
+            current && map(current,(obj) => {
                 if (obj.code === e.code) {
                     return {
                         ...obj,
@@ -141,11 +143,11 @@ function ProductExchanges() {
                 return obj
             })
         )
-        const arrSelling = sellingProductData.filter((obj) => {
+        const arrSelling = filter(sellingProductData,(obj) => {
             return obj !== e
         })
         setSellingProductData(arrSelling)
-        const deletedCode = arrAdded.filter((obj) => {
+        const deletedCode = filter(arrAdded,(obj) => {
             return obj !== e.code
         })
         setArrAdded(deletedCode)
@@ -154,7 +156,7 @@ function ProductExchanges() {
     const returnedDatas = (e, numberError) => {
         if (e.number > 0 && e.get !== '' && e.sell !== '') {
             setProductData((current) =>
-                current?.map((obj) => {
+                current && map(current,(obj) => {
                     if (obj.code === e.code && numberError) {
                         return {
                             ...obj,
@@ -167,9 +169,9 @@ function ProductExchanges() {
         }
 
         setSellingProductData((current) =>
-            current?.map((obj) => {
+            current && map(current,(obj) => {
                 if (obj.number === Number(e.number)) {
-                    const SellingNumberIndex = arrAdded.filter((info) => {
+                    const SellingNumberIndex = filter(arrAdded,(info) => {
                         return info !== e.code
                     })
                     setArrAdded(SellingNumberIndex)
@@ -195,7 +197,7 @@ function ProductExchanges() {
         setFilialNameSearch(value)
         if (isNaN(value)) {
             return setFilteredFilialNames(
-                filialData.filter((item) =>
+                filter(filialData,(item) =>
                     item.filialName.toLowerCase().includes(value.toLowerCase())
                 )
             )
@@ -210,7 +212,7 @@ function ProductExchanges() {
             if (isNaN(value)) {
                 if (productCodeSearch.trim() !== '') {
                     return setFilteredShopProducts(
-                        productData.filter(
+                        filter(productData,
                             (item) =>
                                 item.name
                                     .toLowerCase()
@@ -220,7 +222,7 @@ function ProductExchanges() {
                     )
                 } else {
                     return setFilteredShopProducts(
-                        productData.filter((item) =>
+                        filter(productData,(item) =>
                             item.name
                                 .toLowerCase()
                                 .includes(value.toLowerCase())
@@ -236,7 +238,7 @@ function ProductExchanges() {
             if (searchedVal) {
                 if (isNaN(productNameSearch)) {
                     return setFilteredShopProducts(
-                        productData.filter(
+                        filter(productData,
                             (item) =>
                                 item.code.includes(value) &&
                                 item.name
@@ -248,7 +250,7 @@ function ProductExchanges() {
                     )
                 } else {
                     return setFilteredShopProducts(
-                        productData.filter((item) => item.code.includes(value))
+                        filter(productData,(item) => item.code.includes(value))
                     )
                 }
             } else {
@@ -263,7 +265,7 @@ function ProductExchanges() {
             if (isNaN(value)) {
                 if (filialProductCodeSearch.trim() !== '') {
                     return setFilteredFilials(
-                        sellingProductData.filter(
+                        filter(sellingProductData,
                             (item) =>
                                 item.name
                                     .toLowerCase()
@@ -275,7 +277,7 @@ function ProductExchanges() {
                     )
                 } else {
                     return setFilteredFilials(
-                        sellingProductData.filter((item) =>
+                        filter(sellingProductData,(item) =>
                             item.name
                                 .toLowerCase()
                                 .includes(value.toLowerCase())
@@ -291,7 +293,7 @@ function ProductExchanges() {
             if (searchedVal) {
                 if (isNaN(filialProductNameSearch)) {
                     return setFilteredFilials(
-                        sellingProductData.filter(
+                        filter(sellingProductData,
                             (item) =>
                                 item.code.includes(value) &&
                                 item.name
@@ -305,7 +307,7 @@ function ProductExchanges() {
                     )
                 } else {
                     return setFilteredFilials(
-                        sellingProductData.filter((item) =>
+                        filter(sellingProductData,(item) =>
                             item.code.includes(value)
                         )
                     )
@@ -317,7 +319,7 @@ function ProductExchanges() {
     }
 
     const sendingFilialProduct = () => {
-        const sendData = sellingProductData?.map((item) => {
+        const sendData = sellingProductData && map(sellingProductData,(item) => {
             return {
                 _id: item.id,
                 total: item.number,
@@ -380,7 +382,7 @@ function ProductExchanges() {
     }, [dispatch])
 
     useEffect(() => {
-        const newUpdateProduct = products?.map((item) => {
+        const newUpdateProduct = products && map(products,(item) => {
             return {
                 id: item._id,
                 categoryId: item.category._id,
@@ -409,7 +411,7 @@ function ProductExchanges() {
     }, [productData])
 
     useEffect(() => {
-        const newUpdateFilialProduct = filialDatas?.map((obj) => {
+        const newUpdateFilialProduct = filialDatas && map(filialDatas,(obj) => {
             return {
                 id: obj?._id,
                 image: obj?.image,
@@ -422,7 +424,7 @@ function ProductExchanges() {
     }, [filialDatas])
 
     useEffect(() => {
-        const newSellingsData = sellingProductData.filter((item) => {
+        const newSellingsData = filter(sellingProductData,(item) => {
             return item?.number !== 0
         })
         setSellingProductData(newSellingsData)
@@ -447,6 +449,12 @@ function ProductExchanges() {
                 isOpen={modalVisible}
                 dataObject={dataObject}
             />
+            {loading && (
+                <div
+                    className='fixed backdrop-blur-[2px] z-[100] left-0 top-0 right-0 bottom-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
+                    <SmallLoader />
+                </div>
+            )}
             <section className='flex h-full'>
                 <div className='min-w-[20rem] border-r-[1px] border-r-[#A9C0EF] flex flex-col'>
                     <div className='mainPadding'>
@@ -462,7 +470,7 @@ function ProductExchanges() {
                             {filteredFilialNames.length === 0 ? (
                                 <NotFind text='Filiallar mavjud emas!' />
                             ) : (
-                                filteredFilialNames.map((item, index) => {
+                                map(filteredFilialNames,(item, index) => {
                                     return (
                                         <div
                                             key={index}
@@ -513,10 +521,10 @@ function ProductExchanges() {
                     </div>
                     <div className='grow relative'>
                         <div className='absolute left-0 right-0 top-0 bottom-[1rem] overflow-auto pl-[1.25rem] pr-[2rem] pt-[1.25rem]'>
-                            {filteredShopProducts.length === 0 ? (
+                            {filteredShopProducts.length === 0 || filialInformation === "" ? (
                                 <NotFind text='Maxsulotlar mavjud emas!' />
                             ) : (
-                                filteredShopProducts?.map((item, index) => {
+                                map(filteredShopProducts,(item, index) => {
                                     return (
                                         <div
                                             key={index}
@@ -525,7 +533,7 @@ function ProductExchanges() {
                                             <Exchanges
                                                 dataObject={item}
                                                 added={
-                                                    arrAdded.filter(
+                                                    filter(arrAdded,
                                                         (add) =>
                                                             add === item.code
                                                     ).length > 0
@@ -578,7 +586,7 @@ function ProductExchanges() {
                             {filteredFilials.length === 0 ? (
                                 <NotFind text="Maxsulot o'tkazilmagan" />
                             ) : (
-                                filteredFilials.map((item, index) => {
+                                map(filteredFilials,(item, index) => {
                                     return (
                                         <div
                                             key={index}

@@ -657,16 +657,16 @@ function Products() {
            if(!error) {
             const newData = map(payload, (item, index) => ({
                     nth: index + 1,
-                    barcode: item.productdata.barcode,
-                    category: item.category.code,
-                    code: item.productdata.code,
-                    name: item.productdata.name,
-                    total: item.total,
-                    unit: item?.unit?.name,
-                    incomingprice: item?.price?.incomingprice,
-                    incomingpriceuzs: item?.price?.incomingpriceuzs,
-                    sellingprice: item?.price?.sellingprice,
-                    sellingpriceuzs: item?.price?.sellingpriceuzs
+                    barcode: item?.productdata?.barcode || "",
+                    category: item?.category?.code || "",
+                    code: item?.productdata?.code || "",
+                    name: item?.productdata?.name || "",
+                    total: item?.total || "",
+                    unit: item?.unit?.name || "",
+                    incomingprice: item?.price?.incomingprice || "",
+                    incomingpriceuzs: item?.price?.incomingpriceuzs || "",
+                    sellingprice: item?.price?.sellingprice || "",
+                    sellingpriceuzs: item?.price?.sellingpriceuzs || "",
                 }))
                 exportExcel(newData, fileName, exportHeader)
                

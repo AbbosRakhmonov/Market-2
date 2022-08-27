@@ -172,10 +172,10 @@ const Sellings = () => {
         ]
         const SellingData = map(data, (item, index) => ({
                 nth: index + 1,
-                id: item.id,
+                id: item?.id || "",
                 client: item?.client?.name || item?.packman?.name,
-                alluzs: item.products[0].totalpriceuzs,
-                allusd: item.products[0].totalprice,
+                alluzs: item?.products[0]?.totalpriceuzs || "",
+                allusd: item?.products[0]?.totalprice || "",
                 discount:
                     item.discounts.length > 0
                         ? item.discounts.map((discount) => {
@@ -189,9 +189,9 @@ const Sellings = () => {
                         })
                         : 0,
                 debd:
-                    item.products[0].totalpriceuzs -
-                    item.payments[0].paymentuzs -
-                    item.discounts.length >
+                    item?.products[0]?.totalpriceuzs -
+                    item?.payments[0]?.paymentuzs -
+                    item?.discounts.length >
                     0
                         ? item.discounts.map((discount) => {
                             return discount.discount

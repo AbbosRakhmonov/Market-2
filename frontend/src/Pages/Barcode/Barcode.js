@@ -311,8 +311,8 @@ function Barcode() {
         const exportHeader = ['№', 'Shtix kodi', 'Maxsulot Nomi']
         const BarcodeData = map(products, (item, index) => ({
             nth: index + 1,
-            code: item.barcode,
-            name: item.name
+            code: item?.barcode || "",
+            name: item?.name || "",
         }))
         exportExcel(BarcodeData, fileName, exportHeader)
     }
