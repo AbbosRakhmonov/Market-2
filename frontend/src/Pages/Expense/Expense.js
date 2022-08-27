@@ -158,7 +158,7 @@ const Expense = () => {
             label: t('Turi'),
             value: '',
         })
-    }, [_id])
+    }, [_id, t])
 
     const onKeyCreate = (e) => {
         if (e.key === 'Enter') {
