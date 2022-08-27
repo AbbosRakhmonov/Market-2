@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import FieldContainer from './../../Components/FieldContainer/FieldContainer'
 import Button from './../../Components/Buttons/BtnAddRemove'
 import Table from './../../Components/Table/Table'
-import { useDispatch, useSelector } from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import Spinner from './../../Components/Spinner/SmallLoader'
 import NotFind from './../../Components/NotFind/NotFind'
-import { checkEmptyString } from '../../App/globalFunctions.js'
-import { motion } from 'framer-motion'
+import {checkEmptyString} from '../../App/globalFunctions.js'
+import {motion} from 'framer-motion'
 import {
     successAddSellerMessage,
     successUpdateSellerMessage,
     universalToast,
     warningEmptyInput,
 } from './../../Components/ToastMessages/ToastMessages'
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next'
 import {
-
-addSeller,
+    addSeller,
     clearErrorSellers,
     clearSuccessAddSeller,
     clearSuccessUpdateSeller,
@@ -26,7 +25,7 @@ addSeller,
 import {useNavigate} from 'react-router-dom'
 
 function Sellers() {
-    const { t } = useTranslation(['common'])
+    const {t} = useTranslation(['common'])
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -41,12 +40,12 @@ function Sellers() {
     const {user} = useSelector((state) => state.login)
 
     const headers = [
-        { title: '№', styles: 'w-[8%] text-left' },
-        { title: t('Ismi'), styles: 'w-[21%]' },
-        { title: t('Familiyasi'), styles: 'w-[21%]' },
-        { title: t('Telefon raqami'), styles: 'w-[21%]' },
-        { title: t('Login'), styles: 'w-[21%]' },
-        { title: '', styles: 'w-[8%]' }
+        {title: '№', styles: 'w-[8%] text-left'},
+        {title: t('Ismi'), styles: 'w-[21%]'},
+        {title: t('Familiyasi'), styles: 'w-[21%]'},
+        {title: t('Telefon raqami'), styles: 'w-[21%]'},
+        {title: t('Login'), styles: 'w-[21%]'},
+        {title: '', styles: 'w-[8%]'},
     ]
 
     const [stickyForm, setStickForm] = useState(false)
@@ -74,7 +73,10 @@ function Sellers() {
             warningEmptyInput()
         }
         if (sellerPassword !== sellerAgainPassword) {
-            universalToast(t('Sotuvchining paroli bilan tasdiqlash paroli mos kelmadi'), 'warning')
+            universalToast(
+                t('Sotuvchining paroli bilan tasdiqlash paroli mos kelmadi'),
+                'warning'
+            )
         }
         if (!filter && sellerPassword === sellerAgainPassword) {
             const body = {
@@ -103,8 +105,10 @@ function Sellers() {
             warningEmptyInput()
         }
         if (sellerPassword !== sellerAgainPassword) {
-            universalToast(t('Sotuvchining paroli bilan tasdiqlash paroli mos kelmadi'), 'warning')
-
+            universalToast(
+                t('Sotuvchining paroli bilan tasdiqlash paroli mos kelmadi'),
+                'warning'
+            )
         }
         if (!filter && sellerPassword === sellerAgainPassword) {
             const body = {
@@ -114,6 +118,7 @@ function Sellers() {
                 lastname: sellerSurname,
                 fathername: user.lastname,
                 phone: sellerNumber,
+                password: sellerPassword,
                 type: 'Seller',
                 user: user._id,
             }
@@ -272,7 +277,7 @@ function Sellers() {
                             text={
                                 stickyForm
                                     ? t(`Saqlash`)
-                                    : t("Yangi sotuvchi qo`shish")
+                                    : t('Yangi sotuvchi qo`shish')
                             }
                         />
                         <Button onClick={clearForm} text={t('Tozalash')} />
@@ -280,7 +285,7 @@ function Sellers() {
                 </div>
             </form>
             <div className='font-normal text-[1.25rem] leading-[1.875rem] text-blue-900 mainPadding'>
-                <p>{t("Sotuvchilar")}</p>
+                <p>{t('Sotuvchilar')}</p>
             </div>
 
             <div className='tableContainerPadding'>
