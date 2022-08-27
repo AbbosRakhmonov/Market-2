@@ -15,9 +15,10 @@ import {
 } from '../Products/Create/productSlice.js'
 import {useReactToPrint} from 'react-to-print'
 import {BarCode} from '../../Components/BarCode/BarCode.js'
-import {universalSort} from '../../App/globalFunctions.js'
+import {universalSort, exportExcel} from '../../App/globalFunctions.js'
 import {useTranslation} from 'react-i18next'
-import {filter} from 'lodash'
+import {filter, map} from 'lodash'
+
 
 const WareHouse = () => {
     const {t} = useTranslation(['common'])
@@ -60,7 +61,7 @@ const WareHouse = () => {
     ]
 
     const dispatch = useDispatch()
-    const {products, total, loading, searchedProducts, totalSearched, allProducts} =
+    const {products, total, loading, searchedProducts, totalSearched, loadingExcel} =
         useSelector((state) => state.products)
     const {currencyType} = useSelector((state) => state.currency)
     const {
@@ -233,20 +234,45 @@ const WareHouse = () => {
         }
     }
 
-    const exportProductHead = [
-        '№',
-        'Mahsulot kodi',
-        'Mahsulot nomi',
-        'Soni',
-        'Olish narxi USD',
-        'Olish narxi UZS',
-        'Olish narxi jami USD',
-        'Olish narxi jami UZS',
-        'Sotish narxi USD',
-        'Sotish narxi UZS',
-        'Sotish narxi jami UZS',
-        'Sotish narxi jami USD'
-    ]
+    const exportData = () => {
+        let fileName = 'Wire House'
+        const exportProductHead = [
+            '№',
+            'Mahsulot kodi',
+            'Mahsulot nomi',
+            'Soni',
+            'Olish narxi USD',
+            'Olish narxi UZS',
+            'Olish narxi jami USD',
+            'Olish narxi jami UZS',
+            'Sotish narxi USD',
+            'Sotish narxi UZS',
+            'Sotish narxi jami UZS',
+            'Sotish narxi jami USD'
+        ]
+        dispatch(getProductsAll()).then(({error, payload}) => {
+            if(!error){
+                    const ReportData = map(payload, (item, index) => ({
+                    nth: index + 1,
+                    code: item?.productdata?.code,
+                    name: item?.productdata?.name,
+                    total: item.total + item?.unit?.name,
+                    incomingprice: item?.price?.incomingprice,
+                    incomingpriceuzs: item?.price?.incomingpriceuzs,
+                    incomingpricealluzs:
+                        item?.price?.incomingpriceuzs * item.total,
+                    incomingpriceallusd:
+                        item?.price?.incomingprice * item.total,
+                    sellingprice: item?.price?.sellingprice,
+                    sellingpriceuzs: item?.price?.sellingpriceuzs,
+                    sellingalluzs:
+                        item?.price?.sellingpriceuzs * item.total,
+                    sellingallusd: item?.price?.sellingprice * item.total
+                    }))
+                    exportExcel(ReportData, fileName, exportProductHead)
+            }
+        })
+    }
 
     useEffect(() => {
         const body = {
@@ -272,9 +298,6 @@ const WareHouse = () => {
         setSearchedData(searchedProducts)
     }, [searchedProducts])
 
-    useEffect(() => {
-        dispatch(getProductsAll())
-    }, [dispatch])
 
     return (
         <motion.section
@@ -288,12 +311,15 @@ const WareHouse = () => {
             }}
             transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
         >
+            {loadingExcel && (
+                <div
+                    className='fixed backdrop-blur-[2px] z-[100] left-0 top-0 right-0 bottom-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
+                    <Spinner />
+                </div>
+            )}
             <div className='pagination mainPadding'>
                 <ExportBtn
-                    datas={allProducts}
-                    headers={exportProductHead}
-                    fileName={'Ombrxona'}
-                    pagesName='WareHouse'
+                    onClick={exportData}
                 />
                 <p className='product_name'>{t('Omborxona')}</p>
                 {(filteredDataTotal !== 0 || totalSearched !== 0) && (

@@ -21,7 +21,7 @@ import {
 import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
 import BarcodeReader from 'react-barcode-reader'
-import {checkEmptyString} from '../../App/globalFunctions.js'
+import {checkEmptyString, exportExcel} from '../../App/globalFunctions.js'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
 import * as XLSX from 'xlsx'
 import {map, filter} from 'lodash'
@@ -43,7 +43,7 @@ function Barcode() {
     const [modalBody, setModalBody] = useState(null)
     const [excelData, setExcelData] = useState([])
     const [createdData, setCreatedData] = useState([])
-    const exportHeader = ['№', 'Shtix kodi', 'Maxsulot Nomi']
+   
     const headers = [
         {title: '№'},
         {
@@ -304,6 +304,20 @@ function Barcode() {
             }
         })
     }
+
+    
+    const exportData = () => {
+        let fileName = 'Shtrix Kodlar'
+        const exportHeader = ['№', 'Shtix kodi', 'Maxsulot Nomi']
+        const BarcodeData = map(products, (item, index) => ({
+            nth: index + 1,
+            code: item.barcode,
+            name: item.name
+        }))
+        exportExcel(BarcodeData, fileName, exportHeader)
+    }
+
+
     useEffect(() => {
         setData(products)
     }, [products])
@@ -364,10 +378,7 @@ function Barcode() {
             <div className={'flex justify-between items-center mainPadding'}>
                 <div className={'flex gap-[1.5rem]'}>
                     <ExportBtn
-                        datas={products}
-                        headers={exportHeader}
-                        fileName={'Shtrix Kodlar'}
-                        pagesName='barcode'
+                        onClick={exportData}
                     />
                     <ImportBtn readExcel={readExcel} />
                 </div>

@@ -16,9 +16,10 @@ import {
 } from '../Slices/sellingsSlice.js'
 import {regexForTypeNumber} from '../../../Components/RegularExpressions/RegularExpressions.js'
 import UniversalModal from '../../../Components/Modal/UniversalModal.js'
-import {useTranslation} from 'react-i18next'
-import {filter} from 'lodash'
-import {universalSort} from './../../../App/globalFunctions'
+import { useTranslation } from 'react-i18next'
+import { filter, map } from 'lodash'
+import { universalSort, exportExcel } from './../../../App/globalFunctions';
+
 const Sellings = () => {
     const {t} = useTranslation(['common'])
     const headers = [
@@ -155,17 +156,59 @@ const Sellings = () => {
         setPrintedSelling(null)
     }
 
-    const sellingHeaders = [
-        '№',
-        t('ID'),
-        t('Mijoz'),
-        t('Jami UZS'),
-        t('Jami USD'),
-        t('Chegirma UZS'),
-        t('Chegirma USD'),
-        t('Qarz UZS'),
-        t('Qarz USD'),
-    ]
+
+    const exportData = () => {
+        let fileName = 'Sotuvlar'- new Date().toLocaleDateString()
+        const sellingHeaders = [
+            '№',
+            t('ID'),
+            t('Mijoz'),
+            t('Jami UZS'),
+            t('Jami USD'),
+            t('Chegirma UZS'),
+            t('Chegirma USD'),
+            t('Qarz UZS'),
+            t('Qarz USD'),
+        ]
+        const SellingData = map(data, (item, index) => ({
+                nth: index + 1,
+                id: item.id,
+                client: item?.client?.name || item?.packman?.name,
+                alluzs: item.products[0].totalpriceuzs,
+                allusd: item.products[0].totalprice,
+                discount:
+                    item.discounts.length > 0
+                        ? item.discounts.map((discount) => {
+                            return discount
+                        })
+                        : 0,
+                discountusd:
+                    item.discounts.length > 0
+                        ? item.discounts.map((discount) => {
+                            return discount
+                        })
+                        : 0,
+                debd:
+                    item.products[0].totalpriceuzs -
+                    item.payments[0].paymentuzs -
+                    item.discounts.length >
+                    0
+                        ? item.discounts.map((discount) => {
+                            return discount.discount
+                        })
+                        : 0,
+                debdusd:
+                    item.products[0].totalprice -
+                    item.payments[0].payment -
+                    item.discounts.length >
+                    0
+                        ? item.discounts.map((discount) => {
+                            return discount.discount
+                        })
+                        : 0
+            }))         
+            exportExcel(SellingData, fileName, sellingHeaders )
+         }
 
     const handleClickPrint = (selling) => {
         setChooseBody('allChecks')
@@ -294,12 +337,7 @@ const Sellings = () => {
             />
             <div className='pagination mainPadding'>
                 <ExportBtn
-                    headers={sellingHeaders}
-                    datas={data}
-                    fileName={`${t(
-                        'Sotuvlar'
-                    )}-${new Date().toLocaleDateString()}`}
-                    pagesName='Sellings'
+                    onClick={exportData}
                 />
                 <p className='flex items-center'>{t('Sotuvlar')}</p>
                 {(filteredDataTotal !== 0 || totalSearched !== 0) && (

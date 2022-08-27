@@ -174,7 +174,8 @@ const incomingSlice = createSlice({
         successDelete: false,
         temporaries: [],
         temporary: {},
-        searchedIncoming: []
+        searchedIncoming: [],
+        loadingExcel : false,
     },
     reducers: {
         clearError: (state) => {
@@ -324,14 +325,14 @@ const incomingSlice = createSlice({
             universalToast(`${payload}`, 'error')
         },
         [excelIncomings.pending]: (state) => {
-            state.loading = true
+            state.loadingExcel = true
         },
         [excelIncomings.fulfilled]: (state, {payload}) => {
-            state.loading = false
+            state.loadingExcel = false
             state.allIncomingsData = payload
         },
         [excelIncomings.rejected]: (state, {payload}) => {
-            state.loading = false
+            state.loadingExcel = false
             state.error = payload
         },
         [payDebt.pending]: (state) => {

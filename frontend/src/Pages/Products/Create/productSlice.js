@@ -125,6 +125,7 @@ const productSlice = createSlice({
         successAddProduct: false,
         successUpdateProduct: false,
         successDeleteProduct: false,
+        loadingExcel : false,
     },
     reducers: {
         clearErrorProducts: (state) => {
@@ -247,14 +248,14 @@ const productSlice = createSlice({
             state.errorProducts = payload
         },
         [getProductsAll.pending]: (state) => {
-            state.loading = true
+            state.loadingExcel = true
         },
         [getProductsAll.fulfilled]: (state, {payload}) => {
-            state.loading = false
+            state.loadingExcel = false
             state.allProducts = payload
         },
         [getProductsAll.rejected]: (state, {payload}) => {
-            state.loading = false
+            state.loadingExcel = false
             state.errorProducts = payload
         },
         [getCodeOfCategory.pending]: (state) => {

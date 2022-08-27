@@ -16,7 +16,7 @@ import {
     payDebt,
     updateIncoming,
 } from '../incomingSlice'
-import {universalSort, UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
+import {universalSort, UsdToUzs, UzsToUsd, exportExcel} from '../../../App/globalFunctions'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
 import {filter, map, uniqueId} from 'lodash'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
@@ -25,6 +25,7 @@ import CustomerPayment from '../../../Components/Payment/CustomerPayment.js'
 import {warningMorePayment} from '../../../Components/ToastMessages/ToastMessages.js'
 import NotFind from '../../../Components/NotFind/NotFind.js'
 import Table from '../../../Components/Table/Table.js'
+import SmallLoader from '../../../Components/Spinner/SmallLoader'
 
 const IncomingSuppliers = () => {
     const {t} = useTranslation(['common'])
@@ -39,7 +40,7 @@ const IncomingSuppliers = () => {
         incomingconnectors,
         successUpdate,
         successDelete,
-        allIncomingsData,
+        loadingExcel
     } = useSelector((state) => state.incoming)
     const {currencyType, currency} = useSelector((state) => state.currency)
 
@@ -659,13 +660,6 @@ const IncomingSuppliers = () => {
         getCurrentData(incomings)
     }, [incomings])
 
-    useEffect(() => {
-        const body = {
-            beginDay,
-            endDay,
-        }
-        dispatch(excelIncomings(body))
-    }, [dispatch, beginDay, endDay])
 
     const headers = [
         {
@@ -706,22 +700,52 @@ const IncomingSuppliers = () => {
         },
     ]
 
-    const incomingSupplierHeaders = [
-        '№',
-        t('Yetkazuvchi'),
-        t('Kodi'),
-        t('Nomi'),
-        t('Soni'),
-        t('Kelish UZS'),
-        t('Kelish USD'),
-        t('Jami UZS'),
-        t('Jami USD'),
-        t('Sotish UZS'),
-        t('Sotish USD'),
-    ]
+   
+    const exportData = () => {
+        let fileName = 'Maxsulotlar-qabul-qabullar'-new Date().toLocaleDateString()
+        const incomingSupplierHeaders = [
+            '№',
+            t('Yetkazuvchi'),
+            t('Kodi'),
+            t('Nomi'),
+            t('Soni'),
+            t('Kelish UZS'),
+            t('Kelish USD'),
+            t('Jami UZS'),
+            t('Jami USD'),
+            t('Sotish UZS'),
+            t('Sotish USD'),
+        ]    
+        const body = {
+            beginDay,
+            endDay
+        }
+        dispatch(excelIncomings(body)).then(({error, payload}) => {
+            if(!error){
+                const IncomingSupplierData = map(payload, (item, index) => ({
+                    nth: index + 1,
+                    supplier: item.supplier.name,
+                    code: item.product.productdata.code,
+                    name: item.product.productdata.name,
+                    count: item.pieces + ' ' + item.unit.name,
+                    unit: item.unitpriceuzs,
+                    unitusd: item.unitprice,
+                    all: item.totalpriceuzs,
+                    allusd: item.totalprice
+                }))
+                exportExcel(IncomingSupplierData, fileName, incomingSupplierHeaders)
+            }
+        })
 
+    }
     return (
         <div className={`relative grow overflow-hidden`}>
+             {loadingExcel && (
+                <div
+                    className='fixed backdrop-blur-[2px] z-[100] left-0 top-0 right-0 bottom-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
+                    <SmallLoader />
+                </div>
+            )}
             <CustomerPayment
                 returned={true}
                 type={paymentType}
@@ -780,10 +804,7 @@ const IncomingSuppliers = () => {
                     <>
                         <div className='mainPadding flex items-center justify-between'>
                             <ExportBtn
-                                fileName={`Maxsulotlar-qabul-qabullar-${new Date().toLocaleDateString()}`}
-                                headers={incomingSupplierHeaders}
-                                datas={allIncomingsData}
-                                pagesName='IncomingSuppliers'
+                                onClick={exportData}
                             />
                             <span>Ro`yxat</span>
                             <Pagination
