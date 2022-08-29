@@ -1,4 +1,4 @@
-import {lazy, Suspense, useEffect, useState} from 'react'
+import {lazy, Suspense, useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import Loader from './Components/Loader/Loader'
 import {logIn} from './Pages/Login/loginSlice'
@@ -11,7 +11,6 @@ function App() {
     const dispatch = useDispatch()
     const {logged} = useSelector((state) => state.login)
 
-    const [socketConnection, setSocketConnection] = useState(false)
     useEffect(() => {
         const userData = JSON.parse(localStorage.getItem('userData'))
         if (userData) {
