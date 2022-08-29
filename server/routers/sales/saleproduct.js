@@ -258,7 +258,7 @@ module.exports.register = async (req, res) => {
         select: "totalprice unitprice totalpriceuzs unitpriceuzs pieces",
         populate: {
           path: "product",
-          select: "productdata",
+          select: "productdata total",
           populate: {
             path: "productdata",
             select: "code name",
@@ -518,7 +518,7 @@ module.exports.addproducts = async (req, res) => {
         options: { sort: { created_at: -1 } },
         populate: {
           path: "product",
-          select: "poductdata",
+          select: "poductdata total",
           populate: { path: "productdata", select: "code name" },
         },
       })
@@ -871,7 +871,7 @@ module.exports.registeredit = async (req, res) => {
         options: { sort: { created_at: -1 } },
         populate: {
           path: "product",
-          select: "poductdata",
+          select: "poductdata total",
           populate: { path: "productdata", select: "code name" },
         },
       })

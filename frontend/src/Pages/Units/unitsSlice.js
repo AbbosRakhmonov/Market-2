@@ -1,5 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import Api from '../../Config/Api'
+import {universalToast} from '../../Components/ToastMessages/ToastMessages.js'
 
 export const getUnits = createAsyncThunk(
     'units/getUnits',
@@ -84,6 +85,7 @@ const unitsSlice = createSlice({
         [getUnits.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorUnits = payload
+            universalToast(payload, 'error')
         },
         [addUnit.pending]: (state) => {
             state.loading = true

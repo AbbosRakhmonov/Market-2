@@ -4,7 +4,13 @@ import {successEditProfile, successLoggedIn, universalToast} from '../../Compone
 
 const bcryptjs = require('bcryptjs')
 
-const types = ['Admin', 'Director', 'Seller']
+const handleChooseTypeOfUser = (type) => {
+    const types = ['Admin', 'Director', 'Seller']
+    let userType = null
+    types.forEach(t => bcryptjs.compareSync(t, type) ? userType = t : null)
+    return userType
+}
+
 
 export const signIn = createAsyncThunk(
     'login/signIn',
@@ -63,9 +69,21 @@ const slice = createSlice({
     },
     reducers: {
         logIn: (state, {payload: {user, market}}) => {
-            state.logged = true
-            state.user = user
-            state.market = market
+            let type = handleChooseTypeOfUser(user.type)
+            if (type) {
+                state.logged = true
+                state.user = {
+                    ...user,
+                    type: type
+                }
+                state.market = market
+            } else {
+                localStorage.removeItem('userData')
+                state.logged = false
+                state.user = null
+                state.market = null
+                state.error = 'Invalid user type'
+            }
         },
         logOut: (state, {payload}) => {
             localStorage.removeItem('userData')
@@ -83,18 +101,14 @@ const slice = createSlice({
             state.loading = true
         },
         [signIn.fulfilled]: (state, {payload}) => {
-            const newObj = {
-                ...payload,
-                user: {
-                    ...payload.user,
-                    type: bcryptjs.compareSync(types[0], payload.user.type) ? types[0] : bcryptjs.compareSync(types[1], payload.user.type) ? types[1] : types[2]
-                }
-            }
             state.loading = false
             state.logged = true
-            state.user = newObj.user
+            state.user = {
+                ...payload.user,
+                type: handleChooseTypeOfUser(payload.user.type)
+            }
             state.market = payload.market
-            localStorage.setItem('userData', JSON.stringify(newObj))
+            localStorage.setItem('userData', JSON.stringify(payload))
             successLoggedIn()
         },
         [signIn.rejected]: (state, {payload}) => {

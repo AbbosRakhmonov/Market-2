@@ -1,5 +1,11 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import Api from '../../../Config/Api'
+import {
+    successAddProductMessage,
+    successDeleteProductMessage,
+    successUpdateProductMessage,
+    universalToast
+} from '../../../Components/ToastMessages/ToastMessages.js'
 
 export const getProducts = createAsyncThunk(
     'products/getProducts',
@@ -20,8 +26,8 @@ export const getProductsAll = createAsyncThunk(
             search: {
                 name: '',
                 code: '',
-                category: '',
-            },
+                category: ''
+            }
         },
         {rejectWithValue}
     ) => {
@@ -78,7 +84,7 @@ export const deleteProduct = createAsyncThunk(
     async (body, {rejectWithValue}) => {
         try {
             const {data} = await Api.delete('/products/product/delete', {
-                data: body,
+                data: body
             })
             return data
         } catch (error) {
@@ -122,31 +128,16 @@ const productSlice = createSlice({
         totalSearched: 0,
         loading: false,
         errorProducts: null,
-        successAddProduct: false,
-        successUpdateProduct: false,
-        successDeleteProduct: false,
-        loadingExcel : false,
+        loadingExcel: false
     },
     reducers: {
-        clearErrorProducts: (state) => {
-            state.errorProducts = null
-        },
-        clearSuccessAddProduct: (state) => {
-            state.successAddProduct = false
-        },
-        clearSuccessUpdateProduct: (state) => {
-            state.successUpdateProduct = false
-        },
         clearSearchedProducts: (state) => {
             state.searchedProducts = []
             state.totalSearched = 0
         },
-        clearSuccessDeleteProduct: (state) => {
-            state.successDeleteProduct = false
-        },
         clearUploadExcel: (state) => {
             state.allProducts = []
-        },
+        }
     },
     extraReducers: {
         [getProducts.pending]: (state) => {
@@ -154,16 +145,18 @@ const productSlice = createSlice({
         },
         [getProducts.fulfilled]: (state, {payload: {products, count}}) => {
             state.loading = false
-            state.searchedProducts.length
-                ? (state.searchedProducts = products)
-                : (state.products = products)
-            state.searchedProducts.length
-                ? (state.totalSearched = count)
-                : (state.total = count)
+            if (state.totalSearched > 0) {
+                state.searchedProducts = products
+                state.totalSearched = count
+            } else {
+                state.products = products
+                state.total = count
+            }
         },
         [getProducts.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorProducts = payload
+            universalToast(payload, 'error')
         },
         [getProductsByFilter.pending]: (state) => {
             state.loading = true
@@ -179,57 +172,64 @@ const productSlice = createSlice({
         [getProductsByFilter.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorProducts = payload
+            universalToast(payload, 'error')
         },
         [addProduct.pending]: (state) => {
             state.loading = true
         },
         [addProduct.fulfilled]: (state, {payload: {products, count}}) => {
             state.loading = false
-            state.searchedProducts.length
-                ? (state.searchedProducts = products)
-                : (state.products = products)
-            state.searchedProducts.length
-                ? (state.totalSearcheds = count)
-                : (state.total = count)
-            state.successAddProduct = true
+            if (state.totalSearched > 0) {
+                state.searchedProducts = products
+                state.totalSearched = count
+            } else {
+                state.products = products
+                state.total = count
+            }
+            successAddProductMessage()
         },
         [addProduct.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorProducts = payload
+            universalToast(payload, 'error')
         },
         [updateProduct.pending]: (state) => {
             state.loading = true
         },
         [updateProduct.fulfilled]: (state, {payload: {products, count}}) => {
             state.loading = false
-            state.searchedProducts.length
-                ? (state.searchedProducts = products)
-                : (state.products = products)
-            state.searchedProducts.length
-                ? (state.totalSearcheds = count)
-                : (state.total = count)
-            state.successUpdateProduct = true
+            if (state.totalSearched > 0) {
+                state.searchedProducts = products
+                state.totalSearched = count
+            } else {
+                state.products = products
+                state.total = count
+            }
+            successUpdateProductMessage()
         },
         [updateProduct.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorProducts = payload
+            universalToast(payload, 'error')
         },
         [deleteProduct.pending]: (state) => {
             state.loading = true
         },
         [deleteProduct.fulfilled]: (state, {payload: {products, count}}) => {
             state.loading = false
-            state.searchedProducts.length
-                ? (state.searchedProducts = products)
-                : (state.products = products)
-            state.searchedProducts.length
-                ? (state.totalSearcheds = count)
-                : (state.total = count)
-            state.successDeleteProduct = true
+            if (state.totalSearched > 0) {
+                state.searchedProducts = products
+                state.totalSearched = count
+            } else {
+                state.products = products
+                state.total = count
+            }
+            successDeleteProductMessage()
         },
         [deleteProduct.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorProducts = payload
+            universalToast(payload, 'error')
         },
         [addProductsFromExcel.pending]: (state) => {
             state.loading = true
@@ -241,11 +241,12 @@ const productSlice = createSlice({
             state.loading = false
             state.products = products
             state.total = count
-            state.successAddProduct = true
+            successAddProductMessage()
         },
         [addProductsFromExcel.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorProducts = payload
+            universalToast(payload, 'error')
         },
         [getProductsAll.pending]: (state) => {
             state.loadingExcel = true
@@ -253,10 +254,12 @@ const productSlice = createSlice({
         [getProductsAll.fulfilled]: (state, {payload}) => {
             state.loadingExcel = false
             state.allProducts = payload
+            localStorage.setItem('allProducts', JSON.stringify(payload))
         },
         [getProductsAll.rejected]: (state, {payload}) => {
             state.loadingExcel = false
             state.errorProducts = payload
+            universalToast(payload, 'error')
         },
         [getCodeOfCategory.pending]: (state) => {
             state.loading = true
@@ -268,16 +271,12 @@ const productSlice = createSlice({
         [getCodeOfCategory.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorProducts = payload
-        },
-    },
+            universalToast(payload, 'error')
+        }
+    }
 })
 
 export const {
-    clearErrorProducts,
-    clearSuccessAddProduct,
-    clearSuccessUpdateProduct,
-    clearSearchedProducts,
-    clearSuccessDeleteProduct,
-    clearUploadExcel,
+    clearSearchedProducts
 } = productSlice.actions
 export default productSlice.reducer

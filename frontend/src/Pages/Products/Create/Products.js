@@ -9,16 +9,10 @@ import Spinner from '../../../Components/Spinner/SmallLoader'
 import SmallLoader from '../../../Components/Spinner/SmallLoader'
 import NotFind from '../../../Components/NotFind/NotFind'
 import {motion} from 'framer-motion'
-
-
 import {
     addProduct,
     addProductsFromExcel,
-    clearErrorProducts,
     clearSearchedProducts,
-    clearSuccessAddProduct,
-    clearSuccessDeleteProduct,
-    clearSuccessUpdateProduct,
     deleteProduct,
     getCodeOfCategory,
     getProducts,
@@ -26,27 +20,20 @@ import {
     getProductsByFilter,
     updateProduct
 } from './productSlice'
-import {clearErrorUnits, getUnits} from '../../Units/unitsSlice'
-import {
-    successAddProductMessage,
-    successDeleteProductMessage,
-    successUpdateProductMessage,
-    universalToast,
-    warningCategory,
-    warningCurrencyRate,
-    warningEmptyInput
-} from '../../../Components/ToastMessages/ToastMessages'
+import {getUnits} from '../../Units/unitsSlice'
+import {universalToast, warningCurrencyRate, warningEmptyInput} from '../../../Components/ToastMessages/ToastMessages'
 import {regexForTypeNumber} from '../../../Components/RegularExpressions/RegularExpressions'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
 import CreateProductForm from '../../../Components/CreateProductForm/CreateProductForm'
-import {clearErrorGetAllCategories, getAllCategories} from '../../Category/categorySlice'
+import {getAllCategories} from '../../Category/categorySlice'
 import {checkEmptyString, exportExcel, universalSort, UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
 import SearchForm from '../../../Components/SearchForm/SearchForm'
 import BarcodeReader from 'react-barcode-reader'
-import {clearErrorGetBarcode, getBarcode} from '../../Barcode/barcodeSlice.js'
+import {getBarcode} from '../../Barcode/barcodeSlice.js'
 import {getCurrency} from '../../Currency/currencySlice.js'
 import {useTranslation} from 'react-i18next'
 import {filter, map} from 'lodash'
+import {getAllProducts} from '../../Sale/Slices/registerSellingSlice.js'
 
 function Products() {
     const {t} = useTranslation(['common'])
@@ -54,27 +41,23 @@ function Products() {
     const {
         market: {_id}
     } = useSelector((state) => state.login)
-    const {errorUnits, units} = useSelector((state) => state.units)
-    const {allcategories, errorGetCategories} = useSelector(
+    const {units} = useSelector((state) => state.units)
+    const {allcategories} = useSelector(
         (state) => state.category
     )
-    const {currency, currencyType, currencyError} = useSelector(
+    const {currency, currencyType} = useSelector(
         (state) => state.currency
     )
     const {
         products,
         total,
-        errorProducts,
         loading,
-        successAddProduct,
-        successUpdateProduct,
         lastProductCode,
         searchedProducts,
         totalSearched,
-        successDeleteProduct,
         loadingExcel
     } = useSelector((state) => state.products)
-    const {barcode, errorGetBarcode} = useSelector((state) => state.barcode)
+    const {barcode} = useSelector((state) => state.barcode)
     const [data, setData] = useState(products)
     const [searchedData, setSearchedData] = useState(searchedProducts)
     const [checkOfProduct, setCheckOfProduct] = useState('')
@@ -146,7 +129,7 @@ function Products() {
         },
         {title: ''}
     ]
-   
+
 
     const importHeaders = [
         {name: 'Shtrix kodi', value: 'barcode'},
@@ -387,7 +370,13 @@ function Products() {
                         barcode: checkOfProduct
                     }
                 }
-                dispatch(addProduct(body))
+                dispatch(addProduct(body)).then(({error}) => {
+                    if (!error) {
+                        clearForm()
+                        handleClickCancelToImport()
+                        dispatch(getAllProducts())
+                    }
+                })
             }
         } else {
             warningCurrencyRate()
@@ -445,7 +434,13 @@ function Products() {
                     category: searchByCategory.replace(/\s+/g, ' ').trim()
                 }
             }
-            dispatch(updateProduct(body))
+            dispatch(updateProduct(body)).then(({error}) => {
+                if (!error) {
+                    clearForm()
+                    setStickyForm(false)
+                    dispatch(getAllProducts())
+                }
+            })
         }
     }
 
@@ -516,8 +511,12 @@ function Products() {
         toggleModal()
     }
     const handleClickApproveToDelete = () => {
-        dispatch(deleteProduct(deletedProduct))
-        handleClickCancelToDelete()
+        dispatch(deleteProduct(deletedProduct)).then(({error}) => {
+            if (!error) {
+                handleClickCancelToDelete()
+                dispatch(getAllProducts())
+            }
+        })
     }
     const handleClickCancelToDelete = () => {
         setModalVisible(false)
@@ -550,7 +549,12 @@ function Products() {
                 category: searchByCategory.replace(/\s+/g, ' ').trim()
             }
         }
-        dispatch(addProductsFromExcel(body))
+        dispatch(addProductsFromExcel(body)).then(({error}) => {
+            if (!error) {
+                handleClickCancelToImport()
+                dispatch(getAllProducts())
+            }
+        })
     }
     const handleClickCancelToImport = () => {
         setModalVisible(false)
@@ -628,7 +632,11 @@ function Products() {
         const body = {
             code: data
         }
-        dispatch(getBarcode(body))
+        dispatch(getBarcode(body)).then(({error}) => {
+            if (error) {
+                return setNameOfProduct('')
+            }
+        })
     }
 
     const exportData = () => {
@@ -654,74 +662,25 @@ function Products() {
             }
         }
         dispatch(getProductsAll(body)).then(({error, payload}) => {
-           if(!error) {
-            const newData = map(payload, (item, index) => ({
+            if (!error) {
+                const newData = map(payload, (item, index) => ({
                     nth: index + 1,
-                    barcode: item?.productdata?.barcode || "",
-                    category: item?.category?.code || "",
-                    code: item?.productdata?.code || "",
-                    name: item?.productdata?.name || "",
-                    total: item?.total || "",
-                    unit: item?.unit?.name || "",
-                    incomingprice: item?.price?.incomingprice || "",
-                    incomingpriceuzs: item?.price?.incomingpriceuzs || "",
-                    sellingprice: item?.price?.sellingprice || "",
-                    sellingpriceuzs: item?.price?.sellingpriceuzs || "",
+                    barcode: item?.productdata?.barcode || '',
+                    category: item?.category?.code || '',
+                    code: item?.productdata?.code || '',
+                    name: item?.productdata?.name || '',
+                    total: item?.total || '',
+                    unit: item?.unit?.name || '',
+                    incomingprice: item?.price?.incomingprice || '',
+                    incomingpriceuzs: item?.price?.incomingpriceuzs || '',
+                    sellingprice: item?.price?.sellingprice || '',
+                    sellingpriceuzs: item?.price?.sellingpriceuzs || ''
                 }))
                 exportExcel(newData, fileName, exportHeader)
-               
-           }  
+            }
         })
     }
 
-    useEffect(() => {
-        if (errorUnits) {
-            universalToast(errorUnits, 'error')
-            dispatch(clearErrorUnits())
-        }
-        if (errorProducts) {
-            universalToast(errorProducts, 'error')
-            dispatch(clearErrorProducts())
-        }
-
-        if (successAddProduct) {
-            successAddProductMessage()
-            dispatch(clearSuccessAddProduct())
-            clearForm()
-            handleClickCancelToImport()
-        }
-
-        if (successUpdateProduct) {
-            successUpdateProductMessage()
-            dispatch(clearSuccessUpdateProduct())
-            clearForm()
-            setStickyForm(false)
-        }
-
-        if (successDeleteProduct) {
-            successDeleteProductMessage()
-            dispatch(clearSuccessDeleteProduct())
-        }
-        if (errorGetCategories) {
-            warningCategory()
-            dispatch(clearErrorGetAllCategories())
-        }
-
-        if (errorGetBarcode) {
-            setNameOfProduct('')
-            dispatch(clearErrorGetBarcode())
-        }
-    }, [
-        errorUnits,
-        errorProducts,
-        dispatch,
-        successAddProduct,
-        successUpdateProduct,
-        successDeleteProduct,
-        errorGetCategories,
-        currencyError,
-        errorGetBarcode
-    ])
     useEffect(() => {
         const body = {
             currentPage,
@@ -735,7 +694,7 @@ function Products() {
         dispatch(getProducts(body))
         //    eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage, showByTotal, dispatch])
-  
+
     useEffect(() => {
         dispatch(getUnits())
         dispatch(getAllCategories())
@@ -837,7 +796,7 @@ function Products() {
                     <SmallLoader />
                 </div>
             )}
-             {loadingExcel && (
+            {loadingExcel && (
                 <div
                     className='fixed backdrop-blur-[2px] z-[100] left-0 top-0 right-0 bottom-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
                     <SmallLoader />
@@ -909,7 +868,7 @@ function Products() {
             />
             <div className={'flex justify-between items-center mainPadding'}>
                 <div className={'flex gap-[1.5rem]'}>
-                    <ExportBtn    
+                    <ExportBtn
                         onClick={exportData}
                     />
                     <ImportBtn readExcel={readExcel} />
