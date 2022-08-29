@@ -3,6 +3,7 @@ const { Schema, Types, model } = require('mongoose');
 
 const transfer = new Schema(
   {
+    id: { type: String },
     market: { type: Schema.Types.ObjectId, ref: 'Market' },
     filial: { type: Schema.Types.ObjectId, ref: 'Market' },
     products: [{ type: Schema.Types.ObjectId, ref: 'TransferProduct' }],
