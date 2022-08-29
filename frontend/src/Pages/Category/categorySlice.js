@@ -1,5 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import Api from '../../Config/Api'
+import {universalToast} from '../../Components/ToastMessages/ToastMessages.js'
 
 export const getAllCategories = createAsyncThunk(
     'category/getAllCategories',
@@ -134,6 +135,7 @@ const categorySlice = createSlice({
         [getAllCategories.rejected]: (state, {payload}) => {
             state.errorGetCategories = payload
             state.loading = false
+            universalToast(payload, 'error')
         },
         [getCategories.pending]: (state) => {
             state.loading = true
@@ -150,6 +152,7 @@ const categorySlice = createSlice({
         [getCategories.rejected]: (state, {payload}) => {
             state.errorGetCategories = payload
             state.loading = false
+            universalToast(payload, 'error')
         },
         [addCategory.pending]: (state) => {
             state.loading = true
