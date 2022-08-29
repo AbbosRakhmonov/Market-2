@@ -29,44 +29,46 @@ import {ReturnProductsTableRow} from './TableRows/ReturnProductsTableRow.js'
 import {GeneralReportTableRow} from './TableRows/GeneralReportTableRow.js'
 import {RegisterSaleTableFooter} from './TableFooters/RegisterSaleTableFooter.js'
 import DailyReport from './TableRows/DailyReport.js'
+import SupplierIncomingsTableRow from './TableRows/SupplierIncomingsTableRow'
 
 function Table({
-                   page,
-                   data,
-                   headers,
-                   currentPage,
-                   countPage,
-                   Sort,
-                   Edit,
-                   Delete,
-                   currency,
-                   changeHandler,
-                   addProductCheque,
-                   productCheque,
-                   Print,
-                   inputValue,
-                   inputDisabled,
-                   Excel,
-                   editedIncoming,
-                   saveEditIncoming,
-                   sortItem,
-                   ReturnPayment,
-                   Save,
-                   onKeyUp,
-                   currencyType,
-                   type,
-                   Pay,
-                   isDisabled,
-                   reports,
-                   onClickTableRow,
-                   linkToSellerReports,
-                   sellers,
-                   addPlus,
-                   footer,
-                   increment,
-                   decrement,
-                   lowUnitpriceProducts
-               }) {
+    page,
+    data,
+    headers,
+    currentPage,
+    countPage,
+    Sort,
+    Edit,
+    Delete,
+    currency,
+    changeHandler,
+    addProductCheque,
+    productCheque,
+    Print,
+    inputValue,
+    inputDisabled,
+    Excel,
+    editedIncoming,
+    saveEditIncoming,
+    sortItem,
+    ReturnPayment,
+    Save,
+    onKeyUp,
+    currencyType,
+    type,
+    Pay,
+    isDisabled,
+    reports,
+    onClickTableRow,
+    linkToSellerReports,
+    sellers,
+    addPlus,
+    footer,
+    increment,
+    decrement,
+    lowUnitpriceProducts,
+    linkToSupplierReport,
+}) {
     const checkRows = () => {
         switch (page) {
             case 'product':
@@ -120,6 +122,7 @@ function Table({
                         countPage={countPage}
                         Edit={Edit}
                         Delete={Delete}
+                        linkToSupplierReport={linkToSupplierReport}
                     />
                 )
             case 'productreport':
@@ -387,6 +390,16 @@ function Table({
                 return <GeneralReportTableRow data={data} currency={currency} />
             case 'dailyreport':
                 return <DailyReport data={data} />
+            case 'incomingsupplier':
+                return (
+                    <SupplierIncomingsTableRow
+                        data={data}
+                        currency={currency}
+                        currentPage={currentPage}
+                        countPage={countPage}
+                        Pay={Pay}
+                    />
+                )
             default:
                 return ''
         }
@@ -408,7 +421,7 @@ function Table({
     return (
         <table className='overflow-x-auto w-full'>
             <thead className='rounded-t-lg'>
-            {<Thead headers={headers} Sort={Sort} sortItem={sortItem} />}
+                {<Thead headers={headers} Sort={Sort} sortItem={sortItem} />}
             </thead>
             <tbody>{checkRows()}</tbody>
             {footer && <tfoot>{checkFooters()}</tfoot>}

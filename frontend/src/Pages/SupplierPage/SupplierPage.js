@@ -17,23 +17,25 @@ import {
     deleteSupplier,
     getSuppliers,
     getSuppliersByFilter,
-    updateSupplier
+    updateSupplier,
 } from './suppliersSlice.js'
 import {
     successAddSupplierMessage,
     successDeleteSupplierMessage,
     successUpdateSupplierMessage,
     universalToast,
-    warningEmptyInput
+    warningEmptyInput,
 } from '../../Components/ToastMessages/ToastMessages.js'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
 import SearchForm from '../../Components/SearchForm/SearchForm.js'
 import {checkEmptyString} from '../../App/globalFunctions.js'
-import { useTranslation } from 'react-i18next';
-import {filter} from "lodash"
+import {useTranslation} from 'react-i18next'
+import {filter} from 'lodash'
+import {useNavigate} from 'react-router-dom'
 const Supplier = () => {
     const {t} = useTranslation(['common'])
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const {
         errorSuppliers,
         suppliers,
@@ -43,13 +45,13 @@ const Supplier = () => {
         loading,
         searchedSuppliers,
         total,
-        totalSearched
+        totalSearched,
     } = useSelector((state) => state.suppliers)
 
     const headers = [
         {title: t('№'), styles: 'w-[8%] text-left'},
         {title: t('Yetkazuvchi'), styles: 'w-[84%] text-left'},
-        {title: '', styles: 'w-[8%] text-left'}
+        {title: '', styles: 'w-[8%] text-left'},
     ]
 
     // states
@@ -89,8 +91,8 @@ const Supplier = () => {
             currentPage,
             countPage: showByTotal,
             search: {
-                name: searchByName.replace(/\s+/g, ' ').trim()
-            }
+                name: searchByName.replace(/\s+/g, ' ').trim(),
+            },
         }
         dispatch(deleteSupplier(body))
         handleClickCancelToDelete()
@@ -112,8 +114,8 @@ const Supplier = () => {
                 currentPage,
                 countPage: showByTotal,
                 search: {
-                    name: searchByName.replace(/\s+/g, ' ').trim()
-                }
+                    name: searchByName.replace(/\s+/g, ' ').trim(),
+                },
             }
             dispatch(addSupplier(body))
         }
@@ -131,8 +133,8 @@ const Supplier = () => {
                 currentPage,
                 countPage: showByTotal,
                 search: {
-                    name: searchByName.replace(/\s+/g, ' ').trim()
-                }
+                    name: searchByName.replace(/\s+/g, ' ').trim(),
+                },
             }
             dispatch(updateSupplier(body))
         }
@@ -158,12 +160,12 @@ const Supplier = () => {
         let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
         setSearchByName(val)
         ;(searchedData.length > 0 || totalSearched > 0) &&
-        dispatch(clearSearchedSuppliers())
+            dispatch(clearSearchedSuppliers())
         if (valForSearch === '') {
             setData(suppliers)
             setFilteredDataTotal(total)
         } else {
-            const filteredSuppliers = filter(suppliers,(supplier) => {
+            const filteredSuppliers = filter(suppliers, (supplier) => {
                 return supplier.name.toLowerCase().includes(valForSearch)
             })
             setData(filteredSuppliers)
@@ -176,11 +178,16 @@ const Supplier = () => {
                 currentPage,
                 countPage: showByTotal,
                 search: {
-                    name: searchByName.replace(/\s+/g, ' ').trim()
-                }
+                    name: searchByName.replace(/\s+/g, ' ').trim(),
+                },
             }
             dispatch(getSuppliersByFilter(body))
         }
+    }
+
+    // link to next page
+    const linkToSupplierReport = (id) => {
+        navigate(`/hamkorlar/yetkazuvchilar/${id}`)
     }
 
     // useEffects
@@ -211,7 +218,7 @@ const Supplier = () => {
         errorSuppliers,
         successAddSupplier,
         successUpdateSupplier,
-        successDeleteSupplier
+        successDeleteSupplier,
     ])
 
     useEffect(() => {
@@ -219,8 +226,8 @@ const Supplier = () => {
             currentPage,
             countPage: showByTotal,
             search: {
-                name: searchByName.replace(/\s+/g, ' ').trim()
-            }
+                name: searchByName.replace(/\s+/g, ' ').trim(),
+            },
         }
         dispatch(getSuppliers(body))
         //    eslint-disable-next-line react-hooks/exhaustive-deps
@@ -245,14 +252,17 @@ const Supplier = () => {
             exit='collapsed'
             variants={{
                 open: {opacity: 1, height: 'auto'},
-                collapsed: {opacity: 0, height: 0}
+                collapsed: {opacity: 0, height: 0},
             }}
             transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
         >
             <UniversalModal
-                headerText={`${deletedSupplier && deletedSupplier.name
-                } ${t("yetkazib beruvchini o`chirishni tasdiqlaysizmi?")}`}
-                title={t("O`chirilgan yetkazib beruvchini tiklashning imkoni mavjud emas!")}
+                headerText={`${deletedSupplier && deletedSupplier.name} ${t(
+                    'yetkazib beruvchini o`chirishni tasdiqlaysizmi?'
+                )}`}
+                title={t(
+                    'O`chirilgan yetkazib beruvchini tiklashning imkoni mavjud emas!'
+                )}
                 toggleModal={toggleModal}
                 body={'approve'}
                 approveFunction={handleClickApproveToDelete}
@@ -260,7 +270,8 @@ const Supplier = () => {
                 isOpen={modalVisible}
             />
             <form
-                className={`flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200 ${stickyForm && 'stickyForm'
+                className={`flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200 ${
+                    stickyForm && 'stickyForm'
                 }`}
             >
                 <div className='supplier-style'>
@@ -279,7 +290,7 @@ const Supplier = () => {
                             text={
                                 stickyForm
                                     ? t(`Saqlash`)
-                                    : t("Yangi yetkazuvchi qo`shish")
+                                    : t('Yangi yetkazuvchi qo`shish')
                             }
                             onClick={stickyForm ? handleEdit : addNewSupplier}
                         />
@@ -288,7 +299,7 @@ const Supplier = () => {
                 </div>
             </form>
             <div className='pagination-supplier mainPadding'>
-                <p className='supplier-title'>{t("Yetkazuvchilar")}</p>
+                <p className='supplier-title'>{t('Yetkazuvchilar')}</p>
                 {(filteredDataTotal !== 0 || totalSearched !== 0) && (
                     <Pagination
                         countPage={Number(showByTotal)}
@@ -322,6 +333,7 @@ const Supplier = () => {
                         headers={headers}
                         Edit={handleEditSupplier}
                         Delete={handleDeleteSupplier}
+                        linkToSupplierReport={linkToSupplierReport}
                     />
                 )}
             </div>

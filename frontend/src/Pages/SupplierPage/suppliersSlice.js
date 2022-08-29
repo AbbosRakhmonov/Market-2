@@ -1,4 +1,5 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
+import {universalToast} from '../../Components/ToastMessages/ToastMessages'
 import Api from '../../Config/Api'
 
 export const getSuppliers = createAsyncThunk(
@@ -61,6 +62,18 @@ export const getSuppliersByFilter = createAsyncThunk(
     }
 )
 
+export const getIncomingConnectorsBySupplier = createAsyncThunk(
+    'suppliers/getIncomingConnectorsBySupplier',
+    async (body = {}, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post('supplier/incomingsreport', body)
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
 const suppliersSlice = createSlice({
     name: 'suppliers',
     initialState: {
@@ -68,11 +81,13 @@ const suppliersSlice = createSlice({
         total: 0,
         searchedSuppliers: [],
         totalSearched: 0,
+        incomingconnectors: [],
+        connectorscount: 0,
         loading: false,
         errorSuppliers: null,
         successAddSupplier: false,
         successUpdateSupplier: false,
-        successDeleteSupplier: false
+        successDeleteSupplier: false,
     },
     reducers: {
         clearErrorSuppliers: (state) => {
@@ -90,7 +105,7 @@ const suppliersSlice = createSlice({
         clearSearchedSuppliers: (state) => {
             state.searchedSuppliers = []
             state.totalSearched = 0
-        }
+        },
     },
     extraReducers: {
         [getSuppliers.pending]: (state) => {
@@ -174,8 +189,23 @@ const suppliersSlice = createSlice({
         [deleteSupplier.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorSuppliers = payload
-        }
-    }
+        },
+        [getIncomingConnectorsBySupplier.pending]: (state) => {
+            state.loading = true
+        },
+        [getIncomingConnectorsBySupplier.fulfilled]: (
+            state,
+            {payload: {data, count}}
+        ) => {
+            state.pending = false
+            state.incomingconnectors = data
+            state.connectorscount = count
+        },
+        [getIncomingConnectorsBySupplier.rejected]: (state, {payload}) => {
+            state.loading = false
+            universalToast(payload, 'error')
+        },
+    },
 })
 
 export const {
@@ -183,6 +213,6 @@ export const {
     clearSuccessAddSupplier,
     clearSuccessUpdateSupplier,
     clearSuccessDeleteSupplier,
-    clearSearchedSuppliers
+    clearSearchedSuppliers,
 } = suppliersSlice.actions
 export default suppliersSlice.reducer
