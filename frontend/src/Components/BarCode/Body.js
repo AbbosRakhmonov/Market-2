@@ -7,8 +7,8 @@ export const Body = ({product, currency, marketName}) => {
         options: {
             background: '#fff',
             width: '2cm',
-            height: '40cm',
-        },
+            height: '40cm'
+        }
     })
     return (
         <div className='w-[40mm] break-after-page font-sans h-[65mm] times '>
@@ -29,13 +29,13 @@ export const Body = ({product, currency, marketName}) => {
                         <span>{product.price ? 'Цена:' : ''}</span>{' '}
                         <span>
                             {(product.price &&
-                                (currency === 'UZS'
-                                    ? product.price.sellingpriceuzs.toLocaleString(
-                                          'ru-RU'
-                                      )
-                                    : product.price.sellingprice.toLocaleString(
-                                          'ru-RU'
-                                      )) +
+                                    (currency === 'UZS'
+                                        ? product.price.sellingpriceuzs.toLocaleString(
+                                            'ru-RU'
+                                        )
+                                        : product.price.sellingprice.toLocaleString(
+                                            'ru-RU'
+                                        )) +
                                     ' ' +
                                     currency) ||
                                 ''}

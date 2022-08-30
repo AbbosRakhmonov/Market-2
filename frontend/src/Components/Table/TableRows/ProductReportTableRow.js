@@ -3,65 +3,40 @@ import TableBtn from '../../Buttons/TableBtn'
 import TableInput from '../../Inputs/TableInput'
 import {map} from 'lodash'
 
-export const ProductReportTableRow = ({
-                                          data,
-                                          Print,
-                                          currentPage,
-                                          countPage,
-                                          currency,
-                                          changeHandler,
-                                          addProductCheque,
-                                          productCheque,
-                                          inputValue
-                                      }) => {
-    const activeProduct =
-        'bg-primary-500 text-white-900 group-hover:bg-black-300'
+const inputVal = (id, printedData) => {
+    let hasData = printedData.filter(p => p.product._id === id)
+    return hasData.length > 0 ? hasData[0].numberOfChecks : ''
+}
+
+export const ProductReportTableRow = (
+    {
+        data,
+        Print,
+        currentPage,
+        countPage,
+        currency,
+        changeHandler,
+        printedData
+    }) => {
     return (
         <>
-            {map(data,(product, index) => (
+            {map(data, (product, index) => (
                 <tr className='tr' key={product._id}>
                     <td className='td'>
                         {currentPage * countPage + 1 + index}
                     </td>
                     <td
-                        className={`td ${
-                            productCheque.code ? `${activeProduct}` : ''
-                        }`}
-                        onClick={() =>
-                            addProductCheque(
-                                'code',
-                                product._id,
-                                product.productdata.code
-                            )
-                        }
+                        className={`td`}
                     >
                         {product.productdata.code}
                     </td>
                     <td
-                        className={`${
-                            productCheque.name ? `${activeProduct}` : ''
-                        } td`}
-                        onClick={() =>
-                            addProductCheque(
-                                'name',
-                                product._id,
-                                product.productdata.name
-                            )
-                        }
+                        className={`td`}
                     >
                         {product.productdata.name}
                     </td>
                     <td
-                        className={`td text-right ${
-                            productCheque.total ? `${activeProduct}` : ''
-                        } `}
-                        onClick={() =>
-                            addProductCheque(
-                                'total',
-                                product._id,
-                                `${product.total} ${product.unit.name}`
-                            )
-                        }
+                        className={`td text-right`}
                     >
                         <span className='pointer-events-none'>
                             {product?.total.toLocaleString('ru-Ru')} {product?.unit?.name}
@@ -88,16 +63,7 @@ export const ProductReportTableRow = ({
                         {currency}
                     </td>
                     <td
-                        className={`${
-                            productCheque.price ? `${activeProduct}` : ''
-                        } td text-right`}
-                        onClick={() =>
-                            addProductCheque(
-                                'price',
-                                product._id,
-                                product.price.sellingprice
-                            )
-                        }
+                        className={`td text-right`}
                     >
                         {currency === 'UZS'
                             ? product.price.sellingpriceuzs.toLocaleString(
@@ -122,7 +88,7 @@ export const ProductReportTableRow = ({
                         <TableInput
                             onChange={(e) => changeHandler(e, product)}
                             type={'number'}
-                            value={inputValue}
+                            value={inputVal(product._id, printedData)}
                         />
                     </td>
                     <td className='td text-center'>
@@ -130,7 +96,7 @@ export const ProductReportTableRow = ({
                             <TableBtn
                                 type={'print'}
                                 bgcolor={'bg-primary-800'}
-                                onClick={() => Print(product)}
+                                onClick={() => Print(product, 'single')}
                             />
                         </div>
                     </td>
