@@ -798,9 +798,9 @@ function Products() {
             setPriceOfProductsUsd(incomingprice)
             setSellingPriceOfProductUsd(sellingprice)
             setCheckOfProduct(barcode ? barcode : '')
-            setMinimumCount(minimumcount)
-            setTradePrice(tradeprice)
-            setTradePriceUzs(tradepriceuzs)
+            setMinimumCount(minimumcount || 0)
+            setTradePrice(tradeprice || 0)
+            setTradePriceUzs(tradepriceuzs || 0)
         }
     }, [currentProduct])
     useEffect(() => {

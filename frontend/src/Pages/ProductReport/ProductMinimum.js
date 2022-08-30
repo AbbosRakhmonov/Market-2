@@ -171,7 +171,7 @@ const ProductMinimum = () => {
         setCurrentData(minimumproducts)
     }, [minimumproducts])
 
-    return (
+    return currentData.length > 0 ? (
         <div className='pt-[1rem]'>
             <div className='flex items-center justify-center mainPadding'>
                 <p className='product_name text-center'>
@@ -197,6 +197,12 @@ const ProductMinimum = () => {
                     />
                 </div>
             )}
+        </div>
+    ) : (
+        <div className='flex items-center justify-center pt-[2rem]'>
+            <p className='product_name text-center'>
+                Kam qolgan mahsulotlar mavjud emas...
+            </p>
         </div>
     )
 }
