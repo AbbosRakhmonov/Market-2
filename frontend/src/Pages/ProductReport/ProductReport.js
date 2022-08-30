@@ -51,10 +51,10 @@ function ProductReport() {
             title: t('Qolgan')
         },
         {
-            title: t('Narxi') + ' ' + `(${currencyType})`
+            title: `${t('Narxi')} (${currencyType})`
         },
         {
-            title: t('Jami') + ' ' + `(${currencyType})`
+            title: `${t('Jami')} (${currencyType})`
         },
         {
             title: t('Sotuvchi')
