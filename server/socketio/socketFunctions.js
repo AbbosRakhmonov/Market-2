@@ -6,6 +6,23 @@ const { Unit } = require("../models/Products/Unit.js");
 const { ProductPrice } = require("../models/Products/ProductPrice.js");
 const { filter } = require("lodash");
 
+const getAllCategories = async (market) => {
+  try {
+    const marke = await Market.findById(market);
+
+    if (!marke) {
+      return { error: error };
+    }
+
+    const categories = await Category.find({ market }).select(
+      "code market name products"
+    );
+    return categories;
+  } catch (error) {
+    return { error: error };
+  }
+};
+
 const getAllProducts = async (market) => {
   try {
     const marke = await Market.findById(market);
@@ -46,9 +63,8 @@ const replaceAllProductdata = async () => {
 
     return allProductDatas;
   } catch (error) {
-    console.log(error);
     return { message: "Serverda xatolik yuz berdi" };
   }
 };
 
-module.exports = { getAllProducts, replaceAllProductdata };
+module.exports = { getAllCategories, getAllProducts, replaceAllProductdata };
