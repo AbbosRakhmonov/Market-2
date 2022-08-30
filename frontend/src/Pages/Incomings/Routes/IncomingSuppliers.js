@@ -860,7 +860,7 @@ const IncomingSuppliers = () => {
                                 searchOnKeyUp
                             }
                         />
-                        <div className='mainPadding'>
+                        <div className='tableContainerPadding'>
                             <Table
                                 page={'incomings'}
                                 headers={headers}

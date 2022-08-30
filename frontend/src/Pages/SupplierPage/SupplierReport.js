@@ -434,7 +434,7 @@ const SupplierReport = () => {
                     totalDatas={connectorscount || 1}
                 />
             </div>
-            <div className='mainPadding'>
+            <div className='tableContainerPadding'>
                 {currentData.length > 0 && (
                     <Table
                         page={'incomingsupplier'}

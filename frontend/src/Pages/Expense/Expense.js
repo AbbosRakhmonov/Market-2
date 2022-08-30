@@ -316,7 +316,7 @@ const Expense = () => {
                 />
             </div>
             {expenses && (
-                <div className='mainPadding'>
+                <div className='tableContainerPadding'>
                     <Table
                         page={'expenses'}
                         headers={headers}

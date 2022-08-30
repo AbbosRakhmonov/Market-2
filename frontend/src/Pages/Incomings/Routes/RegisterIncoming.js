@@ -708,7 +708,7 @@ const RegisterIncoming = () => {
                 {t('Yetkazib beruvchi')}: {supplier.name}
             </p>
             <div
-                className={`${incomings.length > 0 ? 'mainPadding' : 'hidden'}`}
+                className={`${incomings.length > 0 ? 'tableContainerPadding' : 'hidden'}`}
             >
                 <Table
                     page={'registerincoming'}
