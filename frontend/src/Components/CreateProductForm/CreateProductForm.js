@@ -122,27 +122,25 @@ function CreateProductForm({
                             placeholder={`${t('misol')}: 200`}
                             type={'text'}
                         />
-                        <FieldContainer
-                            value={tradePrice}
-                            onChange={handleChangeTradePrice}
-                            label={'Optom narxi'}
-                            placeholder={`${t('misol')}: 300`}
-                            type={'text'}
-                        />
-                        <FieldContainer
-                            value={minimumCount}
-                            onChange={handleChangeMinimumCount}
-                            label={'Minimum qiymat'}
-                            placeholder={`${t('misol')}: 300`}
-                            type={'text'}
-                        />
                     </>
                 )}
             </div>
-            <div className='flex justify-end'>
-                <div
-                    className={'flex gap-[1.25rem] min-w-[20rem] max-w-[21rem]'}
-                >
+            <div className='flex flex gap-[2.5rem] items-end'>
+                <FieldContainer
+                    value={tradePrice}
+                    onChange={handleChangeTradePrice}
+                    label={'Optom narxi'}
+                    placeholder={`${t('misol')}: 300`}
+                    type={'text'}
+                />
+                <FieldContainer
+                    value={minimumCount}
+                    onChange={handleChangeMinimumCount}
+                    label={'Minimum qiymat'}
+                    placeholder={`${t('misol')}: 300`}
+                    type={'text'}
+                />
+                <div className={'flex gap-[1.25rem] min-w-[20rem]'}>
                     <Button
                         onClick={stickyForm ? handleEdit : addNewProduct}
                         add={!stickyForm}
