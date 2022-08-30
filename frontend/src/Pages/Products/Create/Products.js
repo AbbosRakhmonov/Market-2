@@ -736,14 +736,13 @@ function Products() {
                 value: category._id,
                 label: `${category.code} - ${category.name}`,
             })
-            !priceOfProduct && setPriceOfProduct(incomingpriceuzs)
-            !sellingPriceOfProduct && setSellingPriceOfProduct(sellingpriceuzs)
-            !priceOfProductUsd && setPriceOfProductsUsd(incomingprice)
-            !sellingPriceOfProductUsd &&
-                setSellingPriceOfProductUsd(sellingprice)
+            setPriceOfProduct(incomingpriceuzs)
+            setSellingPriceOfProduct(sellingpriceuzs)
+            setPriceOfProductsUsd(incomingprice)
+            setSellingPriceOfProductUsd(sellingprice)
             setCheckOfProduct(barcode ? barcode : '')
         }
-    }, [currentProduct, currencyType])
+    }, [currentProduct])
     useEffect(() => {
         setUnitOptions(
             map(units, (unit) => ({
