@@ -1,6 +1,9 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import Api from '../../../Config/Api.js'
-import {successSavedTemporary, universalToast} from '../../../Components/ToastMessages/ToastMessages.js'
+import {
+    successSavedTemporary,
+    universalToast,
+} from '../../../Components/ToastMessages/ToastMessages.js'
 
 export const getAllProducts = createAsyncThunk(
     'registerSelling/getAllProducts',
@@ -93,7 +96,12 @@ const registerSellingSlice = createSlice({
         errorGetAllProducts: null,
         errorGetUsers: null,
         errorMakePayment: null,
-        errorSavePayment: null
+        errorSavePayment: null,
+    },
+    reducers: {
+        setAllProductsBySocket: (state, {payload}) => {
+            state.allProducts = [...payload]
+        },
     },
     extraReducers: {
         [getAllProducts.pending]: (state) => {
@@ -130,60 +138,52 @@ const registerSellingSlice = createSlice({
             state.loadingMakePayment = false
             state.lastPayments.unshift(payload)
         },
-        [makePayment.rejected]:
-            (state, {payload}) => {
-                universalToast(payload, 'error')
-                state.loadingMakePayment = false
-                state.errorMakePayment = payload
-                state.errorMakePayment = null
-            },
-        [savePayment.pending]:
-            (state) => {
-                state.loadingSavePayment = true
-            },
-        [savePayment.fulfilled]:
-            (state) => {
-                state.loadingSavePayment = false
-                successSavedTemporary()
-            },
-        [savePayment.rejected]:
-            (state, {payload}) => {
-                universalToast(payload, 'error')
-                state.loadingSavePayment = false
-                state.errorSavePayment = payload
-                state.errorSavePayment = null
-            },
-        [addPayment.pending]:
-            (state) => {
-                state.loadingMakePayment = true
-            },
-        [addPayment.fulfilled]:
-            (state, {payload}) => {
-                state.loadingMakePayment = false
-                state.lastPayments.unshift(payload)
-            },
-        [addPayment.rejected]:
-            (state, {payload}) => {
-                universalToast(payload, 'error')
-                state.loadingMakePayment = false
-                state.errorMakePayment = payload
-            },
-        [returnSaleProducts.pending]:
-            (state) => {
-                state.loadingMakePayment = true
-            },
-        [returnSaleProducts.fulfilled]:
-            (state, {payload}) => {
-                state.loadingMakePayment = false
-                state.lastPayments.unshift(payload)
-            },
-        [returnSaleProducts.rejected]:
-            (state, {payload}) => {
-                universalToast(payload, 'error')
-                state.loadingMakePayment = false
-                state.errorMakePayment = payload
-                state.errorMakePayment = null
-            }
-    }
+        [makePayment.rejected]: (state, {payload}) => {
+            universalToast(payload, 'error')
+            state.loadingMakePayment = false
+            state.errorMakePayment = payload
+            state.errorMakePayment = null
+        },
+        [savePayment.pending]: (state) => {
+            state.loadingSavePayment = true
+        },
+        [savePayment.fulfilled]: (state) => {
+            state.loadingSavePayment = false
+            successSavedTemporary()
+        },
+        [savePayment.rejected]: (state, {payload}) => {
+            universalToast(payload, 'error')
+            state.loadingSavePayment = false
+            state.errorSavePayment = payload
+            state.errorSavePayment = null
+        },
+        [addPayment.pending]: (state) => {
+            state.loadingMakePayment = true
+        },
+        [addPayment.fulfilled]: (state, {payload}) => {
+            state.loadingMakePayment = false
+            state.lastPayments.unshift(payload)
+        },
+        [addPayment.rejected]: (state, {payload}) => {
+            universalToast(payload, 'error')
+            state.loadingMakePayment = false
+            state.errorMakePayment = payload
+        },
+        [returnSaleProducts.pending]: (state) => {
+            state.loadingMakePayment = true
+        },
+        [returnSaleProducts.fulfilled]: (state, {payload}) => {
+            state.loadingMakePayment = false
+            state.lastPayments.unshift(payload)
+        },
+        [returnSaleProducts.rejected]: (state, {payload}) => {
+            universalToast(payload, 'error')
+            state.loadingMakePayment = false
+            state.errorMakePayment = payload
+            state.errorMakePayment = null
+        },
+    },
 })
+
+export const {setAllProductsBySocket} = registerSellingSlice.actions
 export default registerSellingSlice.reducer

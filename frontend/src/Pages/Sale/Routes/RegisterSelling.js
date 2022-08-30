@@ -11,11 +11,11 @@ import Spinner from '../../../Components/Spinner/SmallLoader.js'
 import SmallLoader from '../../../Components/Spinner/SmallLoader.js'
 import {
     addPayment,
-    getAllProducts,
     getClients,
     makePayment,
     returnSaleProducts,
     savePayment,
+    setAllProductsBySocket,
 } from '../Slices/registerSellingSlice.js'
 import {deleteSavedPayment} from '../Slices/savedSellingsSlice.js'
 import {getAllPackmans} from '../../Clients/clientsSlice.js'
@@ -1077,20 +1077,15 @@ const RegisterSelling = () => {
     }
 
     useEffect(() => {
-        let allProducts = []
+        let allProductsReducer = []
         market &&
             socket.emit('getProductsOfCount', {market: market._id, count: 100})
         market &&
             socket.on('getProductsOfCount', (products) => {
-                allProducts.push(
-                    ...map(products, (product) => ({
-                        value: product._id,
-                        label: `(${product.total}) ${product.category.code}${product.productdata.code} - ${product.productdata.name}`,
-                    }))
-                )
-                setFilteredProducts(allProducts)
+                allProductsReducer.push(...products)
+                dispatch(setAllProductsBySocket(allProductsReducer))
             })
-    }, [market])
+    }, [market, dispatch, lastPayments])
     useEffect(() => {
         if (activeCategory) {
             const filteredData = filter(
@@ -1111,9 +1106,8 @@ const RegisterSelling = () => {
                 }))
             )
         }
-    }, [activeCategory, allProducts, lastPayments])
+    }, [activeCategory, allProducts])
     useEffect(() => {
-        // dispatch(getAllProducts())
         dispatch(getAllPackmans())
         dispatch(getClients())
         dispatch(getAllCategories())

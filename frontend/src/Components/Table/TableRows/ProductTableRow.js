@@ -58,13 +58,13 @@ export const ProductTableRow = ({
                         {currencyType}
                     </td>
                     <td className='td text-right'>
-                        {product.price?.tradeprice ? (
+                        {product.price?.tradepriceuzs ? (
                             <>
                                 {currency === 'UZS'
-                                    ? product.price?.tradepriceuzs.toLocaleString(
+                                    ? product?.price?.tradepriceuzs.toLocaleString(
                                           'ru-RU'
                                       )
-                                    : product.price?.tradeprice.toLocaleString(
+                                    : product?.price?.tradeprice.toLocaleString(
                                           'ru-RU'
                                       )}{' '}
                                 {currencyType}
@@ -80,7 +80,7 @@ export const ProductTableRow = ({
                             ''
                         }`}
                     >
-                        {product.minimumcount || ''}
+                        {product?.minimumcount || ''}
                     </td>
                     {!productminimumpage && (
                         <td className='td py-[0.375rem] border-r-0'>
