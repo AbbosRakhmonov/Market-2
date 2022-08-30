@@ -6,6 +6,8 @@ const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const { start } = require("./connectDB/db");
+const { socketIO } = require("./socketio/socket");
+const { routers } = require("./routers/routers");
 const io = new Server(server, {
   cors: {
     origin: "*",
@@ -13,20 +15,11 @@ const io = new Server(server, {
   },
 });
 
-const { getAllProducts } = require("./routers/socket/socketFunctions");
-
 app.use(cors());
 
-io.on("connection", (socket) => {
-  socket.on("getallproducts", async (market) => {
-    const products = await getAllProducts(market);
-    socket.emit("getallproducts", products);
-  });
-});
+socketIO(io);
 
 start(server);
-
-const { routers } = require("./routers/routers");
 
 routers(app);
 

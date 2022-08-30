@@ -8,6 +8,7 @@ const productdata = new Schema(
     code: { type: String, required: true },
     barcode: { type: String },
     products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
+    product: { type: Schema.Types.ObjectId, ref: "Product" },
     category: { type: Schema.Types.ObjectId, ref: "Category" },
     market: { type: Schema.Types.ObjectId, ref: "Market", required: true },
     isArchive: { type: Boolean, default: false },

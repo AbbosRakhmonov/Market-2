@@ -156,6 +156,7 @@ module.exports.registerAll = async (req, res) => {
         $push: {
           products: product._id,
         },
+        product: product._id,
       });
 
       await Category.findByIdAndUpdate(product.category, {
@@ -332,6 +333,7 @@ module.exports.register = async (req, res) => {
       $push: {
         products: newProduct._id,
       },
+      product: newProduct._id,
     });
 
     await Category.findByIdAndUpdate(category, {
@@ -1132,6 +1134,7 @@ module.exports.updateAllProducts = async (req, res) => {
           $push: {
             products: new ObjectId(product._id),
           },
+          product: new ObjectId(product._id),
         });
 
         await Product.findByIdAndUpdate(product._id, {
