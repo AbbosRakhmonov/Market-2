@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useState} from 'react'
 import CardLink from '../../../Components/Card/CardLink'
 import {useDispatch, useSelector} from 'react-redux'
 import {filter, map, uniqueId} from 'lodash'
-import {getIncomingConnectors, getSuppliers} from '../incomingSlice'
+import {getIncomingConnectors, getAllSuppliers} from '../incomingSlice'
 import Dates from '../../../Components/Dates/Dates'
 import SelectInput from '../../../Components/SelectInput/SelectInput'
 import FilterButtons from '../../../Components/FilterButtons/FilterButtons'
@@ -165,7 +165,7 @@ function Incomings() {
     }, [dispatch, _id, beginDay, endDay])
 
     useEffect(() => {
-        dispatch(getSuppliers({_id}))
+        dispatch(getAllSuppliers({_id}))
     }, [dispatch, _id])
     return (
         <section className={'grow overflow-auto'}>

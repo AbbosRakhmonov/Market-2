@@ -10,7 +10,7 @@ import {
     clearTemporary,
     deleteTemporary,
     getProducts,
-    getSuppliers,
+    getAllSuppliers,
 } from '../incomingSlice'
 import {ConfirmBtn, SaveBtn} from '../../../Components/Buttons/SaveConfirmBtn'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
@@ -615,7 +615,7 @@ const RegisterIncoming = () => {
     }
 
     useEffect(() => {
-        suppliers.length < 1 && dispatch(getSuppliers(_id))
+        suppliers.length < 1 && dispatch(getAllSuppliers(_id))
         suppliers.length > 0 && changeSuppliersData(suppliers)
     }, [dispatch, _id, suppliers])
 

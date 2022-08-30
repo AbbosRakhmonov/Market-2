@@ -1,8 +1,11 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {successPayDebt, universalToast} from '../../Components/ToastMessages/ToastMessages'
+import {
+    successPayDebt,
+    universalToast,
+} from '../../Components/ToastMessages/ToastMessages'
 import Api from '../../Config/Api'
 
-export const getSuppliers = createAsyncThunk(
+export const getAllSuppliers = createAsyncThunk(
     'incoming/getsuppliers',
     async (body, {rejectWithValue}) => {
         try {
@@ -97,7 +100,7 @@ export const deleteIncoming = createAsyncThunk(
     async (body, {rejectWithValue}) => {
         try {
             const {data} = await Api.delete('/products/incoming/delete', {
-                data: body
+                data: body,
             })
             return {data, body}
         } catch (error) {
@@ -123,7 +126,7 @@ export const deleteTemporary = createAsyncThunk(
     async (body, {rejectWithValue}) => {
         try {
             const {data} = await Api.delete('/products/temporary/delete', {
-                data: body
+                data: body,
             })
             return data
         } catch (error) {
@@ -156,7 +159,6 @@ export const payDebt = createAsyncThunk(
     }
 )
 
-
 const incomingSlice = createSlice({
     name: 'incoming',
     initialState: {
@@ -175,7 +177,7 @@ const incomingSlice = createSlice({
         temporaries: [],
         temporary: {},
         searchedIncoming: [],
-        loadingExcel : false,
+        loadingExcel: false,
     },
     reducers: {
         clearError: (state) => {
@@ -197,7 +199,7 @@ const incomingSlice = createSlice({
             state.temporary = {
                 _id,
                 incomings,
-                supplier
+                supplier,
             }
         },
         clearTemporary: (state) => {
@@ -205,17 +207,17 @@ const incomingSlice = createSlice({
         },
         clearSuccesDelete: (state) => {
             state.successDelete = false
-        }
+        },
     },
     extraReducers: {
-        [getSuppliers.pending]: (state) => {
+        [getAllSuppliers.pending]: (state) => {
             state.loading = true
         },
-        [getSuppliers.fulfilled]: (state, {payload}) => {
+        [getAllSuppliers.fulfilled]: (state, {payload}) => {
             state.suppliers = payload
             state.loading = false
         },
-        [getSuppliers.rejected]: (state, {payload}) => {
+        [getAllSuppliers.rejected]: (state, {payload}) => {
             state.error = payload
             state.loading = false
         },
@@ -306,7 +308,7 @@ const incomingSlice = createSlice({
         [deleteIncoming.fulfilled]: (state) => {
             state.loading = false
             state.successDelete = true
-            universalToast('Mahsulot o\'chirildi!', 'success')
+            universalToast("Mahsulot o'chirildi!", 'success')
         },
         [deleteIncoming.rejected]: (state, {payload}) => {
             state.loading = false
@@ -345,8 +347,8 @@ const incomingSlice = createSlice({
         [payDebt.rejected]: (state, {payload}) => {
             state.loading = false
             universalToast(`${payload}`, 'error')
-        }
-    }
+        },
+    },
 })
 
 export const {
@@ -356,6 +358,6 @@ export const {
     clearSuccessTemporary,
     setTemporaryRegister,
     clearTemporary,
-    clearSuccesDelete
+    clearSuccesDelete,
 } = incomingSlice.actions
 export default incomingSlice.reducer

@@ -19,6 +19,8 @@ import {
     getSuppliersByFilter,
     updateSupplier,
 } from './suppliersSlice.js'
+
+import {getAllSuppliers} from '../Incomings/incomingSlice.js'
 import {
     successAddSupplierMessage,
     successDeleteSupplierMessage,
@@ -199,16 +201,19 @@ const Supplier = () => {
         if (successAddSupplier) {
             successAddSupplierMessage()
             dispatch(clearSuccessAddSupplier())
+            dispatch(getAllSuppliers())
             clearForm()
         }
         if (successUpdateSupplier) {
             successUpdateSupplierMessage()
             dispatch(clearSuccessUpdateSupplier())
+            dispatch(getAllSuppliers())
             setCurrentSupplier('')
             setStickyForm(false)
             clearForm()
         }
         if (successDeleteSupplier) {
+            dispatch(getAllSuppliers())
             successDeleteSupplierMessage()
             dispatch(clearSuccessDeleteSupplier())
             clearForm()
