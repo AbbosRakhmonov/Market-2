@@ -13,7 +13,6 @@ import {
     addPayment,
     getAllProducts,
     getClients,
-    getProductsFromLocalStorage,
     makePayment,
     returnSaleProducts,
     savePayment
@@ -1099,13 +1098,9 @@ const RegisterSelling = () => {
         }
     }, [activeCategory, allProducts, lastPayments])
     useEffect(() => {
+        dispatch(getAllProducts())
         dispatch(getAllPackmans())
         dispatch(getClients())
-        if (localStorage.getItem('allProducts')) {
-            dispatch(getProductsFromLocalStorage())
-        } else {
-            dispatch(getAllProducts())
-        }
         dispatch(getAllCategories())
     }, [dispatch])
     useEffect(() => {

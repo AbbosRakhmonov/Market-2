@@ -7,17 +7,20 @@ import UniversalModal from '../../Components/Modal/UniversalModal'
 import NotFind from '../../Components/NotFind/NotFind'
 import {filter, map} from 'lodash'
 import {
-    universalToast,
-    warningSellingExchanges,
     emptyProductExchanges,
+    productExchangesFilial,
     productNumberExchanges,
     productNumberMinusExchanges,
-    productExchangesFilial,
+    universalToast,
+    warningSellingExchanges
 } from '../../Components/ToastMessages/ToastMessages'
 import {getExchangesFilial, sendingFilial} from './productExchangesSlice'
 import {useDispatch, useSelector} from 'react-redux'
 import {getProducts} from './../Incomings/incomingSlice'
 import SmallLoader from '../../Components/Spinner/SmallLoader'
+import {motion} from 'framer-motion'
+
+
 function ProductExchanges() {
     const dispatch = useDispatch()
 
@@ -42,13 +45,13 @@ function ProductExchanges() {
     const [arrAdded, setArrAdded] = useState([])
     const [approveModal, setApproveModal] = useState('')
     const [filteredFilials, setFilteredFilials] = useState([
-        ...sellingProductData,
+        ...sellingProductData
     ])
     const [filteredShopProducts, setFilteredShopProducts] = useState([
-        ...productData,
+        ...productData
     ])
     const [filteredFilialNames, setFilteredFilialNames] = useState([
-        ...filialData,
+        ...filialData
     ])
 
     const handleFilial = (e) => {
@@ -77,15 +80,15 @@ function ProductExchanges() {
     const approveFilialData = (e, numberError) => {
         if (e.number > 0 && e.get !== '' && e.sell !== '') {
             setProductData((current) =>
-                current && map(current,(obj) => {
-                    if (obj.code === e.code && numberError) {
-                        return {
-                            ...obj,
-                            number: obj.number - Number(e.number),
+                    current && map(current, (obj) => {
+                        if (obj.code === e.code && numberError) {
+                            return {
+                                ...obj,
+                                number: obj.number - Number(e.number)
+                            }
                         }
-                    }
-                    return obj
-                })
+                        return obj
+                    })
             )
         }
 
@@ -113,7 +116,7 @@ function ProductExchanges() {
             productNumberMinusExchanges()
         } else {
             setSellingProductData((current) => {
-                return map(current,(obj) => {
+                return map(current, (obj) => {
                     if (obj?.code === e.code) {
                         return {
                             ...obj,
@@ -121,7 +124,7 @@ function ProductExchanges() {
                             sell: e.sell,
                             number: obj.number + Number(e.number),
                             getUSD: e.getUSD,
-                            sellUSD: e.sellUSD,
+                            sellUSD: e.sellUSD
                         }
                     }
                     return obj
@@ -133,21 +136,21 @@ function ProductExchanges() {
 
     const deletedProducts = (e) => {
         setProductData((current) =>
-            current && map(current,(obj) => {
-                if (obj.code === e.code) {
-                    return {
-                        ...obj,
-                        number: obj.number + Number(e.number),
+                current && map(current, (obj) => {
+                    if (obj.code === e.code) {
+                        return {
+                            ...obj,
+                            number: obj.number + Number(e.number)
+                        }
                     }
-                }
-                return obj
-            })
+                    return obj
+                })
         )
-        const arrSelling = filter(sellingProductData,(obj) => {
+        const arrSelling = filter(sellingProductData, (obj) => {
             return obj !== e
         })
         setSellingProductData(arrSelling)
-        const deletedCode = filter(arrAdded,(obj) => {
+        const deletedCode = filter(arrAdded, (obj) => {
             return obj !== e.code
         })
         setArrAdded(deletedCode)
@@ -156,38 +159,38 @@ function ProductExchanges() {
     const returnedDatas = (e, numberError) => {
         if (e.number > 0 && e.get !== '' && e.sell !== '') {
             setProductData((current) =>
-                current && map(current,(obj) => {
-                    if (obj.code === e.code && numberError) {
-                        return {
-                            ...obj,
-                            number: obj.number + Number(e.number),
+                    current && map(current, (obj) => {
+                        if (obj.code === e.code && numberError) {
+                            return {
+                                ...obj,
+                                number: obj.number + Number(e.number)
+                            }
                         }
-                    }
-                    return obj
-                })
+                        return obj
+                    })
             )
         }
 
         setSellingProductData((current) =>
-            current && map(current,(obj) => {
-                if (obj.number === Number(e.number)) {
-                    const SellingNumberIndex = filter(arrAdded,(info) => {
-                        return info !== e.code
-                    })
-                    setArrAdded(SellingNumberIndex)
-                }
-                if (obj.code === e.code && numberError) {
-                    return {
-                        ...obj,
-                        get: e.get,
-                        getUSD: e.getUSD,
-                        sell: e.sell,
-                        sellUSD: e.sellUSD,
-                        number: obj.number - Number(e.number),
+                current && map(current, (obj) => {
+                    if (obj.number === Number(e.number)) {
+                        const SellingNumberIndex = filter(arrAdded, (info) => {
+                            return info !== e.code
+                        })
+                        setArrAdded(SellingNumberIndex)
                     }
-                }
-                return obj
-            })
+                    if (obj.code === e.code && numberError) {
+                        return {
+                            ...obj,
+                            get: e.get,
+                            getUSD: e.getUSD,
+                            sell: e.sell,
+                            sellUSD: e.sellUSD,
+                            number: obj.number - Number(e.number)
+                        }
+                    }
+                    return obj
+                })
         )
 
         handleClickCancelToDelete()
@@ -197,7 +200,7 @@ function ProductExchanges() {
         setFilialNameSearch(value)
         if (isNaN(value)) {
             return setFilteredFilialNames(
-                filter(filialData,(item) =>
+                filter(filialData, (item) =>
                     item.filialName.toLowerCase().includes(value.toLowerCase())
                 )
             )
@@ -222,7 +225,7 @@ function ProductExchanges() {
                     )
                 } else {
                     return setFilteredShopProducts(
-                        filter(productData,(item) =>
+                        filter(productData, (item) =>
                             item.name
                                 .toLowerCase()
                                 .includes(value.toLowerCase())
@@ -250,7 +253,7 @@ function ProductExchanges() {
                     )
                 } else {
                     return setFilteredShopProducts(
-                        filter(productData,(item) => item.code.includes(value))
+                        filter(productData, (item) => item.code.includes(value))
                     )
                 }
             } else {
@@ -277,7 +280,7 @@ function ProductExchanges() {
                     )
                 } else {
                     return setFilteredFilials(
-                        filter(sellingProductData,(item) =>
+                        filter(sellingProductData, (item) =>
                             item.name
                                 .toLowerCase()
                                 .includes(value.toLowerCase())
@@ -307,7 +310,7 @@ function ProductExchanges() {
                     )
                 } else {
                     return setFilteredFilials(
-                        filter(sellingProductData,(item) =>
+                        filter(sellingProductData, (item) =>
                             item.code.includes(value)
                         )
                     )
@@ -319,40 +322,40 @@ function ProductExchanges() {
     }
 
     const sendingFilialProduct = () => {
-        const sendData = sellingProductData && map(sellingProductData,(item) => {
+        const sendData = sellingProductData && map(sellingProductData, (item) => {
             return {
                 _id: item.id,
                 total: item.number,
                 productdata: {
                     _id: item.productDataId,
                     name: item.name,
-                    code: item.code,
+                    code: item.code
                 },
                 unit: {
                     _id: item.unidId,
-                    name: item.unitName,
+                    name: item.unitName
                 },
                 category: {
                     _id: item.categoryId,
-                    code: item.categoryCode,
+                    code: item.categoryCode
                 },
                 price: {
                     incomingprice: item.getUSD,
                     incomingpriceuzs: item.get,
                     sellingprice: item.sellUSD,
-                    sellingpriceuzs: item.sell,
-                },
+                    sellingpriceuzs: item.sell
+                }
             }
         })
         const body = {
             filial: filialInformation?.id,
-            products: sendData,
+            products: sendData
         }
         if (filialInformation && sendData.length > 0) {
             dispatch(sendingFilial(body)).then((data) => {
                 if (data.meta.requestStatus === 'fulfilled') {
                     universalToast(
-                        "Maxsulot muvaffaqiyatli o'tkazildi!",
+                        'Maxsulot muvaffaqiyatli o\'tkazildi!',
                         'success'
                     )
                     setSellingProductData([])
@@ -371,8 +374,8 @@ function ProductExchanges() {
             currentPage: 0,
             countPage: 10,
             search: {
-                name: '',
-            },
+                name: ''
+            }
         }
         dispatch(getExchangesFilial(body))
     }, [dispatch])
@@ -382,7 +385,7 @@ function ProductExchanges() {
     }, [dispatch])
 
     useEffect(() => {
-        const newUpdateProduct = products && map(products,(item) => {
+        const newUpdateProduct = products && map(products, (item) => {
             return {
                 id: item._id,
                 categoryId: item.category._id,
@@ -396,7 +399,7 @@ function ProductExchanges() {
                 code: item.productdata.code,
                 number: item.total,
                 name: item.productdata.name,
-                productDataId: item.productdata._id,
+                productDataId: item.productdata._id
             }
         })
         setProductData(newUpdateProduct)
@@ -411,20 +414,20 @@ function ProductExchanges() {
     }, [productData])
 
     useEffect(() => {
-        const newUpdateFilialProduct = filialDatas && map(filialDatas,(obj) => {
+        const newUpdateFilialProduct = filialDatas && map(filialDatas, (obj) => {
             return {
                 id: obj?._id,
                 image: obj?.image,
                 filialName: obj?.name,
                 directorName: obj?.director?.firstname,
-                directorLastName: obj?.director?.lastname,
+                directorLastName: obj?.director?.lastname
             }
         })
         setFilialData(newUpdateFilialProduct)
     }, [filialDatas])
 
     useEffect(() => {
-        const newSellingsData = filter(sellingProductData,(item) => {
+        const newSellingsData = filter(sellingProductData, (item) => {
             return item?.number !== 0
         })
         setSellingProductData(newSellingsData)
@@ -442,8 +445,8 @@ function ProductExchanges() {
                     approveModal === 'modal1'
                         ? approveFilialData
                         : approveModal === 'modal2'
-                        ? returnedDatas
-                        : ''
+                            ? returnedDatas
+                            : ''
                 }
                 closeModal={handleClickCancelToDelete}
                 isOpen={modalVisible}
@@ -466,22 +469,26 @@ function ProductExchanges() {
                         />
                     </div>
                     <div className='grow relative'>
-                        <div className='absolute left-0 right-0 top-0 bottom-[1rem] overflow-auto pl-[2.5rem] pr-[1.25rem] pt-[1.25rem]'>
+                        <div
+                            className='absolute left-0 right-0 top-0 bottom-[1rem] overflow-auto pl-[2.5rem] pr-[1.25rem] pt-[1.25rem]'>
                             {filteredFilialNames.length === 0 ? (
                                 <NotFind text='Filiallar mavjud emas!' />
                             ) : (
-                                map(filteredFilialNames,(item, index) => {
+                                map(filteredFilialNames, (item, index) => {
                                     return (
-                                        <div
+                                        <motion.div
+                                            initial={{y: '100%'}}
+                                            animate={{y: '0%'}}
+                                            transition={{delay: 0, ease: 'linear'}}
                                             key={index}
-                                            className='pb-[0.675rem]'
+                                            className='pb-[0.675rem] '
                                         >
                                             <FilialCard
                                                 market={item}
                                                 onClick={handleFilial}
                                                 activeFilial={activeFilial}
                                             />
-                                        </div>
+                                        </motion.div>
                                     )
                                 })
                             )}
@@ -520,15 +527,19 @@ function ProductExchanges() {
                         </div>
                     </div>
                     <div className='grow relative'>
-                        <div className='absolute left-0 right-0 top-0 bottom-[1rem] overflow-auto pl-[1.25rem] pr-[2rem] pt-[1.25rem]'>
-                            {filteredShopProducts.length === 0 || filialInformation === "" ? (
+                        <div
+                            className='absolute left-0 right-0 top-0 bottom-[1rem] overflow-auto pl-[1.25rem] pr-[2rem] pt-[1.25rem]'>
+                            {filteredShopProducts.length === 0 || filialInformation === '' ? (
                                 <NotFind text='Maxsulotlar mavjud emas!' />
                             ) : (
-                                map(filteredShopProducts,(item, index) => {
+                                map(filteredShopProducts, (item, index) => {
                                     return (
-                                        <div
+                                        <motion.div
+                                            initial={{y: '100%'}}
+                                            animate={{y: '0%'}}
+                                            transition={{delay: 0, ease: 'linear'}}
                                             key={index}
-                                            className='pb-[0.675rem]'
+                                            className='pb-[0.675rem] '
                                         >
                                             <Exchanges
                                                 dataObject={item}
@@ -543,7 +554,7 @@ function ProductExchanges() {
                                                 onClick={productModal}
                                                 currency={currencyType}
                                             />
-                                        </div>
+                                        </motion.div>
                                     )
                                 })
                             )}
@@ -582,13 +593,17 @@ function ProductExchanges() {
                         </div>
                     </div>
                     <div className='grow relative'>
-                        <div className='absolute left-0 right-0 top-0 bottom-[1rem] pl-[2rem] pr-[2rem] pb-[0.25rem] pt-[1.25rem] overflow-auto'>
+                        <div
+                            className='absolute left-0 right-0 top-0 bottom-[1rem] pl-[2rem] pr-[2rem] pb-[0.25rem] pt-[1.25rem] overflow-auto'>
                             {filteredFilials.length === 0 ? (
                                 <NotFind text="Maxsulot o'tkazilmagan" />
                             ) : (
-                                map(filteredFilials,(item, index) => {
+                                map(filteredFilials, (item, index) => {
                                     return (
-                                        <div
+                                        <motion.div
+                                            initial={{y: '100%'}}
+                                            animate={{y: '0%'}}
+                                            transition={{delay: 0, ease: 'linear'}}
                                             key={index}
                                             className='pb-[0.675rem] '
                                         >
@@ -602,7 +617,7 @@ function ProductExchanges() {
                                                 currency={currencyType}
                                                 open={true}
                                             />
-                                        </div>
+                                        </motion.div>
                                     )
                                 })
                             )}

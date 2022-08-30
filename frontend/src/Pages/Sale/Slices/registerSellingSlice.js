@@ -1,7 +1,6 @@
-import {createAsyncThunk, createSlice, current} from '@reduxjs/toolkit'
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import Api from '../../../Config/Api.js'
 import {successSavedTemporary, universalToast} from '../../../Components/ToastMessages/ToastMessages.js'
-import {forEach, map} from 'lodash'
 
 export const getAllProducts = createAsyncThunk(
     'registerSelling/getAllProducts',
@@ -96,11 +95,6 @@ const registerSellingSlice = createSlice({
         errorMakePayment: null,
         errorSavePayment: null
     },
-    reducers: {
-        getProductsFromLocalStorage: (state) => {
-            state.allProducts = JSON.parse(localStorage.getItem('allProducts'))
-        }
-    },
     extraReducers: {
         [getAllProducts.pending]: (state) => {
             state.loadingGetAllProducts = true
@@ -135,16 +129,6 @@ const registerSellingSlice = createSlice({
         [makePayment.fulfilled]: (state, {payload}) => {
             state.loadingMakePayment = false
             state.lastPayments.unshift(payload)
-            state.allProducts = map(current(state.allProducts), (product) => {
-                const newObj = {...product}
-                forEach(payload.products, (productPayload) => {
-                    if (newObj.productdata._id === productPayload.product.productdata._id) {
-                        newObj.total = productPayload.product.total
-                    }
-                })
-                return newObj
-            })
-            localStorage.setItem('allProducts', JSON.stringify(state.allProducts))
         },
         [makePayment.rejected]:
             (state, {payload}) => {
@@ -177,16 +161,6 @@ const registerSellingSlice = createSlice({
             (state, {payload}) => {
                 state.loadingMakePayment = false
                 state.lastPayments.unshift(payload)
-                state.allProducts = map(current(state.allProducts), (product) => {
-                    const newObj = {...product}
-                    forEach(payload.products, (productPayload) => {
-                        if (newObj.productdata._id === productPayload.product.productdata._id) {
-                            newObj.total = productPayload.product.total
-                        }
-                    })
-                    return newObj
-                })
-                localStorage.setItem('allProducts', JSON.stringify(state.allProducts))
             },
         [addPayment.rejected]:
             (state, {payload}) => {
@@ -202,16 +176,6 @@ const registerSellingSlice = createSlice({
             (state, {payload}) => {
                 state.loadingMakePayment = false
                 state.lastPayments.unshift(payload)
-                state.allProducts = map(current(state.allProducts), (product) => {
-                    const newObj = {...product}
-                    forEach(payload.products, (productPayload) => {
-                        if (newObj.productdata._id === productPayload.product.productdata._id) {
-                            newObj.total = productPayload.product.total
-                        }
-                    })
-                    return newObj
-                })
-                localStorage.setItem('allProducts', JSON.stringify(state.allProducts))
             },
         [returnSaleProducts.rejected]:
             (state, {payload}) => {
@@ -222,5 +186,4 @@ const registerSellingSlice = createSlice({
             }
     }
 })
-export const {getProductsFromLocalStorage} = registerSellingSlice.actions
 export default registerSellingSlice.reducer

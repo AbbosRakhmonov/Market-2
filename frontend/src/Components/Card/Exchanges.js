@@ -63,10 +63,7 @@ function Exchanges({
     }
 
     return (
-        <motion.div
-            initial={{y: '100%'}}
-            animate={{y: '0%'}}
-            transition={{delay: 0, ease: 'linear'}}
+        <div
             className={`duration-500 product-exchanges-card ${
                 closeActive
                     ? iconsType['closeProduct'].bgCardColor
@@ -150,7 +147,7 @@ function Exchanges({
                     </div>
                 </div>
             </div>
-        </motion.div>
+        </div>
     )
 }
 
