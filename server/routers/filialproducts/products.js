@@ -1,14 +1,14 @@
-const { Transfer } = require('../../models/FilialProducts/Transfer');
+const { Transfer } = require("../../models/FilialProducts/Transfer");
 const {
   TransferProduct,
-} = require('../../models/FilialProducts/TransferProduct');
-const { Market } = require('../../models/MarketAndBranch/Market');
-const { Category } = require('../../models/Products/Category');
-const { Product } = require('../../models/Products/Product');
-const { ProductData } = require('../../models/Products/Productdata');
-const { ProductPrice } = require('../../models/Products/ProductPrice');
-const { Unit } = require('../../models/Products/Unit');
-require('../../models/Products/ProductPrice');
+} = require("../../models/FilialProducts/TransferProduct");
+const { Market } = require("../../models/MarketAndBranch/Market");
+const { Category } = require("../../models/Products/Category");
+const { Product } = require("../../models/Products/Product");
+const { ProductData } = require("../../models/Products/Productdata");
+const { ProductPrice } = require("../../models/Products/ProductPrice");
+const { Unit } = require("../../models/Products/Unit");
+require("../../models/Products/ProductPrice");
 
 // Send Products To Filial
 module.exports.registerProducts = async (req, res) => {
@@ -174,7 +174,7 @@ module.exports.registerProducts = async (req, res) => {
 
     res.status(200).json(responseTransfer);
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -254,10 +254,10 @@ module.exports.editTransfer = async (req, res) => {
     } = transferproduct;
 
     const oldTransferProduct = await TransferProduct.findById(_id)
-      .select('-__v -updatedAt -isArchive')
+      .select("-__v -updatedAt -isArchive")
       .populate(
-        'price',
-        'incomingprice sellingprice incomingpriceuzs sellingpriceuzs'
+        "price",
+        "incomingprice sellingprice incomingpriceuzs sellingpriceuzs"
       );
 
     const { incomingprice, incomingpriceuzs, sellingprice, sellingpriceuzs } =
@@ -311,13 +311,13 @@ module.exports.editTransfer = async (req, res) => {
         $lte: endDate,
       },
     })
-      .select('-__v -isArchive -updatedAt')
-      .populate('productdata', 'code name')
-      .populate('category', 'code')
-      .populate('unit', 'name')
+      .select("-__v -isArchive -updatedAt")
+      .populate("productdata", "code name")
+      .populate("category", "code")
+      .populate("unit", "name")
       .populate(
-        'price',
-        'incomingprice incomingpriceuzs sellingprice sellingpriceuzs'
+        "price",
+        "incomingprice incomingpriceuzs sellingprice sellingpriceuzs"
       );
 
     res.status(201).json({
@@ -325,7 +325,7 @@ module.exports.editTransfer = async (req, res) => {
       data: responseTransferProducts.splice(currentPage * countPage, countPage),
     });
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -372,13 +372,13 @@ module.exports.deleteTransfer = async (req, res) => {
         $lte: endDate,
       },
     })
-      .select('-__v -updatedAt -isArchive')
-      .populate('productdata', 'code name')
-      .populate('category', 'code')
-      .populate('unit', 'name')
+      .select("-__v -updatedAt -isArchive")
+      .populate("productdata", "code name")
+      .populate("category", "code")
+      .populate("unit", "name")
       .populate(
-        'price',
-        'incomingprice incomingpriceuzs sellingprice sellingpriceuzs'
+        "price",
+        "incomingprice incomingpriceuzs sellingprice sellingpriceuzs"
       );
 
     res.status(200).json({
@@ -386,7 +386,7 @@ module.exports.deleteTransfer = async (req, res) => {
       data: response.splice(currentPage * countPage, countPage),
     });
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -412,7 +412,7 @@ module.exports.getTransfers = async (req, res) => {
         $lte: endDate,
       },
     }).select(
-      'market filial products createdAt totalincomingprice totalincomingpriceuzs totalsellingprice totalsellingpriceuzs pieces'
+      "market filial products createdAt totalincomingprice totalincomingpriceuzs totalsellingprice totalsellingpriceuzs pieces"
     );
 
     res.status(200).json({
@@ -420,7 +420,7 @@ module.exports.getTransfers = async (req, res) => {
       data: transfers.splice(currentPage * countPage, countPage),
     });
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -452,13 +452,13 @@ module.exports.getTransferProducts = async (req, res) => {
         $lte: endDate,
       },
     })
-      .select('-__v -updatedAt -isArchive')
-      .populate('productdata', 'code name')
-      .populate('category', 'code')
-      .populate('unit', 'name')
+      .select("-__v -updatedAt -isArchive")
+      .populate("productdata", "code name")
+      .populate("category", "code")
+      .populate("unit", "name")
       .populate(
-        'price',
-        'incomingprice incomingpriceuzs sellingprice sellingpriceuzs'
+        "price",
+        "incomingprice incomingpriceuzs sellingprice sellingpriceuzs"
       );
 
     return res.status(200).json({
@@ -466,7 +466,7 @@ module.exports.getTransferProducts = async (req, res) => {
       data: transferProducts.splice(currentPage * countPage, countPage),
     });
   } catch (error) {
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
 
@@ -483,21 +483,20 @@ module.exports.getFilials = async (req, res) => {
       });
     }
 
-    const name = new RegExp('.*' + search ? search.name : '' + '.*', 'i');
+    const name = new RegExp(".*" + search ? search.name : "" + ".*", "i");
 
     const filials = await Market.find({
       mainmarket: market,
       name: name,
     })
-      .select('director image name phone1 createdAt')
-      .populate('director', 'firstname lastname');
+      .select("director image name phone1 createdAt")
+      .populate("director", "firstname lastname");
 
     res.status(201).json({
       count: filials.length,
       filials: filials.splice(currentPage * countPage, countPage),
     });
   } catch (error) {
-    console.log(error);
-    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };

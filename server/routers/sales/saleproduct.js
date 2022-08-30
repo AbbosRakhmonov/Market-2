@@ -276,7 +276,6 @@ module.exports.register = async (req, res) => {
 
     res.status(201).send(connector);
   } catch (error) {
-    console.log(error);
     res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
