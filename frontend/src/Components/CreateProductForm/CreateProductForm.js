@@ -1,35 +1,38 @@
 import FieldContainer from '../FieldContainer/FieldContainer'
 import Button from '../Buttons/BtnAddRemove'
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next'
 
 function CreateProductForm({
-                               searchBarcode,
-                               stickyForm,
-                               handleChangeCodeOfProduct,
-                               codeOfProduct,
-                               handleChangeNameOfProduct,
-                               nameOfProduct,
-                               numberOfProduct,
-                               handleChangeNumberOfProduct,
-                               unitOfProduct,
-                               handleChangeUnitOfProduct,
-                               handleChangePriceOfProduct,
-                               priceOfProduct,
-                               sellingPriceOfProduct,
-                               handleChangeSellingPriceOfProduct,
-                               handleEdit,
-                               addNewProduct,
-                               clearForm,
-                               pageName,
-                               unitOptions,
-                               categoryOfProduct,
-                               categoryOptions,
-                               handleChangeCategoryOfProduct,
-                               checkOfProduct,
-                               handleChangeCheckOfProduct
-                           }) 
-                           {
-                               const {t} = useTranslation(['common'])
+    searchBarcode,
+    stickyForm,
+    handleChangeCodeOfProduct,
+    codeOfProduct,
+    handleChangeNameOfProduct,
+    nameOfProduct,
+    numberOfProduct,
+    handleChangeNumberOfProduct,
+    unitOfProduct,
+    handleChangeUnitOfProduct,
+    handleChangePriceOfProduct,
+    priceOfProduct,
+    sellingPriceOfProduct,
+    handleChangeSellingPriceOfProduct,
+    handleEdit,
+    addNewProduct,
+    clearForm,
+    pageName,
+    unitOptions,
+    categoryOfProduct,
+    categoryOptions,
+    handleChangeCategoryOfProduct,
+    checkOfProduct,
+    handleChangeCheckOfProduct,
+    tradePrice,
+    handleChangeTradePrice,
+    minimumCount,
+    handleChangeMinimumCount,
+}) {
+    const {t} = useTranslation(['common'])
     return (
         <form
             className={`flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200 ${
@@ -40,7 +43,7 @@ function CreateProductForm({
                 {/* -- maxsulotlar checki -- */}
                 <FieldContainer
                     label={t('Shtrix kodi')}
-                    placeholder={(`${t('misol')}: 123456789`)}
+                    placeholder={`${t('misol')}: 123456789`}
                     onChange={handleChangeCheckOfProduct}
                     value={checkOfProduct}
                     maxWidth={'w-[10rem]'}
@@ -61,7 +64,7 @@ function CreateProductForm({
                 {/* -- maxulot kodi -- */}
                 <FieldContainer
                     label={t('Maxsulot kodi')}
-                    placeholder={(`${t('misol')}: 1234`)}
+                    placeholder={`${t('misol')}: 1234`}
                     onChange={handleChangeCodeOfProduct}
                     value={codeOfProduct}
                     type={'text'}
@@ -71,7 +74,7 @@ function CreateProductForm({
                 {/* -- maxsulotlar nomi -- */}
                 <FieldContainer
                     label={t('Maxsulot nomi')}
-                    placeholder={(`${t('misol')}: Acer`)}
+                    placeholder={`${t('misol')}: Acer`}
                     onChange={handleChangeNameOfProduct}
                     value={nameOfProduct}
                 />
@@ -94,7 +97,7 @@ function CreateProductForm({
                             value={numberOfProduct}
                             onChange={handleChangeNumberOfProduct}
                             label={t('Maxsulot soni')}
-                            placeholder={(`${t('misol')}: 100`)}
+                            placeholder={`${t('misol')}: 100`}
                             type={'text'}
                         />
                     </>
@@ -107,7 +110,7 @@ function CreateProductForm({
                             value={priceOfProduct}
                             onChange={handleChangePriceOfProduct}
                             label={t('Keltirilgan narxi')}
-                            placeholder={(`${t('misol')}: 100`)}
+                            placeholder={`${t('misol')}: 100`}
                             type={'text'}
                         />
 
@@ -116,18 +119,38 @@ function CreateProductForm({
                             value={sellingPriceOfProduct}
                             onChange={handleChangeSellingPriceOfProduct}
                             label={t('Sotish narxi')}
-                            placeholder={(`${t('misol')}: 200`)}
+                            placeholder={`${t('misol')}: 200`}
+                            type={'text'}
+                        />
+                        <FieldContainer
+                            value={tradePrice}
+                            onChange={handleChangeTradePrice}
+                            label={'Optom narxi'}
+                            placeholder={`${t('misol')}: 300`}
+                            type={'text'}
+                        />
+                        <FieldContainer
+                            value={minimumCount}
+                            onChange={handleChangeMinimumCount}
+                            label={'Minimum qiymat'}
+                            placeholder={`${t('misol')}: 300`}
                             type={'text'}
                         />
                     </>
                 )}
-                <div className={'flex gap-[1.25rem] min-w-[20rem]'}>
+            </div>
+            <div className='flex justify-end'>
+                <div
+                    className={'flex gap-[1.25rem] min-w-[20rem] max-w-[21rem]'}
+                >
                     <Button
                         onClick={stickyForm ? handleEdit : addNewProduct}
                         add={!stickyForm}
                         edit={stickyForm}
                         text={
-                            stickyForm ? t('Saqlash') : t('Yangi maxsulot qo`shish')
+                            stickyForm
+                                ? t('Saqlash')
+                                : t('Yangi maxsulot qo`shish')
                         }
                     />
                     <Button onClick={clearForm} text={t('Tozalash')} />

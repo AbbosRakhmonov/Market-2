@@ -98,6 +98,9 @@ function Products() {
         count: 0,
     })
     const [importLoading, setImportLoading] = useState(false)
+    const [minimumCount, setMinimumCount] = useState('')
+    const [tradePrice, setTradePrice] = useState('')
+    const [tradePriceUzs, setTradePriceUzs] = useState('')
 
     // modal toggle
     const toggleModal = () => setModalVisible(!modalVisible)
@@ -133,6 +136,18 @@ function Products() {
                     ? 'price.sellingpriceuzs'
                     : 'price.sellingprice',
         },
+        {
+            title: 'Optom',
+            filter:
+                currencyType === 'UZS'
+                    ? 'price.tradeprice'
+                    : 'price.tradepriceuzs',
+        },
+        {
+            title: 'Minimum qiymat',
+            filter: 'minimumcount',
+            styles: 'w-[5%]',
+        },
         {title: ''},
     ]
 
@@ -147,6 +162,9 @@ function Products() {
         {name: 'Kelish narxi UZS', value: 'incomingpriceuzs'},
         {name: 'Sotish narxi USD', value: 'sellingprice'},
         {name: 'Sotish narxi UZS', value: 'sellingpriceuzs'},
+        {name: 'Optom narxi USD', value: 'tradeprice'},
+        {name: 'Optom narxi UZS', value: 'tradepriceuzs'},
+        {name: 'Minimum qiymat', value: 'minimumcount'},
     ]
 
     // handle change of inputs
@@ -205,7 +223,24 @@ function Products() {
         }
         dispatch(getCodeOfCategory(body))
     }
-
+    const handleChangeMinimumCount = (e) => {
+        let val = e.target.value
+        if (regexForTypeNumber.test(val)) {
+            setMinimumCount(val)
+        }
+    }
+    const handleChangeTradePrice = (e) => {
+        let val = e.target.value
+        if (regexForTypeNumber.test(val)) {
+            if (currencyType === 'UZS') {
+                setTradePriceUzs(val)
+                setTradePrice(UzsToUsd(val, currency))
+            } else {
+                setTradePrice(val)
+                setTradePriceUzs(UsdToUzs(val, currency))
+            }
+        }
+    }
     // handle change of search inputs
     const filterByCode = (e) => {
         let val = e.target.value
@@ -348,6 +383,8 @@ function Products() {
                 priceOfProduct,
                 sellingPriceOfProduct,
                 checkOfProduct,
+                tradePrice,
+                minimumCount,
             ])
             if (filter) {
                 warningEmptyInput()
@@ -373,6 +410,9 @@ function Products() {
                         incomingpriceuzs: priceOfProduct,
                         sellingpriceuzs: sellingPriceOfProduct,
                         barcode: checkOfProduct,
+                        tradeprice: tradePrice,
+                        tradepriceuzs: tradePriceUzs,
+                        minimumcount: minimumCount,
                     },
                 }
                 dispatch(addProduct(body)).then(({error}) => {
@@ -399,6 +439,9 @@ function Products() {
         setSellingPriceOfProductUsd('')
         setUnitOfProduct('')
         setCategoryOfProduct('')
+        setTradePrice('')
+        setTradePriceUzs('')
+        setMinimumCount('')
         setCurrentProduct(null)
         setStickyForm(false)
     }
@@ -411,6 +454,8 @@ function Products() {
             categoryOfProduct,
             priceOfProduct,
             sellingPriceOfProduct,
+            tradePrice,
+            minimumCount,
         ])
         if (filter) {
             warningEmptyInput()
@@ -430,6 +475,9 @@ function Products() {
                     sellingpriceuzs: sellingPriceOfProduct,
                     total: numberOfProduct,
                     barcode: checkOfProduct,
+                    tradeprice: tradePrice,
+                    tradepriceuzs: tradePriceUzs,
+                    minimumcount: minimumCount,
                 },
                 currentPage,
                 countPage: showByTotal,
@@ -658,6 +706,9 @@ function Products() {
             t('Kelish narxi UZS'),
             t('Sotish narxi USD'),
             t('Sotish narxi UZS'),
+            'Optom narxi USD',
+            'Optom narxi UZS',
+            'Minimum qiymat',
         ]
         const body = {
             search: {
@@ -680,6 +731,9 @@ function Products() {
                     incomingpriceuzs: item?.price?.incomingpriceuzs || '',
                     sellingprice: item?.price?.sellingprice || '',
                     sellingpriceuzs: item?.price?.sellingpriceuzs || '',
+                    tradeprice: item?.price?.tradeprice || '',
+                    tradepriceuzs: item?.price?.tradepriceuzs || '',
+                    minimumcount: item?.minimumcount || '',
                 }))
                 exportExcel(newData, fileName, exportHeader)
             }
@@ -718,11 +772,14 @@ function Products() {
                 unit,
                 total,
                 category,
+                minimumcount,
                 price: {
                     sellingprice,
                     incomingprice,
                     sellingpriceuzs,
                     incomingpriceuzs,
+                    tradeprice,
+                    tradepriceuzs,
                 },
             } = currentProduct
             setCodeOfProduct(code)
@@ -741,6 +798,9 @@ function Products() {
             setPriceOfProductsUsd(incomingprice)
             setSellingPriceOfProductUsd(sellingprice)
             setCheckOfProduct(barcode ? barcode : '')
+            setMinimumCount(minimumcount)
+            setTradePrice(tradeprice)
+            setTradePriceUzs(tradepriceuzs)
         }
     }, [currentProduct])
     useEffect(() => {
@@ -868,6 +928,10 @@ function Products() {
                 unitOptions={unitOptions}
                 categoryOptions={categoryOptions}
                 searchBarcode={searchBarcode}
+                minimumCount={minimumCount}
+                handleChangeMinimumCount={handleChangeMinimumCount}
+                tradePrice={currencyType === 'USD' ? tradePrice : tradePriceUzs}
+                handleChangeTradePrice={handleChangeTradePrice}
             />
             <div className={'flex justify-between items-center mainPadding'}>
                 <div className={'flex gap-[1.5rem]'}>

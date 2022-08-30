@@ -8,6 +8,8 @@ const productprice = new Schema(
     sellingpriceuzs: { type: Number },
     incomingprice: { type: Number },
     incomingpriceuzs: { type: Number },
+    tradeprice: { type: Number },
+    tradepriceuzs: { type: Number },
     proceint: { type: Number },
     product: { type: Schema.Types.ObjectId, ref: 'Product' },
     incoming: {

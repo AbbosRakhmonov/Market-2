@@ -42,6 +42,7 @@ const PayDebts = lazy(() => import('./PayDebts/PayDebts.js'))
 const ProductExchanges = lazy(() =>
     import('./ProductExchanges/ProductExchanges.js')
 )
+const ProductMinimum = lazy(() => import('./ProductReport/ProductMinimum.js'))
 // <-- pages
 
 const directorRoutes = [
@@ -80,8 +81,12 @@ const directorRoutes = [
         element: <Products />,
     },
     {
-        path: '/maxsulotlar/hisobot',
+        path: '/maxsulotlar/hisobot/sotilganlar',
         element: <ProductReport />,
+    },
+    {
+        path: '/maxsulotlar/hisobot/kamqolganlar',
+        element: <ProductMinimum />,
     },
     {
         path: '/maxsulotlar/kategoriyalar',

@@ -66,7 +66,8 @@ function Table({
     decrement,
     lowUnitpriceProducts,
     linkToSupplierReport,
-    printedData
+    printedData,
+    productminimumpage,
 }) {
     const checkRows = () => {
         switch (page) {
@@ -80,6 +81,7 @@ function Table({
                         Edit={Edit}
                         Delete={Delete}
                         currency={currency}
+                        productminimumpage={productminimumpage}
                     />
                 )
             case 'adminProduct':

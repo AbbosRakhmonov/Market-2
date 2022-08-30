@@ -1,18 +1,19 @@
-const { Schema, model, Types } = require("mongoose");
-const Joi = require("joi");
+const { Schema, model, Types } = require('mongoose');
+const Joi = require('joi');
 
 const product = new Schema(
   {
     name: { type: String },
     code: { type: Number },
     total: { type: Number, default: 0 },
-    productdata: { type: Schema.Types.ObjectId, ref: "ProductData" },
-    unit: { type: Schema.Types.ObjectId, ref: "Unit" },
-    price: { type: Schema.Types.ObjectId, ref: "ProductPrice" },
-    category: { type: Schema.Types.ObjectId, ref: "Category" },
-    producttype: { type: Schema.Types.ObjectId, ref: "ProductType" },
-    brand: { type: Schema.Types.ObjectId, ref: "Brand" },
-    market: { type: Schema.Types.ObjectId, ref: "Market", required: true },
+    minimumcount: { type: Number, default: 0 },
+    productdata: { type: Schema.Types.ObjectId, ref: 'ProductData' },
+    unit: { type: Schema.Types.ObjectId, ref: 'Unit' },
+    price: { type: Schema.Types.ObjectId, ref: 'ProductPrice' },
+    category: { type: Schema.Types.ObjectId, ref: 'Category' },
+    producttype: { type: Schema.Types.ObjectId, ref: 'ProductType' },
+    brand: { type: Schema.Types.ObjectId, ref: 'Brand' },
+    market: { type: Schema.Types.ObjectId, ref: 'Market', required: true },
     isArchive: { type: Boolean, default: false },
   },
   {
@@ -30,11 +31,14 @@ function validateProduct(product) {
     incomingpriceuzs: Joi.number(),
     sellingpriceuzs: Joi.number(),
     total: Joi.number(),
+    minimumcount: Joi.number(),
     category: Joi.string(),
     producttype: Joi.string(),
     brand: Joi.string(),
     market: Joi.string().required(),
     barcode: Joi.string(),
+    tradeprice: Joi.number(),
+    tradepriceuzs: Joi.number(),
   });
 
   return schema.validate(product);
@@ -53,6 +57,9 @@ function validateProductExcel(product) {
     sellingprice: Joi.number(),
     incomingpriceuzs: Joi.number(),
     sellingpriceuzs: Joi.number(),
+    tradeprice: Joi.number(),
+    tradepriceuzs: Joi.number(),
+    minimumcount: Joi.number(),
     total: Joi.number(),
   });
 
@@ -61,4 +68,4 @@ function validateProductExcel(product) {
 
 module.exports.validateProduct = validateProduct;
 module.exports.validateProductExcel = validateProductExcel;
-module.exports.Product = model("Product", product);
+module.exports.Product = model('Product', product);

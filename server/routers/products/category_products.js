@@ -86,6 +86,10 @@ router.post('/product/productcode', auth, (req, res) => {
   require('./product').productcode(req, res);
 });
 
+router.post('/product/getminimumproducts', auth, (req, res) => {
+  require('./productminimum').getProductsMinimum(req, res);
+});
+
 //========================================================
 // PRODUCTTYPE
 router.post('/producttype/register', auth, (req, res) => {
