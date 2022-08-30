@@ -15,7 +15,7 @@ import {
 } from '../Products/Create/productSlice.js'
 import {useReactToPrint} from 'react-to-print'
 import {BarCode} from '../../Components/BarCode/BarCode.js'
-import {universalSort, exportExcel} from '../../App/globalFunctions.js'
+import {exportExcel, universalSort} from '../../App/globalFunctions.js'
 import {useTranslation} from 'react-i18next'
 import {filter, map} from 'lodash'
 
@@ -75,15 +75,15 @@ const Labels = () => {
     const [searchByCode, setSearchByCode] = useState('')
     const [searchByName, setSearchByName] = useState('')
 
-    const [productForCheque, setProductForCheque] = useState(null)
     const [productForCheques, setProductForCheques] = useState(null)
-    const [countOfCheque, setCountOfCheque] = useState(null)
-    const [countOfCheques, setCountOfCheques] = useState(null)
+    const [countOfCheques, setCountOfCheques] = useState('')
     const [sorItem, setSorItem] = useState({
         filter: '',
         sort: '',
         count: 0
     })
+    const [dataLoaded, setDataLoaded] = useState(false)
+    const [printedData, setPrintedData] = useState([])
 
     // handle change of search inputs
     const filterByCode = (e) => {
@@ -194,29 +194,45 @@ const Labels = () => {
 
     // handle print
     const componentRef = useRef()
+    const onBeforeGetContentResolve = useRef()
 
+    const handleOnBeforeGetContent = () => {
+        setDataLoaded(true)
+        return new Promise((resolve) => {
+            onBeforeGetContentResolve.current = resolve
+            setTimeout(() => {
+                setDataLoaded(false)
+                resolve()
+            }, 2000)
+        })
+    }
     const handleChequeCounts = (e) => {
-        setCountOfCheques(parseInt(e.target.value))
+        setCountOfCheques(e.target.value)
         setProductForCheques(searchedData.length > 0 ? searchedData : data)
     }
 
     const handleChequeCount = (e, product) => {
-        setCountOfCheque(parseInt(e.target.value))
-        setProductForCheque(product)
+        const prevIndex = printedData.findIndex(item => item.product._id === product._id)
+        if (prevIndex !== -1) {
+            if (e.target.value.trim() !== '') {
+                printedData[prevIndex].numberOfChecks = Number(e.target.value)
+            } else {
+                printedData.splice(prevIndex, 1)
+            }
+            setPrintedData([...printedData])
+        } else {
+            setPrintedData([...printedData, {product, numberOfChecks: Number(e.target.value)}])
+        }
     }
 
     const handlePrint = useReactToPrint({
-        content: () => componentRef.current
+        content: () => componentRef.current,
+        onBeforeGetContent: handleOnBeforeGetContent
     })
 
-    const handlePrintToProduct = async () => {
+    const handlePrintToProduct = async (product, single) => {
+        if (single) setPrintedData([...filter(printedData, (item) => item.product._id === product._id)])
         await handlePrint()
-        setTimeout(() => {
-            setCountOfCheque('')
-            setCountOfCheques(null)
-            setProductForCheque(null)
-            setProductForCheques(null)
-        }, 1000)
     }
 
     const filterByCodeAndNameAndCategoryWhenPressEnter = (e) => {
@@ -251,25 +267,25 @@ const Labels = () => {
             'Sotish narxi jami USD'
         ]
         dispatch(getProductsAll()).then(({error, payload}) => {
-            if(!error){
-                    const ReportData = map(payload, (item, index) => ({
+            if (!error) {
+                const ReportData = map(payload, (item, index) => ({
                     nth: index + 1,
-                    code: item?.productdata?.code || "",
-                    name: item?.productdata?.name || "",
-                    total:( item.total + item?.unit?.name) || "",
-                    incomingprice: item?.price?.incomingprice || "",
-                    incomingpriceuzs: item?.price?.incomingpriceuzs || "",
+                    code: item?.productdata?.code || '',
+                    name: item?.productdata?.name || '',
+                    total: (item.total + item?.unit?.name) || '',
+                    incomingprice: item?.price?.incomingprice || '',
+                    incomingpriceuzs: item?.price?.incomingpriceuzs || '',
                     incomingpricealluzs:
                         item?.price?.incomingpriceuzs * item.total,
                     incomingpriceallusd:
                         item?.price?.incomingprice * item.total,
-                    sellingprice: item?.price?.sellingprice || "",
-                    sellingpriceuzs: item?.price?.sellingpriceuzs || "",
+                    sellingprice: item?.price?.sellingprice || '',
+                    sellingpriceuzs: item?.price?.sellingpriceuzs || '',
                     sellingalluzs:
                         item?.price?.sellingpriceuzs * item.total,
                     sellingallusd: item?.price?.sellingprice * item.total
-                    }))
-                    exportExcel(ReportData, fileName, exportProductHead)
+                }))
+                exportExcel(ReportData, fileName, exportProductHead)
             }
         })
     }
@@ -297,8 +313,22 @@ const Labels = () => {
     useEffect(() => {
         setSearchedData(searchedProducts)
     }, [searchedProducts])
-
-
+    useEffect(() => {
+        if (
+            dataLoaded &&
+            typeof onBeforeGetContentResolve.current === 'function'
+        ) {
+            onBeforeGetContentResolve.current()
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [onBeforeGetContentResolve.current, dataLoaded])
+    useEffect(() => {
+        if (!dataLoaded) {
+            setPrintedData([])
+            setCountOfCheques('')
+            setProductForCheques(null)
+        }
+    }, [dataLoaded])
     return (
         <motion.section
             key='content'
@@ -311,7 +341,7 @@ const Labels = () => {
             }}
             transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
         >
-            {loadingExcel && (
+            {loadingExcel || dataLoaded && (
                 <div
                     className='fixed backdrop-blur-[2px] z-[100] left-0 top-0 right-0 bottom-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
                     <Spinner />
@@ -337,6 +367,7 @@ const Labels = () => {
                 filterByName={filterByName}
                 searchByCode={searchByCode}
                 searchByName={searchByName}
+                numberOfChecks={countOfCheques}
                 filterByTotal={filterByTotal}
                 filterByCodeAndNameAndCategoryWhenPressEnter={
                     filterByCodeAndNameAndCategoryWhenPressEnter
@@ -360,9 +391,9 @@ const Labels = () => {
                         Sort={filterData}
                         sortItem={sorItem}
                         placeholder={'misol : 10'}
-                        productCheque={{}}
                         changeHandler={handleChequeCount}
                         Print={handlePrintToProduct}
+                        printedData={printedData}
                     />
                 )}
             </div>
@@ -370,10 +401,9 @@ const Labels = () => {
                 <BarCode
                     currency={currencyType}
                     componentRef={componentRef}
-                    countOfCheque={countOfCheque}
                     countOfCheques={countOfCheques}
-                    productForCheque={productForCheque}
                     productForCheques={productForCheques}
+                    printedData={printedData}
                     marketName={name}
                 />
             </div>

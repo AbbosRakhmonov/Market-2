@@ -1,23 +1,30 @@
 import React from 'react'
 import {Body} from './Body.js'
-import {uniqueId,map} from 'lodash'
-import {range} from 'lodash/util.js'
+import {map, range, uniqueId} from 'lodash'
 
-export const BarCode = ({
-                            countOfCheques,
-                            productForCheque,
-                            productForCheques,
-                            componentRef,
-                            currency,
-                            countOfCheque,
-                            marketName
-                        }) => {
+const repeat = (count, element) => {
+    let result = []
+    for (let i = 0; i < count; i++) {
+        result.push(element)
+    }
+    return result
+}
+
+export const BarCode = (
+    {
+        countOfCheques,
+        productForCheques,
+        printedData,
+        componentRef,
+        currency,
+        marketName
+    }) => {
     return (
         <div ref={componentRef}>
-            <div>
-                {productForCheque &&
-                    countOfCheque &&
-                    range(0, countOfCheque).map(() => {
+            {productForCheques &&
+                countOfCheques &&
+                map(productForCheques, (productForCheque) =>
+                    range(0, countOfCheques).map(() => {
                         return (
                             <Body
                                 key={uniqueId('barCode')}
@@ -26,22 +33,20 @@ export const BarCode = ({
                                 marketName={marketName}
                             />
                         )
-                    })}
-                {productForCheques &&
-                    countOfCheques &&
-                    map(productForCheques,(productForCheque) =>
-                        range(0, countOfCheques).map(() => {
-                            return (
-                                <Body
-                                    key={uniqueId('barCode')}
-                                    currency={currency}
-                                    product={productForCheque}
-                                    marketName={marketName}
-                                />
-                            )
-                        })
-                    )}
-            </div>
+                    })
+                )}
+            {
+                map(printedData, item => <div key={uniqueId('barCodeContainer')}>
+                    {
+                        map(repeat(item.numberOfChecks, item.product), (product) => <Body
+                            key={uniqueId('barCode')}
+                            currency={currency}
+                            product={product}
+                            marketName={marketName}
+                        />)
+                    }
+                </div>)
+            }
         </div>
     )
 }

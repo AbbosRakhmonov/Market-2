@@ -42,8 +42,6 @@ function Table({
     Delete,
     currency,
     changeHandler,
-    addProductCheque,
-    productCheque,
     Print,
     inputValue,
     inputDisabled,
@@ -68,6 +66,7 @@ function Table({
     decrement,
     lowUnitpriceProducts,
     linkToSupplierReport,
+    printedData
 }) {
     const checkRows = () => {
         switch (page) {
@@ -135,10 +134,8 @@ function Table({
                         Delete={Delete}
                         currency={currency}
                         changeHandler={changeHandler}
-                        addProductCheque={addProductCheque}
-                        productCheque={productCheque}
                         Print={Print}
-                        inputValue={inputValue}
+                        printedData={printedData}
                     />
                 )
             case 'registerincoming':
