@@ -419,8 +419,8 @@ function Table({
     }
     return (
         <table className='overflow-x-auto w-full'>
-            <thead className='rounded-t-lg'>
-                {<Thead headers={headers} Sort={Sort} sortItem={sortItem} />}
+            <thead className='rounded-t-lg sticky top-0'>
+            <Thead headers={headers} Sort={Sort} sortItem={sortItem} />
             </thead>
             <tbody>{checkRows()}</tbody>
             {footer && <tfoot>{checkFooters()}</tfoot>}

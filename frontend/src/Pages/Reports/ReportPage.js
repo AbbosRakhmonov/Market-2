@@ -723,7 +723,7 @@ const ReportPage = () => {
                     />
                 )}
             </div>
-            <div className='mainPadding'>
+            <div className='tableContainerPadding'>
                 {currentData.length > 0 && (
                     <Table
                         page={id}

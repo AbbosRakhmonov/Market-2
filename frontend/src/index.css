@@ -291,7 +291,7 @@
     }
 
     .tableContainerPadding {
-        @apply pl-[2.5rem] pr-[1.25rem] pb-[1.25rem];
+        @apply pl-[2.5rem] pr-[1.25rem] pb-[1.25rem] overflow-y-auto max-h-[28rem] mb-[1rem];
     }
 
     .stickyForm {
@@ -680,7 +680,6 @@
     }
 
     /* Loader style end */
-
     /* product exchanges style */
     .product-exchanges-card {
         @apply relative border-2 rounded-lg h-auto p-[1.25rem] shadow-[0px_10px_10px_rgba(0,0,0,0.05)]
@@ -694,7 +693,7 @@
         @apply absolute top-[36%] left-[-1.15rem] w-[2.125rem] h-[2.125rem] rounded-full bg-[#F79009] border border-[#F79009] z-20 flex justify-center items-center shadow-[0px_10px_10px_rgba(0,0,0,0.05)] active:shadow-none cursor-pointer
     }
 
-    .product-exchanges-card-text{
+    .product-exchanges-card-text {
         @apply text-black-700 font-[400] text-[0.875rem] leading-[1rem] mb-[1.25rem]
     }
 
@@ -706,13 +705,15 @@
         @apply flex justify-between leading-[0.875rem]
     }
 
-    .product-exchanges-span{
+    .product-exchanges-span {
         @apply text-[0.75rem] py-[0.125rem] px-[0.675rem] rounded-[3.125rem] text-white-900
     }
+
     .product-exchange-modal-span {
         @apply py-[0.125rem] px-[0.625rem] rounded-[3.125rem] text-white-900 text-[1rem] font-[400] leading-[1rem]
     }
-    .product-exchange-modal-text{
+
+    .product-exchange-modal-text {
         @apply text-[1rem] font-[300] text-black-700 w-full flex items-center justify-between
     }
 

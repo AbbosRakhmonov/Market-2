@@ -500,7 +500,7 @@ const PayDebts = () => {
                     filterByClientName={searchClientName}
                 />
             </div>
-            <div className='mainPadding'>
+            <div className='tableContainerPadding'>
                 {currentData.length > 0 && (
                     <Table
                         page={'debts'}

@@ -456,7 +456,7 @@ const IncomingsList = () => {
                     filterByDelivererName={searchSupplier}
                 />
             </div>
-            <div className='mainPadding'>
+            <div className='tableContainerPadding'>
                 <Table
                     page={'incomings'}
                     headers={headers}

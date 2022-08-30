@@ -231,7 +231,7 @@ const SellersReport = () => {
             </div>
             {data.length > 0 && (
                 <>
-                    <div className='mainPadding'>
+                    <div className='tableContainerPadding'>
                         <Table
                             data={generalReport}
                             currency={currencyType}
@@ -239,7 +239,7 @@ const SellersReport = () => {
                             headers={headersInfo}
                         />
                     </div>
-                    <div className='mainPadding'>
+                    <div className='tableContainerPadding'>
                         <Table
                             data={data}
                             currentPage={currentPage}
