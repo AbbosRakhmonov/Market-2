@@ -2,25 +2,25 @@ const {
   Product,
   validateProduct,
   validateProductExcel,
-} = require("../../models/Products/Product");
-const { Market } = require("../../models/MarketAndBranch/Market");
-const { Category } = require("../../models/Products/Category");
-const { ProductType } = require("../../models/Products/ProductType");
-const { Unit } = require("../../models/Products/Unit");
-const { Brand } = require("../../models/Products/Brand");
-const { ProductPrice } = require("../../models/Products/ProductPrice");
+} = require('../../models/Products/Product');
+const { Market } = require('../../models/MarketAndBranch/Market');
+const { Category } = require('../../models/Products/Category');
+const { ProductType } = require('../../models/Products/ProductType');
+const { Unit } = require('../../models/Products/Unit');
+const { Brand } = require('../../models/Products/Brand');
+const { ProductPrice } = require('../../models/Products/ProductPrice');
 const {
   FilialProduct,
   validateFilialProduct,
-} = require("../../models/FilialProducts/FilialProduct");
-const { ProductData } = require("../../models/Products/Productdata");
-const ObjectId = require("mongodb").ObjectId;
+} = require('../../models/FilialProducts/FilialProduct');
+const { ProductData } = require('../../models/Products/Productdata');
+const ObjectId = require('mongodb').ObjectId;
 const {
   Exchangerate,
   validateExchangerate,
-} = require("../../models/Exchangerate/Exchangerate");
+} = require('../../models/Exchangerate/Exchangerate');
 
-const filter = require("lodash").filter;
+const filter = require('lodash').filter;
 
 //Product registerall
 module.exports.registerAll = async (req, res) => {
@@ -76,6 +76,9 @@ module.exports.registerAll = async (req, res) => {
         incomingpriceuzs,
         sellingpriceuzs,
         total,
+        tradeprice,
+        tradepriceuzs,
+        minimumcount,
       } = product;
 
       let categor = await Category.findOne({
@@ -95,7 +98,7 @@ module.exports.registerAll = async (req, res) => {
       const newProductData = new ProductData({
         barcode: barcode
           ? barcode
-          : "47800" + categor.code.toString() + code.toString(),
+          : '47800' + categor.code.toString() + code.toString(),
         code,
         name,
         category: categor._id,
@@ -109,6 +112,7 @@ module.exports.registerAll = async (req, res) => {
         market,
         unit,
         total: Math.round(total * 1000) / 1000,
+        minimumcount: minimumcount ? minimumcount : 0,
       });
 
       // Create Price
@@ -123,6 +127,8 @@ module.exports.registerAll = async (req, res) => {
         sellingpriceuzs: sellingpriceuzs
           ? Math.round(sellingpriceuzs * 1) / 1
           : 0,
+        tradeprice: tradeprice ? Math.round(tradeprice * 1000) / 1000 : 0,
+        tradepriceuzs: tradepriceuzs ? Math.round(tradepriceuzs * 1) / 1 : 0,
         market,
       });
       await newPrice.save();
@@ -171,38 +177,38 @@ module.exports.registerAll = async (req, res) => {
     }
 
     const productcode = new RegExp(
-      ".*" + search ? search.code : "" + ".*",
-      "i"
+      '.*' + search ? search.code : '' + '.*',
+      'i'
     );
     const productname = new RegExp(
-      ".*" + search ? search.name : "" + ".*",
-      "i"
+      '.*' + search ? search.name : '' + '.*',
+      'i'
     );
     const productcategory = new RegExp(
-      ".*" + search ? search.category : "" + ".*",
-      "i"
+      '.*' + search ? search.category : '' + '.*',
+      'i'
     );
 
     const allproducts = await Product.find({
       market,
     })
       .sort({ code: 1 })
-      .select("total market category")
+      .select('total market category minimumcount')
       .populate(
-        "price",
-        "incomingprice sellingprice incomingpriceuzs sellingpriceuzs"
+        'price',
+        'incomingprice sellingprice incomingpriceuzs sellingpriceuzs tradeprice tradepriceuzs'
       )
       .populate({
-        path: "productdata",
-        select: "name code barcode",
+        path: 'productdata',
+        select: 'name code barcode',
         match: { name: productname, code: productcode },
       })
       .populate({
-        path: "category",
-        select: "name code",
+        path: 'category',
+        select: 'name code',
         match: { code: productcategory },
       })
-      .populate("unit", "name");
+      .populate('unit', 'name');
 
     let filtered = filter(
       allproducts,
@@ -216,7 +222,7 @@ module.exports.registerAll = async (req, res) => {
       count,
     });
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -242,6 +248,9 @@ module.exports.register = async (req, res) => {
       sellingprice,
       incomingpriceuzs,
       sellingpriceuzs,
+      tradeprice,
+      tradepriceuzs,
+      minimumcount,
     } = req.body.product;
     const marke = await Market.findById(market);
 
@@ -305,6 +314,7 @@ module.exports.register = async (req, res) => {
       category,
       market,
       unit,
+      minimumcount,
       total: Math.round(total * 100) / 100,
     });
 
@@ -319,6 +329,8 @@ module.exports.register = async (req, res) => {
       sellingpriceuzs: sellingpriceuzs
         ? Math.round(sellingpriceuzs * 1) / 1
         : 0,
+      tradeprice: tradeprice ? Math.round(tradeprice * 1000) / 1000 : 0,
+      tradepriceuzs: tradepriceuzs ? Math.round(tradepriceuzs * 1) / 1 : 0,
       market,
     });
 
@@ -343,40 +355,40 @@ module.exports.register = async (req, res) => {
     });
 
     const productcode = new RegExp(
-      ".*" + search ? search.code : "" + ".*",
-      "i"
+      '.*' + search ? search.code : '' + '.*',
+      'i'
     );
 
     const productcategory = new RegExp(
-      ".*" + search ? search.category : "" + ".*",
-      "i"
+      '.*' + search ? search.category : '' + '.*',
+      'i'
     );
 
     const productname = new RegExp(
-      ".*" + search ? search.name : "" + ".*",
-      "i"
+      '.*' + search ? search.name : '' + '.*',
+      'i'
     );
 
     const products = await Product.find({
       market,
     })
       .sort({ code: -1 })
-      .select("total market category")
+      .select('total market category minimumcount')
       .populate(
-        "price",
-        "incomingprice sellingprice incomingpriceuzs sellingpriceuzs"
+        'price',
+        'incomingprice sellingprice incomingpriceuzs sellingpriceuzs tradeprice tradepriceuzs'
       )
       .populate({
-        path: "productdata",
-        select: "name code barcode",
+        path: 'productdata',
+        select: 'name code barcode',
         match: { name: productname, code: productcode },
       })
       .populate({
-        path: "category",
-        select: "name code",
+        path: 'category',
+        select: 'name code',
         match: { code: productcategory },
       })
-      .populate("unit", "name");
+      .populate('unit', 'name');
 
     let filtered = filter(
       products,
@@ -390,7 +402,7 @@ module.exports.register = async (req, res) => {
       count,
     });
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -409,9 +421,12 @@ module.exports.update = async (req, res) => {
       sellingprice,
       incomingpriceuzs,
       sellingpriceuzs,
+      tradeprice,
+      tradepriceuzs,
       total,
       productdata,
       barcode,
+      minimumcount,
     } = req.body.product;
 
     const { currentPage, countPage, search } = req.body;
@@ -425,12 +440,12 @@ module.exports.update = async (req, res) => {
 
     const product = await Product.findById(_id)
       .populate({
-        path: "productdata",
-        select: "code barcode",
+        path: 'productdata',
+        select: 'code barcode',
       })
       .populate({
-        path: "category",
-        select: "code",
+        path: 'category',
+        select: 'code',
       });
 
     if (!product) {
@@ -468,7 +483,7 @@ module.exports.update = async (req, res) => {
     }
 
     const exchangerate = await Exchangerate.findOne({ market })
-      .select("exchangerate")
+      .select('exchangerate')
       .sort({ _id: -1 });
 
     await ProductPrice.findByIdAndUpdate(priceid, {
@@ -486,6 +501,8 @@ module.exports.update = async (req, res) => {
             ? sellingpriceuzs
             : exchangerate.exchangerate * sellingprice) * 1
         ) / 1,
+      tradeprice: Math.round(tradeprice * 1000) / 1000,
+      tradepriceuzs: Math.round(tradepriceuzs * 1) / 1,
     });
     product.unit = unit;
     product.total = total;
@@ -510,43 +527,43 @@ module.exports.update = async (req, res) => {
       product.category = updateCategory._id;
       productData.category = updateCategory._id;
     }
-
+    product.minimumcount = minimumcount;
     await product.save();
     await productData.save();
 
     const productcode = new RegExp(
-      ".*" + search ? search.code : "" + ".*",
-      "i"
+      '.*' + search ? search.code : '' + '.*',
+      'i'
     );
     const productname = new RegExp(
-      ".*" + search ? search.name : "" + ".*",
-      "i"
+      '.*' + search ? search.name : '' + '.*',
+      'i'
     );
     const productcategory = new RegExp(
-      ".*" + search ? search.category : "" + ".*",
-      "i"
+      '.*' + search ? search.category : '' + '.*',
+      'i'
     );
 
     const products = await Product.find({
       market,
     })
       .sort({ code: 1 })
-      .select("total market category")
+      .select('total market category minimumcount')
       .populate(
-        "price",
-        "incomingprice sellingprice incomingpriceuzs sellingpriceuzs"
+        'price',
+        'incomingprice sellingprice incomingpriceuzs sellingpriceuzs tradeprice tradepriceuzs'
       )
       .populate({
-        path: "productdata",
-        select: "name code barcode",
+        path: 'productdata',
+        select: 'name code barcode',
         match: { name: productname, code: productcode },
       })
       .populate({
-        path: "category",
-        select: "code name",
+        path: 'category',
+        select: 'code name',
         match: { code: productcategory },
       })
-      .populate("unit", "name");
+      .populate('unit', 'name');
 
     let filtered = filter(
       products,
@@ -560,7 +577,7 @@ module.exports.update = async (req, res) => {
       count,
     });
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -630,35 +647,35 @@ module.exports.delete = async (req, res) => {
     }
 
     const productcode = new RegExp(
-      ".*" + search ? search.code : "" + ".*",
-      "i"
+      '.*' + search ? search.code : '' + '.*',
+      'i'
     );
     const productname = new RegExp(
-      ".*" + search ? search.name : "" + ".*",
-      "i"
+      '.*' + search ? search.name : '' + '.*',
+      'i'
     );
     const productcategory = new RegExp(
-      ".*" + search ? search.category : "" + ".*",
-      "i"
+      '.*' + search ? search.category : '' + '.*',
+      'i'
     );
 
     const products = await Product.find({
       market,
     })
       .sort({ code: 1 })
-      .select("total market category")
-      .populate("price", "incomingprice sellingprice")
+      .select('total market category')
+      .populate('price', 'incomingprice sellingprice')
       .populate({
-        path: "productdata",
-        select: "name code",
+        path: 'productdata',
+        select: 'name code',
         match: { name: productname, code: productcode },
       })
       .populate({
-        path: "category",
-        select: "name code",
+        path: 'category',
+        select: 'name code',
         match: { code: productcategory },
       })
-      .populate("unit", "name");
+      .populate('unit', 'name');
 
     let filtered = filter(products, (product) => product.productdata !== null);
 
@@ -669,7 +686,7 @@ module.exports.delete = async (req, res) => {
       count,
     });
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -690,20 +707,20 @@ module.exports.getAll = async (req, res) => {
       market,
     })
       .sort({ code: 1 })
-      .select("name code unit category producttype brand price total")
-      .populate("category", "name code")
-      .populate("productdata", "name code barcode")
-      .populate("producttype", "name")
-      .populate("unit", "name")
-      .populate("brand", "name")
+      .select('name code unit category producttype brand price total')
+      .populate('category', 'name code')
+      .populate('productdata', 'name code barcode')
+      .populate('producttype', 'name')
+      .populate('unit', 'name')
+      .populate('brand', 'name')
       .populate(
-        "price",
-        "incomingprice sellingprice incomingpriceuzs sellingpriceuzs"
+        'price',
+        'incomingprice sellingprice incomingpriceuzs sellingpriceuzs'
       );
 
     res.send(products);
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -716,34 +733,34 @@ module.exports.getProducts = async (req, res) => {
         .status(401)
         .json({ message: "Diqqat! Do'kon malumotlari topilmadi" });
     }
-    const code = new RegExp(".*" + search ? search.code : "" + ".*", "i");
-    const name = new RegExp(".*" + search ? search.name : "" + ".*", "i");
+    const code = new RegExp('.*' + search ? search.code : '' + '.*', 'i');
+    const name = new RegExp('.*' + search ? search.name : '' + '.*', 'i');
     const category = new RegExp(
-      ".*" + search ? search.category : "" + ".*",
-      "i"
+      '.*' + search ? search.category : '' + '.*',
+      'i'
     );
-    const barcode = new RegExp(".*" + search ? search.barcode : "" + ".*", "i");
+    const barcode = new RegExp('.*' + search ? search.barcode : '' + '.*', 'i');
 
     const products = await Product.find({
       market,
     })
       .sort({ code: 1 })
-      .select("total market category")
+      .select('total market category minimumcount')
       .populate(
-        "price",
-        "incomingprice sellingprice incomingpriceuzs sellingpriceuzs"
+        'price',
+        'incomingprice sellingprice incomingpriceuzs sellingpriceuzs tradeprice tradepriceuzs'
       )
       .populate({
-        path: "productdata",
-        select: "name code barcode",
+        path: 'productdata',
+        select: 'name code barcode',
         match: { name: name, code: code },
       })
       .populate({
-        path: "category",
-        select: "name code",
+        path: 'category',
+        select: 'name code',
         match: { code: category },
       })
-      .populate("unit", "name")
+      .populate('unit', 'name')
       .then((products) =>
         filter(
           products,
@@ -779,14 +796,14 @@ module.exports.getCategory = async (req, res) => {
       category,
     })
       .sort({ _id: -1 })
-      .select("name code unit category price total")
-      .populate("category", "name code")
-      .populate("unit", "name")
-      .populate("price", "sellingprice");
+      .select('name code unit category price total')
+      .populate('category', 'name code')
+      .populate('unit', 'name')
+      .populate('price', 'sellingprice');
 
     res.send(products);
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -802,12 +819,12 @@ module.exports.getAllProducttypes = async (req, res) => {
     }
 
     const producttypes = await ProductType.find({ market }).select(
-      "name category market"
+      'name category market'
     );
 
     res.status(201).json(producttypes);
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -821,31 +838,31 @@ module.exports.getProductExcel = async (req, res) => {
         .status(401)
         .json({ message: "Diqqat! Do'kon malummotlari topilmadi." });
     }
-    const code = new RegExp(".*" + search ? search.code : "" + ".*", "i");
-    const name = new RegExp(".*" + search ? search.name : "" + ".*", "i");
+    const code = new RegExp('.*' + search ? search.code : '' + '.*', 'i');
+    const name = new RegExp('.*' + search ? search.name : '' + '.*', 'i');
     const category = new RegExp(
-      ".*" + search ? search.category : "" + ".*",
-      "i"
+      '.*' + search ? search.category : '' + '.*',
+      'i'
     );
 
     const allproducts = await Product.find({
       market,
     })
       .sort({ _id: -1 })
-      .select("total unit price productdata category")
+      .select('total unit price productdata category minimumcount')
       .populate(
-        "price",
-        "incomingprice sellingprice incomingpriceuzs sellingpriceuzs"
+        'price',
+        'incomingprice sellingprice incomingpriceuzs sellingpriceuzs tradeprice tradepriceuzs'
       )
-      .populate("unit", "name")
+      .populate('unit', 'name')
       .populate({
-        path: "productdata",
-        select: "name code barcode",
+        path: 'productdata',
+        select: 'name code barcode',
         match: { name: name, code: code },
       })
       .populate({
-        path: "category",
-        select: "name code",
+        path: 'category',
+        select: 'name code',
         match: { code: category },
       });
 
@@ -855,7 +872,7 @@ module.exports.getProductExcel = async (req, res) => {
     );
     res.status(201).json(products);
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -876,16 +893,16 @@ module.exports.getAllIncoming = async (req, res) => {
       market,
     })
       .sort({ code: 1 })
-      .select("total market category")
+      .select('total market category')
       .populate(
-        "price",
-        "incomingprice sellingprice incomingpriceuzs sellingpriceuzs"
+        'price',
+        'incomingprice sellingprice incomingpriceuzs sellingpriceuzs'
       )
       .populate({
-        path: "productdata",
-        select: "name code barcode",
+        path: 'productdata',
+        select: 'name code barcode',
       })
-      .populate("unit", "name");
+      .populate('unit', 'name');
 
     const products = filter(
       allproducts,
@@ -894,7 +911,7 @@ module.exports.getAllIncoming = async (req, res) => {
 
     res.send(products);
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -917,13 +934,13 @@ module.exports.getAllType = async (req, res) => {
       producttype: typeid,
     })
       .sort({ _id: -1 })
-      .select("name code unit category price total")
-      .populate("category", "name code")
-      .populate("unit", "name")
-      .populate("price", "sellingprice");
+      .select('name code unit category price total')
+      .populate('category', 'name code')
+      .populate('unit', 'name')
+      .populate('price', 'sellingprice');
     res.send(products);
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -946,14 +963,14 @@ module.exports.getAllBrand = async (req, res) => {
 
       brand: typeid,
     })
-      .select("name code category producttype price unit total")
-      .populate("category", "code")
-      .populate("producttype", "name")
-      .populate("price", "sellingprice")
-      .populate("unit", "name");
+      .select('name code category producttype price unit total')
+      .populate('category', 'code')
+      .populate('producttype', 'name')
+      .populate('price', 'sellingprice')
+      .populate('unit', 'name');
     res.send(products);
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -975,18 +992,18 @@ module.exports.getAllCategory = async (req, res) => {
       category: categoryId,
     })
       .sort({ code: -1 })
-      .select("unit category price total")
-      .populate("productdata", "name code barcode")
-      .populate("category", "name code")
-      .populate("unit", "name")
+      .select('unit category price total')
+      .populate('productdata', 'name code barcode')
+      .populate('category', 'name code')
+      .populate('unit', 'name')
       .populate(
-        "price",
-        "sellingprice sellingpriceuzs incomingprice incomingpriceuzs"
+        'price',
+        'sellingprice sellingpriceuzs incomingprice incomingpriceuzs'
       );
 
     res.status(201).send(products);
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -1032,7 +1049,7 @@ module.exports.deleteAll = async (req, res) => {
 
     res.send(all);
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -1049,27 +1066,27 @@ module.exports.getProductsInventory = async (req, res) => {
     }
 
     const productcode = new RegExp(
-      ".*" + search ? search.productcode : "" + ".*",
-      "i"
+      '.*' + search ? search.productcode : '' + '.*',
+      'i'
     );
 
     const productname = new RegExp(
-      ".*" + search ? search.productname : "" + ".*",
-      "i"
+      '.*' + search ? search.productname : '' + '.*',
+      'i'
     );
 
     const products = await Product.find({
       market,
     })
       .sort({ code: 1 })
-      .select("total market category")
-      .populate("price", "incomingprice sellingprice")
+      .select('total market category')
+      .populate('price', 'incomingprice sellingprice')
       .populate({
-        path: "productdata",
-        select: "name code barcode",
+        path: 'productdata',
+        select: 'name code barcode',
         match: { name: productname, code: productcode },
       })
-      .populate("unit", "name");
+      .populate('unit', 'name');
 
     let filtered = filter(products, (product) => product.productdata !== null);
 
@@ -1081,7 +1098,7 @@ module.exports.getProductsInventory = async (req, res) => {
       count,
     });
   } catch (error) {
-    res.status(401).json({ message: "Serverda xatolik yuz berdi..." });
+    res.status(401).json({ message: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -1099,18 +1116,18 @@ module.exports.getproductsale = async (req, res) => {
     const products = await Product.find({
       market,
     })
-      .select("market total")
-      .populate("productdata", "name code barcode")
+      .select('market total')
+      .populate('productdata', 'name code barcode')
       .populate(
-        "price",
-        "sellingprice incomingprice sellingpriceuzs incomingpriceuzs"
+        'price',
+        'sellingprice incomingprice sellingpriceuzs incomingpriceuzs'
       )
-      .populate("category", "name code")
-      .populate("unit", "name");
+      .populate('category', 'name code')
+      .populate('unit', 'name');
 
     res.status(201).json(products);
   } catch (error) {
-    res.status(401).json({ message: "Serverda xatolik yuz berdi..." });
+    res.status(401).json({ message: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -1157,10 +1174,10 @@ module.exports.updateAllProducts = async (req, res) => {
     });
 
     res.status(201).json({
-      message: "tayyor",
+      message: 'tayyor',
     });
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -1174,6 +1191,6 @@ module.exports.productcode = async (req, res) => {
 
     res.status(201).send({ code: 1001 + code });
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
