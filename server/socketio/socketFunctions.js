@@ -67,4 +67,57 @@ const replaceAllProductdata = async () => {
   }
 };
 
-module.exports = { getAllCategories, getAllProducts, replaceAllProductdata };
+const getCountOfProducts = async (market) => {
+  try {
+    const marke = await Market.findById(market);
+    if (!marke) {
+      return;
+      {
+        message: "Diqqat! Do'kon ma'lumotlari topilmadi.";
+      }
+    }
+
+    const count = await Product.find({ market }).count();
+
+    return count;
+  } catch (error) {
+    return { message: "Serverda xatolik yuz berdi" };
+  }
+};
+
+const getProductsByCount = async ({ current, count, market }) => {
+  try {
+    const marke = await Market.findById(market);
+    if (!marke) {
+      return;
+      {
+        message: "Diqqat! Do'kon ma'lumotlari topilmadi.";
+      }
+    }
+
+    const products = await Product.find({ market })
+      .sort({ timestamp: -1 })
+      .select("market total")
+      .populate("productdata", "name code barcode")
+      .populate(
+        "price",
+        "sellingprice incomingprice sellingpriceuzs incomingpriceuzs"
+      )
+      .populate("category", "name code")
+      .populate("unit", "name")
+      .skip(current * count)
+      .limit(count);
+
+    return products;
+  } catch (error) {
+    return { message: "Serverda xatolik yuz berdi" };
+  }
+};
+
+module.exports = {
+  getAllCategories,
+  getAllProducts,
+  replaceAllProductdata,
+  getCountOfProducts,
+  getProductsByCount,
+};
