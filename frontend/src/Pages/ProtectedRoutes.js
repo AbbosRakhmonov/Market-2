@@ -43,6 +43,9 @@ const ProductExchanges = lazy(() =>
     import('./ProductExchanges/ProductExchanges.js')
 )
 const ProductMinimum = lazy(() => import('./ProductReport/ProductMinimum.js'))
+const ProductIdExchanges = lazy(() =>
+    import('./ProductIdExchanges/ProductIdExchanges.js')
+)
 // <-- pages
 
 const directorRoutes = [
@@ -129,6 +132,7 @@ const directorRoutes = [
     {
         path: '/hamkorlar/yetkazuvchilar',
         element: <Supplier />,
+
     },
     {
         path: '/hamkorlar/yetkazuvchilar/:id',
@@ -167,21 +171,27 @@ const directorRoutes = [
         element: <ReportPage />,
     },
     {
-        path: '/dukonlar/*',
+        path: '/dukonlar/filiallar/*',
+        element: <Shops />,
         subRoutes: [
             {
                 path: ':tablename/:_id',
                 element: <Shops />,
             },
             {
+
                 path: 'filiallar',
                 element: <Shops />,
             },
             {
-                path: 'almashinuv',
-                element: <ProductExchanges />,
+                path: ':tablename/:_id/exchangesId',
+                element: <ProductIdExchanges />,
             },
         ],
+    },
+    {
+        path: '/dukonlar/almashinuv',
+        element: <ProductExchanges />,
     },
     {
         path: '/shaxsiy/parol',

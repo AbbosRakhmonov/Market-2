@@ -28,8 +28,10 @@ import {AdminProductTableRow} from './TableRows/AdminProductTableRow'
 import {ReturnProductsTableRow} from './TableRows/ReturnProductsTableRow.js'
 import {GeneralReportTableRow} from './TableRows/GeneralReportTableRow.js'
 import {RegisterSaleTableFooter} from './TableFooters/RegisterSaleTableFooter.js'
+import { FilialShopTableRow } from './TableRows/FilialShopTableRow'
 import DailyReport from './TableRows/DailyReport.js'
 import SupplierIncomingsTableRow from './TableRows/SupplierIncomingsTableRow'
+import { FilialShopDataIdTableRow } from './TableRows/FilialShopDataIdTablerow'
 
 function Table({
     page,
@@ -385,6 +387,24 @@ function Table({
                         currency={currency}
                     />
                 )
+                case 'filialShop':
+                    return (
+                        <FilialShopTableRow
+                            data={data}
+                            currentPage={currentPage}
+                            countPage={countPage}
+                            currency={currency}
+                        />
+                    )
+                case 'filialShopDataId' :
+                    return (
+                        <FilialShopDataIdTableRow
+                            data={data}
+                            currentPage={currentPage}
+                            countPage={countPage}
+                            currency={currency}
+                        />
+                    )    
             case 'generalreport':
                 return <GeneralReportTableRow data={data} currency={currency} />
             case 'dailyreport':

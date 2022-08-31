@@ -20,7 +20,8 @@ import ExpenseReducer from '../Pages/Expense/expenseSlice'
 import AdminProductsReducer from '../Pages/AdminProducts/adminproductsSlice.js'
 import ProductReportReducer from '../Pages/ProductReport/productreportSlice.js'
 import exchangesReducer from './../Pages/ProductExchanges/productExchangesSlice.js'
-
+import FilialDatasReducer from './../Pages/FilialExchanges/FilialExchengesSlice'
+import ExchangesDataIdReducer from './../Pages/ProductIdExchanges/ProductIdExchangesSlice'
 export default configureStore({
     devTools: process.env.NODE_ENV === 'development',
     reducer: {
@@ -45,5 +46,7 @@ export default configureStore({
         adminmarkets: AdminProductsReducer,
         productReport: ProductReportReducer,
         exchanges: exchangesReducer,
+        filialData: FilialDatasReducer, 
+        exchangesIdData: ExchangesDataIdReducer
     },
 })

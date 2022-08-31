@@ -1,14 +1,15 @@
 const { Transfer } = require("../../models/FilialProducts/Transfer");
 const {
   TransferProduct,
-} = require("../../models/FilialProducts/TransferProduct");
-const { Market } = require("../../models/MarketAndBranch/Market");
-const { Category } = require("../../models/Products/Category");
-const { Product } = require("../../models/Products/Product");
-const { ProductData } = require("../../models/Products/Productdata");
-const { ProductPrice } = require("../../models/Products/ProductPrice");
-const { Unit } = require("../../models/Products/Unit");
-require("../../models/Products/ProductPrice");
+} = require('../../models/FilialProducts/TransferProduct');
+const { Market } = require('../../models/MarketAndBranch/Market');
+const { Category } = require('../../models/Products/Category');
+const { Product } = require('../../models/Products/Product');
+const { ProductData } = require('../../models/Products/Productdata');
+const { ProductPrice } = require('../../models/Products/ProductPrice');
+const { Unit } = require('../../models/Products/Unit');
+require('../../models/Products/ProductPrice');
+require('../../models/Users')
 
 // Send Products To Filial
 module.exports.registerProducts = async (req, res) => {
@@ -412,7 +413,7 @@ module.exports.getTransfers = async (req, res) => {
         $lte: endDate,
       },
     }).select(
-      "market filial products createdAt totalincomingprice totalincomingpriceuzs totalsellingprice totalsellingpriceuzs pieces"
+      'market filial id products createdAt totalincomingprice totalincomingpriceuzs totalsellingprice totalsellingpriceuzs pieces'
     );
 
     res.status(200).json({
@@ -427,7 +428,7 @@ module.exports.getTransfers = async (req, res) => {
 // Get TransferProducts
 module.exports.getTransferProducts = async (req, res) => {
   try {
-    const { market, transfer, currentPage, countPage, startDate, endDate } =
+    const { market, transfer, currentPage, countPage} =
       req.body;
 
     const marke = await Market.findById(market);
@@ -438,19 +439,9 @@ module.exports.getTransferProducts = async (req, res) => {
       });
     }
 
-    if (!marke.filials.includes(filial)) {
-      return res.status(400).json({
-        message: "Diqqat! Bosh do'konda bunaqa filial mavjud emas.",
-      });
-    }
-
     const transferProducts = await TransferProduct.find({
       market,
-      transfer,
-      createdAt: {
-        $gte: startDate,
-        $lte: endDate,
-      },
+      transfer
     })
       .select("-__v -updatedAt -isArchive")
       .populate("productdata", "code name")
@@ -466,7 +457,7 @@ module.exports.getTransferProducts = async (req, res) => {
       data: transferProducts.splice(currentPage * countPage, countPage),
     });
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
