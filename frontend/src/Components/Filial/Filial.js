@@ -1,30 +1,22 @@
-import React, { useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import FilialButtons from '../FilialButtons/FilialButtons'
 import Avatar from '../Avatar/Avatar.js'
-import { Link, Route, Routes, useLocation, useParams } from 'react-router-dom'
+import {Link, Route, Routes, useLocation, useParams} from 'react-router-dom'
 import Labels from '../../Pages/Labels/Labels.js'
-import Currency from '../../Pages/Currency/Currency.js'
-import { AnimatePresence } from 'framer-motion'
+import {AnimatePresence} from 'framer-motion'
 import Sellings from '../../Pages/Sale/Routes/Sellings'
-import { useTranslation } from 'react-i18next';
-
-const Filial = ({
-    typecount,
-    productcount,
-    totalPrice,
-    shopname,
-    active,
-    currency,
-    director,
-    id
-}) => {
-    const { tablename, _id } = useParams()
+import {useTranslation} from 'react-i18next'
+import {useSelector} from 'react-redux'
+import FilialExchangesProduct from '../../Pages/FilialExchanges/FilialExchengesProduct'
+import ProductIdExchanges from '../../Pages/ProductIdExchanges/ProductIdExchanges'
+const Filial = ({active, value}) => {
+    const {currencyType} = useSelector((state) => state.currency)
+    const {tablename, _id, exchangesId} = useParams()
     const location = useLocation()
-
     const [reportOpen, setReprotOpen] = useState(true)
     const [salesOpen, setSalesOpen] = useState(true)
     const [paymentOpen, setPaymentOpen] = useState(true)
-
+    const [useParamsId, setUseParamsId] = useState(_id)
     const handleReportOpen = (e) => {
         e && e.preventDefault()
         setReprotOpen(!reportOpen)
@@ -35,92 +27,108 @@ const Filial = ({
     const handleSalesOpen = (e) => {
         e && e.preventDefault()
         setSalesOpen(!salesOpen)
-         setReprotOpen(true)
-         setPaymentOpen(true)
+        setReprotOpen(true)
+        setPaymentOpen(true)
     }
 
     const handlePaymentOpen = (e) => {
         e && e.preventDefault()
         setPaymentOpen(!paymentOpen)
-         setReprotOpen(true)
-         setSalesOpen(true)
+        setReprotOpen(true)
+        setSalesOpen(true)
     }
 
+    const {t} = useTranslation(['common'])
 
-    const { t } = useTranslation(['common'])
-
+    useEffect(() => {
+        if(_id){
+             setUseParamsId(_id)
+        }
+    }, [_id])
+  
     return (
         <section>
             <div
-                className={`shops_card flex gap-[1.25rem] ${active ? 'active_shop' : ''
-                    }`}
+                className={`shops_card flex gap-[1.25rem] ${
+                    active ? 'active_shop' : ''
+                }`}
             >
-                <Avatar border={true} director={director} />
+                <Avatar border={true} director={value.director} />
                 <div className='product-cost'>
                     <div
                         className={'flex flex-col items-center justify-center'}
                     >
-                        <p className='product'>{t("Maxsulotlar turi")}</p>
-                        <p className='product-number'>{typecount}</p>
+                        <p className='product'>{t('Maxsulotlar turi')}</p>
+                        <p className='product-number'>{value.typecount}</p>
                     </div>
                     <div
                         className={'flex flex-col items-center justify-center'}
                     >
-                        <p className='product'>{t("Maxsulotlar soni")}</p>
-                        <p className='product-number'>{productcount}</p>
+                        <p className='product'>{t('Maxsulotlar soni')}</p>
+                        <p className='product-number'>{value.productcount}</p>
                     </div>
                     <div
                         className={'flex flex-col items-center justify-center'}
                     >
-                        <p className='product'>{t("Jami")}</p>
+                        <p className='product'>{t('Jami')}</p>
                         <p className='product-total'>
-                            {totalPrice.toLocaleString('ru-Ru')} {currency}
+                            {currencyType === 'UZS'
+                                ? value.totalPrice.toLocaleString('ru-Ru')
+                                : value.totalPriceUSD.toLocaleString(
+                                      'ru-Ru'
+                                  )}{' '}
+                            {currencyType}
                         </p>
                     </div>
                 </div>
                 <div className='shop-name flex flex-col w-[13.4375rem]'>
                     <div className='shop-title'>
-                        <p>{t(shopname)}</p>
+                        <p>{t(value.shopname)}</p>
                     </div>
                     <div className={'filial-btn'}>
                         <Link
-                            to={`${reportOpen
-                                    ? `/dukonlar/report/${id}`
-                                    : '/dukonlar'
+                            to={`${
+                                reportOpen
+                                    ? `/dukonlar/filiallar/report/${value._id}`
+                                    : '/dukonlar/filiallar'
                             }`}
                             onClick={() => handleReportOpen()}
-
                         >
                             <FilialButtons
                                 type={'product'}
-                                active={_id === id && tablename === 'report'}
+                                active={
+                                    _id === value._id && tablename === 'report'
+                                }
                             />
                         </Link>
-
                         <Link
-                            to={`${salesOpen
-                                    ? `/dukonlar/sales/${id}`
-                                    : '/dukonlar'
+                            to={`${
+                                salesOpen
+                                    ? `/dukonlar/filiallar/sales/${value._id}`
+                                    : '/dukonlar/filiallar'
                             } `}
                             onClick={() => handleSalesOpen()}
-
                         >
                             <FilialButtons
                                 type={'selling'}
-                                active={_id === id && tablename === 'sales'}
+                                active={
+                                    _id === value._id && tablename === 'sales'
+                                }
                             />
                         </Link>
                         <Link
-                            to={`${paymentOpen
-                                    ? `/dukonlar/payment/${id}`
-                                    : '/dukonlar'
+                            to={`${
+                                paymentOpen
+                                    ? `/dukonlar/filiallar/payment/${value._id}`
+                                    : '/dukonlar/filiallar'
                             }`}
                             onClick={() => handlePaymentOpen()}
-
                         >
                             <FilialButtons
                                 type={'payments'}
-                                active={_id === id && tablename === 'payment'}
+                                active={
+                                    (_id === value._id && tablename === 'payment') || (_id === value._id && location.pathname === `/dukonlar/filiallar/payment/${_id}/exchangesId`)
+                                }
                             />
                         </Link>
                     </div>
@@ -131,18 +139,25 @@ const Filial = ({
                     <Route
                         path={`/:tablename/:_id`}
                         element={
-                            _id === id ? (
+                            _id === value._id ? (
                                 tablename === 'report' ? (
                                     <Labels id={_id} />
                                 ) : tablename === 'sales' ? (
                                     <Sellings id={_id} />
                                 ) : (
-                                    <Currency id={_id} />
+                                    <FilialExchangesProduct
+                                        id={value._id}
+                                        currency={currencyType}
+                                    />
                                 )
                             ) : (
                                 ''
                             )
                         }
+                    />
+                    <Route
+                        path={`/:tablename/:_id/exchangesId`}
+                        element={ useParamsId === value._id ? <ProductIdExchanges/> : ""}
                     />
                 </Routes>
             </AnimatePresence>
