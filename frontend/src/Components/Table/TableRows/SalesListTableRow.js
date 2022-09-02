@@ -53,7 +53,16 @@ export const SalesListTableRow = ({
                     </td>
                     <td className='text-left td'>{saleconnector.id}</td>
                     <td className='text-left td'>
-                        {saleconnector?.client?.name || (
+                        {saleconnector?.client?.name ? (
+                            <div className='flex justify-between items-center'>
+                                <span> {saleconnector?.client?.name}</span>
+                                <TableBtn
+                                    type={'edit'}
+                                    bgcolor={'bg-success-500'}
+                                    onClick={() => addPlus(saleconnector._id)}
+                                />
+                            </div>
+                        ) : (
                             <div className='flex justify-center items-center'>
                                 <TableBtn
                                     type={'add'}
