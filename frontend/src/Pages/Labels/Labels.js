@@ -11,7 +11,7 @@ import {
     clearSearchedProducts,
     getProducts,
     getProductsAll,
-    getProductsByFilter
+    getProductsByFilter,
 } from '../Products/Create/productSlice.js'
 import {useReactToPrint} from 'react-to-print'
 import {BarCode} from '../../Components/BarCode/BarCode.js'
@@ -19,53 +19,62 @@ import {exportExcel, universalSort} from '../../App/globalFunctions.js'
 import {useTranslation} from 'react-i18next'
 import {filter, map} from 'lodash'
 
-
 const Labels = () => {
     const {t} = useTranslation(['common'])
     const headers = [
         {
-            title: t('№')
+            title: t('№'),
+        },
+        {
+            title: t('Kategoriyasi'),
+            filter: 'category.code',
         },
         {
             title: t('Maxsulot kodi'),
-            filter: 'productdata.code'
+            filter: 'productdata.code',
         },
         {
             title: t('Maxsulot nomi'),
-            filter: 'productdata.name'
+            filter: 'productdata.name',
         },
         {
             title: t('Soni(dona)'),
-            filter: 'product.total'
+            filter: 'product.total',
         },
         {
             title: t('Olish'),
-            filter: 'price.incomingprice'
+            filter: 'price.incomingprice',
         },
         {
-            title: t('Olish jami')
+            title: t('Olish jami'),
         },
         {
             title: t('Sotish'),
-            filter: 'price.sellingprice'
+            filter: 'price.sellingprice',
         },
         {
-            title: t('Sotish jami')
+            title: t('Sotish jami'),
         },
         {
-            title: t('Cheklar soni')
+            title: t('Cheklar soni'),
         },
         {
-            title: ''
-        }
+            title: '',
+        },
     ]
 
     const dispatch = useDispatch()
-    const {products, total, loading, searchedProducts, totalSearched, loadingExcel} =
-        useSelector((state) => state.products)
+    const {
+        products,
+        total,
+        loading,
+        searchedProducts,
+        totalSearched,
+        loadingExcel,
+    } = useSelector((state) => state.products)
     const {currencyType} = useSelector((state) => state.currency)
     const {
-        market: {name}
+        market: {name},
     } = useSelector((state) => state.login)
     const [data, setData] = useState(products)
     const [searchedData, setSearchedData] = useState(searchedProducts)
@@ -74,13 +83,14 @@ const Labels = () => {
     const [currentPage, setCurrentPage] = useState(0)
     const [searchByCode, setSearchByCode] = useState('')
     const [searchByName, setSearchByName] = useState('')
+    const [searchByCategory, setSearchByCategory] = useState('')
 
     const [productForCheques, setProductForCheques] = useState(null)
     const [countOfCheques, setCountOfCheques] = useState('')
     const [sorItem, setSorItem] = useState({
         filter: '',
         sort: '',
-        count: 0
+        count: 0,
     })
     const [dataLoaded, setDataLoaded] = useState(false)
     const [printedData, setPrintedData] = useState([])
@@ -91,7 +101,7 @@ const Labels = () => {
         let valForSearch = val.replace(/\s+/g, ' ').trim()
         setSearchByCode(val)
         ;(searchedData.length > 0 || totalSearched > 0) &&
-        dispatch(clearSearchedProducts())
+            dispatch(clearSearchedProducts())
         if (valForSearch === '') {
             setData(products)
             setFilteredDataTotal(total)
@@ -109,7 +119,7 @@ const Labels = () => {
         let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
         setSearchByName(val)
         ;(searchedData.length > 0 || totalSearched > 0) &&
-        dispatch(clearSearchedProducts())
+            dispatch(clearSearchedProducts())
         if (valForSearch === '') {
             setData(products)
             setFilteredDataTotal(total)
@@ -130,6 +140,25 @@ const Labels = () => {
         setCurrentPage(0)
     }
 
+    // filter by category
+    const filterByCategory = (e) => {
+        let val = e.target.value
+        let valForSearch = val.replace(/\s+/g, ' ').trim()
+        setSearchByCategory(val)
+        ;(searchedData.length > 0 || totalSearched > 0) &&
+            dispatch(clearSearchedProducts())
+        if (valForSearch === '') {
+            setData(products)
+            setFilteredDataTotal(total)
+        } else {
+            const filteredProducts = filter(products, (product) => {
+                return product.category.code.includes(valForSearch)
+            })
+            setData(filteredProducts)
+            setFilteredDataTotal(filteredProducts.length)
+        }
+    }
+
     const filterData = (filterKey) => {
         if (filterKey === sorItem.filter) {
             switch (sorItem.count) {
@@ -137,7 +166,7 @@ const Labels = () => {
                     setSorItem({
                         filter: filterKey,
                         sort: '1',
-                        count: 2
+                        count: 2,
                     })
                     universalSort(
                         searchedData.length > 0 ? searchedData : data,
@@ -151,7 +180,7 @@ const Labels = () => {
                     setSorItem({
                         filter: filterKey,
                         sort: '',
-                        count: 0
+                        count: 0,
                     })
                     universalSort(
                         searchedData.length > 0 ? searchedData : data,
@@ -165,7 +194,7 @@ const Labels = () => {
                     setSorItem({
                         filter: filterKey,
                         sort: '-1',
-                        count: 1
+                        count: 1,
                     })
                     universalSort(
                         searchedData.length > 0 ? searchedData : data,
@@ -179,7 +208,7 @@ const Labels = () => {
             setSorItem({
                 filter: filterKey,
                 sort: '-1',
-                count: 1
+                count: 1,
             })
             universalSort(
                 searchedData.length > 0 ? searchedData : data,
@@ -212,7 +241,9 @@ const Labels = () => {
     }
 
     const handleChequeCount = (e, product) => {
-        const prevIndex = printedData.findIndex(item => item.product._id === product._id)
+        const prevIndex = printedData.findIndex(
+            (item) => item.product._id === product._id
+        )
         if (prevIndex !== -1) {
             if (e.target.value.trim() !== '') {
                 printedData[prevIndex].numberOfChecks = Number(e.target.value)
@@ -221,17 +252,26 @@ const Labels = () => {
             }
             setPrintedData([...printedData])
         } else {
-            setPrintedData([...printedData, {product, numberOfChecks: Number(e.target.value)}])
+            setPrintedData([
+                ...printedData,
+                {product, numberOfChecks: Number(e.target.value)},
+            ])
         }
     }
 
     const handlePrint = useReactToPrint({
         content: () => componentRef.current,
-        onBeforeGetContent: handleOnBeforeGetContent
+        onBeforeGetContent: handleOnBeforeGetContent,
     })
 
     const handlePrintToProduct = async (product, single) => {
-        if (single) setPrintedData([...filter(printedData, (item) => item.product._id === product._id)])
+        if (single)
+            setPrintedData([
+                ...filter(
+                    printedData,
+                    (item) => item.product._id === product._id
+                ),
+            ])
         await handlePrint()
     }
 
@@ -243,8 +283,8 @@ const Labels = () => {
                 countPage: showByTotal,
                 search: {
                     name: searchByName.replace(/\s+/g, ' ').trim(),
-                    code: searchByCode.replace(/\s+/g, ' ').trim()
-                }
+                    code: searchByCode.replace(/\s+/g, ' ').trim(),
+                },
             }
             dispatch(getProductsByFilter(body))
         }
@@ -264,7 +304,7 @@ const Labels = () => {
             'Sotish narxi USD',
             'Sotish narxi UZS',
             'Sotish narxi jami UZS',
-            'Sotish narxi jami USD'
+            'Sotish narxi jami USD',
         ]
         dispatch(getProductsAll()).then(({error, payload}) => {
             if (!error) {
@@ -272,7 +312,7 @@ const Labels = () => {
                     nth: index + 1,
                     code: item?.productdata?.code || '',
                     name: item?.productdata?.name || '',
-                    total: (item.total + item?.unit?.name) || '',
+                    total: item.total + item?.unit?.name || '',
                     incomingprice: item?.price?.incomingprice || '',
                     incomingpriceuzs: item?.price?.incomingpriceuzs || '',
                     incomingpricealluzs:
@@ -281,9 +321,8 @@ const Labels = () => {
                         item?.price?.incomingprice * item.total,
                     sellingprice: item?.price?.sellingprice || '',
                     sellingpriceuzs: item?.price?.sellingpriceuzs || '',
-                    sellingalluzs:
-                        item?.price?.sellingpriceuzs * item.total,
-                    sellingallusd: item?.price?.sellingprice * item.total
+                    sellingalluzs: item?.price?.sellingpriceuzs * item.total,
+                    sellingallusd: item?.price?.sellingprice * item.total,
                 }))
                 exportExcel(ReportData, fileName, exportProductHead)
             }
@@ -296,8 +335,8 @@ const Labels = () => {
             countPage: showByTotal,
             search: {
                 name: searchByName.replace(/\s+/g, ' ').trim(),
-                code: searchByCode.replace(/\s+/g, ' ').trim()
-            }
+                code: searchByCode.replace(/\s+/g, ' ').trim(),
+            },
         }
         dispatch(getProducts(body))
         //    eslint-disable-next-line react-hooks/exhaustive-deps
@@ -337,20 +376,18 @@ const Labels = () => {
             exit='collapsed'
             variants={{
                 open: {opacity: 1, height: 'auto'},
-                collapsed: {opacity: 0, height: 0}
+                collapsed: {opacity: 0, height: 0},
             }}
             transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
         >
-            {loadingExcel || dataLoaded && (
-                <div
-                    className='fixed backdrop-blur-[2px] z-[100] left-0 top-0 right-0 bottom-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
-                    <Spinner />
-                </div>
-            )}
+            {loadingExcel ||
+                (dataLoaded && (
+                    <div className='fixed backdrop-blur-[2px] z-[100] left-0 top-0 right-0 bottom-0 bg-white-700 flex flex-col items-center justify-center w-full h-full'>
+                        <Spinner />
+                    </div>
+                ))}
             <div className='pagination mainPadding'>
-                <ExportBtn
-                    onClick={exportData}
-                />
+                <ExportBtn onClick={exportData} />
                 <p className='product_name'>{t('Etiketka')}</p>
                 {(filteredDataTotal !== 0 || totalSearched !== 0) && (
                     <Pagination
@@ -362,11 +399,20 @@ const Labels = () => {
                 )}
             </div>
             <SearchForm
-                filterBy={['total', 'code', 'name', 'checks', 'printBtn']}
+                filterBy={[
+                    'total',
+                    'category',
+                    'code',
+                    'name',
+                    'checks',
+                    'printBtn',
+                ]}
                 filterByCode={filterByCode}
                 filterByName={filterByName}
                 searchByCode={searchByCode}
                 searchByName={searchByName}
+                searchByCategory={searchByCategory}
+                filterByCategory={filterByCategory}
                 numberOfChecks={countOfCheques}
                 filterByTotal={filterByTotal}
                 filterByCodeAndNameAndCategoryWhenPressEnter={
