@@ -31,6 +31,8 @@ function CreateProductForm({
     handleChangeTradePrice,
     minimumCount,
     handleChangeMinimumCount,
+    sellingPriceOfProcient,
+    handleChangeSellingPriceOfProcient,
 }) {
     const {t} = useTranslation(['common'])
     return (
@@ -120,6 +122,15 @@ function CreateProductForm({
                             onChange={handleChangeSellingPriceOfProduct}
                             label={t('Sotish narxi')}
                             placeholder={`${t('misol')}: 200`}
+                            type={'text'}
+                        />
+
+                        {/* -- sotish foizi -- */}
+                        <FieldContainer
+                            value={sellingPriceOfProcient}
+                            onChange={handleChangeSellingPriceOfProcient}
+                            label={t('Sotish foizi')}
+                            placeholder={`${t('misol')}: 30 %`}
                             type={'text'}
                         />
                     </>

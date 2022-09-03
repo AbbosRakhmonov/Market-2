@@ -33,6 +33,8 @@ import {getAllCategories} from '../../Category/categorySlice'
 import {
     checkEmptyString,
     exportExcel,
+    roundUsd,
+    roundUzs,
     universalSort,
     UsdToUzs,
     UzsToUsd,
@@ -73,6 +75,7 @@ function Products() {
     const [unitOfProduct, setUnitOfProduct] = useState('')
     const [priceOfProduct, setPriceOfProduct] = useState('')
     const [sellingPriceOfProduct, setSellingPriceOfProduct] = useState('')
+    const [sellingPriceOfProcient, setSellingPriceOfProcient] = useState('')
     const [priceOfProductUsd, setPriceOfProductsUsd] = useState('')
     const [sellingPriceOfProductUsd, setSellingPriceOfProductUsd] = useState('')
     const [categoryOfProduct, setCategoryOfProduct] = useState('')
@@ -189,15 +192,38 @@ function Products() {
             setNumberOfProduct(val)
         }
     }
+    const setProcient = (datausd, datauzs, procient) => {
+        if (procient && data) {
+            setSellingPriceOfProduct(
+                roundUzs(datauzs + (datauzs * procient) / 100)
+            )
+            setSellingPriceOfProductUsd(
+                roundUsd(datausd + (datausd * procient) / 100)
+            )
+        } else {
+            setSellingPriceOfProduct('')
+            setSellingPriceOfProductUsd('')
+        }
+    }
     const handleChangePriceOfProduct = (e) => {
         let val = e.target.value
         if (regexForTypeNumber.test(val)) {
             if (currencyType === 'UZS') {
                 setPriceOfProduct(val)
                 setPriceOfProductsUsd(UzsToUsd(val, currency))
+                setProcient(
+                    UzsToUsd(val, currency),
+                    Number(val),
+                    Number(sellingPriceOfProcient)
+                )
             } else {
                 setPriceOfProductsUsd(val)
                 setPriceOfProduct(UsdToUzs(val, currency))
+                setProcient(
+                    Number(val),
+                    UsdToUzs(val, currency),
+                    Number(sellingPriceOfProcient)
+                )
             }
         }
     }
@@ -212,6 +238,15 @@ function Products() {
                 setSellingPriceOfProduct(UsdToUzs(val, currency))
             }
         }
+    }
+    const handleChangeSellingPriceOfProcient = (e) => {
+        let val = e.target.value
+        setSellingPriceOfProcient(val)
+        setProcient(
+            Number(priceOfProductUsd),
+            Number(priceOfProduct),
+            Number(val)
+        )
     }
     const handleChangeUnitOfProduct = (option) => {
         setUnitOfProduct(option)
@@ -910,9 +945,13 @@ function Products() {
                         ? sellingPriceOfProduct
                         : sellingPriceOfProductUsd
                 }
+                sellingPriceOfProcient={sellingPriceOfProcient}
                 numberOfProduct={numberOfProduct}
                 handleChangeSellingPriceOfProduct={
                     handleChangeSellingPriceOfProduct
+                }
+                handleChangeSellingPriceOfProcient={
+                    handleChangeSellingPriceOfProcient
                 }
                 handleChangePriceOfProduct={handleChangePriceOfProduct}
                 handleChangeNumberOfProduct={handleChangeNumberOfProduct}
