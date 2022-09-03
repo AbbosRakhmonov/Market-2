@@ -1075,6 +1075,7 @@ const RegisterSelling = () => {
             warningReturnProductsEmpty()
         }
     }
+    console.log(allProducts)
     useEffect(() => {
         let allProductsReducer = []
         market &&
@@ -1086,6 +1087,7 @@ const RegisterSelling = () => {
             })
     }, [market, dispatch, lastPayments])
     useEffect(() => {
+        localStorage.setItem('products', JSON.stringify(allProducts))
         if (activeCategory) {
             const filteredData = filter(
                 allProducts,
