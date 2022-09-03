@@ -1075,7 +1075,6 @@ const RegisterSelling = () => {
             warningReturnProductsEmpty()
         }
     }
-    console.log(filteredProducts)
     useEffect(() => {
         let allProductsReducer = []
         market &&
