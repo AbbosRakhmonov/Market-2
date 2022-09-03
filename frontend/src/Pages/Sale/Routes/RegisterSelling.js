@@ -1075,11 +1075,14 @@ const RegisterSelling = () => {
             warningReturnProductsEmpty()
         }
     }
-    console.log(allProducts)
+    console.log(filteredProducts)
     useEffect(() => {
         let allProductsReducer = []
         market &&
-            socket.emit('getProductsOfCount', {market: market._id, count: 100})
+            socket.emit('getProductsOfCount', {
+                market: market._id,
+                count: 10000,
+            })
         market &&
             socket.on('getProductsOfCount', (products) => {
                 allProductsReducer.push(...products)
