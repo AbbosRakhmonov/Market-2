@@ -109,7 +109,7 @@ const registerSellingSlice = createSlice({
         },
         [getAllProducts.fulfilled]: (state, {payload}) => {
             state.loadingGetAllProducts = false
-            state.allProducts = payload
+            // state.allProducts = payload
             localStorage.setItem('allProducts', JSON.stringify(payload))
         },
         [getAllProducts.rejected]: (state, {payload}) => {
