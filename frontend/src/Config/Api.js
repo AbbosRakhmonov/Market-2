@@ -3,10 +3,10 @@ import Store from '../App/store'
 import {logOut} from '../Pages/Login/loginSlice'
 
 const instance = axios.create({
-    baseURL: `http://localhost:8801/api`,
+    baseURL: `http://alo24.uz/api`,
     headers: {
-        'Content-Type': 'application/json'
-    }
+        'Content-Type': 'application/json',
+    },
 })
 
 instance.interceptors.request.use(
@@ -17,15 +17,21 @@ instance.interceptors.request.use(
             const {token} = userData
             config.headers['Authorization'] = `Bearer ${token}`
         }
-        if (market && config.headers['Content-Type'] !== 'multipart/form-data') {
+        if (
+            market &&
+            config.headers['Content-Type'] !== 'multipart/form-data'
+        ) {
             config.data = {
                 ...config.data,
-                market: market._id
+                market: market._id,
             }
-        } else if (user?.type === 'Admin' && config.headers['Content-Type'] !== 'multipart/form-data') {
+        } else if (
+            user?.type === 'Admin' &&
+            config.headers['Content-Type'] !== 'multipart/form-data'
+        ) {
             config.data = {
                 ...config.data,
-                administrator: user._id
+                administrator: user._id,
             }
         }
         return config
@@ -36,12 +42,7 @@ instance.interceptors.request.use(
 )
 instance.interceptors.response.use(
     (response) => response,
-    ({
-         response: {
-             data,
-             status
-         }
-     }) => {
+    ({response: {data, status}}) => {
         if (!status) {
             return Promise.reject({message: 'Internet mavjud emas'})
         } else if (status === 401) {

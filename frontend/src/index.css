@@ -52,7 +52,7 @@
     }
 
     .headerStyle {
-        @apply flex items-center justify-center text-[1.5rem] font-bold p-[.625rem] leading-["120%"];
+        @apply flex items-center justify-center text-[1.2rem] font-bold p-[.625rem] leading-["120%"];
     }
 
     .paragrafCard {
@@ -682,39 +682,39 @@
     /* Loader style end */
     /* product exchanges style */
     .product-exchanges-card {
-        @apply relative border-2 rounded-lg h-auto p-[1.25rem] shadow-[0px_10px_10px_rgba(0,0,0,0.05)]
+        @apply relative border-2 rounded-lg h-auto p-[1.25rem] shadow-[0px_10px_10px_rgba(0,0,0,0.05)];
     }
 
     .product-exchanges-card-top-icons {
-        @apply absolute top-[0.6875rem] right-[-1.1rem] w-[2.125rem] h-[2.125rem] rounded-full border z-20 flex justify-center items-center shadow-[0px_10px_10px_rgba(0,0,0,0.05)] active:shadow-none cursor-pointer
+        @apply absolute top-[0.6875rem] right-[-1.1rem] w-[2.125rem] h-[2.125rem] rounded-full border z-20 flex justify-center items-center shadow-[0px_10px_10px_rgba(0,0,0,0.05)] active:shadow-none cursor-pointer;
     }
 
     .product-exchanges-card-center-icons {
-        @apply absolute top-[36%] left-[-1.15rem] w-[2.125rem] h-[2.125rem] rounded-full bg-[#F79009] border border-[#F79009] z-20 flex justify-center items-center shadow-[0px_10px_10px_rgba(0,0,0,0.05)] active:shadow-none cursor-pointer
+        @apply absolute top-[36%] left-[-1.15rem] w-[2.125rem] h-[2.125rem] rounded-full bg-[#F79009] border border-[#F79009] z-20 flex justify-center items-center shadow-[0px_10px_10px_rgba(0,0,0,0.05)] active:shadow-none cursor-pointer;
     }
 
     .product-exchanges-card-text {
-        @apply text-black-700 font-[400] text-[0.875rem] leading-[1rem] mb-[1.25rem]
+        @apply text-black-700 font-[400] text-[0.875rem] leading-[1rem] mb-[1.25rem];
     }
 
     .product-exchanges-card-body {
-        @apply flex items-start gap-[1.875rem] text-[0.75rem] font-[300] text-black-700
+        @apply flex items-start gap-[1.875rem] text-[0.75rem] font-[300] text-black-700;
     }
 
     .product-exchanges-card-body-text {
-        @apply flex justify-between leading-[0.875rem]
+        @apply flex justify-between leading-[0.875rem];
     }
 
     .product-exchanges-span {
-        @apply text-[0.75rem] py-[0.125rem] px-[0.675rem] rounded-[3.125rem] text-white-900
+        @apply text-[0.75rem] py-[0.125rem] px-[0.675rem] rounded-[3.125rem] text-white-900;
     }
 
     .product-exchange-modal-span {
-        @apply py-[0.125rem] px-[0.625rem] rounded-[3.125rem] text-white-900 text-[1rem] font-[400] leading-[1rem]
+        @apply py-[0.125rem] px-[0.625rem] rounded-[3.125rem] text-white-900 text-[1rem] font-[400] leading-[1rem];
     }
 
     .product-exchange-modal-text {
-        @apply text-[1rem] font-[300] text-black-700 w-full flex items-center justify-between
+        @apply text-[1rem] font-[300] text-black-700 w-full flex items-center justify-between;
     }
 
     /* product exchanges style */
@@ -729,9 +729,9 @@ body {
 .loginPage {
     height: 100vh;
     background: radial-gradient(
-            100% 316.36% at 0% 50%,
-            #0090a3 0%,
-            rgba(36, 86, 50, 0.9) 100%
+        100% 316.36% at 0% 50%,
+        #0090a3 0%,
+        rgba(36, 86, 50, 0.9) 100%
     );
 }
 
@@ -924,8 +924,7 @@ input[type='checkbox']::before {
     top: -3px;
     left: 0;
     transform: scale(1.1);
-    box-shadow: 0 0.1px 0.3px rgba(0, 0, 0, 0.1),
-    0 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0.1px 0.3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.2);
     transition: 0.3s;
     background: #ffffff;
     z-index: 20;

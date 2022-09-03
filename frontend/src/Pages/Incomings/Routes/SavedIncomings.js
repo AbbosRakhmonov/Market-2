@@ -188,7 +188,7 @@ const SavedIncomings = () => {
     }
 
     return (
-        <div className='tableContainerPadding grow'>
+        <div className='tableContainerPadding grow mainPadding'>
             {currentTemporaryData.length > 0 ? (
                 <Table
                     page={'temporaryincoming'}

@@ -9,7 +9,11 @@ const socketIO = (io) => {
       let current = 0;
       let allProducts = [];
       while (countOfProducts > 0) {
-        const products = await getProductsByCount({ market, current, count });
+        const products = await getProductsByCount({
+          market,
+          current,
+          count,
+        });
         allProducts.push(...products);
         countOfProducts -= count;
         current++;

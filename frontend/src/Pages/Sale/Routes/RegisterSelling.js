@@ -1080,7 +1080,7 @@ const RegisterSelling = () => {
         market &&
             socket.emit('getProductsOfCount', {
                 market: market._id,
-                count: 10000,
+                count: 100,
             })
         market &&
             socket.on('getProductsOfCount', (products) => {

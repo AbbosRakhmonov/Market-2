@@ -352,7 +352,6 @@ const incomingSlice = createSlice({
 })
 
 export const {
-    clearError,
     clearSuccessUpdate,
     clearSuccessAdd,
     clearSuccessTemporary,

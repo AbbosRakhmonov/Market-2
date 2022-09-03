@@ -14,7 +14,14 @@ import {
 } from '../incomingSlice'
 import {ConfirmBtn, SaveBtn} from '../../../Components/Buttons/SaveConfirmBtn'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
-import {UsdToUzs, UzsToUsd} from '../../../App/globalFunctions'
+import {
+    currentExchangerate,
+    reduceSumm,
+    roundUsd,
+    roundUzs,
+    UsdToUzs,
+    UzsToUsd,
+} from '../../../App/globalFunctions'
 import {useNavigate} from 'react-router-dom'
 import {useTranslation} from 'react-i18next'
 import {filter, map} from 'lodash'
@@ -106,6 +113,8 @@ const RegisterIncoming = () => {
             )
         ) {
             addIncomingToModal(e.value)
+        } else {
+            universalToast("Diqqat mahsulot ro'yxatda mavjud", 'warning')
         }
     }
 
@@ -119,16 +128,16 @@ const RegisterIncoming = () => {
             oldprice: product.price.incomingprice,
             oldpriceuzs: product.price.incomingpriceuzs,
             product: {...product.productdata, _id: product._id},
-            pieces: 0,
-            unitprice: 0,
-            unitpriceuzs: 0,
-            totalprice: 0,
-            totalpriceuzs: 0,
+            pieces: '',
+            unitprice: '',
+            unitpriceuzs: '',
+            totalprice: '',
+            totalpriceuzs: '',
             user: user._id,
             unit: product.unit,
             sellingprice: product.price.sellingprice,
             sellingpriceuzs: product.price.sellingpriceuzs,
-            procient: 0,
+            procient: '',
             supplier: {...supplier},
         })
         setModalBody('registerincomingbody')
@@ -137,15 +146,16 @@ const RegisterIncoming = () => {
 
     // add modalincoming to incomings
     const addProductToIncomings = () => {
-        setIncomings([incomingModal, ...incomings])
-        toggleModal()
+        if (!checkIncomingModal(incomingModal)) {
+            setIncomings([incomingModal, ...incomings])
+            toggleModal()
+        }
     }
 
     // change product in incomings
     const changeIncomings = (e, key, id) => {
         const target = Number(e.target.value)
         const check = (property) => key === property
-
         const product = (!id && {
             ...incomingModal,
         }) || {...filter([...incomings], (incoming) => incoming._id === id)[0]}
@@ -162,15 +172,15 @@ const RegisterIncoming = () => {
 
         const changepieces = (obj) => {
             obj.pieces = target
-            obj.totalprice = target * obj.unitprice
-            obj.totalpriceuzs = target * obj.unitpriceuzs
+            obj.totalprice = roundUsd(target * obj.unitprice)
+            obj.totalpriceuzs = roundUzs(target * obj.unitpriceuzs)
         }
 
         const changeunitprice = (obj) => {
             obj.unitprice = countUsd
             obj.unitpriceuzs = countUzs
-            obj.totalprice = countUsd * obj.pieces
-            obj.totalpriceuzs = countUzs * obj.pieces
+            obj.totalprice = roundUsd(countUsd * obj.pieces)
+            obj.totalpriceuzs = roundUzs(countUzs * obj.pieces)
         }
 
         const changesellingprice = (obj) => {
@@ -233,7 +243,7 @@ const RegisterIncoming = () => {
             temporaryIncomings,
             (temp) => temp._id !== product._id
         )
-        setTemporaryIncomings(temporary)
+        setTemporaryIncomings(temps)
         if (temps.length === 0) {
             dispatch(clearTemporary())
         }
@@ -252,10 +262,29 @@ const RegisterIncoming = () => {
             }
             if (product.sellingprice < product.unitprice) {
                 return universalToast(
-                    t("Sotish narxi olish dan kam bo'lmasin"),
+                    t("Sotish narxi olish narxidan kam bo'lmasin"),
                     'warning'
                 )
             }
+        }
+        return false
+    }
+
+    const checkIncomingModal = (product) => {
+        if (Number(product.pieces) < 1) {
+            return universalToast(t('Mahsulot sonini kiriting!'), 'warning')
+        }
+        if (Number(product.unitprice) < 0.01) {
+            return universalToast(
+                t('Mahsulot qabul narxini kiriting!'),
+                'warning'
+            )
+        }
+        if (Number(product.sellingprice) < Number(product.unitprice)) {
+            return universalToast(
+                t("Sotish narxi olish narxidan kam bo'lmasin"),
+                'warning'
+            )
         }
         return false
     }
@@ -271,14 +300,8 @@ const RegisterIncoming = () => {
 
         if (!CheckIncoming(postincoming)) {
             if (incomings.length) {
-                const all = incomings.reduce(
-                    (acc, cur) => convertToUsd(acc + cur.totalprice),
-                    0
-                )
-                const allUzs = incomings.reduce(
-                    (acc, cur) => convertToUzs(acc + cur.totalpriceuzs),
-                    0
-                )
+                const all = reduceSumm(incomings, 'totalprice')
+                const allUzs = reduceSumm(incomings, 'totalpriceuzs')
                 setAllPayment(all)
                 setAllPaymentUzs(allUzs)
                 setPaymentCash(all)
@@ -286,7 +309,7 @@ const RegisterIncoming = () => {
                 setPaid(all)
                 setPaidUzs(allUzs)
                 setPaymentModalVisible(true)
-                currentEchangerate(allUzs, all)
+                setExchangerate(currentExchangerate(allUzs, all))
             } else {
                 !currency ? warningCurrencyRate() : warningSaleProductsEmpty()
             }
@@ -318,15 +341,18 @@ const RegisterIncoming = () => {
                     incomings,
                 },
             })
-        ).then(() => {
-            setSelectSupplierValue({
-                label: t('Yetkazib beruvchi'),
-                value: '',
-            })
-            setSelectProductValue({
-                label: t('Mahsulotlar'),
-                value: '',
-            })
+        ).then(({error}) => {
+            if (!error) {
+                setSelectSupplierValue({
+                    label: t('Yetkazib beruvchi'),
+                    value: '',
+                })
+                setSelectProductValue({
+                    label: t('Mahsulotlar'),
+                    value: '',
+                })
+                navigate('/maxsulotlar/qabul/saqlanganlar')
+            }
         })
     }
 
@@ -377,11 +403,7 @@ const RegisterIncoming = () => {
             setModalBody('')
         }, 500)
     }
-    const convertToUsd = (value) => Math.round(value * 1000) / 1000
-    const convertToUzs = (value) => Math.round(value)
-    const currentEchangerate = (uzs, usd) => {
-        setExchangerate(convertToUzs(uzs / usd))
-    }
+
     // payment
     const togglePaymentModal = (bool) => {
         bool
@@ -465,8 +487,8 @@ const RegisterIncoming = () => {
                 if (all <= maxSum) {
                     setPaymentCash(value)
                     setPaymentCashUzs(UsdToUzs(value, exchangerate))
-                    setPaymentDebt(convertToUsd(maxSum - all))
-                    setPaymentDebtUzs(convertToUzs(maxSumUzs - allUzs))
+                    setPaymentDebt(roundUsd(maxSum - all))
+                    setPaymentDebtUzs(roundUzs(maxSumUzs - allUzs))
                     setPaid(all)
                     setPaidUzs(allUzs)
                 } else {
@@ -484,8 +506,8 @@ const RegisterIncoming = () => {
                 if (all <= maxSum) {
                     setPaymentCard(value)
                     setPaymentCardUzs(UsdToUzs(value, exchangerate))
-                    setPaymentDebt(convertToUsd(maxSum - all))
-                    setPaymentDebtUzs(convertToUzs(maxSumUzs - allUzs))
+                    setPaymentDebt(roundUsd(maxSum - all))
+                    setPaymentDebtUzs(roundUzs(maxSumUzs - allUzs))
                     setPaid(all)
                     setPaidUzs(allUzs)
                 } else {
@@ -501,8 +523,8 @@ const RegisterIncoming = () => {
                 if (all <= maxSum) {
                     setPaymentTransfer(value)
                     setPaymentTransferUzs(UsdToUzs(value, exchangerate))
-                    setPaymentDebt(convertToUsd(maxSum - all))
-                    setPaymentDebtUzs(convertToUzs(maxSumUzs - allUzs))
+                    setPaymentDebt(roundUsd(maxSum - all))
+                    setPaymentDebtUzs(roundUzs(maxSumUzs - allUzs))
                     setPaid(all)
                     setPaidUzs(allUzs)
                 } else {
@@ -522,8 +544,8 @@ const RegisterIncoming = () => {
                 if (all <= maxSumUzs) {
                     setPaymentCashUzs(value)
                     setPaymentCash(UzsToUsd(value, exchangerate))
-                    setPaymentDebt(convertToUsd(maxSum - allUsd))
-                    setPaymentDebtUzs(convertToUzs(maxSumUzs - all))
+                    setPaymentDebt(roundUsd(maxSum - allUsd))
+                    setPaymentDebtUzs(roundUzs(maxSumUzs - all))
                     setPaid(allUsd)
                     setPaidUzs(all)
                 } else {
@@ -541,8 +563,8 @@ const RegisterIncoming = () => {
                 if (all <= maxSumUzs) {
                     setPaymentCard(UzsToUsd(value, exchangerate))
                     setPaymentCardUzs(value)
-                    setPaymentDebt(convertToUsd(maxSum - allUsd))
-                    setPaymentDebtUzs(convertToUzs(maxSumUzs - all))
+                    setPaymentDebt(roundUsd(maxSum - allUsd))
+                    setPaymentDebtUzs(roundUzs(maxSumUzs - all))
                     setPaid(UzsToUsd(all, exchangerate))
                     setPaidUzs(all)
                 } else {
@@ -560,8 +582,8 @@ const RegisterIncoming = () => {
                 if (all <= maxSumUzs) {
                     setPaymentTransfer(UzsToUsd(value, exchangerate))
                     setPaymentTransferUzs(value)
-                    setPaymentDebt(convertToUsd(maxSum - allUsd))
-                    setPaymentDebtUzs(convertToUzs(maxSumUzs - all))
+                    setPaymentDebt(roundUsd(maxSum - allUsd))
+                    setPaymentDebtUzs(roundUzs(maxSumUzs - all))
                     setPaid(allUsd)
                     setPaidUzs(all)
                 } else {
@@ -708,7 +730,9 @@ const RegisterIncoming = () => {
                 {t('Yetkazib beruvchi')}: {supplier.name}
             </p>
             <div
-                className={`${incomings.length > 0 ? 'tableContainerPadding' : 'hidden'}`}
+                className={`${
+                    incomings.length > 0 ? 'tableContainerPadding' : 'hidden'
+                }`}
             >
                 <Table
                     page={'registerincoming'}
@@ -719,15 +743,10 @@ const RegisterIncoming = () => {
                     Delete={deleteIncoming}
                 />
                 <div className='flex items-center justify-end gap-[0.625rem] pt-[1.25rem]'>
-                    <SaveBtn
-                        text={t('Saqlash')}
-                        onClick={() => createTemporary()}
-                    />
+                    <SaveBtn text={t('Saqlash')} onClick={createTemporary} />
                     <ConfirmBtn
                         text={t('Tasdiqlash')}
-                        onClick={() => {
-                            createIncoming()
-                        }}
+                        onClick={createIncoming}
                     />
                 </div>
             </div>

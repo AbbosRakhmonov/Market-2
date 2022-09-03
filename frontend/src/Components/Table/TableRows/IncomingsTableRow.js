@@ -4,22 +4,22 @@ import TableInput from '../../Inputs/TableInput'
 import {map} from 'lodash'
 
 export const IncomingsTableRow = ({
-                                      editedIncoming,
-                                      currency,
-                                      saveEditIncoming,
-                                      changeHandler,
-                                      Delete,
-                                      Edit,
-                                      currentPage,
-                                      countPage,
-                                      data,
-                                      onKeyUp
-                                  }) => {
+    editedIncoming,
+    currency,
+    saveEditIncoming,
+    changeHandler,
+    Delete,
+    Edit,
+    currentPage,
+    countPage,
+    data,
+    onKeyUp,
+}) => {
     const current = (usd, uzs) => (currency === 'USD' ? usd : uzs || 0)
 
     return (
         <>
-            {map(data,(incoming, index) => (
+            {map(data, (incoming, index) => (
                 <tr className='tr' key={incoming._id}>
                     <td className='text-left td'>
                         {currentPage * countPage + 1 + index}
@@ -40,7 +40,7 @@ export const IncomingsTableRow = ({
                             />
                         )) || (
                             <span>
-                                {incoming.pieces}{' '}
+                                {incoming?.pieces?.toLocaleString('ru-RU')}{' '}
                                 <span className='text-warning-500 font-medium'>
                                     {incoming?.unit?.name}
                                 </span>
@@ -73,13 +73,13 @@ export const IncomingsTableRow = ({
                     <td className='td text-right font-bold'>
                         {editedIncoming._id === incoming._id
                             ? current(
-                                editedIncoming.totalprice,
-                                editedIncoming.totalpriceuzs
-                            ).toLocaleString('ru-RU')
+                                  editedIncoming.totalprice,
+                                  editedIncoming.totalpriceuzs
+                              ).toLocaleString('ru-RU')
                             : current(
-                                incoming.totalprice,
-                                incoming.totalpriceuzs
-                            ).toLocaleString('ru-RU')}{' '}
+                                  incoming.totalprice,
+                                  incoming.totalpriceuzs
+                              ).toLocaleString('ru-RU')}{' '}
                         <span className='text-success-500 font-medium'>
                             {currency}
                         </span>

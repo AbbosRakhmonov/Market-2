@@ -1,5 +1,5 @@
 import {regexForEmptyString} from '../Components/RegularExpressions/RegularExpressions.js'
-import {orderBy} from 'lodash'
+import {orderBy, reduce} from 'lodash'
 import * as XLSX from 'xlsx'
 
 export const universalSort = (data, setData, key, sort, prevData) => {
@@ -19,16 +19,14 @@ export const universalSort = (data, setData, key, sort, prevData) => {
         : prevData
     setData(result)
 }
-export const UsdToUzs = (val, currency) => {
-    return Math.round(val * currency)
-}
-export const UzsToUsd = (val, currency) => {
-    return Math.round((val / currency) * 1000) / 1000
-}
+export const UsdToUzs = (val, currency) => Math.round(val * currency)
+
+export const UzsToUsd = (val, currency) =>
+    Math.round((val / currency) * 1000) / 1000
+
 // check empty string
-export const checkEmptyString = (values) => {
-    return values.some((value) => regexForEmptyString.test(value))
-}
+export const checkEmptyString = (values) =>
+    values.some((value) => regexForEmptyString.test(value))
 // export excel
 export const exportExcel = (data, fileName, headers) => {
     const autoFillColumnWidth = (json) => {
@@ -57,3 +55,15 @@ export const exportExcel = (data, fileName, headers) => {
     XLSX.utils.book_append_sheet(wb, ws, 'Maxsulotlar')
     XLSX.writeFile(wb, `${fileName}-${new Date().toLocaleDateString()}.xlsx`)
 }
+
+// round UZS||USD
+export const roundUzs = (val) => Math.round(val * 1) / 1
+
+export const roundUsd = (val) => Math.round(val * 1000) / 1000
+
+// reduce
+export const reduceSumm = (arr, key) =>
+    reduce(arr, (prev, current) => prev + current[key], 0)
+
+// current Exchange
+export const currentExchangerate = (uzs, usd) => roundUzs(uzs / usd)
