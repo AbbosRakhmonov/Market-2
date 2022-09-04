@@ -479,6 +479,7 @@ function Products() {
         setMinimumCount('')
         setCurrentProduct(null)
         setStickyForm(false)
+        setSellingPriceOfProcient('')
     }
     const handleEdit = (e) => {
         e.preventDefault()
