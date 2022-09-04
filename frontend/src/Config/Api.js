@@ -3,7 +3,7 @@ import Store from '../App/store'
 import {logOut} from '../Pages/Login/loginSlice'
 
 const instance = axios.create({
-    baseURL: `http://localhost:8801/api`,
+    baseURL: `http://alo24.uz/api`,
     headers: {
         'Content-Type': 'application/json',
     },

@@ -1,5 +1,5 @@
 import io from 'socket.io-client'
 
-const socket = io('http://localhost:8801/')
+const socket = io('http://alo24.uz/')
 
 export default socket
