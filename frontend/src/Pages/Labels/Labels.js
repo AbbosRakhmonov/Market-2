@@ -18,6 +18,7 @@ import {BarCode} from '../../Components/BarCode/BarCode.js'
 import {exportExcel, universalSort} from '../../App/globalFunctions.js'
 import {useTranslation} from 'react-i18next'
 import {filter, map} from 'lodash'
+import { universalToast } from '../../Components/ToastMessages/ToastMessages'
 
 const Labels = () => {
     const {t} = useTranslation(['common'])
@@ -308,23 +309,29 @@ const Labels = () => {
         ]
         dispatch(getProductsAll()).then(({error, payload}) => {
             if (!error) {
-                const ReportData = map(payload, (item, index) => ({
-                    nth: index + 1,
-                    code: item?.productdata?.code || '',
-                    name: item?.productdata?.name || '',
-                    total: item.total + item?.unit?.name || '',
-                    incomingprice: item?.price?.incomingprice || '',
-                    incomingpriceuzs: item?.price?.incomingpriceuzs || '',
-                    incomingpricealluzs:
-                        item?.price?.incomingpriceuzs * item.total,
-                    incomingpriceallusd:
-                        item?.price?.incomingprice * item.total,
-                    sellingprice: item?.price?.sellingprice || '',
-                    sellingpriceuzs: item?.price?.sellingpriceuzs || '',
-                    sellingalluzs: item?.price?.sellingpriceuzs * item.total,
-                    sellingallusd: item?.price?.sellingprice * item.total,
-                }))
-                exportExcel(ReportData, fileName, exportProductHead)
+                if(payload?.length>0){
+                    const ReportData = map(payload, (item, index) => ({
+                        nth: index + 1,
+                        code: item?.productdata?.code || '',
+                        name: item?.productdata?.name || '',
+                        total: (item.total + item?.unit?.name) || '',
+                        incomingprice: item?.price?.incomingprice || '',
+                        incomingpriceuzs: item?.price?.incomingpriceuzs || '',
+                        incomingpricealluzs:
+                            item?.price?.incomingpriceuzs * item.total,
+                        incomingpriceallusd:
+                            item?.price?.incomingprice * item.total,
+                        sellingprice: item?.price?.sellingprice || '',
+                        sellingpriceuzs: item?.price?.sellingpriceuzs || '',
+                        sellingalluzs:
+                            item?.price?.sellingpriceuzs * item.total,
+                        sellingallusd: item?.price?.sellingprice * item.total
+                    }))
+                    exportExcel(ReportData, fileName, exportProductHead)
+                }
+                else {
+                    universalToast("Jadvalda ma'lumot mavjud emas !","warning" )
+                }
             }
         })
     }

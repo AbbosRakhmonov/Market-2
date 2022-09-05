@@ -10,6 +10,7 @@ import {filter, map} from 'lodash';
 import NotFind from "../../Components/NotFind/NotFind";
 import SmallLoader from "../../Components/Spinner/SmallLoader";
 import { exportExcel } from "../../App/globalFunctions";
+import { universalToast } from "../../Components/ToastMessages/ToastMessages";
 
 function FilialExchangesProduct({id, currency}) { 
 
@@ -82,30 +83,36 @@ function FilialExchangesProduct({id, currency}) {
        const exportData = () => {
           let fileName = 'Almashinilgan tovarlar'
           const headersExcel = ['№', 'Sana', 'Id', 'Maxsulot turi', 'Maxsulot Soni', 'Jami olish summasi', 'Jami sotish summasi']
-          const ExchangesDatas = map(data, (item, index) => ({
-            nth: index + 1,
-            date : new Date(item?.createdAt).toLocaleDateString() || "",
-            product_id : item?._id || "",
-            product_type : item?.products.length || "",
-            product_number : item?.pieces || "",
-            all_get_product : currency === 'UZS'
-                            ? (
-                                  Math.round(item.totalincomingpriceuzs * 1) / 1
-                              ).toLocaleString('ru-RU')
-                            : (
-                                  Math.round(item.totalincomingprice * 1000) /
-                                  1000
-                              ).toLocaleString('ru-RU'),
-            all_sell_product :   currency === 'UZS' 
-                            ? (
-                                  Math.round(item?.totalsellingpriceuzs * 1) / 1
-                              ).toLocaleString('ru-RU')
-                            : (
-                                  Math.round(item?.totalsellingprice * 1000) /
-                                  1000
-                              ).toLocaleString('ru-RU')
-        }))
-          exportExcel(ExchangesDatas, fileName, headersExcel)
+          if(data?.length > 0){
+            const ExchangesDatas = map(data, (item, index) => ({
+                nth: index + 1,
+                date : new Date(item?.createdAt).toLocaleDateString() || "",
+                product_id : item?._id || "",
+                product_type : item?.products.length || "",
+                product_number : item?.pieces || "",
+                all_get_product : currency === 'UZS'
+                                ? (
+                                      Math.round(item.totalincomingpriceuzs * 1) / 1
+                                  ).toLocaleString('ru-RU')
+                                : (
+                                      Math.round(item.totalincomingprice * 1000) /
+                                      1000
+                                  ).toLocaleString('ru-RU'),
+                all_sell_product :   currency === 'UZS' 
+                                ? (
+                                      Math.round(item?.totalsellingpriceuzs * 1) / 1
+                                  ).toLocaleString('ru-RU')
+                                : (
+                                      Math.round(item?.totalsellingprice * 1000) /
+                                      1000
+                                  ).toLocaleString('ru-RU')
+               }))
+              exportExcel(ExchangesDatas, fileName, headersExcel)
+          }
+          else{
+            universalToast("Jadvalda ma'lumot mavjud emas !","warning")
+          }
+         
         } 
 
     useEffect(() => {

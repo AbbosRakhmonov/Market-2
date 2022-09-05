@@ -19,6 +19,7 @@ import UniversalModal from '../../../Components/Modal/UniversalModal.js'
 import { useTranslation } from 'react-i18next'
 import { filter, map } from 'lodash'
 import { universalSort, exportExcel } from './../../../App/globalFunctions';
+import { universalToast } from '../../../Components/ToastMessages/ToastMessages.js'
 
 const Sellings = () => {
     const {t} = useTranslation(['common'])
@@ -170,7 +171,8 @@ const Sellings = () => {
             t('Qarz UZS'),
             t('Qarz USD'),
         ]
-        const SellingData = map(data, (item, index) => ({
+        if(data?.length>0){
+            const SellingData = map(data, (item, index) => ({
                 nth: index + 1,
                 id: item?.id || "",
                 client: item?.client?.name || item?.packman?.name,
@@ -208,6 +210,11 @@ const Sellings = () => {
                         : 0
             }))         
             exportExcel(SellingData, fileName, sellingHeaders )
+        }
+        else{
+         universalToast("Jadvalda ma'lumot mavjud emas !","warning")
+        }
+
          }
 
     const handleClickPrint = (selling) => {

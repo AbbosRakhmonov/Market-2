@@ -27,7 +27,7 @@ import {filter, map, uniqueId} from 'lodash'
 import UniversalModal from '../../../Components/Modal/UniversalModal'
 import {useTranslation} from 'react-i18next'
 import CustomerPayment from '../../../Components/Payment/CustomerPayment.js'
-import {warningMorePayment} from '../../../Components/ToastMessages/ToastMessages.js'
+import {universalToast, warningMorePayment} from '../../../Components/ToastMessages/ToastMessages.js'
 import NotFind from '../../../Components/NotFind/NotFind.js'
 import Table from '../../../Components/Table/Table.js'
 import SmallLoader from '../../../Components/Spinner/SmallLoader'
@@ -759,22 +759,27 @@ const IncomingSuppliers = () => {
         }
         dispatch(excelIncomings(body)).then(({error, payload}) => {
             if (!error) {
-                const IncomingSupplierData = map(payload, (item, index) => ({
-                    nth: index + 1,
-                    supplier: item?.supplier?.name || '',
-                    code: item?.product?.productdata?.code || '',
-                    name: item?.product?.productdata?.name || '',
-                    count: item?.pieces + ' ' + item?.unit?.name || '',
-                    unit: item?.unitpriceuzs || '',
-                    unitusd: item?.unitprice || '',
-                    all: item?.totalpriceuzs || '',
-                    allusd: item?.totalprice || '',
-                }))
-                exportExcel(
-                    IncomingSupplierData,
-                    fileName,
-                    incomingSupplierHeaders
-                )
+                if(payload?.length>0){
+                    const IncomingSupplierData = map(payload, (item, index) => ({
+                        nth: index + 1,
+                        supplier: item?.supplier?.name || '',
+                        code: item?.product?.productdata?.code || '',
+                        name: item?.product?.productdata?.name || '',
+                        count: item?.pieces + ' ' + item?.unit?.name || '',
+                        unit: item?.unitpriceuzs || '',
+                        unitusd: item?.unitprice || '',
+                        all: item?.totalpriceuzs || '',
+                        allusd: item?.totalprice || '',
+                    }))
+                    exportExcel(
+                        IncomingSupplierData,
+                        fileName,
+                        incomingSupplierHeaders
+                    )
+                }
+                else{
+                    universalToast("Jadvalda ma'lumot mavjud emas !","warning" )
+                } 
             }
         })
     }

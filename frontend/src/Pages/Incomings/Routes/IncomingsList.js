@@ -18,6 +18,7 @@ import {
 } from '../incomingSlice'
 import {useTranslation} from 'react-i18next'
 import SmallLoader from '../../../Components/Spinner/SmallLoader'
+import { universalToast } from '../../../Components/ToastMessages/ToastMessages'
 
 
 const IncomingsList = () => {
@@ -321,18 +322,23 @@ const IncomingsList = () => {
         }
         dispatch(excelIncomings(body)).then(({error, payload}) => {
             if(!error){
-                const IncomingData = map(payload, (item, index) => ({
-                    nth: index + 1,
-                    supplier: item.supplier?.name || "",
-                    code: item.product?.productdata?.code || "",
-                    name: item.product?.productdata?.name || "",
-                    count: (item.pieces + ' ' + item.unit?.name) || "",
-                    unit: item?.unitpriceuzs || "",
-                    unitusd: item?.unitprice || "",
-                    all: item?.totalpriceuzs || "",
-                    allusd: item?.totalprice || "",
-                }))
-                exportExcel(IncomingData, fileName, incomingHeaders)
+                if(payload?.length > 0){
+                    const IncomingData = map(payload, (item, index) => ({
+                        nth: index + 1,
+                        supplier: item.supplier?.name || "",
+                        code: item.product?.productdata?.code || "",
+                        name: item.product?.productdata?.name || "",
+                        count: (item.pieces + ' ' + item.unit?.name) || "",
+                        unit: item?.unitpriceuzs || "",
+                        unitusd: item?.unitprice || "",
+                        all: item?.totalpriceuzs || "",
+                        allusd: item?.totalprice || "",
+                    }))
+                    exportExcel(IncomingData, fileName, incomingHeaders)
+                }
+                else {
+                    universalToast("Jadvalda ma'lumot mavjud emas !","warning" )
+                }
             }
         })
 

@@ -755,23 +755,29 @@ function Products() {
         }
         dispatch(getProductsAll(body)).then(({error, payload}) => {
             if (!error) {
-                const newData = map(payload, (item, index) => ({
-                    nth: index + 1,
-                    barcode: item?.productdata?.barcode || '',
-                    category: item?.category?.code || '',
-                    code: item?.productdata?.code || '',
-                    name: item?.productdata?.name || '',
-                    total: item?.total || '',
-                    unit: item?.unit?.name || '',
-                    incomingprice: item?.price?.incomingprice || '',
-                    incomingpriceuzs: item?.price?.incomingpriceuzs || '',
-                    sellingprice: item?.price?.sellingprice || '',
-                    sellingpriceuzs: item?.price?.sellingpriceuzs || '',
-                    tradeprice: item?.price?.tradeprice || '',
-                    tradepriceuzs: item?.price?.tradepriceuzs || '',
-                    minimumcount: item?.minimumcount || '',
-                }))
-                exportExcel(newData, fileName, exportHeader)
+                if(payload?.length > 0){
+                    const newData = map(payload, (item, index) => ({
+                        nth: index + 1,
+                        barcode: item?.productdata?.barcode || '',
+                        category: item?.category?.code || '',
+                        code: item?.productdata?.code || '',
+                        name: item?.productdata?.name || '',
+                        total: item?.total || '',
+                        unit: item?.unit?.name || '',
+                        incomingprice: item?.price?.incomingprice || '',
+                        incomingpriceuzs: item?.price?.incomingpriceuzs || '',
+                        sellingprice: item?.price?.sellingprice || '',
+                        sellingpriceuzs: item?.price?.sellingpriceuzs || '',
+                        tradeprice: item?.price?.tradeprice || '',
+                        tradepriceuzs: item?.price?.tradepriceuzs || '',
+                        minimumcount: item?.minimumcount || '',
+                    }))
+                    exportExcel(newData, fileName, exportHeader)
+                }
+                else {
+                    universalToast("Jadvalda ma'lumot mavjud emas !","warning" )
+                }
+               
             }
         })
     }

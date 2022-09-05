@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import {exportExcel, universalSort} from '../../App/globalFunctions'
 import ExportBtn from '../../Components/Buttons/ExportBtn'
 import Table from '../../Components/Table/Table'
+import { universalToast } from '../../Components/ToastMessages/ToastMessages'
 import {getMinimumProducts} from './productreportSlice'
 
 const ProductMinimum = () => {
@@ -82,23 +83,28 @@ const ProductMinimum = () => {
             'Optom narxi UZS',
             'Minimum qiymat',
         ]
-        const newData = map(minimumproducts, (item, index) => ({
-            nth: index + 1,
-            barcode: item?.productdata?.barcode || '',
-            category: item?.category?.code || '',
-            code: item?.productdata?.code || '',
-            name: item?.productdata?.name || '',
-            total: item?.total || '',
-            unit: item?.unit?.name || '',
-            incomingprice: item?.price?.incomingprice || '',
-            incomingpriceuzs: item?.price?.incomingpriceuzs || '',
-            sellingprice: item?.price?.sellingprice || '',
-            sellingpriceuzs: item?.price?.sellingpriceuzs || '',
-            tradeprice: item?.price?.tradeprice || '',
-            tradepriceuzs: item?.price?.tradepriceuzs || '',
-            minimumcount: item?.minimumcount || '',
-        }))
-        exportExcel(newData, fileName, exportHeader)
+        if(minimumproducts?.length > 0) {
+            const newData = map(minimumproducts, (item, index) => ({
+                nth: index + 1,
+                barcode: item?.productdata?.barcode || '',
+                category: item?.category?.code || '',
+                code: item?.productdata?.code || '',
+                name: item?.productdata?.name || '',
+                total: item?.total || '',
+                unit: item?.unit?.name || '',
+                incomingprice: item?.price?.incomingprice || '',
+                incomingpriceuzs: item?.price?.incomingpriceuzs || '',
+                sellingprice: item?.price?.sellingprice || '',
+                sellingpriceuzs: item?.price?.sellingpriceuzs || '',
+                tradeprice: item?.price?.tradeprice || '',
+                tradepriceuzs: item?.price?.tradepriceuzs || '',
+                minimumcount: item?.minimumcount || '',
+            }))
+            exportExcel(newData, fileName, exportHeader)
+        }
+        else {
+           universalToast("Jadvalda ma'lumot mavjud emas !","warning");
+        }
     }
 
     const filterData = (filterKey) => {

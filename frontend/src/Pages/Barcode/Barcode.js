@@ -309,12 +309,17 @@ function Barcode() {
     const exportData = () => {
         let fileName = 'Shtrix Kodlar'
         const exportHeader = ['№', 'Shtix kodi', 'Maxsulot Nomi']
-        const BarcodeData = map(products, (item, index) => ({
-            nth: index + 1,
-            code: item?.barcode || "",
-            name: item?.name || "",
-        }))
-        exportExcel(BarcodeData, fileName, exportHeader)
+        if(products?.length > 0){
+            const BarcodeData = map(products, (item, index) => ({
+                nth: index + 1,
+                code: item?.barcode || "",
+                name: item?.name || "",
+            }))
+            exportExcel(BarcodeData, fileName, exportHeader)
+        }
+        else {
+          universalToast("Jadvalda ma'lumot mavjud emas !","warning" )
+        }
     }
 
 
