@@ -27,6 +27,10 @@ function ExchangesBody({approveFunction, toggleModal, dataObject}) {
         number: productNumber ? Number(productNumber) : '',
         name: dataObject?.name,
         productDataId: dataObject?.productDataId,
+        barcode: dataObject.barcode,
+        tradeprice: dataObject.tradeprice,
+        tradepriceuzs: dataObject.tradepriceuzs,
+        minimumcount: dataObject.minimumcount,
     }
 
     const handleNumberProduct = (event) => {
