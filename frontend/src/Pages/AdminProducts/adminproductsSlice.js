@@ -12,7 +12,8 @@ export const getMarkets = createAsyncThunk(
         } catch (error) {
             return rejectWithValue(error)
         }
-    })
+    }
+)
 
 export const getMarketsByFilter = createAsyncThunk(
     'adminproducts/getMarketsByFilter',
@@ -23,14 +24,17 @@ export const getMarketsByFilter = createAsyncThunk(
         } catch (error) {
             return rejectWithValue(error)
         }
-
-    })
+    }
+)
 
 export const getBranchesByFilter = createAsyncThunk(
     'adminproducts/getBranchesByFilter',
     async (body, {rejectWithValue}) => {
         try {
-            const {data} = await Api.post('/administrator/getmarketcontrols', body)
+            const {data} = await Api.post(
+                '/administrator/getmarketcontrols',
+                body
+            )
             return data
         } catch (error) {
             return rejectWithValue(error)
@@ -41,7 +45,10 @@ export const getBranches = createAsyncThunk(
     'adminproducts/getBranches',
     async (body, {rejectWithValue}) => {
         try {
-            const {data} = await Api.post('/administrator/getmarketcontrols', body)
+            const {data} = await Api.post(
+                '/administrator/getmarketcontrols',
+                body
+            )
             return data
         } catch (error) {
             return rejectWithValue(error)
@@ -69,7 +76,8 @@ export const createMarket = createAsyncThunk(
         } catch (error) {
             return rejectWithValue(error)
         }
-    })
+    }
+)
 
 export const createDirector = createAsyncThunk(
     'adminproducts/createDirector',
@@ -91,13 +99,26 @@ export const editDirector = createAsyncThunk(
         } catch (error) {
             return rejectWithValue(error)
         }
-    })
+    }
+)
 
 export const editMarket = createAsyncThunk(
     'adminproducts/editMarket',
     async (body, {rejectWithValue}) => {
         try {
             const {data} = await Api.put('/market/edit', body)
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
+export const deleteMarket = createAsyncThunk(
+    'adminproducts/deleteMarket',
+    async (body, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post('/administrator/delete', body)
             return data
         } catch (error) {
             return rejectWithValue(error)
@@ -125,7 +146,8 @@ const adminproductsSlice = createSlice({
         loadingGetBranches: false,
         errorGetBranches: null,
         loadingUpdateMarkets: false,
-        errorUpdateMarkets: null
+        errorUpdateMarkets: null,
+        loadingDeleteMarket: false,
     },
     reducers: {
         clearSearchedMarkets: (state) => {
@@ -135,7 +157,7 @@ const adminproductsSlice = createSlice({
         clearSearchedBranches: (state) => {
             state.searchedBranches = []
             state.totalSearchedBranches = 0
-        }
+        },
     },
     extraReducers: {
         [getMarkets.pending]: (state) => {
@@ -159,7 +181,10 @@ const adminproductsSlice = createSlice({
         [getMarketsByFilter.pending]: (state) => {
             state.loadingGetMarkets = true
         },
-        [getMarketsByFilter.fulfilled]: (state, {payload: {markets, count}}) => {
+        [getMarketsByFilter.fulfilled]: (
+            state,
+            {payload: {markets, count}}
+        ) => {
             state.searchedMarkets = markets
             state.totalSearched = count
             state.loadingGetMarkets = false
@@ -192,7 +217,10 @@ const adminproductsSlice = createSlice({
         [getBranchesByFilter.pending]: (state) => {
             state.loadingGetBranches = true
         },
-        [getBranchesByFilter.fulfilled]: (state, {payload: {markets, count}}) => {
+        [getBranchesByFilter.fulfilled]: (
+            state,
+            {payload: {markets, count}}
+        ) => {
             state.searchedBranches = markets
             state.totalSearchedBranches = count
             state.loadingGetBranches = false
@@ -225,12 +253,20 @@ const adminproductsSlice = createSlice({
         [updateMarkets.fulfilled]: (state, {payload: {markets, market}}) => {
             state.loadingUpdateMarkets = false
             if (state.searchedBranches.length > 0) {
-                state.searchedBranches = state.searchedBranches.map(sb => sb._id === markets[0]._id ? markets[0] : sb)
+                state.searchedBranches = state.searchedBranches.map((sb) =>
+                    sb._id === markets[0]._id ? markets[0] : sb
+                )
             }
-            state.branches = map(state.branches, (sb) => sb._id === markets[0]._id ? markets[0] : sb)
-            state.markets = map(state.markets, (m) => m._id === market._id ? market : m)
+            state.branches = map(state.branches, (sb) =>
+                sb._id === markets[0]._id ? markets[0] : sb
+            )
+            state.markets = map(state.markets, (m) =>
+                m._id === market._id ? market : m
+            )
             if (state.searchedMarkets.length > 0) {
-                state.searchedMarkets = map(state.searchedMarkets, (m) => m._id === market._id ? market : m)
+                state.searchedMarkets = map(state.searchedMarkets, (m) =>
+                    m._id === market._id ? market : m
+                )
             }
         },
         [updateMarkets.rejected]: (state, {payload}) => {
@@ -243,16 +279,35 @@ const adminproductsSlice = createSlice({
         },
         [editMarket.fulfilled]: (state, {payload}) => {
             state.loadingGetMarkets = false
-            state.markets = map(state.markets, (m) => m._id === payload._id ? payload : m)
+            state.markets = map(state.markets, (m) =>
+                m._id === payload._id ? payload : m
+            )
             if (state.searchedMarkets.length > 0) {
-                state.searchedMarkets = map(state.searchedMarkets, (m) => m._id === payload._id ? payload : m)
+                state.searchedMarkets = map(state.searchedMarkets, (m) =>
+                    m._id === payload._id ? payload : m
+                )
             }
         },
         [editMarket.rejected]: (state, {payload}) => {
             universalToast(payload, 'error')
             state.loadingGetMarkets = false
-        }
-    }
+        },
+        [deleteMarket.pending]: (state) => {
+            state.loadingDeleteMarket = true
+        },
+        [deleteMarket.fulfilled]: (state) => {
+            state.loadingDeleteMarket = false
+            universalToast(
+                "Do'kon ma'lumotlari muvaffaqqiyatli o'chirildi",
+                'success'
+            )
+        },
+        [deleteMarket.rejected]: (state, {payload}) => {
+            universalToast(payload, 'error')
+            state.loadingDeleteMarket = false
+        },
+    },
 })
-export const {clearSearchedMarkets, clearSearchedBranches} = adminproductsSlice.actions
+export const {clearSearchedMarkets, clearSearchedBranches} =
+    adminproductsSlice.actions
 export default adminproductsSlice.reducer

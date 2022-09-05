@@ -28,10 +28,10 @@ import {AdminProductTableRow} from './TableRows/AdminProductTableRow'
 import {ReturnProductsTableRow} from './TableRows/ReturnProductsTableRow.js'
 import {GeneralReportTableRow} from './TableRows/GeneralReportTableRow.js'
 import {RegisterSaleTableFooter} from './TableFooters/RegisterSaleTableFooter.js'
-import { FilialShopTableRow } from './TableRows/FilialShopTableRow'
+import {FilialShopTableRow} from './TableRows/FilialShopTableRow'
 import DailyReport from './TableRows/DailyReport.js'
 import SupplierIncomingsTableRow from './TableRows/SupplierIncomingsTableRow'
-import { FilialShopDataIdTableRow } from './TableRows/FilialShopDataIdTablerow'
+import {FilialShopDataIdTableRow} from './TableRows/FilialShopDataIdTablerow'
 
 function Table({
     page,
@@ -70,6 +70,7 @@ function Table({
     linkToSupplierReport,
     printedData,
     productminimumpage,
+    handleDelete,
 }) {
     const checkRows = () => {
         switch (page) {
@@ -95,6 +96,7 @@ function Table({
                         Edit={Edit}
                         Delete={Delete}
                         onClickTableRow={onClickTableRow}
+                        handleDelete={handleDelete}
                     />
                 )
             case 'category':
@@ -387,24 +389,24 @@ function Table({
                         currency={currency}
                     />
                 )
-                case 'filialShop':
-                    return (
-                        <FilialShopTableRow
-                            data={data}
-                            currentPage={currentPage}
-                            countPage={countPage}
-                            currency={currency}
-                        />
-                    )
-                case 'filialShopDataId' :
-                    return (
-                        <FilialShopDataIdTableRow
-                            data={data}
-                            currentPage={currentPage}
-                            countPage={countPage}
-                            currency={currency}
-                        />
-                    )    
+            case 'filialShop':
+                return (
+                    <FilialShopTableRow
+                        data={data}
+                        currentPage={currentPage}
+                        countPage={countPage}
+                        currency={currency}
+                    />
+                )
+            case 'filialShopDataId':
+                return (
+                    <FilialShopDataIdTableRow
+                        data={data}
+                        currentPage={currentPage}
+                        countPage={countPage}
+                        currency={currency}
+                    />
+                )
             case 'generalreport':
                 return <GeneralReportTableRow data={data} currency={currency} />
             case 'dailyreport':
@@ -440,7 +442,7 @@ function Table({
     return (
         <table className='overflow-x-auto w-full'>
             <thead className='rounded-t-lg sticky top-0'>
-            <Thead headers={headers} Sort={Sort} sortItem={sortItem} />
+                <Thead headers={headers} Sort={Sort} sortItem={sortItem} />
             </thead>
             <tbody>{checkRows()}</tbody>
             {footer && <tfoot>{checkFooters()}</tfoot>}
