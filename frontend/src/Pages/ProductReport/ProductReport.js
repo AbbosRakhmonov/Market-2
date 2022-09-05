@@ -18,6 +18,7 @@ import {
 import {filter, map} from 'lodash'
 import Dates from '../../Components/Dates/Dates.js'
 import {exportExcel} from '../../App/globalFunctions.js'
+import { universalToast } from '../../Components/ToastMessages/ToastMessages.js'
 
 
 function ProductReport() {
@@ -225,23 +226,29 @@ function ProductReport() {
         }
         dispatch(getAllProductReports(body)).then(({error, payload: {products}}) => {
             if (!error) {
-                const data = map(products, (product, index) => ({
-                    nth: index + 1,
-                    sana: `${new Date(product.createdAt).toLocaleDateString('ru-Ru')} ${new Date(product.createdAt).toLocaleTimeString('ru-Ru', {
-                        hourCycle: 'h24'
-                    })}`,
-                    client: product.saleconnector?.client ? product.saleconnector.client.name : product.saleconnector?.id,
-                    code: product.product.productdata.code,
-                    name: product.product.productdata.name,
-                    previous: product.previous ? product.previous + ' ' + product.product.unit.name || '' : '',
-                    soni: product.pieces + ' ' + product.product.unit.name || '',
-                    next: product.next ? product.next + ' ' + product.product.unit.name || '' : '',
-                    narxiUSD: product.unitprice,
-                    narxiUZS: product.unitpriceuzs,
-                    jamiUSD: product.totalprice,
-                    jamiUZS: product.totalpriceuzs
-                }))
-                exportExcel(data, fileName, exportProductHead)
+                if(products?.length > 0){
+                    const data = map(products, (product, index) => ({
+                        nth: index + 1,
+                        sana: `${new Date(product.createdAt).toLocaleDateString('ru-Ru')} ${new Date(product.createdAt).toLocaleTimeString('ru-Ru', {
+                            hourCycle: 'h24'
+                        })}`,
+                        client: product.saleconnector?.client ? product.saleconnector.client.name : product.saleconnector?.id,
+                        code: product.product.productdata.code,
+                        name: product.product.productdata.name,
+                        previous: product.previous ? product.previous + ' ' + product.product.unit.name || '' : '',
+                        soni: product.pieces + ' ' + product.product.unit.name || '',
+                        next: product.next ? product.next + ' ' + product.product.unit.name || '' : '',
+                        narxiUSD: product.unitprice,
+                        narxiUZS: product.unitpriceuzs,
+                        jamiUSD: product.totalprice,
+                        jamiUZS: product.totalpriceuzs
+                    }))
+                    exportExcel(data, fileName, exportProductHead)
+                }
+                else{
+                   universalToast("Jadvalda ma'lumot mavjud emas !","warning")
+                }
+                
             }
         })
     }

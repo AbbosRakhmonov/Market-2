@@ -317,12 +317,16 @@ const Category = () => {
     const excelData = () => {
         let fileName = 'Kategoriyalar'
         const exportHeader = ['№', 'Kodi', 'Nomi']
-        const categoryData = map(data, (item, index) => ({
+        if(data?.length > 0){
+            const categoryData = map(data, (item, index) => ({
         nth: index + 1,
         code: item?.code || "",
         name: item?.name || "",
         }))
         exportExcel(categoryData, fileName, exportHeader)
+        }  else {
+            universalToast("Jadvalda ma'lumot mavjud emas !","warning" )
+        }  
     }
 
     useEffect(() => {
