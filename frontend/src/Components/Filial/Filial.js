@@ -157,7 +157,7 @@ const Filial = ({active, value}) => {
                     />
                     <Route
                         path={`/:tablename/:_id/exchangesId`}
-                        element={ useParamsId === value._id ? <ProductIdExchanges/> : ""}
+                        element={ useParamsId === value._id ? <ProductIdExchanges currency={currencyType}/> : ""}
                     />
                 </Routes>
             </AnimatePresence>

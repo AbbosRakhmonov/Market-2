@@ -45,7 +45,7 @@ export const FilialShopTableRow = ({
                     </td>
                     <td className='py-[0.375rem] td text-center'>
                         <div className='flex items justify-center'>
-                            <Link to='exchangesId' state={item?._id}>
+                            <Link to='exchangesId' state={{id : item?._id}}>
                                 <IoArrowRedoCircleSharp
                                     size={'1.75rem'}
                                     className='cursor-pointer text-black-800'

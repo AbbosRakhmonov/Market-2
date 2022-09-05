@@ -39,6 +39,16 @@ const FilialExchangesSlice = createSlice({
       total : 0,
       totalSearched : 0, 
       searchedExchanges: [],
+      startDate: new Date(new Date(
+         new Date().getFullYear(),
+         new Date().getMonth(),
+         new Date().getDate(),
+     ).setHours(0, 0, 0, 0)).toISOString(),
+     endDate: new Date(new Date(
+         new Date().getFullYear(),
+         new Date().getMonth(),
+         new Date().getDate(),
+     ).setHours(23, 59, 59, 59)).toISOString(),
    },
    reducers : {
       clearErrorShops : (state) => {
@@ -47,7 +57,13 @@ const FilialExchangesSlice = createSlice({
       clearSearchedExchanges : (state) => {
          state.searchedExchanges = []
          state.totalSearched = 0
-      }
+      },
+      changeStartDate: (state, { payload }) => {
+         state.startDate = payload.start
+     },
+     changeEndDate: (state, { payload }) => {
+         state.endDate = payload.end
+     }
    },
    extraReducers : {
       [getFilialShopData.pending] : (state) => {
@@ -86,7 +102,9 @@ const FilialExchangesSlice = createSlice({
 
 export const {
    clearErrorShops, 
-   clearSearchedExchanges
+   clearSearchedExchanges,
+   changeStartDate,
+   changeEndDate
 } = FilialExchangesSlice.actions
 
 export default FilialExchangesSlice.reducer
