@@ -249,11 +249,9 @@ const AdminProduct = () => {
     }
 
     const handleClickRow = (market) => {
-        if (!market?.mainmarket) {
-            setCurrentMarket(market)
-            setModalBody('filterBranch')
-            setModalVisible(true)
-        }
+        setCurrentMarket(market)
+        setModalBody('filterBranch')
+        setModalVisible(true)
     }
     const handleClickSave = () => {
         const body = {

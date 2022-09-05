@@ -14,14 +14,16 @@ import SavedSellingsReducer from '../Pages/Sale/Slices/savedSellingsSlice.js'
 import ClientsReducer from '../Pages/Clients/clientsSlice'
 import ReportsReducer from '../Pages/Reports/reportsSlice.js'
 import SellingsReducer from '../Pages/Sale/Slices/sellingsSlice.js'
-import SellersReducer from './../Pages/Seller/sellerSlice'
-import BarcodeReducer from './../Pages/Barcode/barcodeSlice.js'
+import SellersReducer from '../Pages/Seller/sellerSlice'
+import BarcodeReducer from '../Pages/Barcode/barcodeSlice.js'
 import ExpenseReducer from '../Pages/Expense/expenseSlice'
 import AdminProductsReducer from '../Pages/AdminProducts/adminproductsSlice.js'
 import ProductReportReducer from '../Pages/ProductReport/productreportSlice.js'
-import exchangesReducer from './../Pages/ProductExchanges/productExchangesSlice.js'
-import FilialDatasReducer from './../Pages/FilialExchanges/FilialExchengesSlice'
-import ExchangesDataIdReducer from './../Pages/ProductIdExchanges/ProductIdExchangesSlice'
+import exchangesReducer from '../Pages/ProductExchanges/productExchangesSlice.js'
+import FilialDatasReducer from '../Pages/FilialExchanges/FilialExchengesSlice'
+import ExchangesDataIdReducer from '../Pages/ProductIdExchanges/ProductIdExchangesSlice'
+import CategoryReportReducer from '../Pages/CategoryReport/CategoryReportSlice.js'
+
 export default configureStore({
     devTools: process.env.NODE_ENV === 'development',
     reducer: {
@@ -46,7 +48,8 @@ export default configureStore({
         adminmarkets: AdminProductsReducer,
         productReport: ProductReportReducer,
         exchanges: exchangesReducer,
-        filialData: FilialDatasReducer, 
-        exchangesIdData: ExchangesDataIdReducer
-    },
+        filialData: FilialDatasReducer,
+        exchangesIdData: ExchangesDataIdReducer,
+        categoryReport: CategoryReportReducer
+    }
 })

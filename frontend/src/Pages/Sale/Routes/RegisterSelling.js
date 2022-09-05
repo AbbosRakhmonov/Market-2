@@ -100,6 +100,7 @@ const RegisterSelling = () => {
     const [exchangerate, setExchangerate] = useState(currency)
     const [saleComment, setSaleComment] = useState('')
     const [lowUnitpriceProducts, setLowUnitpriceProducts] = useState([])
+    const [wholesale, setWholesale] = useState(false)
     let delay = null
     const headers = [
         {title: '№'},
@@ -120,15 +121,6 @@ const RegisterSelling = () => {
         {title: t('Soni')},
         {title: t('Jami')}
     ]
-    const toggleModal = () => {
-        setModalBody('')
-        setModalVisible(!modalVisible)
-        setSelectedProduct('')
-        setTimeout(() => {
-            setCurrentProduct(null)
-        }, 500)
-    }
-
     // payment
     const togglePaymentModal = (bool) => {
         bool
@@ -548,7 +540,22 @@ const RegisterSelling = () => {
     const handleApprovePay = () => {
         handleClosePay()
         const body = {
-            saleproducts: tableProducts,
+            saleproducts: map(tableProducts, (product) => {
+                if (wholesale) {
+                    const prev = {
+                        ...product,
+                        unitprice: product.tradeprice || product.unitprice,
+                        unitpriceuzs: product.tradepriceuzs || product.unitpriceuzs
+                    }
+                    delete prev.tradeprice
+                    delete prev.tradepriceuzs
+                    return prev
+                } else {
+                    delete product.tradeprice
+                    delete product.tradepriceuzs
+                    return product
+                }
+            }),
             client: {
                 _id: clientValue ? clientValue.value : null,
                 name: clientValue ? clientValue.label : userValue,
@@ -588,10 +595,12 @@ const RegisterSelling = () => {
             saleconnectorid: saleConnectorId,
             comment: saleComment
         }
+        console.log(body)
         dispatch(saleConnectorId ? addPayment(body) : makePayment(body)).then(
             ({payload, error}) => {
                 if (!error) {
                     setModalData(payload)
+                    setWholesale(false)
                     setTimeout(() => {
                         setModalBody('checkSell')
                         setModalVisible(true)
@@ -691,7 +700,6 @@ const RegisterSelling = () => {
     }
     // bu yerda boshqa funksiyalar
     const handleChange = (id, value, key) => {
-        // get index of product in tableProducts
         switch (key) {
             case 'unitprice':
                 handleChangeProductUnitPriceTable(id, value)
@@ -762,6 +770,8 @@ const RegisterSelling = () => {
                 },
                 totalprice: product.price.sellingprice,
                 totalpriceuzs: product.price.sellingpriceuzs,
+                tradeprice: product.price.tradeprice || 0,
+                tradepriceuzs: product.price.tradepriceuzs || 0,
                 pieces: 1,
                 incomingprice: product.price.incomingprice,
                 incomingpriceuzs: product.price.incomingpriceuzs,
@@ -856,7 +866,7 @@ const RegisterSelling = () => {
         })
     }
     const handleChangeProductUnitPriceTable = (id, value) => {
-        const newRelease = map(tableProducts, (prevProduct) =>
+        const newRelease = !wholesale ? map(tableProducts, (prevProduct) =>
             prevProduct.product._id === id
                 ? {
                     ...prevProduct,
@@ -884,7 +894,31 @@ const RegisterSelling = () => {
                             )
                 }
                 : prevProduct
-        )
+        ) : map(tableProducts, (prevProduct) => prevProduct.product._id === id ? {
+            ...prevProduct,
+            tradeprice:
+                currencyType === 'USD'
+                    ? value
+                    : UzsToUsd(value, exchangerate),
+            tradepriceuzs:
+                currencyType === 'UZS'
+                    ? value
+                    : UsdToUzs(value, exchangerate),
+            totalprice:
+                currencyType === 'USD'
+                    ? value * prevProduct.pieces
+                    : UzsToUsd(
+                        value * prevProduct.pieces,
+                        exchangerate
+                    ),
+            totalpriceuzs:
+                currencyType === 'UZS'
+                    ? value * prevProduct.pieces
+                    : UsdToUzs(
+                        value * prevProduct.pieces,
+                        exchangerate
+                    )
+        } : prevProduct)
         setTableProducts(newRelease)
     }
     const handleChangeProductNumberTable = (id, value) => {
@@ -893,9 +927,9 @@ const RegisterSelling = () => {
                 ? {
                     ...prevProduct,
                     pieces: value,
-                    totalprice: convertToUsd(value * prevProduct.unitprice),
+                    totalprice: convertToUsd(Number(value) * (wholesale ? prevProduct.tradeprice || prevProduct.unitprice : prevProduct.unitprice)),
                     totalpriceuzs: convertToUzs(
-                        value * prevProduct.unitpriceuzs
+                        Number(value) * (wholesale ? prevProduct.tradepriceuzs || prevProduct.unitpriceuzs : prevProduct.unitpriceuzs)
                     )
                 }
                 : prevProduct
@@ -922,11 +956,11 @@ const RegisterSelling = () => {
                     pieces: Number(prevProduct.pieces) + 1,
                     totalprice: convertToUsd(
                         (Number(prevProduct.pieces) + 1) *
-                        prevProduct.unitprice
+                        (wholesale ? prevProduct.tradeprice || prevProduct.unitprice : prevProduct.unitprice)
                     ),
                     totalpriceuzs: convertToUzs(
                         (Number(prevProduct.pieces) + 1) *
-                        prevProduct.unitpriceuzs
+                        (wholesale ? prevProduct.tradepriceuzs || prevProduct.unitpriceuzs : prevProduct.unitpriceuzs)
                     )
                 }
                 : prevProduct
@@ -945,35 +979,18 @@ const RegisterSelling = () => {
                     totalprice: convertToUsd(
                         (Number(prevProduct.pieces) > 1
                             ? Number(prevProduct.pieces) - 1
-                            : 1) * prevProduct.unitprice
+                            : 1) * (wholesale ? prevProduct.tradeprice || prevProduct.unitprice : prevProduct.unitprice)
                     ),
                     totalpriceuzs: convertToUzs(
                         (Number(prevProduct.pieces) > 1
                             ? Number(prevProduct.pieces) - 1
-                            : 1) * prevProduct.unitpriceuzs
+                            : 1) * (wholesale ? prevProduct.tradepriceuzs || prevProduct.unitpriceuzs : prevProduct.unitpriceuzs)
                     )
                 }
                 : prevProduct
         )
         setTableProducts(newRelease)
     }
-    const handleAddProduct = () => {
-        if (currentProduct) {
-            if (
-                (currencyType === 'USD' &&
-                    currentProduct.incomingprice < currentProduct.unitprice) ||
-                (currencyType === 'UZS' &&
-                    currentProduct.incomingpriceuzs <
-                    currentProduct.unitpriceuzs)
-            ) {
-                setTableProducts([...tableProducts, currentProduct])
-                toggleModal()
-            } else {
-                warningLessSellPayment()
-            }
-        }
-    }
-
     const changeComment = (e) => {
         setSaleComment(e)
     }
@@ -1074,6 +1091,39 @@ const RegisterSelling = () => {
             currentEchangerate(allUzs, all)
         } else {
             warningReturnProductsEmpty()
+        }
+    }
+    const toggleSalePrice = (e) => {
+        let checked = e.target.checked
+        if (tableProducts.length > 0) {
+            setWholesale(!wholesale)
+            if (checked) {
+                setTableProducts(prevState => prevState.map(product => ({
+                    ...product,
+                    totalprice: product.tradeprice ? convertToUsd(
+                        Number(product.pieces) *
+                        product.tradeprice
+                    ) : product.totalprice,
+                    totalpriceuzs: product.tradepriceuzs ? convertToUzs(
+                        Number(product.pieces) *
+                        product.tradepriceuzs
+                    ) : product.totalpriceuzs
+                })))
+            } else {
+                setTableProducts(prevState => prevState.map(product => ({
+                    ...product,
+                    totalprice: product.unitprice ? convertToUsd(
+                        Number(product.pieces) *
+                        product.unitprice
+                    ) : product.totalprice,
+                    totalpriceuzs: product.unitpriceuzs ? convertToUzs(
+                        Number(product.pieces) *
+                        product.unitpriceuzs
+                    ) : product.totalpriceuzs
+                })))
+            }
+        } else {
+            warningSaleProductsEmpty()
         }
     }
     useEffect(() => {
@@ -1278,23 +1328,19 @@ const RegisterSelling = () => {
             <UniversalModal
                 body={modalBody}
                 toggleModal={
-                    modalBody === 'sell'
-                        ? toggleModal
-                        : modalBody === 'complete'
-                            ? handleClosePay
-                            : toggleCheckModal
+                    modalBody === 'complete'
+                        ? handleClosePay
+                        : toggleCheckModal
                 }
                 approveFunction={
-                    modalBody === 'sell'
-                        ? handleAddProduct
-                        : modalBody === 'complete'
-                            ? returnProducts.length
-                                ? handleApproveReturn
-                                : handleApprovePay
-                            : handleClickPrint
+                    modalBody === 'complete'
+                        ? returnProducts.length
+                            ? handleApproveReturn
+                            : handleApprovePay
+                        : handleClickPrint
                 }
                 isOpen={modalVisible}
-                product={modalBody === 'sell' ? currentProduct : modalData}
+                product={modalData}
                 headers={headers}
                 headerText={
                     modalBody === 'complete' &&
@@ -1347,14 +1393,23 @@ const RegisterSelling = () => {
                         </div>
                     </div>
                     {!returnProducts.length && (
-                        <FieldContainer
-                            select={true}
-                            placeholder={t('misol: kompyuter')}
-                            value={selectedProduct}
-                            label={t('Maxsulotlar')}
-                            onChange={handleChangeSelectedProduct}
-                            options={filteredProducts}
-                        />
+                        <div className={'flex flex-col gap-[1.25rem]'}>
+                            <FieldContainer
+                                select={true}
+                                placeholder={t('misol: kompyuter')}
+                                value={selectedProduct}
+                                label={t('Maxsulotlar')}
+                                onChange={handleChangeSelectedProduct}
+                                options={filteredProducts}
+                            />
+                            <div className={'flex justify-end'}>
+                                <div className='checkbox-card sale-toggle-container'>
+                                    <p className={'toggleText'}>{t('Optom narxida hisoblash')} :</p>
+                                    <input type='checkbox' checked={wholesale}
+                                           onChange={toggleSalePrice} />
+                                </div>
+                            </div>
+                        </div>
                     )}
                 </div>
                 <div className={'tableContainerPadding'}>
@@ -1382,6 +1437,7 @@ const RegisterSelling = () => {
                             increment={increment}
                             decrement={decrement}
                             lowUnitpriceProducts={lowUnitpriceProducts}
+                            wholeSale={wholesale}
                         />
                     )}
                 </div>
