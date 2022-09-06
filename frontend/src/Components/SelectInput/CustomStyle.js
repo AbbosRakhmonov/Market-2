@@ -18,7 +18,7 @@ const DropdownIndicator = (styles, {isFocused}) => ({
 })
 const Menu = (styles) => ({
     ...styles,
-    overflow: 'hidden'
+    zIndex: 30
 })
 const Option = (styles, {isFocused, isSelected}) => ({
     ...styles,

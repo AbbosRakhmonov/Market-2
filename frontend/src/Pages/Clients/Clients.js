@@ -110,9 +110,12 @@ const ClientsPage = () => {
     // handle submit of inputs
     const addNewClients = (e) => {
         e.preventDefault()
-        const filter = checkEmptyString([clientName])
-        if (filter) {
-            warningEmptyInput()
+        const {failed, message} = checkEmptyString([{
+            value: clientName,
+            message: t('Mijoz ismi')
+        }])
+        if (failed) {
+            warningEmptyInput(message)
         } else {
             const body = {
                 name: clientName,
@@ -135,9 +138,12 @@ const ClientsPage = () => {
 
     const handleEdit = (e) => {
         e.preventDefault()
-        const filter = checkEmptyString([clientName])
-        if (filter) {
-            warningEmptyInput()
+        const {failed, message} = checkEmptyString([{
+            value: clientName,
+            message: t('Mijoz ismi')
+        }])
+        if (failed) {
+            warningEmptyInput(message)
         } else {
             const body = {
                 name: clientName,

@@ -12,7 +12,8 @@ export const RegisterSaleTableRow = (
         currency,
         increment,
         decrement,
-        lowUnitpriceProducts
+        lowUnitpriceProducts,
+        wholeSale
     }) => {
     const [showIncomingPrice, setShowIncomingPrice] = useState([])
     const changeShow = (i) => {
@@ -58,8 +59,8 @@ export const RegisterSaleTableRow = (
                         <TableInput
                             value={
                                 currency !== 'UZS'
-                                    ? product.unitprice
-                                    : product.unitpriceuzs
+                                    ? wholeSale ? product.tradeprice || product.unitprice : product.unitprice
+                                    : wholeSale ? product.tradepriceuzs || product.unitpriceuzs : product.unitpriceuzs
                             }
                             onChange={(e) =>
                                 changeHandler(
