@@ -66,7 +66,8 @@ export const AdminProductTableRow = ({
                         <TableBtn
                             type={'delete'}
                             bgcolor='bg-error-500 ml-2.5'
-                            onClick={() => {
+                            onClick={(e) => {
+                                e.stopPropagation()
                                 handleDelete(market)
                             }}
                         />
