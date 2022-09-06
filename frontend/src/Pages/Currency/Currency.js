@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import FieldContainer from '../../Components/FieldContainer/FieldContainer.js'
 import Button from '../../Components/Buttons/BtnAddRemove.js'
 import Table from '../../Components/Table/Table.js'
-import { useDispatch, useSelector } from 'react-redux'
-import { motion } from 'framer-motion'
-import { addExchangerate, deleteExchangerate, getCurrencies, updateExchangerate } from './currencySlice.js'
+import {useDispatch, useSelector} from 'react-redux'
+import {motion} from 'framer-motion'
+import {addExchangerate, deleteExchangerate, getCurrencies, updateExchangerate} from './currencySlice.js'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
 import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
-import { checkEmptyString } from '../../App/globalFunctions.js'
-import { universalToast } from '../../Components/ToastMessages/ToastMessages.js'
-import { useTranslation } from 'react-i18next';
+import {checkEmptyString} from '../../App/globalFunctions.js'
+import {universalToast} from '../../Components/ToastMessages/ToastMessages.js'
+import {useTranslation} from 'react-i18next'
 
 const Currency = () => {
-    const { t } = useTranslation(['common'])
+    const {t} = useTranslation(['common'])
     const dispatch = useDispatch()
     const {
         currencies,
@@ -21,10 +21,10 @@ const Currency = () => {
     } = useSelector((state) => state.currency)
 
     const headers = [
-        { title: '№', styles: 'w-[8%] text-left' },
-        { title: t('Sana'), styles: 'w-[17%] text-center' },
-        { title: t('Kurs'), styles: 'w-[67%] text-center' },
-        { title: '', styles: 'w-[8%] text-center' }
+        {title: '№', styles: 'w-[8%] text-left'},
+        {title: t('Sana'), styles: 'w-[17%] text-center'},
+        {title: t('Kurs'), styles: 'w-[67%] text-center'},
+        {title: '', styles: 'w-[8%] text-center'}
     ]
 
     const [data, setData] = useState(currencies)
@@ -50,7 +50,7 @@ const Currency = () => {
         toggleModal()
     }
     const handleClickApproveToDelete = () => {
-        const body = { _id: deletedExchange._id }
+        const body = {_id: deletedExchange._id}
         dispatch(deleteExchangerate(body))
         handleClickCancelToDelete()
     }
@@ -61,11 +61,12 @@ const Currency = () => {
 
     const addNewExchange = (e) => {
         e.preventDefault()
-        const body = { exchangerate: exchangeName }
-        if (checkEmptyString([exchangeName])) {
+        const body = {exchangerate: exchangeName}
+        const {failed} = checkEmptyString([{value: exchangeName, message: 'Kurs narxi'}])
+        if (failed) {
             return universalToast(t('Valyuta kursini kiriting!'), 'error')
         }
-        dispatch(addExchangerate(body)).then(({ error }) => {
+        dispatch(addExchangerate(body)).then(({error}) => {
             if (!error) {
                 clearForm()
             }
@@ -75,11 +76,15 @@ const Currency = () => {
 
     const handleEdit = (e) => {
         e.preventDefault()
+        const {failed} = checkEmptyString([{value: exchangeName, message: 'Kurs narxi'}])
+        if (failed) {
+            return universalToast(t('Valyuta kursini kiriting!'), 'error')
+        }
         const body = {
             exchangerate: exchangeName,
             _id: currentExchange._id
         }
-        dispatch(updateExchangerate(body)).then(({ error }) => {
+        dispatch(updateExchangerate(body)).then(({error}) => {
             if (!error) {
                 clearForm()
             }
@@ -115,15 +120,15 @@ const Currency = () => {
             animate='open'
             exit='collapsed'
             variants={{
-                open: { opacity: 1, height: 'auto' },
-                collapsed: { opacity: 0, height: 0 }
+                open: {opacity: 1, height: 'auto'},
+                collapsed: {opacity: 0, height: 0}
             }}
-            transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
+            transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
         >
             <UniversalModal
                 headerText={`${deletedExchange && deletedExchange.exchangerate
-                    } ${t("kurs narxini o'chirishni tasdiqlaysizmi?")}`}
-                title={t("O'chirilgan kurs narxini tiklashning imkoni mavjud emas!")}
+                } ${t('kurs narxini o\'chirishni tasdiqlaysizmi?')}`}
+                title={t('O\'chirilgan kurs narxini tiklashning imkoni mavjud emas!')}
                 toggleModal={toggleModal}
                 body={'approve'}
                 approveFunction={handleClickApproveToDelete}
@@ -132,7 +137,7 @@ const Currency = () => {
             />
             <form
                 className={`unitFormStyle ${stickyForm && 'stickyForm'
-                    } flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200`}
+                } flex gap-[1.25rem] bg-background flex-col mainPadding transition ease-linear duration-200`}
             >
                 <div className='exchangerate-style'>
                     <FieldContainer

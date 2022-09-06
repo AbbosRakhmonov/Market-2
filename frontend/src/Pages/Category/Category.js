@@ -7,7 +7,7 @@ import NotFind from '../../Components/NotFind/NotFind.js'
 import Table from '../../Components/Table/Table.js'
 import {useDispatch, useSelector} from 'react-redux'
 import {regexForTypeNumber} from '../../Components/RegularExpressions/RegularExpressions.js'
-import {checkEmptyString, universalSort, exportExcel} from '../../App/globalFunctions.js'
+import {checkEmptyString, exportExcel, universalSort} from '../../App/globalFunctions.js'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
 import {motion} from 'framer-motion'
 import {
@@ -16,7 +16,7 @@ import {
     successUpdateCategoryMessage,
     universalToast,
     warningCategory,
-    warningEmptyInput,
+    warningEmptyInput
 } from '../../Components/ToastMessages/ToastMessages.js'
 import {
     addCategory,
@@ -31,33 +31,34 @@ import {
     deleteCategory,
     getCategories,
     getCategoriesByFilter,
-    updateCategory,
+    updateCategory
 } from './categorySlice.js'
 import Pagination from '../../Components/Pagination/Pagination.js'
 import {useTranslation} from 'react-i18next'
 import {filter, map} from 'lodash'
 import ExportBtn from '../../Components/Buttons/ExportBtn.js'
+
 const Category = () => {
     const {t} = useTranslation(['common'])
 
     const headers = [
         {
             title: t('№'),
-            styles: 'w-[10%]',
+            styles: 'w-[10%]'
         },
         {
             title: t('Kategoriya kodi'),
             filter: 'code',
-            styles: 'w-[16%]',
+            styles: 'w-[16%]'
         },
         {
             title: t('Kategoriya nomi'),
             filter: 'name',
-            styles: 'w-[64%]',
+            styles: 'w-[64%]'
         },
         {
-            title: '',
-        },
+            title: ''
+        }
     ]
 
     const dispatch = useDispatch()
@@ -73,7 +74,7 @@ const Category = () => {
         successUpdateCategory,
         errorUpdateCategory,
         successDeleteCategory,
-        errorDeleteCategory,
+        errorDeleteCategory
     } = useSelector((state) => state.category)
     const [data, setData] = useState(categories)
     const [searchedData, setSearchedData] = useState(searchedCategories)
@@ -88,7 +89,7 @@ const Category = () => {
     const [sorItem, setSorItem] = useState({
         filter: '',
         sort: '',
-        count: 0,
+        count: 0
     })
     const [currentCategory, setCurrentCategory] = useState(null)
     const [deletedCategory, setDeletedCategory] = useState(null)
@@ -124,20 +125,36 @@ const Category = () => {
 
     const handleEdit = (e) => {
         e.preventDefault()
-        const body = {
-            currentPage,
-            countPage: showByTotal,
-            search: {
-                name: searchByName.replace(/\s+/g, ' ').trim(),
-                code: searchByCode.replace(/\s+/g, ' ').trim(),
-            },
-            category: {
-                name: nameOfCategory,
-                code: codeOfCategory,
-                _id: currentCategory._id,
-            },
+        const {failed, message} = checkEmptyString(
+            [
+                {
+                    value: codeOfCategory,
+                    message: t('Kategoriya kodi')
+                },
+                {
+                    value: nameOfCategory,
+                    message: t('Kategoriya nomi')
+                }
+            ]
+        )
+        if (failed) {
+            warningEmptyInput(message)
+        } else {
+            const body = {
+                currentPage,
+                countPage: showByTotal,
+                search: {
+                    name: searchByName.replace(/\s+/g, ' ').trim(),
+                    code: searchByCode.replace(/\s+/g, ' ').trim()
+                },
+                category: {
+                    name: nameOfCategory,
+                    code: codeOfCategory,
+                    _id: currentCategory._id
+                }
+            }
+            dispatch(updateCategory(body))
         }
-        dispatch(updateCategory(body))
     }
 
     const handleDeleteCategory = (category) => {
@@ -147,8 +164,8 @@ const Category = () => {
             countPage: showByTotal,
             search: {
                 name: searchByName.replace(/\s+/g, ' ').trim(),
-                code: searchByCode.replace(/\s+/g, ' ').trim(),
-            },
+                code: searchByCode.replace(/\s+/g, ' ').trim()
+            }
         }
         setDeletedCategory(body)
         toggleModal()
@@ -165,21 +182,32 @@ const Category = () => {
     // handle submit of inputs
     const addNewcategory = (e) => {
         e.preventDefault()
-        const filter = checkEmptyString([codeOfCategory, nameOfCategory])
-        if (filter) {
-            warningEmptyInput()
+        const {failed, message} = checkEmptyString(
+            [
+                {
+                    value: codeOfCategory,
+                    message: t('Kategoriya kodi')
+                },
+                {
+                    value: nameOfCategory,
+                    message: t('Kategoriya nomi')
+                }
+            ]
+        )
+        if (failed) {
+            warningEmptyInput(message)
         } else {
             const body = {
                 currentPage,
                 countPage: showByTotal,
                 category: {
                     name: nameOfCategory,
-                    code: codeOfCategory,
+                    code: codeOfCategory
                 },
                 search: {
                     name: searchByName.replace(/\s+/g, ' ').trim(),
-                    code: searchByCode.replace(/\s+/g, ' ').trim(),
-                },
+                    code: searchByCode.replace(/\s+/g, ' ').trim()
+                }
             }
             dispatch(addCategory(body))
         }
@@ -199,7 +227,7 @@ const Category = () => {
         let valForSearch = val.replace(/\s+/g, ' ').trim()
         setSearchByCode(val)
         ;(searchedData.length > 0 || totalSearched > 0) &&
-            dispatch(clearSearchedCategories())
+        dispatch(clearSearchedCategories())
         if (valForSearch === '') {
             setData(categories)
             setFilteredDataTotal(total)
@@ -216,7 +244,7 @@ const Category = () => {
         let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
         setSearchByName(val)
         ;(searchedData.length > 0 || totalSearched > 0) &&
-            dispatch(clearSearchedCategories())
+        dispatch(clearSearchedCategories())
         if (valForSearch === '') {
             setData(categories)
             setFilteredDataTotal(total)
@@ -239,8 +267,8 @@ const Category = () => {
                 countPage: showByTotal,
                 search: {
                     name: searchByName.replace(/\s+/g, ' ').trim(),
-                    code: searchByCode.replace(/\s+/g, ' ').trim(),
-                },
+                    code: searchByCode.replace(/\s+/g, ' ').trim()
+                }
             }
             dispatch(getCategoriesByFilter(body))
         }
@@ -253,7 +281,7 @@ const Category = () => {
                     setSorItem({
                         filter: filterKey,
                         sort: '1',
-                        count: 2,
+                        count: 2
                     })
                     universalSort(
                         searchedData.length > 0 ? searchedData : data,
@@ -269,7 +297,7 @@ const Category = () => {
                     setSorItem({
                         filter: filterKey,
                         sort: '',
-                        count: 0,
+                        count: 0
                     })
                     universalSort(
                         searchedData.length > 0 ? searchedData : data,
@@ -285,7 +313,7 @@ const Category = () => {
                     setSorItem({
                         filter: filterKey,
                         sort: '-1',
-                        count: 1,
+                        count: 1
                     })
                     universalSort(
                         searchedData.length > 0 ? searchedData : data,
@@ -301,7 +329,7 @@ const Category = () => {
             setSorItem({
                 filter: filterKey,
                 sort: '-1',
-                count: 1,
+                count: 1
             })
             universalSort(
                 searchedData.length > 0 ? searchedData : data,
@@ -317,16 +345,16 @@ const Category = () => {
     const excelData = () => {
         let fileName = 'Kategoriyalar'
         const exportHeader = ['№', 'Kodi', 'Nomi']
-        if(data?.length > 0){
+        if (data?.length > 0) {
             const categoryData = map(data, (item, index) => ({
-        nth: index + 1,
-        code: item?.code || "",
-        name: item?.name || "",
-        }))
-        exportExcel(categoryData, fileName, exportHeader)
-        }  else {
-            universalToast("Jadvalda ma'lumot mavjud emas !","warning" )
-        }  
+                nth: index + 1,
+                code: item?.code || '',
+                name: item?.name || ''
+            }))
+            exportExcel(categoryData, fileName, exportHeader)
+        } else {
+            universalToast('Jadvalda ma\'lumot mavjud emas !', 'warning')
+        }
     }
 
     useEffect(() => {
@@ -370,7 +398,7 @@ const Category = () => {
         successUpdateCategory,
         errorUpdateCategory,
         errorDeleteCategory,
-        successDeleteCategory,
+        successDeleteCategory
     ])
     useEffect(() => {
         const body = {
@@ -378,8 +406,8 @@ const Category = () => {
             countPage: showByTotal,
             search: {
                 name: searchByName.replace(/\s+/g, ' ').trim(),
-                code: searchByCode.replace(/\s+/g, ' ').trim(),
-            },
+                code: searchByCode.replace(/\s+/g, ' ').trim()
+            }
         }
         dispatch(getCategories(body))
         //    eslint-disable-next-line react-hooks/exhaustive-deps
@@ -402,7 +430,7 @@ const Category = () => {
             exit='collapsed'
             variants={{
                 open: {opacity: 1, height: 'auto'},
-                collapsed: {opacity: 0, height: 0},
+                collapsed: {opacity: 0, height: 0}
             }}
             transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
         >

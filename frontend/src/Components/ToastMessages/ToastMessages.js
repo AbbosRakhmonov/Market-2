@@ -1,5 +1,5 @@
 import {toast} from 'react-toastify'
-import i18n from './../../i18n';
+import i18n from './../../i18n'
 // Long toast message with header and body
 const toastWithHeader = (header, message) => (
     <div>
@@ -97,8 +97,8 @@ export const successPayDebt = () =>
 // Warning Messages
 export const warningRepeatPasswordDoesntMatch = () =>
     toast.warn(i18n.t('Takroriy parol no`to`g`ri kiritilgan!'))
-export const warningEmptyInput = () =>
-    toast.warn(i18n.t('Ma`lumotlar to`liq kiritilmagan!'))
+export const warningEmptyInput = (text) =>
+    toast.warn(text ? i18n.t(`${text} bo'sh qolishi mumkin emas!`) : i18n.t('Ma`lumotlar to`liq kiritilmagan!'))
 export const warningCurrencyRate = () =>
     toast.warn(i18n.t('Valyuta kursi kiritilmagan!'))
 export const warningCategory = () => {
@@ -109,7 +109,7 @@ export const warningSaleProductsEmpty = () =>
 export const warningMorePayment = () =>
     toast.warn(i18n.t('To`lov summasidan ortiq summa kiritib bo`lmaydi'))
 export const warningMoreDiscount = (val) =>
-    toast.warn(`${val} ${i18n.t("dan ortiq chegirma kiritib bo'lmaydi")}`)
+    toast.warn(`${val} ${i18n.t('dan ortiq chegirma kiritib bo\'lmaydi')}`)
 export const warningLessSellPayment = () =>
     toast.warn(i18n.t('Sotish narxi kelish narxidan past bo`lmasligi kerak'))
 
@@ -121,20 +121,20 @@ export const warningReturnProductsEmpty = () =>
 
 // Product Exchanges toast
 
-export const warningSellingExchanges = () => 
-toast.warn("Sotish narxi olish narxidan kam yoki teng bo'lmasligi kerak !")
+export const warningSellingExchanges = () =>
+    toast.warn('Sotish narxi olish narxidan kam yoki teng bo\'lmasligi kerak !')
 
-export const emptyProductExchanges = () => 
- toast.warn("Ma'lumotlar to'liq kiritilmagan !")
+export const emptyProductExchanges = () =>
+    toast.warn('Ma\'lumotlar to\'liq kiritilmagan !')
 
-export const productNumberExchanges = () => 
- toast.warn("Siz kiritgan maxsulot soni umumiy maxsulot sonidan ko'p bolishi mumkin emas !")
+export const productNumberExchanges = () =>
+    toast.warn('Siz kiritgan maxsulot soni umumiy maxsulot sonidan ko\'p bolishi mumkin emas !')
 
-export const productNumberMinusExchanges = () => 
-  toast.warn("Maxsulot soni manfiy bo'lishi mumkin emas !")
+export const productNumberMinusExchanges = () =>
+    toast.warn('Maxsulot soni manfiy bo\'lishi mumkin emas !')
 
-export const productExchangesFilial = () => 
-  toast.error("Maxsulot kiritilmagan yoki filial tanlanmagan !")
+export const productExchangesFilial = () =>
+    toast.error('Maxsulot kiritilmagan yoki filial tanlanmagan !')
 
 // Universal Messages
 export const universalToast = (message, type, option = {}) =>
