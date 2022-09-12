@@ -35,7 +35,7 @@ export const CategoryReportTableRow = ({data}) => {
                     <td className='td text-right'>
                         {product.price && product.price.sellingprice.toLocaleString(
                             'ru-RU'
-                        )} UZS
+                        )} USD
                     </td>
                 </tr>
             ))}

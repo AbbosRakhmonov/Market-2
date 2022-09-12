@@ -6,6 +6,35 @@ import {getReportOfCategory} from './CategoryReportSlice.js'
 import Table from '../../Components/Table/Table.js'
 import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
+import {reduce} from 'lodash'
+
+const calculateTotal = (data) => {
+    return reduce(data, (sum, item) => {
+        return sum + item.total
+    }, 0)
+}
+const calculateIncomings = (data, currency) => {
+    if (currency === 'UZS') {
+        return reduce(data, (sum, item) => {
+            return sum + Number(item.price.incomingpriceuzs)
+        }, 0).toLocaleString('ru-RU')
+    } else {
+        return reduce(data, (sum, item) => {
+            return sum + item.price.incomingprice
+        }, 0).toLocaleString('ru-RU')
+    }
+}
+const calculateSellings = (data, currency) => {
+    if (currency === 'UZS') {
+        return reduce(data, (sum, item) => {
+            return sum + item.price.sellingpriceuzs
+        }, 0).toLocaleString('ru-RU')
+    } else {
+        return reduce(data, (sum, item) => {
+            return sum + item.price.sellingprice
+        }, 0).toLocaleString('ru-RU')
+    }
+}
 
 function CategoryReport() {
     const headers = [{title: '№'}, {title: 'Kodi'}, {title: 'Nomi'}, {title: 'Soni'}, {title: 'Olish (UZS)'}, {title: 'Olish (USD)'}, {title: 'Sotish (UZS)'}, {title: 'Sotish (USD)'}]
@@ -38,6 +67,27 @@ function CategoryReport() {
                         data={products}
                     /> : <NotFind text={'Maxsulot topilmadi d...'} />
                 }
+            </div>
+            <div className={'pl-[2.5rem] pr-[1.25rem] flex items-center justify-end gap-[1rem]'}>
+                <p className={'font-medium'}>Jami :</p>
+                <ul className={'flex justify-end gap-[1rem]'}>
+                    <li className={'text-sm flex items-center gap-[0.5rem]'}>
+                        <div className={'w-[0.5rem] h-[0.5rem] rounded-full bg-primary-700'}></div>
+                        <span className={'font-medium'}>{products.length} ta maxsulot</span>
+                    </li>
+                    <li className={'text-sm flex items-center gap-[0.5rem]'}>
+                        <div className={'w-[0.5rem] h-[0.5rem] rounded-full bg-warning-400'}></div>
+                        <span className={'font-medium'}>Soni: {calculateTotal(products)}</span>
+                    </li>
+                    <li className={'text-sm flex items-center gap-[0.5rem]'}>
+                        <div className={'w-[0.5rem] h-[0.5rem] rounded-full bg-blue-400'}></div>
+                        <span className={'font-medium'}>Olish : {calculateIncomings(products, 'UZS')} UZS {' / '} {calculateIncomings(products, 'USD')} USD</span>
+                    </li>
+                    <li className={'text-sm flex items-center gap-[0.5rem]'}>
+                        <div className={'w-[0.5rem] h-[0.5rem] rounded-full bg-success-400'}></div>
+                        <span className={'font-medium'}>Sotish : {calculateSellings(products, 'UZS')} UZS {' / '} {calculateSellings(products, 'USD')} USD</span>
+                    </li>
+                </ul>
             </div>
         </section>
     )

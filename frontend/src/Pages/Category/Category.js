@@ -54,7 +54,7 @@ const Category = () => {
         {
             title: t('Kategoriya nomi'),
             filter: 'name',
-            styles: 'w-[64%]'
+            styles: 'w-[60%]'
         },
         {
             title: ''
