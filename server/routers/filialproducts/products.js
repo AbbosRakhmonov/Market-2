@@ -1,4 +1,4 @@
-const { Transfer } = require("../../models/FilialProducts/Transfer");
+const { Transfer } = require('../../models/FilialProducts/Transfer');
 const {
   TransferProduct,
 } = require('../../models/FilialProducts/TransferProduct');
@@ -9,7 +9,7 @@ const { ProductData } = require('../../models/Products/Productdata');
 const { ProductPrice } = require('../../models/Products/ProductPrice');
 const { Unit } = require('../../models/Products/Unit');
 require('../../models/Products/ProductPrice');
-require('../../models/Users')
+require('../../models/Users');
 
 // Send Products To Filial
 module.exports.registerProducts = async (req, res) => {
@@ -53,6 +53,8 @@ module.exports.registerProducts = async (req, res) => {
         incomingpriceuzs,
         sellingprice,
         sellingpriceuzs,
+        tradeprice: product?.tradeprice,
+        tradepriceuzs: product?.tradepriceuzs,
         market,
       });
       await transferPrice.save();
@@ -65,6 +67,7 @@ module.exports.registerProducts = async (req, res) => {
         pieces: product.total,
         transfer: newTransfer._id,
         price: transferPrice._id,
+        barcode: product?.productdata.barcode,
         market,
         filial,
       });
@@ -93,11 +96,29 @@ module.exports.registerProducts = async (req, res) => {
           productdata: filialProductData._id,
           market: filial,
         });
+
         filialProduct.total = filialProduct.total + product.total;
+        filialProduct.minimumcount = product.minimumcount;
         await filialProduct.save();
 
         newTransferProduct.filialproduct = filialProduct._id;
         await newTransferProduct.save();
+
+        // Filialda mahsulot barcode tekshirish va qushish
+        if (!filialProductData.barcode) {
+          filialProductData.barcode = product?.productdata?.barcode;
+          await filialProductData.save();
+        }
+
+        //Filialda mahsulot optom narxini tekshirish
+        const filialProductPrice = await ProductPrice.findById(
+          filialProduct.price
+        );
+        if (!filialProductPrice.tradeprice) {
+          filialProductPrice.tradeprice = product.price.tradeprice;
+          filialProductPrice.tradepriceuzs = product.price.tradepriceuzs;
+          await filialProductPrice.save();
+        }
       } else {
         // filialda mahsulot yuq bulsa
 
@@ -113,6 +134,7 @@ module.exports.registerProducts = async (req, res) => {
           code: product.productdata.code,
           category: filialCategory._id,
           unit: filialUnit._id,
+          barcode: product?.productdata?.barcode,
           market: filial,
         });
         await filialNewProductData.save();
@@ -122,6 +144,7 @@ module.exports.registerProducts = async (req, res) => {
           unit: filialUnit._id,
           category: filialCategory._id,
           market: filial,
+          minimumcount: product?.minimumcount,
           total: product.total,
         });
         await filialNewProduct.save();
@@ -134,6 +157,8 @@ module.exports.registerProducts = async (req, res) => {
           sellingpriceuzs,
           market: filial,
           product: filialNewProduct._id,
+          tradeprice: product.price?.tradeprice,
+          tradepriceuzs: product.price?.tradepriceuzs,
         });
         await filialPrice.save();
 
@@ -175,7 +200,7 @@ module.exports.registerProducts = async (req, res) => {
 
     res.status(200).json(responseTransfer);
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -255,10 +280,10 @@ module.exports.editTransfer = async (req, res) => {
     } = transferproduct;
 
     const oldTransferProduct = await TransferProduct.findById(_id)
-      .select("-__v -updatedAt -isArchive")
+      .select('-__v -updatedAt -isArchive')
       .populate(
-        "price",
-        "incomingprice sellingprice incomingpriceuzs sellingpriceuzs"
+        'price',
+        'incomingprice sellingprice incomingpriceuzs sellingpriceuzs'
       );
 
     const { incomingprice, incomingpriceuzs, sellingprice, sellingpriceuzs } =
@@ -312,13 +337,13 @@ module.exports.editTransfer = async (req, res) => {
         $lte: endDate,
       },
     })
-      .select("-__v -isArchive -updatedAt")
-      .populate("productdata", "code name")
-      .populate("category", "code")
-      .populate("unit", "name")
+      .select('-__v -isArchive -updatedAt')
+      .populate('productdata', 'code name')
+      .populate('category', 'code')
+      .populate('unit', 'name')
       .populate(
-        "price",
-        "incomingprice incomingpriceuzs sellingprice sellingpriceuzs"
+        'price',
+        'incomingprice incomingpriceuzs sellingprice sellingpriceuzs'
       );
 
     res.status(201).json({
@@ -326,7 +351,7 @@ module.exports.editTransfer = async (req, res) => {
       data: responseTransferProducts.splice(currentPage * countPage, countPage),
     });
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -373,13 +398,13 @@ module.exports.deleteTransfer = async (req, res) => {
         $lte: endDate,
       },
     })
-      .select("-__v -updatedAt -isArchive")
-      .populate("productdata", "code name")
-      .populate("category", "code")
-      .populate("unit", "name")
+      .select('-__v -updatedAt -isArchive')
+      .populate('productdata', 'code name')
+      .populate('category', 'code')
+      .populate('unit', 'name')
       .populate(
-        "price",
-        "incomingprice incomingpriceuzs sellingprice sellingpriceuzs"
+        'price',
+        'incomingprice incomingpriceuzs sellingprice sellingpriceuzs'
       );
 
     res.status(200).json({
@@ -387,7 +412,7 @@ module.exports.deleteTransfer = async (req, res) => {
       data: response.splice(currentPage * countPage, countPage),
     });
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
@@ -421,15 +446,14 @@ module.exports.getTransfers = async (req, res) => {
       data: transfers.splice(currentPage * countPage, countPage),
     });
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
 
 // Get TransferProducts
 module.exports.getTransferProducts = async (req, res) => {
   try {
-    const { market, transfer, currentPage, countPage} =
-      req.body;
+    const { market, transfer, currentPage, countPage } = req.body;
 
     const marke = await Market.findById(market);
     if (!marke) {
@@ -441,15 +465,15 @@ module.exports.getTransferProducts = async (req, res) => {
 
     const transferProducts = await TransferProduct.find({
       market,
-      transfer
+      transfer,
     })
-      .select("-__v -updatedAt -isArchive")
-      .populate("productdata", "code name")
-      .populate("category", "code")
-      .populate("unit", "name")
+      .select('-__v -updatedAt -isArchive')
+      .populate('productdata', 'code name')
+      .populate('category', 'code')
+      .populate('unit', 'name')
       .populate(
-        "price",
-        "incomingprice incomingpriceuzs sellingprice sellingpriceuzs"
+        'price',
+        'incomingprice incomingpriceuzs sellingprice sellingpriceuzs'
       );
 
     return res.status(200).json({
@@ -474,20 +498,20 @@ module.exports.getFilials = async (req, res) => {
       });
     }
 
-    const name = new RegExp(".*" + search ? search.name : "" + ".*", "i");
+    const name = new RegExp('.*' + search ? search.name : '' + '.*', 'i');
 
     const filials = await Market.find({
       mainmarket: market,
       name: name,
     })
-      .select("director image name phone1 createdAt")
-      .populate("director", "firstname lastname");
+      .select('director image name phone1 createdAt')
+      .populate('director', 'firstname lastname');
 
     res.status(201).json({
       count: filials.length,
       filials: filials.splice(currentPage * countPage, countPage),
     });
   } catch (error) {
-    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+    res.status(501).json({ error: 'Serverda xatolik yuz berdi...' });
   }
 };
