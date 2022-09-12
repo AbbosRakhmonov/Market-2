@@ -17,7 +17,7 @@ import {
     deleteSupplier,
     getSuppliers,
     getSuppliersByFilter,
-    updateSupplier,
+    updateSupplier
 } from './suppliersSlice.js'
 
 import {getAllSuppliers} from '../Incomings/incomingSlice.js'
@@ -26,7 +26,7 @@ import {
     successDeleteSupplierMessage,
     successUpdateSupplierMessage,
     universalToast,
-    warningEmptyInput,
+    warningEmptyInput
 } from '../../Components/ToastMessages/ToastMessages.js'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
 import SearchForm from '../../Components/SearchForm/SearchForm.js'
@@ -34,6 +34,7 @@ import {checkEmptyString} from '../../App/globalFunctions.js'
 import {useTranslation} from 'react-i18next'
 import {filter} from 'lodash'
 import {useNavigate} from 'react-router-dom'
+
 const Supplier = () => {
     const {t} = useTranslation(['common'])
     const dispatch = useDispatch()
@@ -47,13 +48,13 @@ const Supplier = () => {
         loading,
         searchedSuppliers,
         total,
-        totalSearched,
+        totalSearched
     } = useSelector((state) => state.suppliers)
 
     const headers = [
         {title: t('№'), styles: 'w-[8%] text-left'},
         {title: t('Yetkazuvchi'), styles: 'w-[84%] text-left'},
-        {title: '', styles: 'w-[8%] text-left'},
+        {title: '', styles: 'w-[8%] text-left'}
     ]
 
     // states
@@ -93,8 +94,8 @@ const Supplier = () => {
             currentPage,
             countPage: showByTotal,
             search: {
-                name: searchByName.replace(/\s+/g, ' ').trim(),
-            },
+                name: searchByName.replace(/\s+/g, ' ').trim()
+            }
         }
         dispatch(deleteSupplier(body))
         handleClickCancelToDelete()
@@ -107,17 +108,20 @@ const Supplier = () => {
     // handle submit of inputs
     const addNewSupplier = (e) => {
         e.preventDefault()
-        const filter = checkEmptyString([supplierName])
-        if (filter) {
-            warningEmptyInput()
+        const {failed, message} = checkEmptyString([{
+            value: supplierName,
+            message: t('Yetkazuvchi ismi')
+        }])
+        if (failed) {
+            warningEmptyInput(message)
         } else {
             const body = {
                 name: supplierName,
                 currentPage,
                 countPage: showByTotal,
                 search: {
-                    name: searchByName.replace(/\s+/g, ' ').trim(),
-                },
+                    name: searchByName.replace(/\s+/g, ' ').trim()
+                }
             }
             dispatch(addSupplier(body))
         }
@@ -125,9 +129,12 @@ const Supplier = () => {
 
     const handleEdit = (e) => {
         e.preventDefault()
-        const filter = checkEmptyString([supplierName])
-        if (filter) {
-            warningEmptyInput()
+        const {failed, message} = checkEmptyString([{
+            value: supplierName,
+            message: t('Yetkazuvchi ismi')
+        }])
+        if (failed) {
+            warningEmptyInput(message)
         } else {
             const body = {
                 name: supplierName,
@@ -135,8 +142,8 @@ const Supplier = () => {
                 currentPage,
                 countPage: showByTotal,
                 search: {
-                    name: searchByName.replace(/\s+/g, ' ').trim(),
-                },
+                    name: searchByName.replace(/\s+/g, ' ').trim()
+                }
             }
             dispatch(updateSupplier(body))
         }
@@ -162,7 +169,7 @@ const Supplier = () => {
         let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
         setSearchByName(val)
         ;(searchedData.length > 0 || totalSearched > 0) &&
-            dispatch(clearSearchedSuppliers())
+        dispatch(clearSearchedSuppliers())
         if (valForSearch === '') {
             setData(suppliers)
             setFilteredDataTotal(total)
@@ -180,8 +187,8 @@ const Supplier = () => {
                 currentPage,
                 countPage: showByTotal,
                 search: {
-                    name: searchByName.replace(/\s+/g, ' ').trim(),
-                },
+                    name: searchByName.replace(/\s+/g, ' ').trim()
+                }
             }
             dispatch(getSuppliersByFilter(body))
         }
@@ -223,7 +230,7 @@ const Supplier = () => {
         errorSuppliers,
         successAddSupplier,
         successUpdateSupplier,
-        successDeleteSupplier,
+        successDeleteSupplier
     ])
 
     useEffect(() => {
@@ -231,8 +238,8 @@ const Supplier = () => {
             currentPage,
             countPage: showByTotal,
             search: {
-                name: searchByName.replace(/\s+/g, ' ').trim(),
-            },
+                name: searchByName.replace(/\s+/g, ' ').trim()
+            }
         }
         dispatch(getSuppliers(body))
         //    eslint-disable-next-line react-hooks/exhaustive-deps
@@ -257,7 +264,7 @@ const Supplier = () => {
             exit='collapsed'
             variants={{
                 open: {opacity: 1, height: 'auto'},
-                collapsed: {opacity: 0, height: 0},
+                collapsed: {opacity: 0, height: 0}
             }}
             transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
         >

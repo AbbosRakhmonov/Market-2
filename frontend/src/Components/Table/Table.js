@@ -28,49 +28,52 @@ import {AdminProductTableRow} from './TableRows/AdminProductTableRow'
 import {ReturnProductsTableRow} from './TableRows/ReturnProductsTableRow.js'
 import {GeneralReportTableRow} from './TableRows/GeneralReportTableRow.js'
 import {RegisterSaleTableFooter} from './TableFooters/RegisterSaleTableFooter.js'
-import { FilialShopTableRow } from './TableRows/FilialShopTableRow'
+import {FilialShopTableRow} from './TableRows/FilialShopTableRow'
 import DailyReport from './TableRows/DailyReport.js'
 import SupplierIncomingsTableRow from './TableRows/SupplierIncomingsTableRow'
-import { FilialShopDataIdTableRow } from './TableRows/FilialShopDataIdTablerow'
+import {FilialShopDataIdTableRow} from './TableRows/FilialShopDataIdTablerow'
+import {CategoryReportTableRow} from './TableRows/CategoryReportTableRow'
 
 function Table({
-    page,
-    data,
-    headers,
-    currentPage,
-    countPage,
-    Sort,
-    Edit,
-    Delete,
-    currency,
-    changeHandler,
-    Print,
-    inputValue,
-    inputDisabled,
-    Excel,
-    editedIncoming,
-    saveEditIncoming,
-    sortItem,
-    ReturnPayment,
-    Save,
-    onKeyUp,
-    currencyType,
-    type,
-    Pay,
-    isDisabled,
-    reports,
-    onClickTableRow,
-    linkToSellerReports,
-    sellers,
-    addPlus,
-    footer,
-    increment,
-    decrement,
-    lowUnitpriceProducts,
-    linkToSupplierReport,
-    printedData,
-    productminimumpage,
-}) {
+                   page,
+                   data,
+                   headers,
+                   currentPage,
+                   countPage,
+                   Sort,
+                   Edit,
+                   Delete,
+                   currency,
+                   changeHandler,
+                   Print,
+                   inputValue,
+                   inputDisabled,
+                   Excel,
+                   editedIncoming,
+                   saveEditIncoming,
+                   sortItem,
+                   ReturnPayment,
+                   Save,
+                   onKeyUp,
+                   currencyType,
+                   type,
+                   Pay,
+                   isDisabled,
+                   reports,
+                   onClickTableRow,
+                   linkToSellerReports,
+                   sellers,
+                   addPlus,
+                   footer,
+                   increment,
+                   decrement,
+                   lowUnitpriceProducts,
+                   linkToSupplierReport,
+                   printedData,
+                   productminimumpage,
+                   handleDelete,
+                   wholeSale
+               }) {
     const checkRows = () => {
         switch (page) {
             case 'product':
@@ -95,6 +98,7 @@ function Table({
                         Edit={Edit}
                         Delete={Delete}
                         onClickTableRow={onClickTableRow}
+                        handleDelete={handleDelete}
                     />
                 )
             case 'category':
@@ -203,6 +207,7 @@ function Table({
                         decrement={decrement}
                         increment={increment}
                         lowUnitpriceProducts={lowUnitpriceProducts}
+                        wholeSale={wholeSale}
                     />
                 )
             case 'temporaryincoming':
@@ -387,24 +392,24 @@ function Table({
                         currency={currency}
                     />
                 )
-                case 'filialShop':
-                    return (
-                        <FilialShopTableRow
-                            data={data}
-                            currentPage={currentPage}
-                            countPage={countPage}
-                            currency={currency}
-                        />
-                    )
-                case 'filialShopDataId' :
-                    return (
-                        <FilialShopDataIdTableRow
-                            data={data}
-                            currentPage={currentPage}
-                            countPage={countPage}
-                            currency={currency}
-                        />
-                    )    
+            case 'filialShop':
+                return (
+                    <FilialShopTableRow
+                        data={data}
+                        currentPage={currentPage}
+                        countPage={countPage}
+                        currency={currency}
+                    />
+                )
+            case 'filialShopDataId':
+                return (
+                    <FilialShopDataIdTableRow
+                        data={data}
+                        currentPage={currentPage}
+                        countPage={countPage}
+                        currency={currency}
+                    />
+                )
             case 'generalreport':
                 return <GeneralReportTableRow data={data} currency={currency} />
             case 'dailyreport':
@@ -419,6 +424,8 @@ function Table({
                         Pay={Pay}
                     />
                 )
+            case 'categoryreport':
+                return <CategoryReportTableRow data={data} />
             default:
                 return ''
         }

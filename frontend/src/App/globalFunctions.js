@@ -6,16 +6,16 @@ export const universalSort = (data, setData, key, sort, prevData) => {
     const keys = key.split('.')
     const result = sort
         ? orderBy(
-              [...data],
-              (item) => {
-                  return keys.length === 3
-                      ? item[keys[0]][keys[1]][keys[2]]
-                      : keys.length === 2
-                      ? item[keys[0]][keys[1]]
-                      : item[key]
-              },
-              [sort === -1 ? 'desc' : 'asc']
-          )
+            [...data],
+            (item) => {
+                return keys.length === 3
+                    ? item[keys[0]][keys[1]][keys[2]]
+                    : keys.length === 2
+                        ? item[keys[0]][keys[1]]
+                        : item[key]
+            },
+            [sort === -1 ? 'desc' : 'asc']
+        )
         : prevData
     setData(result)
 }
@@ -25,8 +25,19 @@ export const UzsToUsd = (val, currency) =>
     Math.round((val / currency) * 1000) / 1000
 
 // check empty string
-export const checkEmptyString = (values) =>
-    values.some((value) => regexForEmptyString.test(value))
+export const checkEmptyString = (values) => {
+    let result = {failed: false, message: ''}
+    for (let i = 0; i < values.length; i++) {
+        if (regexForEmptyString.test(values[i].value)) {
+            result = {
+                message: values[i].message,
+                failed: true
+            }
+            break
+        }
+    }
+    return result
+}
 // export excel
 export const exportExcel = (data, fileName, headers) => {
     const autoFillColumnWidth = (json) => {
@@ -39,7 +50,7 @@ export const exportExcel = (data, fileName, headers) => {
                 wch:
                     headers[index].length > maxLength
                         ? headers[index].length + 1
-                        : maxLength + 4,
+                        : maxLength + 4
             }
         })
     }
@@ -50,7 +61,7 @@ export const exportExcel = (data, fileName, headers) => {
     XLSX.utils.sheet_add_aoa(ws, [headers])
     XLSX.utils.sheet_add_json(ws, data, {
         origin: 'A2',
-        skipHeader: true,
+        skipHeader: true
     })
     XLSX.utils.book_append_sheet(wb, ws, 'Maxsulotlar')
     XLSX.writeFile(wb, `${fileName}-${new Date().toLocaleDateString()}.xlsx`)

@@ -13,13 +13,15 @@ import Pagination from '../../Components/Pagination/Pagination'
 import {filter, map} from 'lodash'
 import NotFind from '../../Components/NotFind/NotFind'
 import SmallLoader from '../../Components/Spinner/SmallLoader'
-import {useLocation} from 'react-router-dom'
+import {useLocation, useNavigate} from 'react-router-dom'
 import {exportExcel} from '../../App/globalFunctions'
 import { universalToast } from '../../Components/ToastMessages/ToastMessages'
-
-function ProductIdExchanges() {
+import { IoChevronBack } from "react-icons/io5";
+function ProductIdExchanges({currency}) {
+     
+    const navigate = useNavigate();
     const location = useLocation()
-    const dataId = location.state
+    const dataId = location?.state?.id
     const dispatch = useDispatch()
     const {idProducts, loading, total, totalSearched, searchedExchanges} =
         useSelector((state) => state.exchangesIdData)
@@ -48,7 +50,7 @@ function ProductIdExchanges() {
     const [searchByCategory, setSearchByCategory] = useState('')
     const [searchByCode, setSearchByCode] = useState('')
     const [searchByName, setSearchByName] = useState('')
-    const currency = 'UZS'
+    
     const filterByTotal = ({value}) => {
         setShowByTotal(value)
         setCurrentPage(0)
@@ -205,7 +207,10 @@ function ProductIdExchanges() {
             transition={{duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98]}}
         >
             <div className='pagination-supplier mainPadding'>
-                <ExportBtn onClick={exportData} />
+                <div className='flex gap-[1rem] items-center'>
+                    <span className='linktoback' onClick={() => navigate(-1)}><IoChevronBack /></span>
+                    <ExportBtn onClick={exportData} />
+                </div>
                 <p className='supplier-title'>Barcha tovarlar ro'yxati</p>
                 <div>
                     {(filteredDataTotal !== 0 || totalSearched !== 0) && (
@@ -243,7 +248,7 @@ function ProductIdExchanges() {
                         currentPage={currentPage}
                         countPage={showByTotal}
                         headers={headers}
-                        currency='UZS'
+                        currency={currency}
                     />
                 )}
             </div>

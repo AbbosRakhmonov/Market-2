@@ -5,23 +5,34 @@ import BtnAddRemove from './../../Components/Buttons/BtnAddRemove'
 import {useDispatch, useSelector} from 'react-redux'
 import {
     clearSearchedMarkets,
+    deleteMarket,
     createDirector,
     createMarket,
     editDirector,
     editMarket,
     getMarkets,
-    getMarketsByFilter
+    getMarketsByFilter,
 } from './adminproductsSlice.js'
 import Pagination from '../../Components/Pagination/Pagination.js'
 import Spinner from '../../Components/Spinner/SmallLoader.js'
 import NotFind from '../../Components/NotFind/NotFind.js'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
-import {successAddDirectory, successEditProfile} from '../../Components/ToastMessages/ToastMessages.js'
+import {
+    successAddDirectory,
+    successEditProfile,
+} from '../../Components/ToastMessages/ToastMessages.js'
 import {filter} from 'lodash'
 
 const AdminProduct = () => {
     const dispatch = useDispatch()
-    const {markets, total, searchedMarkets, totalSearched, loadingGetMarkets} = useSelector(state => state.adminmarkets)
+    const {
+        markets,
+        total,
+        searchedMarkets,
+        totalSearched,
+        loadingGetMarkets,
+        loadingDeleteMarket,
+    } = useSelector((state) => state.adminmarkets)
     const [data, setData] = useState(markets)
     const [searchedData, setSearchedData] = useState(searchedMarkets)
     const [filteredDataTotal, setFilteredDataTotal] = useState(total)
@@ -37,15 +48,17 @@ const AdminProduct = () => {
     const [image, setImage] = useState('')
     const [currentMarket, setCurrentMarket] = useState(null)
     const [editedMarket, setEditedMarket] = useState(null)
+    const [deletedMarket, setDeletedMarket] = useState(null)
 
     const headers = [
         {title: '№', styles: 'text-center'},
         {title: 'Logotip', styles: 'w-[4.25rem]'},
-        {title: 'Do\'kon nomi', styles: 'text-center'},
+        {title: "Do'kon nomi", styles: 'text-center'},
         {title: 'Director', styles: 'text-center'},
         {title: 'Telefon', styles: 'w-[7.875rem]'},
         {title: 'Turi', styles: 'text-center w-[3.1875rem]'},
-        {title: '', styles: 'w-[3rem]'}
+        {title: '', styles: 'w-[3rem]'},
+        {title: 'Delete', styles: 'w-[3rem]'},
     ]
 
     const toggleModal = () => {
@@ -69,15 +82,13 @@ const AdminProduct = () => {
         let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
         setName(val)
         ;(searchedData.length > 0 || totalSearched > 0) &&
-        dispatch(clearSearchedMarkets())
+            dispatch(clearSearchedMarkets())
         if (valForSearch === '') {
             setData(markets)
             setFilteredDataTotal(total)
         } else {
             const filteredProducts = filter(markets, (market) => {
-                return market.name
-                    .toLowerCase()
-                    .includes(valForSearch)
+                return market.name.toLowerCase().includes(valForSearch)
             })
             setData(filteredProducts)
             setFilteredDataTotal(filteredProducts.length)
@@ -88,15 +99,20 @@ const AdminProduct = () => {
         let valForSearch = val.toLowerCase().replace(/\s+/g, ' ').trim()
         setDirector(val)
         ;(searchedData.length > 0 || totalSearched > 0) &&
-        dispatch(clearSearchedMarkets())
+            dispatch(clearSearchedMarkets())
         if (valForSearch === '') {
             setData(markets)
             setFilteredDataTotal(total)
         } else {
             const filteredProducts = filter(markets, (market) => {
-                return market.director.firstname
-                    .toLowerCase()
-                    .includes(valForSearch) || market.director.lastname.toLowerCase().includes(valForSearch)
+                return (
+                    market.director.firstname
+                        .toLowerCase()
+                        .includes(valForSearch) ||
+                    market.director.lastname
+                        .toLowerCase()
+                        .includes(valForSearch)
+                )
             })
             setData(filteredProducts)
             setFilteredDataTotal(filteredProducts.length)
@@ -110,8 +126,8 @@ const AdminProduct = () => {
                 countPage: showByTotal,
                 search: {
                     name: name.replace(/\s+/g, ' ').trim(),
-                    director: director.replace(/\s+/g, ' ').trim()
-                }
+                    director: director.replace(/\s+/g, ' ').trim(),
+                },
             }
             dispatch(getMarketsByFilter(body))
         }
@@ -130,7 +146,7 @@ const AdminProduct = () => {
         const body = {
             ...data,
             image,
-            market: createdMarketId
+            market: createdMarketId,
         }
         dispatch(createDirector(body)).then(({error}) => {
             if (!error) {
@@ -139,8 +155,8 @@ const AdminProduct = () => {
                     countPage: showByTotal,
                     search: {
                         name: name.replace(/\s+/g, ' ').trim(),
-                        director: director.replace(/\s+/g, ' ').trim()
-                    }
+                        director: director.replace(/\s+/g, ' ').trim(),
+                    },
                 }
                 setImage('')
                 setCurrentStep(1)
@@ -157,7 +173,7 @@ const AdminProduct = () => {
             ...data,
             image,
             market: createdMarketId,
-            _id: editedMarket.director._id
+            _id: editedMarket.director._id,
         }
         dispatch(editDirector(body)).then(({error}) => {
             if (!error) {
@@ -166,8 +182,8 @@ const AdminProduct = () => {
                     countPage: showByTotal,
                     search: {
                         name: name.replace(/\s+/g, ' ').trim(),
-                        director: director.replace(/\s+/g, ' ').trim()
-                    }
+                        director: director.replace(/\s+/g, ' ').trim(),
+                    },
                 }
                 setImage('')
                 setCurrentStep(1)
@@ -183,8 +199,8 @@ const AdminProduct = () => {
         const sendingBody = {
             market: {
                 ...body,
-                _id: editedMarket._id
-            }
+                _id: editedMarket._id,
+            },
         }
         dispatch(editMarket(sendingBody)).then(({error, payload}) => {
             if (!error) {
@@ -197,20 +213,45 @@ const AdminProduct = () => {
                     countPage: showByTotal,
                     search: {
                         name: name.replace(/\s+/g, ' ').trim(),
-                        director: director.replace(/\s+/g, ' ').trim()
-                    }
+                        director: director.replace(/\s+/g, ' ').trim(),
+                    },
                 }
                 dispatch(getMarkets(body))
             }
         })
     }
 
+    const handleDelete = (market) => {
+        setDeletedMarket(market)
+        setModalBody('approve')
+        setModalVisible(true)
+    }
+
+    const handleDeleteMarket = () => {
+        dispatch(deleteMarket({id: deletedMarket._id})).then(
+            ({error, payload}) => {
+                if (!error) {
+                    const body = {
+                        currentPage,
+                        countPage: showByTotal,
+                        search: {
+                            name: name.replace(/\s+/g, ' ').trim(),
+                            director: director.replace(/\s+/g, ' ').trim(),
+                        },
+                    }
+                    setDeletedMarket(null)
+                    setModalVisible(false)
+                    setModalBody('')
+                    dispatch(getMarkets(body))
+                }
+            }
+        )
+    }
+
     const handleClickRow = (market) => {
-        if (!market?.mainmarket) {
-            setCurrentMarket(market)
-            setModalBody('filterBranch')
-            setModalVisible(true)
-        }
+        setCurrentMarket(market)
+        setModalBody('filterBranch')
+        setModalVisible(true)
     }
     const handleClickSave = () => {
         const body = {
@@ -218,8 +259,8 @@ const AdminProduct = () => {
             countPage: showByTotal,
             search: {
                 name: name.replace(/\s+/g, ' ').trim(),
-                director: director.replace(/\s+/g, ' ').trim()
-            }
+                director: director.replace(/\s+/g, ' ').trim(),
+            },
         }
         dispatch(getMarkets(body))
         toggleModal()
@@ -237,8 +278,8 @@ const AdminProduct = () => {
             countPage: showByTotal,
             search: {
                 name: name.replace(/\s+/g, ' ').trim(),
-                director: director.replace(/\s+/g, ' ').trim()
-            }
+                director: director.replace(/\s+/g, ' ').trim(),
+            },
         }
         dispatch(getMarkets(body))
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -255,28 +296,55 @@ const AdminProduct = () => {
 
     return (
         <section>
-            <UniversalModal
-                body={modalBody}
-                isOpen={modalVisible}
-                toggleModal={!editedMarket ? currentStep === 1 ? toggleModal : () => {
-                } : toggleModal}
-                addMarket={{
-                    currentStep,
-                    bgActive,
-                    handleNext: !editedMarket ? handleAddNext : handleEditNext,
-                    handleFinish: !editedMarket ? handleAddFinish : handleEditFinish,
-                    image: image,
-                    setImage: setImage,
-                    editedMarket
-                }}
-                product={currentMarket}
-                approveFunction={handleClickSave}
-            />
+            {loadingDeleteMarket ? (
+                <Spinner />
+            ) : (
+                <UniversalModal
+                    title={
+                        modalBody === 'approve' &&
+                        "O'chirilgan do'kon ma'lumotlarini tiklashning imkoni mavjud emas"
+                    }
+                    headerText={
+                        modalBody === 'approve' &&
+                        "Diqqat do'kon ma'lumotlarni o'chirishni tasdiqlaysizmi?"
+                    }
+                    body={modalBody}
+                    isOpen={modalVisible}
+                    toggleModal={
+                        !editedMarket
+                            ? currentStep === 1
+                                ? toggleModal
+                                : () => {}
+                            : toggleModal
+                    }
+                    addMarket={{
+                        currentStep,
+                        bgActive,
+                        handleNext: !editedMarket
+                            ? handleAddNext
+                            : handleEditNext,
+                        handleFinish: !editedMarket
+                            ? handleAddFinish
+                            : handleEditFinish,
+                        image: image,
+                        setImage: setImage,
+                        editedMarket,
+                    }}
+                    product={currentMarket}
+                    approveFunction={
+                        deletedMarket ? handleDeleteMarket : handleClickSave
+                    }
+                />
+            )}
             <div className='mainPadding'>
-                <BtnAddRemove text={'Yangi do\'kon qo`shish'} add={true} onClick={() => {
-                    setModalBody('addMarket')
-                    setModalVisible(true)
-                }} />
+                <BtnAddRemove
+                    text={"Yangi do'kon qo`shish"}
+                    add={true}
+                    onClick={() => {
+                        setModalBody('addMarket')
+                        setModalVisible(true)
+                    }}
+                />
             </div>
             <div className={'flex justify-between items-center mainPadding'}>
                 <h3 className={'text-blue-900 text-[xl] leading-[1.875rem]'}>
@@ -297,16 +365,20 @@ const AdminProduct = () => {
                 filterByDirectorName={filterByDirectorName}
                 searchByDirectorName={director}
                 searchByMarketName={name}
-                filterByDirectorNameWhenPressEnter={filterByMarketNameAndDirectorNameWhenPressEnter}
-                filterByMarketNameWhenPressEnter={filterByMarketNameAndDirectorNameWhenPressEnter}
+                filterByDirectorNameWhenPressEnter={
+                    filterByMarketNameAndDirectorNameWhenPressEnter
+                }
+                filterByMarketNameWhenPressEnter={
+                    filterByMarketNameAndDirectorNameWhenPressEnter
+                }
                 filterByTotal={filterByTotal}
             />
             <div className={'tableContainerPadding'}>
                 {loadingGetMarkets ? (
                     <Spinner />
                 ) : data.length === 0 && searchedData.length === 0 ? (
-                        <NotFind text={'Do\'konlar mavjud emas'} />
-                    ) :
+                    <NotFind text={"Do'konlar mavjud emas"} />
+                ) : (
                     <Table
                         page={'adminProduct'}
                         data={searchedData.length > 0 ? searchedData : data}
@@ -315,7 +387,9 @@ const AdminProduct = () => {
                         countPage={showByTotal}
                         onClickTableRow={handleClickRow}
                         Edit={handleClickEdit}
-                    />}
+                        handleDelete={handleDelete}
+                    />
+                )}
             </div>
         </section>
     )

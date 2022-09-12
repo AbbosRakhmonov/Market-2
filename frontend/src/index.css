@@ -611,6 +611,10 @@
         @apply font-medium text-[.75rem] leading-[12px] text-[#fff];
     }
 
+    .toggleText {
+        @apply text-sm leading-[12px] text-black-700;
+    }
+
     /* Admin product Cards styly end */
     /* admin Report style start */
     .admin-report-label {
@@ -729,9 +733,9 @@ body {
 .loginPage {
     height: 100vh;
     background: radial-gradient(
-        100% 316.36% at 0% 50%,
-        #0090a3 0%,
-        rgba(36, 86, 50, 0.9) 100%
+            100% 316.36% at 0% 50%,
+            #0090a3 0%,
+            rgba(36, 86, 50, 0.9) 100%
     );
 }
 
@@ -927,9 +931,21 @@ input[type='checkbox']::before {
     box-shadow: 0 0.1px 0.3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.2);
     transition: 0.3s;
     background: #ffffff;
-    z-index: 20;
+    z-index: 10;
 }
 
 input[type='checkbox']:checked::before {
     left: 20px;
+}
+
+
+/* sale toggle*/
+
+.sale-toggle-container input[type='checkbox']:checked {
+    background: #86A7E9;
+}
+
+.sale-toggle-container input[type='checkbox']:checked::before {
+    left: 20px;
+    background: #4175DC;
 }

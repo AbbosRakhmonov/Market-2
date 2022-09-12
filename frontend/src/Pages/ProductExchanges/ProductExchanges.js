@@ -75,14 +75,12 @@ function ProductExchanges() {
     const handleClickCancelToDelete = () => {
         setModalVisible(false)
     }
-
+   
     const approveFilialData = (e, numberError) => {
         if (e.number > 0 && e.get !== '' && e.sell !== '') {
-            setProductData(
-                (current) =>
-                    current &&
-                    map(current, (obj) => {
-                        if (obj.code === e.code && numberError) {
+            setProductData((current) =>
+                    current && map(current, (obj) => {
+                        if (obj.id === e.id && numberError) {
                             return {
                                 ...obj,
                                 number: obj.number - Number(e.number),
@@ -94,7 +92,7 @@ function ProductExchanges() {
         }
 
         const foundProduct = sellingProductData.findIndex(
-            (product) => product.code === e.code
+            (product) => product.id === e.id
         )
         if (
             foundProduct === -1 &&
@@ -104,7 +102,7 @@ function ProductExchanges() {
             e.sell !== '' &&
             numberError
         ) {
-            arrAdded.push(e.code)
+            arrAdded.push(e.id)
             sellingProductData.push(e)
             handleClickCancelToDelete()
         } else if (e.get >= e.sell) {
@@ -118,7 +116,7 @@ function ProductExchanges() {
         } else {
             setSellingProductData((current) => {
                 return map(current, (obj) => {
-                    if (obj?.code === e.code) {
+                    if (obj?.id === e.id) {
                         return {
                             ...obj,
                             get: e.get,
@@ -136,11 +134,9 @@ function ProductExchanges() {
     }
 
     const deletedProducts = (e) => {
-        setProductData(
-            (current) =>
-                current &&
-                map(current, (obj) => {
-                    if (obj.code === e.code) {
+        setProductData((current) =>
+                current && map(current, (obj) => {
+                    if (obj.id === e.id) {
                         return {
                             ...obj,
                             number: obj.number + Number(e.number),
@@ -154,18 +150,16 @@ function ProductExchanges() {
         })
         setSellingProductData(arrSelling)
         const deletedCode = filter(arrAdded, (obj) => {
-            return obj !== e.code
+            return obj !== e.id
         })
         setArrAdded(deletedCode)
     }
 
     const returnedDatas = (e, numberError) => {
         if (e.number > 0 && e.get !== '' && e.sell !== '') {
-            setProductData(
-                (current) =>
-                    current &&
-                    map(current, (obj) => {
-                        if (obj.code === e.code && numberError) {
+            setProductData((current) =>
+                    current && map(current, (obj) => {
+                        if (obj.id === e.id && numberError) {
                             return {
                                 ...obj,
                                 number: obj.number + Number(e.number),
@@ -182,11 +176,11 @@ function ProductExchanges() {
                 map(current, (obj) => {
                     if (obj.number === Number(e.number)) {
                         const SellingNumberIndex = filter(arrAdded, (info) => {
-                            return info !== e.code
+                            return info !== e.id
                         })
                         setArrAdded(SellingNumberIndex)
                     }
-                    if (obj.code === e.code && numberError) {
+                    if (obj.id === e.id && numberError) {
                         return {
                             ...obj,
                             get: e.get,
@@ -427,7 +421,7 @@ function ProductExchanges() {
             })
         setProductData(newUpdateProduct)
     }, [products])
-
+   
     useEffect(() => {
         setFilteredFilials(sellingProductData)
     }, [sellingProductData])
@@ -561,12 +555,9 @@ function ProductExchanges() {
                                 map(filteredShopProducts, (item, index) => {
                                     return (
                                         <motion.div
-                                            initial={{y: '100%'}}
-                                            animate={{y: '0%'}}
-                                            transition={{
-                                                delay: 0,
-                                                ease: 'linear',
-                                            }}
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            transition={{ duration: 0.5 }}
                                             key={index}
                                             className='pb-[0.675rem] '
                                         >
@@ -576,10 +567,17 @@ function ProductExchanges() {
                                                     filter(
                                                         arrAdded,
                                                         (add) =>
-                                                            add === item.code
+                                                            add === item.id
                                                     ).length > 0
                                                 }
-                                                fulled={item.number === 0}
+                                                fulled={item.number === 0 && filter(arrAdded,
+                                                    (add) =>
+                                                        add === item.id
+                                                ).length > 0}
+                                                fulled2={item.number === 0 && filter(arrAdded,
+                                                    (add) =>
+                                                        add === item.id
+                                                ).length === 0}
                                                 type='allProducts'
                                                 onClick={productModal}
                                                 currency={currencyType}
@@ -630,12 +628,9 @@ function ProductExchanges() {
                                 map(filteredFilials, (item, index) => {
                                     return (
                                         <motion.div
-                                            initial={{y: '100%'}}
-                                            animate={{y: '0%'}}
-                                            transition={{
-                                                delay: 0,
-                                                ease: 'linear',
-                                            }}
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            transition={{ duration: 0.5 }}
                                             key={index}
                                             className='pb-[0.675rem] '
                                         >

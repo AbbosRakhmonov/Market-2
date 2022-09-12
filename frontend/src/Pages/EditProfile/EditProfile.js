@@ -63,8 +63,30 @@ function EditProfile() {
         })
     }
     const handleSubmit = () => {
-        if (checkEmptyString([currentUser.firstname, currentUser.lastname, currentUser.newPassword, currentUser.repeatPassword, currentUser.newLogin])) {
-            warningEmptyInput()
+        const {failed, message} = checkEmptyString([
+            {
+                value: currentUser.firstname,
+                message: 'Ismi'
+            },
+            {
+                value: currentUser.lastname,
+                message: 'Familiyasi'
+            },
+            {
+                value: currentUser.newPassword,
+                message: 'Parol'
+            },
+            {
+                value: currentUser.repeatPassword,
+                message: 'Tasdiqlash paroli'
+            },
+            {
+                value: currentUser.newLogin,
+                message: 'Login'
+            }
+        ])
+        if (failed) {
+            warningEmptyInput(message)
         } else {
             const body = {
                 _id: currentUser._id,

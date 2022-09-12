@@ -18,8 +18,22 @@ function CreateShop({handleClickNext, editedMarket}) {
     const [phoneNumber3, setPhoneNumber3] = useState('')
 
     const handleClick = () => {
-        if (checkEmptyString([shopName, phoneNumber1, organizationName])) {
-            warningEmptyInput()
+        const {failed, message} = checkEmptyString([
+            {
+                value: shopName,
+                message: 'Do`kon nomi'
+            },
+            {
+                value: phoneNumber1,
+                message: 'Telefon raqam 1'
+            },
+            {
+                value: organizationName,
+                message: 'Tashkilot nomi'
+            }
+        ])
+        if (failed) {
+            warningEmptyInput(message)
         } else {
             const allData = {
                 name: shopName,
