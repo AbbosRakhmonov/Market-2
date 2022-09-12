@@ -15,8 +15,34 @@ function CreateDirector({handleClickFinish, director}) {
     const [repeatPassword, setRepeatPassword] = useState('')
     const handleFinish = (e) => {
         e.preventDefault()
-        if (checkEmptyString([directorName, directorSurname, directorPhone, login, password, repeatPassword])) {
-            warningEmptyInput()
+        const {failed, message} = checkEmptyString([
+            {
+                value: directorName,
+                message: 'Direktor ismi'
+            },
+            {
+                value: directorSurname,
+                message: 'Direktor familiyasi'
+            },
+            {
+                value: directorPhone,
+                message: 'Telefon raqami'
+            },
+            {
+                value: login,
+                message: 'Login'
+            },
+            {
+                value: password,
+                message: 'Parol'
+            },
+            {
+                value: repeatPassword,
+                message: 'Tasdiqlash paroli'
+            }
+        ])
+        if (failed) {
+            warningEmptyInput(message)
         } else {
             if (password !== repeatPassword) {
                 warningRepeatPasswordDoesntMatch()

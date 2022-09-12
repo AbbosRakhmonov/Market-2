@@ -24,7 +24,8 @@ import BarcodeReader from 'react-barcode-reader'
 import {checkEmptyString, exportExcel} from '../../App/globalFunctions.js'
 import UniversalModal from '../../Components/Modal/UniversalModal.js'
 import * as XLSX from 'xlsx'
-import {map, filter} from 'lodash'
+import {filter, map} from 'lodash'
+
 function Barcode() {
     const dispatch = useDispatch()
     const {products, searchedProducts, totalSearched, total, loadingGetAll} = useSelector((state) => state.barcode)
@@ -43,7 +44,7 @@ function Barcode() {
     const [modalBody, setModalBody] = useState(null)
     const [excelData, setExcelData] = useState([])
     const [createdData, setCreatedData] = useState([])
-   
+
     const headers = [
         {title: '№'},
         {
@@ -70,8 +71,18 @@ function Barcode() {
     const add = (e) => {
         e.preventDefault()
         e.autofocus = true
-        if (checkEmptyString([barcode, name])) {
-            warningEmptyInput()
+        const {failed, message} = checkEmptyString([
+            {
+                value: barcode,
+                message: 'Shtrix kod'
+            },
+            {
+                value: name,
+                message: 'Maxsulot nomi'
+            }
+        ])
+        if (failed) {
+            warningEmptyInput(message)
         } else {
             const body = {
                 currentPage,
@@ -95,8 +106,18 @@ function Barcode() {
     const save = (e) => {
         e.preventDefault()
         e.autofocus = true
-        if (checkEmptyString([barcode, name])) {
-            warningEmptyInput()
+        const {failed, message} = checkEmptyString([
+            {
+                value: barcode,
+                message: 'Shtrix kod'
+            },
+            {
+                value: name,
+                message: 'Maxsulot nomi'
+            }
+        ])
+        if (failed) {
+            warningEmptyInput(message)
         } else {
             const body = {
                 currentPage,
@@ -168,7 +189,7 @@ function Barcode() {
             setData(products)
             setFilteredDataTotal(total)
         } else {
-            const filteredProducts = filter(products,(product) => {
+            const filteredProducts = filter(products, (product) => {
                 return product.name
                     .toLowerCase()
                     .includes(valForSearch)
@@ -187,7 +208,7 @@ function Barcode() {
             setData(products)
             setFilteredDataTotal(total)
         } else {
-            const filteredProducts = filter(products,(product) => {
+            const filteredProducts = filter(products, (product) => {
                 return product.barcode.includes(valForSearch)
             })
             setData(filteredProducts)
@@ -275,7 +296,7 @@ function Barcode() {
     }
     const handleClickApproveToImport = () => {
         const oldKeys = Object.keys(excelData[0])
-        const newData =map(createdData,(item) => {
+        const newData = map(createdData, (item) => {
             const newItem = {}
             for (const key in item) {
                 newItem[key] = item[key].toString().replace(/\s+/g, ' ').trim()
@@ -305,20 +326,19 @@ function Barcode() {
         })
     }
 
-    
+
     const exportData = () => {
         let fileName = 'Shtrix Kodlar'
         const exportHeader = ['№', 'Shtix kodi', 'Maxsulot Nomi']
-        if(products?.length > 0){
+        if (products?.length > 0) {
             const BarcodeData = map(products, (item, index) => ({
                 nth: index + 1,
-                code: item?.barcode || "",
-                name: item?.name || "",
+                code: item?.barcode || '',
+                name: item?.name || ''
             }))
             exportExcel(BarcodeData, fileName, exportHeader)
-        }
-        else {
-          universalToast("Jadvalda ma'lumot mavjud emas !","warning" )
+        } else {
+            universalToast('Jadvalda ma\'lumot mavjud emas !', 'warning')
         }
     }
 
