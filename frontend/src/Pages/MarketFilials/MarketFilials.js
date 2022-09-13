@@ -2,44 +2,48 @@ import React, {useEffect, useState} from 'react'
 import Filial from '../../Components/Filial/Filial'
 import {uniqueId, map} from 'lodash'
 import {motion} from 'framer-motion'
-import {useDispatch, useSelector} from 'react-redux'
 import SmallLoader from '../../Components/Spinner/SmallLoader'
+import socket from '../../Config/socket.js'
+import {useSelector} from 'react-redux'
 import {universalToast} from '../../Components/ToastMessages/ToastMessages.js'
-import {clearGetFilials, getAllFilials} from './marketFilialsSlice.js'
+
 function MarketFilials() {
-    const dispatch = useDispatch()
-    const {allFilials, loading, errorGetFilials} = useSelector(
-        (state) => state.filials
-    )
+    const {market} = useSelector((state) => state.login)
 
     const [data, setData] = useState([])
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        const newData = allFilials.map((item) => {
-            return {
-                director: {
-                    firstname: item?.director?.firstname,
-                    lastname: item?.director?.lastname,
-                    image: item?.director?.image,
-                },
-                typecount: 10,
-                productcount: 100,
-                totalPrice: 1000000,
-                totalPriceUSD: 100,
-                shopname: item?.name,
-                _id: item?._id,
-            }
-        })
-        setData(newData)
-    }, [allFilials])
-
-    useEffect(() => {
-        dispatch(getAllFilials())
-    }, [dispatch])
-    useEffect(() => {
-        errorGetFilials && universalToast(errorGetFilials, 'error')
-        dispatch(clearGetFilials())
-    }, [errorGetFilials, dispatch])
+        market &&
+            socket.emit('getAllFilials', {
+                market: market._id,
+            })
+        market &&
+            socket.on('getAllFilials', (filials) => {
+                setLoading(false)
+                setData(
+                    map(filials, (filial) => {
+                        return {
+                            director: {
+                                firstname: filial?.director?.firstname,
+                                lastname: filial?.director?.lastname,
+                                image: filial?.director?.image,
+                            },
+                            typecount: 10,
+                            productcount: 100,
+                            totalPrice: 1000000,
+                            totalPriceUSD: 100,
+                            shopname: filial?.name,
+                            _id: filial?._id,
+                        }
+                    })
+                )
+            })
+        market &&
+            socket.on('error', (err) => {
+                universalToast(err.message, 'error')
+            })
+    }, [market])
 
     return (
         <motion.section
