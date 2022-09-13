@@ -611,20 +611,24 @@ module.exports.getsaleconnectors = async (req, res) => {
       .populate({ path: "client", match: { name: name }, select: "name" })
       .populate("packman", "name")
       .populate("user", "firstname lastname")
-      .populate("dailyconnectors", "comment");
+      .populate("dailyconnectors", "comment")
+      .then((connectors) => {
+        return filter(
+          connectors,
+          (connector) =>
+            (search.client.length > 0 &&
+              connector.client !== null &&
+              connector.client) ||
+            search.client.length === 0
+        );
+      });
 
-    const filter = saleconnectors.filter((item) => {
-      return (
-        (search.client.length > 0 && item.client !== null && item.client) ||
-        search.client.length === 0
-      );
-    });
-    const count = filter.length;
     res.status(200).json({
-      saleconnectors: filter.splice(countPage * currentPage, countPage),
-      count,
+      saleconnectors: saleconnectors.splice(countPage * currentPage, countPage),
+      count: saleconnectors.length,
     });
   } catch (error) {
+    console.log(error);
     res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };

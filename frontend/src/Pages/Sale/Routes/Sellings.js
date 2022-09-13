@@ -16,10 +16,10 @@ import {
 } from '../Slices/sellingsSlice.js'
 import {regexForTypeNumber} from '../../../Components/RegularExpressions/RegularExpressions.js'
 import UniversalModal from '../../../Components/Modal/UniversalModal.js'
-import { useTranslation } from 'react-i18next'
-import { filter, map } from 'lodash'
-import { universalSort, exportExcel } from './../../../App/globalFunctions';
-import { universalToast } from '../../../Components/ToastMessages/ToastMessages.js'
+import {useTranslation} from 'react-i18next'
+import {filter, map} from 'lodash'
+import {universalSort, exportExcel} from './../../../App/globalFunctions'
+import {universalToast} from '../../../Components/ToastMessages/ToastMessages.js'
 
 const Sellings = () => {
     const {t} = useTranslation(['common'])
@@ -157,9 +157,8 @@ const Sellings = () => {
         setPrintedSelling(null)
     }
 
-
     const exportData = () => {
-        let fileName = 'Sotuvlar'- new Date().toLocaleDateString()
+        let fileName = 'Sotuvlar' - new Date().toLocaleDateString()
         const sellingHeaders = [
             '№',
             t('ID'),
@@ -171,51 +170,49 @@ const Sellings = () => {
             t('Qarz UZS'),
             t('Qarz USD'),
         ]
-        if(data?.length>0){
+        if (data?.length > 0) {
             const SellingData = map(data, (item, index) => ({
                 nth: index + 1,
-                id: item?.id || "",
+                id: item?.id || '',
                 client: item?.client?.name || item?.packman?.name,
-                alluzs: item?.products[0]?.totalpriceuzs || "",
-                allusd: item?.products[0]?.totalprice || "",
+                alluzs: item?.products[0]?.totalpriceuzs || '',
+                allusd: item?.products[0]?.totalprice || '',
                 discount:
                     item.discounts.length > 0
                         ? item.discounts.map((discount) => {
-                            return discount
-                        })
+                              return discount
+                          })
                         : 0,
                 discountusd:
                     item.discounts.length > 0
                         ? item.discounts.map((discount) => {
-                            return discount
-                        })
+                              return discount
+                          })
                         : 0,
                 debd:
                     item?.products[0]?.totalpriceuzs -
-                    item?.payments[0]?.paymentuzs -
-                    item?.discounts.length >
+                        item?.payments[0]?.paymentuzs -
+                        item?.discounts.length >
                     0
                         ? item.discounts.map((discount) => {
-                            return discount.discount
-                        })
+                              return discount.discount
+                          })
                         : 0,
                 debdusd:
                     item.products[0].totalprice -
-                    item.payments[0].payment -
-                    item.discounts.length >
+                        item.payments[0].payment -
+                        item.discounts.length >
                     0
                         ? item.discounts.map((discount) => {
-                            return discount.discount
-                        })
-                        : 0
-            }))         
-            exportExcel(SellingData, fileName, sellingHeaders )
+                              return discount.discount
+                          })
+                        : 0,
+            }))
+            exportExcel(SellingData, fileName, sellingHeaders)
+        } else {
+            universalToast("Jadvalda ma'lumot mavjud emas !", 'warning')
         }
-        else{
-         universalToast("Jadvalda ma'lumot mavjud emas !","warning")
-        }
-
-         }
+    }
 
     const handleClickPrint = (selling) => {
         setChooseBody('allChecks')
@@ -343,9 +340,7 @@ const Sellings = () => {
                 approveFunction={handleAddClient}
             />
             <div className='pagination mainPadding'>
-                <ExportBtn
-                    onClick={exportData}
-                />
+                <ExportBtn onClick={exportData} />
                 <p className='flex items-center'>{t('Sotuvlar')}</p>
                 {(filteredDataTotal !== 0 || totalSearched !== 0) && (
                     <Pagination
@@ -379,7 +374,7 @@ const Sellings = () => {
                     <NotFind text={"Ro'yxat mavjud emas..."} />
                 ) : (
                     <Table
-                        data={data}
+                        data={searchedData.length > 0 ? searchedData : data}
                         currentPage={currentPage}
                         currency={currencyType}
                         countPage={showByTotal}
