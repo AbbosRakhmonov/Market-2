@@ -528,15 +528,13 @@ module.exports.getAllFilials = async (req, res) => {
           "Diqqat! Foydalanuvchi ro'yxatga olinayotgan do'kon dasturda ro'yxatga olinmagan.",
       });
     }
-
     const filials = await Market.find({
       mainmarket: market,
     })
       .select("director image name phone1 createdAt")
       .populate("director", "firstname lastname");
-
     res.status(201).json({
-      filials: filials,
+      filials,
     });
   } catch (error) {
     res.status(501).json({ error: "Serverda xatolik yuz berdi..." });

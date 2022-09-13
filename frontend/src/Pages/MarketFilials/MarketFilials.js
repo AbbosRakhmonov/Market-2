@@ -14,16 +14,16 @@ function MarketFilials() {
         const newData = allFilials.map((item) => {
             return {
                 director: {
-                    firstname: item.director.firstname,
-                    lastname: item.director.lastname,
-                    image: item.director.image,
+                    firstname: item?.director?.firstname,
+                    lastname: item?.director?.lastname,
+                    image: item?.director?.image,
                 },
                 typecount: 10,
                 productcount: 100,
                 totalPrice: 1000000,
                 totalPriceUSD: 100,
-                shopname: item.name,
-                _id: item._id,
+                shopname: item?.name,
+                _id: item?._id,
             }
         })
         setData(newData)

@@ -3,7 +3,7 @@ import {universalToast} from '../../Components/ToastMessages/ToastMessages'
 import Api from '../../Config/Api'
 
 export const getAllFilials = createAsyncThunk(
-    'productExchanges/getAllFilial',
+    'productExchanges/getAllFilials',
     async (body = {}, {rejectWithValue}) => {
         try {
             const {data} = await Api.post('/filialproducts/getallfilials', body)
@@ -57,13 +57,16 @@ const productExchangesSlice = createSlice({
         },
 
         [getAllFilials.fulfilled]: (state, {payload: {filials}}) => {
+            console.log("to'g'ri")
+            console.log(payload)
             state.loading = false
             state.allFilials = filials
         },
         [getAllFilials.rejected]: (state, {payload}) => {
+            console.log('xato')
+            console.log(payload)
             universalToast(payload.error, 'error')
             state.loading = false
-            state.errorProductExchanges = payload
         },
         [getExchangesFilial.pending]: (state) => {
             state.loading = true

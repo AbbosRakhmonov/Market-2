@@ -11,7 +11,7 @@ import FilialExchangesProduct from '../../Pages/FilialExchanges/FilialExchengesP
 import ProductIdExchanges from '../../Pages/ProductIdExchanges/ProductIdExchanges'
 const Filial = ({active, value}) => {
     const {currencyType} = useSelector((state) => state.currency)
-    const {tablename, _id, exchangesId} = useParams()
+    const {tablename, _id} = useParams()
     const location = useLocation()
     const [reportOpen, setReprotOpen] = useState(true)
     const [salesOpen, setSalesOpen] = useState(true)
@@ -41,11 +41,11 @@ const Filial = ({active, value}) => {
     const {t} = useTranslation(['common'])
 
     useEffect(() => {
-        if(_id){
-             setUseParamsId(_id)
+        if (_id) {
+            setUseParamsId(_id)
         }
     }, [_id])
-  
+
     return (
         <section>
             <div
@@ -127,7 +127,11 @@ const Filial = ({active, value}) => {
                             <FilialButtons
                                 type={'payments'}
                                 active={
-                                    (_id === value._id && tablename === 'payment') || (_id === value._id && location.pathname === `/dukonlar/filiallar/payment/${_id}/exchangesId`)
+                                    (_id === value._id &&
+                                        tablename === 'payment') ||
+                                    (_id === value._id &&
+                                        location.pathname ===
+                                            `/dukonlar/filiallar/payment/${_id}/exchangesId`)
                                 }
                             />
                         </Link>
@@ -157,7 +161,13 @@ const Filial = ({active, value}) => {
                     />
                     <Route
                         path={`/:tablename/:_id/exchangesId`}
-                        element={ useParamsId === value._id ? <ProductIdExchanges currency={currencyType}/> : ""}
+                        element={
+                            useParamsId === value._id ? (
+                                <ProductIdExchanges currency={currencyType} />
+                            ) : (
+                                ''
+                            )
+                        }
                     />
                 </Routes>
             </AnimatePresence>
