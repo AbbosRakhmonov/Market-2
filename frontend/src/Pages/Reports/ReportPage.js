@@ -25,15 +25,17 @@ import {
 } from './reportsSlice'
 import {ReportsTableHeaders} from './ReportsTableHeaders'
 import {filter} from 'lodash'
-import { universalSort } from './../../App/globalFunctions';
-import {changeStartDate,changeEndDate} from './reportsSlice'
+import {universalSort} from './../../App/globalFunctions'
+import {changeStartDate, changeEndDate} from './reportsSlice'
 const ReportPage = () => {
     const {id} = useParams()
 
     const dispatch = useDispatch()
 
     const {market: _id, user} = useSelector((state) => state.login)
-    const {datas, count,startDate,endDate} = useSelector((state) => state.reports)
+    const {datas, count, startDate, endDate} = useSelector(
+        (state) => state.reports
+    )
     const {currencyType, currency} = useSelector((state) => state.currency)
     const [currentPage, setCurrentPage] = useState(0)
     const [countPage, setCountPage] = useState(10)
@@ -72,7 +74,7 @@ const ReportPage = () => {
     const [sorItem, setSorItem] = useState({
         filter: '',
         sort: '',
-        count: 0
+        count: 0,
     })
     const [storeData, setStoreData] = useState(datas)
     const [paymentDebt, setPaymentDebt] = useState(0)
@@ -543,7 +545,68 @@ const ReportPage = () => {
         dispatch(changeStartDate({start: e.toISOString()}))
     }
     const handleEndDate = (e) => {
-        dispatch(changeEndDate({end : e.toISOString()}))
+        dispatch(changeEndDate({end: e.toISOString()}))
+    }
+
+    const handleBeginDay = (e) => {
+        setBeginDay(new Date(e.setHours(0, 0, 0)))
+    }
+    const handleEndDay = (e) => {
+        setEndDay(new Date(e.setHours(23, 59, 59)))
+    }
+    const filterData = (filterKey) => {
+        if (filterKey === sorItem.filter) {
+            switch (sorItem.count) {
+                case 1:
+                    setSorItem({
+                        filter: filterKey,
+                        sort: '1',
+                        count: 2,
+                    })
+                    universalSort(
+                        currentData,
+                        setCurrentData,
+                        filterKey,
+                        1,
+                        storeData
+                    )
+                    break
+                case 2:
+                    setSorItem({
+                        filter: filterKey,
+                        sort: '',
+                        count: 0,
+                    })
+                    universalSort(
+                        currentData,
+                        setCurrentData,
+                        filterKey,
+                        '',
+                        storeData
+                    )
+                    break
+                default:
+                    setSorItem({
+                        filter: filterKey,
+                        sort: '-1',
+                        count: 1,
+                    })
+                    universalSort(
+                        currentData,
+                        setCurrentData,
+                        filterKey,
+                        -1,
+                        storeData
+                    )
+            }
+        } else {
+            setSorItem({
+                filter: filterKey,
+                sort: '-1',
+                count: 1,
+            })
+            universalSort(currentData, setCurrentData, filterKey, -1, storeData)
+        }
     }
 
     useEffect(() => {
@@ -557,12 +620,16 @@ const ReportPage = () => {
             market: _id,
             search: sendingSearch,
         }
+        let debtBody = {
+            startDate: beginDay,
+            endDate: endDay,
+        }
         check('sale') && dispatch(getSales(body))
         check('income') && dispatch(getProfit(body))
         check('cash') && dispatch(getPaymentReport(body))
         check('card') && dispatch(getPaymentReport(body))
         check('transfer') && dispatch(getPaymentReport(body))
-        check('debts') && dispatch(getDebts())
+        check('debts') && dispatch(getDebts(debtBody))
         check('discounts') && dispatch(getDiscounts(body))
         check('backproducts') && dispatch(getBackProducts(body))
         check('expenses') && dispatch(getExpensesReport(body))
@@ -577,6 +644,8 @@ const ReportPage = () => {
         countPage,
         startDate,
         endDate,
+        beginDay,
+        endDay,
         _id,
         id,
     ])
@@ -593,11 +662,9 @@ const ReportPage = () => {
             setStorageData([])
         }
     }, [datas, id])
-
     useEffect(() => {
         count > 0 && setTotalPage(count)
     }, [count])
-
     useEffect(() => {
         if (id === 'debts') {
             setTotalDebt({
@@ -606,7 +673,6 @@ const ReportPage = () => {
             })
         }
     }, [datas, id])
-
     useEffect(() => {
         if (id === 'debts') {
             const searched = [...datas].filter((debt) => {
@@ -621,66 +687,6 @@ const ReportPage = () => {
         setStoreData(datas)
     }, [id, datas, beginDay, endDay])
 
-    const filterData = (filterKey) => {
-        if (filterKey === sorItem.filter) {
-            switch (sorItem.count) {
-                case 1:
-                    setSorItem({
-                        filter: filterKey,
-                        sort: '1',
-                        count: 2
-                    })
-                    universalSort(
-                        currentData,
-                        setCurrentData,
-                        filterKey,
-                        1,
-                        storeData
-                    )
-                    break
-                case 2:
-                    setSorItem({
-                        filter: filterKey,
-                        sort: '',
-                        count: 0
-                    })
-                    universalSort(
-                        currentData,
-                        setCurrentData,
-                        filterKey,
-                        '',
-                        storeData
-                    )
-                    break
-                default:
-                    setSorItem({
-                        filter: filterKey,
-                        sort: '-1',
-                        count: 1
-                    })
-                    universalSort(
-                        currentData,
-                        setCurrentData,
-                        filterKey,
-                        -1,
-                        storeData
-                    )
-            }
-        } else {
-            setSorItem({
-                filter: filterKey,
-                sort: '-1',
-                count: 1
-            })
-            universalSort(
-                currentData,
-                setCurrentData,
-                filterKey,
-                -1,
-                storeData
-            )
-        }
-    }
     return (
         <div className='relative overflow-auto h-full'>
             <div className='flex items-center justify-between mainPadding'>
@@ -711,8 +717,8 @@ const ReportPage = () => {
                     filterByClientNameWhenPressEnter={onKeySearch}
                     startDate={beginDay}
                     endDate={endDay}
-                    setStartDate={setBeginDay}
-                    setEndDate={setEndDay}
+                    setStartDate={handleBeginDay}
+                    setEndDate={handleEndDay}
                 />
                 {id !== 'debts' && (
                     <Pagination
@@ -821,11 +827,11 @@ const ReportPage = () => {
                 headers={headers}
                 headerText={
                     modalBody === 'complete' &&
-                    "To'lovni amalga oshirishni tasdiqlaysizmi ?"
+                    "To'lovni amalga oshirishni tasdiqlaysizmi?"
                 }
                 title={
                     modalBody === 'complete' &&
-                    "To'lovni amalga oshirgach bu ma`lumotlarni o`zgaritirb bo`lmaydi !"
+                    "To'lovni amalga oshirgach bu ma`lumotlarni o'zgaritirib bo'lmaydi!"
                 }
             />
         </div>
