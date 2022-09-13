@@ -11,6 +11,7 @@ function Shops() {
     const [data, setData] = useState([])
 
     useEffect(() => {
+        console.log(filialDatas)
         const newData = filialDatas.map((item) => {
             return {
                 director: {
