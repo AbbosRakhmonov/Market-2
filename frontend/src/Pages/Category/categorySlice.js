@@ -95,7 +95,7 @@ const categorySlice = createSlice({
         successUpdateCategory: false,
         errorUpdateCategory: false,
         successDeleteCategory: false,
-        errorDeleteCategory: false
+        errorDeleteCategory: false,
     },
     reducers: {
         clearErrorGetAllCategories: (state) => {
@@ -122,7 +122,10 @@ const categorySlice = createSlice({
         },
         clearErrorDeleteCategory: (state) => {
             state.errorDeleteCategory = false
-        }
+        },
+        setAllCategories: (state, {payload}) => {
+            state.allcategories = [...payload]
+        },
     },
     extraReducers: {
         [getAllCategories.pending]: (state) => {
@@ -219,8 +222,8 @@ const categorySlice = createSlice({
         [deleteCategory.rejected]: (state, {payload}) => {
             state.loading = false
             state.errorDeleteCategory = payload
-        }
-    }
+        },
+    },
 })
 
 export const {
@@ -231,6 +234,7 @@ export const {
     clearErrorUpdateCategory,
     clearSuccessUpdateCategory,
     clearSuccessDeleteCategory,
-    clearErrorDeleteCategory
+    clearErrorDeleteCategory,
+    setAllCategories,
 } = categorySlice.actions
 export default categorySlice.reducer
