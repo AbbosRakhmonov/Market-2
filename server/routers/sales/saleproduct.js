@@ -628,7 +628,6 @@ module.exports.getsaleconnectors = async (req, res) => {
       count: saleconnectors.length,
     });
   } catch (error) {
-    console.log(error);
     res.status(400).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };

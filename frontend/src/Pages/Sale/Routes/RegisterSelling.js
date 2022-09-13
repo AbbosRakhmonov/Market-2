@@ -596,7 +596,6 @@ const RegisterSelling = () => {
             saleconnectorid: saleConnectorId,
             comment: saleComment,
         }
-        console.log(body)
         dispatch(saleConnectorId ? addPayment(body) : makePayment(body)).then(
             ({payload, error}) => {
                 if (!error) {
