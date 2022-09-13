@@ -58,7 +58,7 @@ const productExchangesSlice = createSlice({
 
         [getAllFilials.fulfilled]: (state, {payload: {filials}}) => {
             console.log("to'g'ri")
-            console.log(payload)
+            console.log(filials)
             state.loading = false
             state.allFilials = filials
         },
