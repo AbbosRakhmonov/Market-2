@@ -1193,7 +1193,6 @@ const RegisterSelling = () => {
             })
     }, [market, dispatch, lastPayments])
     useEffect(() => {
-        localStorage.setItem('products', JSON.stringify(allProducts))
         if (activeCategory) {
             const filteredData = filter(
                 allProducts,

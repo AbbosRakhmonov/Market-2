@@ -4,7 +4,7 @@ import {
     successAddProductMessage,
     successDeleteProductMessage,
     successUpdateProductMessage,
-    universalToast
+    universalToast,
 } from '../../../Components/ToastMessages/ToastMessages.js'
 
 export const getProducts = createAsyncThunk(
@@ -26,8 +26,8 @@ export const getProductsAll = createAsyncThunk(
             search: {
                 name: '',
                 code: '',
-                category: ''
-            }
+                category: '',
+            },
         },
         {rejectWithValue}
     ) => {
@@ -84,7 +84,7 @@ export const deleteProduct = createAsyncThunk(
     async (body, {rejectWithValue}) => {
         try {
             const {data} = await Api.delete('/products/product/delete', {
-                data: body
+                data: body,
             })
             return data
         } catch (error) {
@@ -128,7 +128,7 @@ const productSlice = createSlice({
         totalSearched: 0,
         loading: false,
         errorProducts: null,
-        loadingExcel: false
+        loadingExcel: false,
     },
     reducers: {
         clearSearchedProducts: (state) => {
@@ -137,7 +137,7 @@ const productSlice = createSlice({
         },
         clearUploadExcel: (state) => {
             state.allProducts = []
-        }
+        },
     },
     extraReducers: {
         [getProducts.pending]: (state) => {
@@ -254,7 +254,6 @@ const productSlice = createSlice({
         [getProductsAll.fulfilled]: (state, {payload}) => {
             state.loadingExcel = false
             state.allProducts = payload
-            localStorage.setItem('allProducts', JSON.stringify(payload))
         },
         [getProductsAll.rejected]: (state, {payload}) => {
             state.loadingExcel = false
@@ -272,11 +271,9 @@ const productSlice = createSlice({
             state.loading = false
             state.errorProducts = payload
             universalToast(payload, 'error')
-        }
-    }
+        },
+    },
 })
 
-export const {
-    clearSearchedProducts
-} = productSlice.actions
+export const {clearSearchedProducts} = productSlice.actions
 export default productSlice.reducer

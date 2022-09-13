@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import Api from '../../Config/Api'
+import Api from '../../Config/Api.js'
 
 export const getAllFilials = createAsyncThunk(
     'marketFilials/getAllFilials',
@@ -14,7 +14,7 @@ export const getAllFilials = createAsyncThunk(
 )
 
 const marketFilialsSlice = createSlice({
-    name: 'productExchanges',
+    name: 'marketFilials',
     initialState: {
         allFilials: [],
         loading: false,
@@ -35,6 +35,7 @@ const marketFilialsSlice = createSlice({
         },
         [getAllFilials.rejected]: (state, {payload}) => {
             console.log('Yana xato')
+            console.log(payload)
             state.loading = false
             state.errorGetFilials = payload
         },
