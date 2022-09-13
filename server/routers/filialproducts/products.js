@@ -8,9 +8,44 @@ const { Product } = require("../../models/Products/Product");
 const { ProductData } = require("../../models/Products/Productdata");
 const { ProductPrice } = require("../../models/Products/ProductPrice");
 const { Unit } = require("../../models/Products/Unit");
-require("../../models/Products/ProductPrice");
-require("../../models/Users");
+const { User } = require("../../models/Users");
 
+const createFilialCategory = async (filial, product) => {
+  const filialCategory = await Category.findOne({
+    market: filial,
+    code: product.category.code,
+  });
+  if (filialCategory) {
+    return filialCategory;
+  } else {
+    const newFilialCategory = new Category({
+      code: product.category.code,
+      market: filial,
+    });
+    if (product.category.name) {
+      newFilialCategory.name = product.category.name;
+    }
+    await newFilialCategory.save();
+    return newFilialCategory;
+  }
+};
+
+const createFilialUnit = async (filial, product) => {
+  const filialUnit = await Unit.findOne({
+    market: filial,
+    name: product.unit.name,
+  });
+  if (filialUnit) {
+    return filialUnit;
+  } else {
+    const newFilialUnit = new Unit({
+      name: product.unit.name,
+      market: filial,
+    });
+    await newFilialUnit.save();
+    return newFilialUnit;
+  }
+};
 // Send Products To Filial
 module.exports.registerProducts = async (req, res) => {
   try {
@@ -202,43 +237,6 @@ module.exports.registerProducts = async (req, res) => {
     res.status(200).json(responseTransfer);
   } catch (error) {
     res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
-  }
-};
-
-const createFilialCategory = async (filial, product) => {
-  const filialCategory = await Category.findOne({
-    market: filial,
-    code: product.category.code,
-  });
-  if (filialCategory) {
-    return filialCategory;
-  } else {
-    const newFilialCategory = new Category({
-      code: product.category.code,
-      market: filial,
-    });
-    if (product.category.name) {
-      newFilialCategory.name = product.category.name;
-    }
-    await newFilialCategory.save();
-    return newFilialCategory;
-  }
-};
-
-const createFilialUnit = async (filial, product) => {
-  const filialUnit = await Unit.findOne({
-    market: filial,
-    name: product.unit.name,
-  });
-  if (filialUnit) {
-    return filialUnit;
-  } else {
-    const newFilialUnit = new Unit({
-      name: product.unit.name,
-      market: filial,
-    });
-    await newFilialUnit.save();
-    return newFilialUnit;
   }
 };
 
@@ -524,8 +522,7 @@ module.exports.getAllFilials = async (req, res) => {
     const marke = await Market.findById(market);
     if (!marke) {
       return res.status(404).json({
-        error:
-          "Diqqat! Foydalanuvchi ro'yxatga olinayotgan do'kon dasturda ro'yxatga olinmagan.",
+        error: "Diqqat! Do'kon dasturda ro'yxatga olinmagan.",
       });
     }
     const filials = await Market.find({

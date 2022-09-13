@@ -8,10 +8,6 @@ router.post("/register", auth, (req, res) => {
   require("./products").registerProducts(req, res);
 });
 
-router.put("/edit", auth, (req, res) => {
-  require("./products").editTransfer(req, res);
-});
-
 router.post("/gettransfers", auth, (req, res) => {
   require("./products").getTransfers(req, res);
 });
@@ -26,6 +22,10 @@ router.post("/getfilials", auth, (req, res) => {
 
 router.post("/getallfilials", auth, (req, res) => {
   require("./products").getAllFilials(req, res);
+});
+
+router.put("/edit", auth, (req, res) => {
+  require("./products").editTransfer(req, res);
 });
 
 router.delete("/delete", auth, (req, res) => {
