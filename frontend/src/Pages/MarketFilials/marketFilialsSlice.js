@@ -29,9 +29,10 @@ const marketFilialsSlice = createSlice({
         [getAllFilials.pending]: (state) => {
             state.loading = true
         },
-        [getAllFilials.fulfilled]: (state, {payload: {filials}}) => {
+        [getAllFilials.fulfilled]: (state, {payload}) => {
             state.loading = false
-            state.allFilials = filials
+            console.log(payload)
+            // state.allFilials = filials
         },
         [getAllFilials.rejected]: (state, {payload}) => {
             console.log('Yana xato')
