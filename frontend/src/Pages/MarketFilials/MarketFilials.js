@@ -4,12 +4,13 @@ import {uniqueId, map} from 'lodash'
 import {motion} from 'framer-motion'
 import SmallLoader from '../../Components/Spinner/SmallLoader'
 import socket from '../../Config/socket.js'
-import {useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import {universalToast} from '../../Components/ToastMessages/ToastMessages.js'
+import {setFilialDatas} from '../ProductExchanges/productExchangesSlice.js'
 
 function MarketFilials() {
     const {market} = useSelector((state) => state.login)
-
+    const dispatch = useDispatch()
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
 
@@ -21,6 +22,7 @@ function MarketFilials() {
         market &&
             socket.on('getAllFilials', (filials) => {
                 setLoading(false)
+                dispatch(setFilialDatas(filials))
                 setData(
                     map(filials, (filial) => {
                         return {
@@ -43,7 +45,7 @@ function MarketFilials() {
             socket.on('error', (err) => {
                 universalToast(err.message, 'error')
             })
-    }, [market])
+    }, [market, dispatch])
 
     return (
         <motion.section

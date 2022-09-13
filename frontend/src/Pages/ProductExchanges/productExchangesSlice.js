@@ -37,6 +37,9 @@ const productExchangesSlice = createSlice({
         clearErrorProductExchanges: (state) => {
             state.errorPackmans = null
         },
+        setFilialDatas: (state, {payload}) => {
+            state.filialDatas = payload
+        },
     },
     extraReducers: {
         [getExchangesFilial.pending]: (state) => {
@@ -65,5 +68,5 @@ const productExchangesSlice = createSlice({
     },
 })
 
-export const {clearErrorProductExchanges} = productExchangesSlice.actions
+export const {setFilialDatas} = productExchangesSlice.actions
 export default productExchangesSlice.reducer

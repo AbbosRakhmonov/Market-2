@@ -14,11 +14,12 @@ import {
     universalToast,
     warningSellingExchanges,
 } from '../../Components/ToastMessages/ToastMessages'
-import {getExchangesFilial, sendingFilial} from './productExchangesSlice'
+import {sendingFilial, setFilialDatas} from './productExchangesSlice'
 import {useDispatch, useSelector} from 'react-redux'
 import {getProducts} from './../Incomings/incomingSlice'
 import SmallLoader from '../../Components/Spinner/SmallLoader'
 import {motion} from 'framer-motion'
+import socket from '../../Config/socket.js'
 
 function ProductExchanges() {
     const dispatch = useDispatch()
@@ -28,6 +29,8 @@ function ProductExchanges() {
     const {products} = useSelector((state) => state.incoming)
 
     const {currencyType} = useSelector((state) => state.currency)
+
+    const {market} = useSelector((state) => state.login)
 
     const [filialNameSearch, setFilialNameSearch] = useState('')
     const [productCodeSearch, setProductCodeSearch] = useState('')
@@ -385,17 +388,20 @@ function ProductExchanges() {
             productExchangesFilial()
         }
     }
-
     useEffect(() => {
-        const body = {
-            currentPage: 0,
-            countPage: 10,
-            search: {
-                name: '',
-            },
-        }
-        dispatch(getExchangesFilial(body))
-    }, [dispatch])
+        market &&
+            socket.emit('getAllFilials', {
+                market: market._id,
+            })
+        market &&
+            socket.on('getAllFilials', (filials) => {
+                dispatch(setFilialDatas(filials))
+            })
+        market &&
+            socket.on('error', (err) => {
+                universalToast(err.message, 'error')
+            })
+    }, [market, dispatch])
     useEffect(() => {
         dispatch(getProducts())
     }, [dispatch])
@@ -425,30 +431,25 @@ function ProductExchanges() {
             })
         setProductData(newUpdateProduct)
     }, [products])
-
     useEffect(() => {
         setFilteredFilials(sellingProductData)
     }, [sellingProductData])
-
     useEffect(() => {
         setFilteredShopProducts(productData)
     }, [productData])
-
     useEffect(() => {
-        const newUpdateFilialProduct =
-            filialDatas &&
-            map(filialDatas, (obj) => {
-                return {
-                    id: obj?._id,
-                    image: obj?.image,
-                    filialName: obj?.name,
-                    directorName: obj?.director?.firstname,
-                    directorLastName: obj?.director?.lastname,
-                }
-            })
+        const newUpdateFilialProduct = map(filialDatas, (obj) => {
+            return {
+                id: obj?._id,
+                image: obj?.image,
+                filialName: obj?.name,
+                directorName: obj?.director?.firstname,
+                directorLastName: obj?.director?.lastname,
+            }
+        })
         setFilialData(newUpdateFilialProduct)
+        setFilteredFilialNames(newUpdateFilialProduct)
     }, [filialDatas])
-
     useEffect(() => {
         const newSellingsData = filter(sellingProductData, (item) => {
             return item?.number !== 0
@@ -456,9 +457,6 @@ function ProductExchanges() {
         setSellingProductData(newSellingsData)
     }, [productData])
 
-    useEffect(() => {
-        setFilteredFilialNames(filialData)
-    }, [filialData])
     return (
         <>
             <UniversalModal
