@@ -516,3 +516,29 @@ module.exports.getFilials = async (req, res) => {
     res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
   }
 };
+
+// Get Filials List
+module.exports.getAllFilials = async (req, res) => {
+  try {
+    const { market } = req.body;
+    const marke = await Market.findById(market);
+    if (!marke) {
+      return res.status(404).json({
+        error:
+          "Diqqat! Foydalanuvchi ro'yxatga olinayotgan do'kon dasturda ro'yxatga olinmagan.",
+      });
+    }
+
+    const filials = await Market.find({
+      mainmarket: market,
+    })
+      .select("director image name phone1 createdAt")
+      .populate("director", "firstname lastname");
+
+    res.status(201).json({
+      filials: filials,
+    });
+  } catch (error) {
+    res.status(501).json({ error: "Serverda xatolik yuz berdi..." });
+  }
+};

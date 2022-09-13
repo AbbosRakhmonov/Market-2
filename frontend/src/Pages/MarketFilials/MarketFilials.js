@@ -3,15 +3,15 @@ import Filial from '../../Components/Filial/Filial'
 import {uniqueId, map} from 'lodash'
 import {motion} from 'framer-motion'
 import {useDispatch, useSelector} from 'react-redux'
-import {getExchangesFilial} from './../ProductExchanges/productExchangesSlice'
+import {getAllFilials} from './../ProductExchanges/productExchangesSlice'
 import SmallLoader from '../../Components/Spinner/SmallLoader'
-function Shops() {
+function MarketFilials() {
     const dispatch = useDispatch()
-    const {filialDatas, loading} = useSelector((state) => state.exchanges)
+    const {allFilials, loading} = useSelector((state) => state.exchanges)
     const [data, setData] = useState([])
 
     useEffect(() => {
-        const newData = filialDatas.map((item) => {
+        const newData = allFilials.map((item) => {
             return {
                 director: {
                     firstname: item.director.firstname,
@@ -27,17 +27,10 @@ function Shops() {
             }
         })
         setData(newData)
-    }, [filialDatas])
+    }, [allFilials])
 
     useEffect(() => {
-        const body = {
-            currentPage: 0,
-            countPage: 10,
-            search: {
-                name: '',
-            },
-        }
-        dispatch(getExchangesFilial(body))
+        dispatch(getAllFilials())
     }, [dispatch])
 
     return (
@@ -68,4 +61,4 @@ function Shops() {
     )
 }
 
-export default Shops
+export default MarketFilials

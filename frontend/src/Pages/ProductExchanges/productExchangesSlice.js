@@ -2,6 +2,18 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {universalToast} from '../../Components/ToastMessages/ToastMessages'
 import Api from '../../Config/Api'
 
+export const getAllFilials = createAsyncThunk(
+    'productExchanges/getAllFilial',
+    async (body = {}, {rejectWithValue}) => {
+        try {
+            const {data} = await Api.post('/filialproducts/getallfilials', body)
+            return data
+        } catch (error) {
+            return rejectWithValue(error)
+        }
+    }
+)
+
 export const getExchangesFilial = createAsyncThunk(
     'productExchanges/getExchangesFilial',
     async (body = {}, {rejectWithValue}) => {
@@ -30,6 +42,7 @@ const productExchangesSlice = createSlice({
     name: 'productExchanges',
     initialState: {
         filialDatas: [],
+        allFilials: [],
         loading: false,
         errorProductExchanges: null,
     },
@@ -39,6 +52,19 @@ const productExchangesSlice = createSlice({
         },
     },
     extraReducers: {
+        [getAllFilials.pending]: (state) => {
+            state.loading = true
+        },
+
+        [getAllFilials.fulfilled]: (state, {payload: {filials}}) => {
+            state.loading = false
+            state.allFilials = filials
+        },
+        [getAllFilials.rejected]: (state, {payload}) => {
+            universalToast(payload.error, 'error')
+            state.loading = false
+            state.errorProductExchanges = payload
+        },
         [getExchangesFilial.pending]: (state) => {
             state.loading = true
         },
@@ -47,7 +73,6 @@ const productExchangesSlice = createSlice({
             state.filialDatas = filials
         },
         [getExchangesFilial.rejected]: (state, {payload}) => {
-            console.log(payload)
             universalToast(payload, 'error')
             state.loading = false
             state.errorProductExchanges = payload
