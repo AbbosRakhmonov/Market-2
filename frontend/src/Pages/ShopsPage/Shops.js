@@ -58,7 +58,7 @@ function Shops() {
                     <SmallLoader />
                 </div>
             )}
-            {data.length &&
+            {data.length > 0 &&
                 map(data, (value) => (
                     <div className='pb-[1.25rem]' key={uniqueId('filial')}>
                         <Filial value={value} />
