@@ -489,7 +489,7 @@ module.exports.getTransferProducts = async (req, res) => {
 // Get Filials List
 module.exports.getFilials = async (req, res) => {
   try {
-    const { market } = req.body;
+    const { market, currentPage, countPage, search } = req.body;
 
     const marke = await Market.findById(market);
     if (!marke) {
@@ -499,14 +499,18 @@ module.exports.getFilials = async (req, res) => {
       });
     }
 
+    const name = new RegExp(".*" + search ? search.name : "" + ".*", "i");
+
     const filials = await Market.find({
       mainmarket: market,
+      name: name,
     })
       .select("director image name phone1 createdAt")
       .populate("director", "firstname lastname");
 
     res.status(201).json({
-      filials,
+      count: filials.length,
+      filials: filials.splice(currentPage * countPage, countPage),
     });
   } catch (error) {
     res.status(501).json({ error: "Serverda xatolik yuz berdi..." });

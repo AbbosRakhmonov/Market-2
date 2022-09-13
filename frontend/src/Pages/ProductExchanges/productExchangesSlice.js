@@ -4,7 +4,7 @@ import Api from '../../Config/Api'
 
 export const getExchangesFilial = createAsyncThunk(
     'productExchanges/getExchangesFilial',
-    async (body={}, {rejectWithValue}) => {
+    async (body = {}, {rejectWithValue}) => {
         try {
             const {data} = await Api.post('/filialproducts/getfilials', body)
             return data
@@ -47,6 +47,8 @@ const productExchangesSlice = createSlice({
             state.filialDatas = filials
         },
         [getExchangesFilial.rejected]: (state, {payload}) => {
+            console.log(payload)
+            universalToast(payload, 'error')
             state.loading = false
             state.errorProductExchanges = payload
         },
