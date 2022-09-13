@@ -3,11 +3,15 @@ import Filial from '../../Components/Filial/Filial'
 import {uniqueId, map} from 'lodash'
 import {motion} from 'framer-motion'
 import {useDispatch, useSelector} from 'react-redux'
-import {getAllFilials} from './../ProductExchanges/productExchangesSlice'
 import SmallLoader from '../../Components/Spinner/SmallLoader'
+import {universalToast} from '../../Components/ToastMessages/ToastMessages.js'
+import {clearGetFilials, getAllFilials} from './marketFilialsSlice.js'
 function MarketFilials() {
     const dispatch = useDispatch()
-    const {allFilials, loading} = useSelector((state) => state.exchanges)
+    const {allFilials, loading, errorGetFilials} = useSelector(
+        (state) => state.filials
+    )
+
     const [data, setData] = useState([])
 
     useEffect(() => {
@@ -32,6 +36,10 @@ function MarketFilials() {
     useEffect(() => {
         dispatch(getAllFilials())
     }, [dispatch])
+    useEffect(() => {
+        errorGetFilials && universalToast(errorGetFilials, 'error')
+        dispatch(clearGetFilials())
+    }, [errorGetFilials, dispatch])
 
     return (
         <motion.section
