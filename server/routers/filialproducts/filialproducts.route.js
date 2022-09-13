@@ -4,6 +4,10 @@ const auth = require("../../middleware/auth.middleware");
 
 //========================================================
 // Products
+router.post("/filials/getallfilials", auth, (req, res) => {
+  require("./products").getAllFilials(req, res);
+});
+
 router.post("/register", auth, (req, res) => {
   require("./products").registerProducts(req, res);
 });
@@ -18,10 +22,6 @@ router.post("/getproducts", auth, (req, res) => {
 
 router.post("/getfilials", auth, (req, res) => {
   require("./products").getFilials(req, res);
-});
-
-router.post("/getallfilials", auth, (req, res) => {
-  require("./products").getAllFilials(req, res);
 });
 
 router.put("/edit", auth, (req, res) => {

@@ -515,7 +515,7 @@ module.exports.getFilials = async (req, res) => {
   }
 };
 
-// Get Filials List
+// Get AllFilials List
 module.exports.getAllFilials = async (req, res) => {
   try {
     const { market } = req.body;
@@ -525,13 +525,13 @@ module.exports.getAllFilials = async (req, res) => {
         error: "Diqqat! Do'kon dasturda ro'yxatga olinmagan.",
       });
     }
-    // const filials = await Market.find({
-    //   mainmarket: market,
-    // })
-    //   .select("director image name phone1 createdAt")
-    //   .populate("director", "firstname lastname");
+    const filials = await Market.find({
+      mainmarket: market,
+    })
+      .select("director image name phone1 createdAt")
+      .populate("director", "firstname lastname");
     res.status(201).json({
-      marke,
+      filials,
     });
   } catch (error) {
     res.status(501).json({ error: "Serverda xatolik yuz berdi..." });

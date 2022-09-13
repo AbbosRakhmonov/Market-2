@@ -42,7 +42,7 @@ export const makePayment = createAsyncThunk(
 )
 
 export const savePayment = createAsyncThunk(
-    'registerSelling/savePayment',
+    'registerSelling/saveTemporary',
     async (body = {}, {rejectWithValue}) => {
         try {
             const {data} = await Api.post('/sales/temporary/register', body)
@@ -54,7 +54,7 @@ export const savePayment = createAsyncThunk(
 )
 
 export const addPayment = createAsyncThunk(
-    'registerSelling/addPayment',
+    'registerSelling/addProducts',
     async (body = {}, {rejectWithValue}) => {
         try {
             const {data} = await Api.post(
