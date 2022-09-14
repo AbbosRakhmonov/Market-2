@@ -7,7 +7,7 @@ import {
     clearSearchedExchanges,
     changeEndDate,
     changeStartDate,
-} from './FilialExchengesSlice'
+} from './filialExchengesSlice.js'
 import {motion} from 'framer-motion'
 import SearchForm from '../../Components/SearchForm/SearchForm'
 import ExportBtn from '../../Components/Buttons/ExportBtn'

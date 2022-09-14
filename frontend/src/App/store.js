@@ -20,8 +20,8 @@ import ExpenseReducer from '../Pages/Expense/expenseSlice'
 import AdminProductsReducer from '../Pages/AdminProducts/adminproductsSlice.js'
 import ProductReportReducer from '../Pages/ProductReport/productreportSlice.js'
 import exchangesReducer from '../Pages/ProductExchanges/productExchangesSlice.js'
-import FilialDatasReducer from '../Pages/FilialExchanges/FilialExchengesSlice'
-import ExchangesDataIdReducer from '../Pages/ProductIdExchanges/ProductIdExchangesSlice'
+import FilialDatasReducer from '../Pages/FilialExchanges/filialExchengesSlice.js'
+import ExchangesDataIdReducer from '../Pages/ProductIdExchanges/productIdExchangesSlice.js'
 import CategoryReportReducer from '../Pages/CategoryReport/CategoryReportSlice.js'
 
 export default configureStore({

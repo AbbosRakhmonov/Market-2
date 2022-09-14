@@ -5,7 +5,7 @@ import {
     getFilialIdProducts,
     getExchangesFilter,
     clearSearchedExchanges,
-} from './ProductIdExchangesSlice'
+} from './productIdExchangesSlice.js'
 import {motion} from 'framer-motion'
 import SearchForm from '../../Components/SearchForm/SearchForm'
 import ExportBtn from '../../Components/Buttons/ExportBtn'
@@ -15,11 +15,10 @@ import NotFind from '../../Components/NotFind/NotFind'
 import SmallLoader from '../../Components/Spinner/SmallLoader'
 import {useLocation, useNavigate} from 'react-router-dom'
 import {exportExcel} from '../../App/globalFunctions'
-import { universalToast } from '../../Components/ToastMessages/ToastMessages'
-import { IoChevronBack } from "react-icons/io5";
+import {universalToast} from '../../Components/ToastMessages/ToastMessages'
+import {IoChevronBack} from 'react-icons/io5'
 function ProductIdExchanges({currency}) {
-     
-    const navigate = useNavigate();
+    const navigate = useNavigate()
     const location = useLocation()
     const dataId = location?.state?.id
     const dispatch = useDispatch()
@@ -50,7 +49,7 @@ function ProductIdExchanges({currency}) {
     const [searchByCategory, setSearchByCategory] = useState('')
     const [searchByCode, setSearchByCode] = useState('')
     const [searchByName, setSearchByName] = useState('')
-    
+
     const filterByTotal = ({value}) => {
         setShowByTotal(value)
         setCurrentPage(0)
@@ -141,7 +140,7 @@ function ProductIdExchanges({currency}) {
             'Kelgan Narxi UZS',
             'Jami Summasi UZS',
         ]
-        if(data?.length > 0){
+        if (data?.length > 0) {
             const BarcodeData = map(data, (item, index) => ({
                 nth: index + 1,
                 Category_code: item?.category?.code || '',
@@ -154,7 +153,8 @@ function ProductIdExchanges({currency}) {
                               Math.round(item?.price?.incomingpriceuzs * 1) / 1
                           ).toLocaleString('ru-RU')
                         : (
-                              Math.round(item?.price?.incomingprice * 1000) / 1000
+                              Math.round(item?.price?.incomingprice * 1000) /
+                              1000
                           ).toLocaleString('ru-RU'),
                 allIncomingPrice:
                     currency === 'UZS'
@@ -163,16 +163,16 @@ function ProductIdExchanges({currency}) {
                                   item?.price?.sellingpriceuzs
                           ).toLocaleString('ru-RU')
                         : Math.round(
-                              item?.price?.incomingprice + item?.price?.sellingprice
+                              item?.price?.incomingprice +
+                                  item?.price?.sellingprice
                           ).toLocaleString('ru-RU'),
             }))
             exportExcel(BarcodeData, fileName, exportHeader)
-        }
-        else{
-          universalToast("Jadvalda ma'lumot mavjud emas !","warning")
+        } else {
+            universalToast("Jadvalda ma'lumot mavjud emas !", 'warning')
         }
     }
-
+    console.log('salom')
     useEffect(() => {
         const body = {
             currentPage: 0,
@@ -208,7 +208,9 @@ function ProductIdExchanges({currency}) {
         >
             <div className='pagination-supplier mainPadding'>
                 <div className='flex gap-[1rem] items-center'>
-                    <span className='linktoback' onClick={() => navigate(-1)}><IoChevronBack /></span>
+                    <span className='linktoback' onClick={() => navigate(-1)}>
+                        <IoChevronBack />
+                    </span>
                     <ExportBtn onClick={exportData} />
                 </div>
                 <p className='supplier-title'>Barcha tovarlar ro'yxati</p>
