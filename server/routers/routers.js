@@ -18,6 +18,6 @@ module.exports.routers = (app) => {
   app.use("/api/administrator", require("./administrator/administrator.route"));
   app.use("/api/connections", require("./connections/connections.route"));
   app.use("/api/expense", require("./expense/expense.route"));
-  app.use("/api/barcode", require("./barcode/barcode.route.js"));
-  app.use("/api/filials", require("./filials/filials.route.js"));
+  app.use("/api/barcode", require("./barcode/barcode.route"));
+  app.use("/api/filials", require("./filials/filials.route"));
 };
