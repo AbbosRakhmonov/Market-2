@@ -49,8 +49,8 @@ const createFilialUnit = async (filial, product) => {
 // Send Products To Filial
 module.exports.registerProducts = async (req, res) => {
   try {
+    res.send(req.body);
     const { market, filial, products } = req.body;
-
     const marke = await Market.findById(market);
     if (!marke) {
       return res.status(400).json({
