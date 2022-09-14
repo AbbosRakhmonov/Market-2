@@ -6,7 +6,7 @@ export const getExchangesFilial = createAsyncThunk(
     'productExchanges/getExchangesFilial',
     async (body = {}, {rejectWithValue}) => {
         try {
-            const {data} = await Api.post('/filialproducts/getfilials', body)
+            const {data} = await Api.post('/filials/getfilials', body)
             return data
         } catch (error) {
             return rejectWithValue(error)
@@ -18,9 +18,11 @@ export const sendingFilial = createAsyncThunk(
     'productExchanges/sendingFilial',
     async (body, {rejectWithValue}) => {
         try {
-            const {data} = await Api.post('/filialproducts/register', body)
+            const {data} = await Api.post('/filials/register', body)
+            console.log(data)
             return data
         } catch (error) {
+            console.log(error)
             return rejectWithValue(error)
         }
     }
@@ -61,6 +63,7 @@ const productExchangesSlice = createSlice({
             state.loading = false
         },
         [sendingFilial.rejected]: (state, {payload}) => {
+            console.log(payload)
             state.loading = false
             universalToast(`${payload}`, 'error')
             state.errorProductExchanges = payload
