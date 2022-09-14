@@ -87,8 +87,8 @@ module.exports.registerProducts = async (req, res) => {
         incomingpriceuzs,
         sellingprice,
         sellingpriceuzs,
-        tradeprice: product?.tradeprice,
-        tradepriceuzs: product?.tradepriceuzs,
+        tradeprice: product.tradeprice,
+        tradepriceuzs: product.tradepriceuzs,
         market,
       });
       await transferPrice.save();
@@ -101,7 +101,7 @@ module.exports.registerProducts = async (req, res) => {
         pieces: product.total,
         transfer: newTransfer._id,
         price: transferPrice._id,
-        barcode: product?.productdata.barcode,
+        barcode: product.productdata.barcode,
         market,
         filial,
       });
@@ -144,7 +144,7 @@ module.exports.registerProducts = async (req, res) => {
 
         // Filialda mahsulot barcode tekshirish va qushish
         if (!filialProductData.barcode) {
-          filialProductData.barcode = product?.productdata?.barcode;
+          filialProductData.barcode = product.productdata.barcode;
           await filialProductData.save();
         }
 
@@ -169,7 +169,7 @@ module.exports.registerProducts = async (req, res) => {
           code: product.productdata.code,
           category: filialCategory._id,
           unit: filialUnit._id,
-          barcode: product?.productdata?.barcode,
+          barcode: product.productdata.barcode,
           market: filial,
         });
         await filialNewProductData.save();
@@ -179,7 +179,7 @@ module.exports.registerProducts = async (req, res) => {
           unit: filialUnit._id,
           category: filialCategory._id,
           market: filial,
-          minimumcount: product?.minimumcount,
+          minimumcount: product.minimumcount,
           total: product.total,
         });
         await filialNewProduct.save();
@@ -192,8 +192,8 @@ module.exports.registerProducts = async (req, res) => {
           sellingpriceuzs,
           market: filial,
           product: filialNewProduct._id,
-          tradeprice: product.price?.tradeprice,
-          tradepriceuzs: product.price?.tradepriceuzs,
+          tradeprice: product.price.tradeprice,
+          tradepriceuzs: product.price.tradepriceuzs,
         });
         await filialPrice.save();
 
