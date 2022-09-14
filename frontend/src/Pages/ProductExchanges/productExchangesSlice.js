@@ -18,6 +18,7 @@ export const sendingFilial = createAsyncThunk(
     'productExchanges/sendingFilial',
     async (body, {rejectWithValue}) => {
         try {
+            console.log(body)
             const {data} = await Api.post('/filials/register', body)
             console.log(data)
             return data

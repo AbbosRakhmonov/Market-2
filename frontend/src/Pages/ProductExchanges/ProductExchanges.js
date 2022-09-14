@@ -368,7 +368,7 @@ function ProductExchanges() {
                 }
             })
         const body = {
-            filial: filialInformation?.id,
+            filial: filialInformation.id,
             products: sendData,
         }
         if (filialInformation && sendData.length > 0) {
