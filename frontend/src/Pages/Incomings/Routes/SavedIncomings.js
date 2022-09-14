@@ -11,6 +11,7 @@ import {
 } from '../incomingSlice'
 import {filter, map} from 'lodash'
 import NotFind from '../../../Components/NotFind/NotFind.js'
+import UniversalModal from '../../../Components/Modal/UniversalModal.js'
 
 const SavedIncomings = () => {
     const {t} = useTranslation(['common'])
@@ -30,6 +31,15 @@ const SavedIncomings = () => {
 
     const [currentTemporaryData, setCurrentTemporaryData] = useState([])
     const [storeData, setStoreData] = useState([])
+    const [modalVisible, setModalVisible] = useState(false)
+    const [modalBody, setModalBody] = useState('approve')
+    const [printBody, setPrintBody] = useState({})
+
+    const toggleModal = () => {
+        setModalVisible(!modalVisible)
+        setPrintBody({})
+        setModalBody('')
+    }
 
     const changeTemporaryData = useCallback((data) => {
         const count = (arr, key) =>
@@ -49,6 +59,7 @@ const SavedIncomings = () => {
                     totalpriceuzs: count(incomings, 'totalpriceuzs'),
                     pieces: count(incomings, 'pieces'),
                 },
+                temporaries: incomings,
             }
         })
         setCurrentTemporaryData(temporary)
@@ -69,6 +80,17 @@ const SavedIncomings = () => {
         )
         navigate('/maxsulotlar/qabul/qabulqilish')
     }
+
+    const handlePrintModal = (el) => {
+        toggleModal()
+        setModalBody('savedincomingscheck')
+        setPrintBody({
+            createdAt: el.createdAt,
+            temporaries: el.temporaries,
+            supplier: el.supplier,
+        })
+    }
+
     useEffect(() => {
         dispatch(
             getTemporary({
@@ -84,7 +106,6 @@ const SavedIncomings = () => {
             })
         )
     }
-
     useEffect(() => {
         changeTemporaryData(temporaries)
     }, [temporaries, changeTemporaryData])
@@ -189,6 +210,13 @@ const SavedIncomings = () => {
 
     return (
         <div className='tableContainerPadding grow mainPadding'>
+            <UniversalModal
+                isOpen={modalVisible}
+                body={modalBody}
+                // approveFunction={deletePayment}
+                printedIncomings={printBody}
+                toggleModal={toggleModal}
+            />
             {currentTemporaryData.length > 0 ? (
                 <Table
                     page={'temporaryincoming'}
@@ -199,6 +227,7 @@ const SavedIncomings = () => {
                     Delete={removeTemporary}
                     Sort={filterData}
                     sortItem={sorItem}
+                    Print={handlePrintModal}
                 />
             ) : (
                 <NotFind text={t('Saqlangan qabullar mavjud emas')} />

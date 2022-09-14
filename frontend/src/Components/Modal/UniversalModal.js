@@ -14,6 +14,7 @@ import ExchangesBody from './ModalBodys/ExchangesBody'
 import {useTranslation} from 'react-i18next'
 import SalesList from './ModalBodys/SalesList'
 import TotalReports from '../TotalReports/TotalReports.js'
+import {SavedIncomingsCheck} from '../SaleCheck/SavedIncomingsCheck.js'
 
 function UniversalModal({
     isOpen,
@@ -31,6 +32,7 @@ function UniversalModal({
     changeProduct,
     currency,
     printedSelling,
+    printedIncomings,
     printedInventories,
     payment,
     addMarket,
@@ -135,6 +137,8 @@ function UniversalModal({
                 )
             case 'savedsalescheck':
                 return <SavedSalesCheck product={printedSelling} />
+            case 'savedincomingscheck':
+                return <SavedIncomingsCheck incomings={printedIncomings} />
             case 'totalReport':
                 return (
                     <div className={'flex items-center justify-center'}>
