@@ -6,7 +6,6 @@ import {uniqueId, map} from 'lodash'
 
 export const SavedIncomingsCheck = forwardRef((props, ref) => {
     const {incomings} = props
-    console.log(incomings)
     const {user, market} = useSelector((state) => state.login)
     const {currencyType} = useSelector((state) => state.currency)
     const [loadContent, setLoadContent] = useState(false)
