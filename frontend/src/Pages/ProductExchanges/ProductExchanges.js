@@ -372,18 +372,22 @@ function ProductExchanges() {
             products: sendData,
         }
         if (filialInformation && sendData.length > 0) {
-            dispatch(sendingFilial(body)).then((data) => {
-                if (data.meta.requestStatus === 'fulfilled') {
-                    universalToast(
-                        "Maxsulot muvaffaqiyatli o'tkazildi!",
-                        'success'
-                    )
-                    setSellingProductData([])
-                    setArrAdded([])
-                    setFilialInformation('')
-                    setActiveFilial('')
-                }
-            })
+            dispatch(sendingFilial(body))
+                .then((data) => {
+                    if (data.meta.requestStatus === 'fulfilled') {
+                        universalToast(
+                            "Maxsulot muvaffaqiyatli o'tkazildi!",
+                            'success'
+                        )
+                        setSellingProductData([])
+                        setArrAdded([])
+                        setFilialInformation('')
+                        setActiveFilial('')
+                    }
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
         } else {
             productExchangesFilial()
         }
