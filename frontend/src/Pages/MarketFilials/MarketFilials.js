@@ -20,30 +20,32 @@ function MarketFilials() {
                 market: market._id,
             })
         market &&
-            socket.on('getAllFilials', (filials) => {
-                setLoading(false)
-                dispatch(setFilialDatas(filials))
-                setData(
-                    map(filials, (filial) => {
-                        return {
-                            director: {
-                                firstname: filial?.director?.firstname,
-                                lastname: filial?.director?.lastname,
-                                image: filial?.director?.image,
-                            },
-                            typecount: 10,
-                            productcount: 100,
-                            totalPrice: 1000000,
-                            totalPriceUSD: 100,
-                            shopname: filial?.name,
-                            _id: filial?._id,
-                        }
-                    })
-                )
+            socket.on('getAllFilials', ({id, filials}) => {
+                if (id === market._id) {
+                    setLoading(false)
+                    dispatch(setFilialDatas(filials))
+                    setData(
+                        map(filials, (filial) => {
+                            return {
+                                director: {
+                                    firstname: filial?.director?.firstname,
+                                    lastname: filial?.director?.lastname,
+                                    image: filial?.director?.image,
+                                },
+                                typecount: 10,
+                                productcount: 100,
+                                totalPrice: 1000000,
+                                totalPriceUSD: 100,
+                                shopname: filial?.name,
+                                _id: filial?._id,
+                            }
+                        })
+                    )
+                }
             })
         market &&
-            socket.on('error', (err) => {
-                universalToast(err.message, 'error')
+            socket.on('error', ({id, err}) => {
+                id === market._id && universalToast(err.message, 'error')
             })
     }, [market, dispatch])
 

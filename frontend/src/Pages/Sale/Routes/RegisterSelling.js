@@ -1171,25 +1171,27 @@ const RegisterSelling = () => {
                 market: market._id,
             })
         market &&
-            socket.on('categories', (categories) => {
-                dispatch(setAllCategories(categories))
+            socket.on('categories', ({id, categories}) => {
+                id === market._id && dispatch(setAllCategories(categories))
             })
         market &&
-            socket.on('getProductsOfCount', (products) => {
-                productsForSearch = [
-                    ...productsForSearch,
-                    ...map(products, (product) => ({
-                        value: product._id,
-                        label: `(${product.total}) ${product.category.code}${product.productdata.code} - ${product.productdata.name}`,
-                    })),
-                ]
-                setFilteredProducts(productsForSearch)
-                allProductsReducer.push(...products)
-                dispatch(setAllProductsBySocket(allProductsReducer))
+            socket.on('getProductsOfCount', ({id, products}) => {
+                if (id === market._id) {
+                    productsForSearch = [
+                        ...productsForSearch,
+                        ...map(products, (product) => ({
+                            value: product._id,
+                            label: `(${product.total}) ${product.category.code}${product.productdata.code} - ${product.productdata.name}`,
+                        })),
+                    ]
+                    setFilteredProducts(productsForSearch)
+                    allProductsReducer.push(...products)
+                    dispatch(setAllProductsBySocket(allProductsReducer))
+                }
             })
         market &&
-            socket.on('error', (err) => {
-                universalToast(err.message, 'error')
+            socket.on('error', ({id, err}) => {
+                id === market._id && universalToast(err.message, 'error')
             })
     }, [market, dispatch, lastPayments])
     useEffect(() => {

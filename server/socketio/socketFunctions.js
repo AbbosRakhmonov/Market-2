@@ -11,6 +11,7 @@ const getProductsByCount = async ({ socket, market }) => {
     const marke = await Market.findById(market);
     if (!marke) {
       return socket.emit("error", {
+        id: market,
         message: "Diqqat! Do'kon ma'lumotlari topilmadi.",
       });
     }
@@ -21,7 +22,7 @@ const getProductsByCount = async ({ socket, market }) => {
       .sort({ code: 1 })
       .select("_id");
 
-    socket.emit("categories", categories);
+    socket.emit("categories", { id: market, categories });
 
     for (const category of categories) {
       const products = await Product.find(
@@ -37,10 +38,13 @@ const getProductsByCount = async ({ socket, market }) => {
         )
         .populate("category", "name code")
         .populate("unit", "name");
-      socket.emit("getProductsOfCount", products);
+      socket.emit("getProductsOfCount", { id: market, products });
     }
   } catch (error) {
-    return socket.emit("error", { message: "Serverda xatolik yuz berdi" });
+    return socket.emit("error", {
+      id: market,
+      message: "Serverda xatolik yuz berdi",
+    });
   }
 };
 
@@ -49,15 +53,19 @@ const getAllFilials = async ({ socket, market }) => {
     const marke = await Market.findById(market);
     if (!marke) {
       return socket.emit("error", {
+        id: market,
         message: "Diqqat! Do'kon ma'lumotlari topilmadi.",
       });
     }
     const filials = await Market.find({ mainmarket: market }, { timestamp: 1 })
       .select("director image name phone1 createdAt")
       .populate("director", "firstname lastname");
-    return socket.emit("getAllFilials", filials);
+    return socket.emit("getAllFilials", { id: market, filials });
   } catch (error) {
-    return socket.emit("error", { message: "Serverda xatolik yuz berdi" });
+    return socket.emit("error", {
+      id: market,
+      message: "Serverda xatolik yuz berdi",
+    });
   }
 };
 

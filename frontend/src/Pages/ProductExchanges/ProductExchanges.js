@@ -394,12 +394,12 @@ function ProductExchanges() {
                 market: market._id,
             })
         market &&
-            socket.on('getAllFilials', (filials) => {
-                dispatch(setFilialDatas(filials))
+            socket.on('getAllFilials', ({id, filials}) => {
+                id === market._id && dispatch(setFilialDatas(filials))
             })
         market &&
-            socket.on('error', (err) => {
-                universalToast(err.message, 'error')
+            socket.on('error', ({id, err}) => {
+                id === market._id && universalToast(err.message, 'error')
             })
     }, [market, dispatch])
     useEffect(() => {
