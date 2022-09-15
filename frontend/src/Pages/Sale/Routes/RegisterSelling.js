@@ -606,13 +606,13 @@ const RegisterSelling = () => {
                         setModalVisible(true)
                         clearAll()
                     }, 500)
+                    if (temporary) {
+                        dispatch(deleteSavedPayment({_id: temporary._id}))
+                        setTemporary(null)
+                    }
                 }
             }
         )
-        if (temporary) {
-            dispatch(deleteSavedPayment({_id: temporary._id}))
-            setTemporary(null)
-        }
     }
 
     const handleApproveReturn = () => {
