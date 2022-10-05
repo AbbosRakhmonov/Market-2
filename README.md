@@ -12,6 +12,3 @@
 -   ExpressJs
 -   Websocket
 
-# API
-
-Подробная документация [https://kinopoisk.dev/documentation.html](https://kinopoisk.dev/documentation.html)
